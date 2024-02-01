@@ -23,8 +23,12 @@ const Dashboard = () => {
     </div>
   ) : (
     <div>
-      <h1>Dashboard</h1>
-      <Link href="/">Home</Link>
+      <h1 style={{ textAlign: 'center', border: '1px solid black' }}>
+        Dashboard
+      </h1>
+      <Link style={{ color: 'blue' }} href="/">
+        Home
+      </Link>
     </div>
   )
 }

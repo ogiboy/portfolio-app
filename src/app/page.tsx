@@ -7,8 +7,15 @@ const Page = () => {
     <div>
       <Navbar />
       <main>
-        <h1>Login</h1>
-        <a style={{ color: 'red' }} href="/api/auth/login">
+        <h1>Login:</h1>
+        <a
+          style={{
+            color: 'red',
+            border: '1px solid red',
+            borderRadius: '10px',
+          }}
+          href="/api/auth/login"
+        >
           Login
         </a>
       </main>
