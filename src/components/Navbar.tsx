@@ -1,8 +1,10 @@
 const h2 = () => {
   return (
-    <div>
+    <div style={{ border: '1px solid black', textAlign: 'center' }}>
       <h2>Navbar</h2>
-      <a href="/dashboard">Dashboard</a>
+      <a style={{ color: 'blue' }} href="/dashboard">
+        Dashboard
+      </a>
     </div>
   )
 }
