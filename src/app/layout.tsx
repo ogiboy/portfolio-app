@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import './globals.css'
 
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body>{children}</body>
+        <body>
+          {children}
+          <SpeedInsights />
+        </body>
       </UserProvider>
     </html>
   )
