@@ -1,12 +1,11 @@
-'use client'
-
 import Navbar from '@/components/Navbar'
+import Taskbar from '@/components/Taskbar'
 
 const Page = () => {
   return (
     <div>
       <Navbar />
-      <main>
+      <main className="app">
         <h1>Login:</h1>
         <a
           style={{
@@ -19,17 +18,6 @@ const Page = () => {
           Login
         </a>
       </main>
-      <footer>
-        <p
-          style={{
-            textAlign: 'center',
-            textDecoration: 'underline',
-            fontSize: '2em',
-          }}
-        >
-          Under Construction
-        </p>
-      </footer>
     </div>
   )
 }
