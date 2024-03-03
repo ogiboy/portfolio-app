@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('@headlessui/tailwindcss')],
+  darkMode: 'class',
 }
 export default config
