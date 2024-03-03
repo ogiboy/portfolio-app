@@ -9,10 +9,11 @@ import { FiGithub } from 'react-icons/fi'
 import { Within } from '@theme-toggles/react'
 import { useTheme } from 'next-themes'
 import { ThemeProvider } from 'next-themes'
-import type { AppProps } from 'next/app'
+import { useEffect, useState } from 'react'
 
 import '@theme-toggles/react/css/Within.css'
-import { useEffect, useState } from 'react'
+
+import type { NextComponentType, NextPageContext } from 'next'
 
 interface Links {
   id: number
@@ -95,7 +96,12 @@ const Welcome = () => {
   )
 }
 
-const Wrapper = ({ Component, pageProps }: AppProps) => {
+interface AppPropsWithoutRouter {
+  Component: NextComponentType<NextPageContext, any, any>
+  pageProps: any
+}
+
+const Wrapper = ({ Component, pageProps }: AppPropsWithoutRouter) => {
   return (
     <ThemeProvider attribute="class">
       <Component {...pageProps} />
@@ -104,7 +110,8 @@ const Wrapper = ({ Component, pageProps }: AppProps) => {
 }
 
 const App = () => {
-  return <Wrapper Component={Welcome} />
+  let emptyProp
+  return <Wrapper Component={Welcome} pageProps={emptyProp} />
 }
 
 const Page = () => {
