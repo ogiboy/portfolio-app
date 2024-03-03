@@ -102,10 +102,10 @@ interface AppPropsWithoutRouter {
   Component: NextComponentType<NextPageContext, any, any>
 }
 
-const Wrapper = ({ Component, pageProps }: AppPropsWithoutRouter) => {
+const Wrapper = ({ Component }: AppPropsWithoutRouter) => {
   return (
     <ThemeProvider attribute="class">
-      <Component {...pageProps} />
+      <Component />
     </ThemeProvider>
   )
 }
