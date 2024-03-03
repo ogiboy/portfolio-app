@@ -83,6 +83,7 @@ const Welcome = () => {
                   className="w-28 flex flex-col justify-evenly items-center mx-2 hover:bg-slate-300 dark:hover:bg-slate-500 rounded"
                   href={link.link}
                   key={link.id}
+                  referrerPolicy="no-referrer"
                 >
                   <div className="flex justify-center items-baseline text-lg scale-125 m-3">
                     {link.img}
