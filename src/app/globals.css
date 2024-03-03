@@ -15,6 +15,10 @@ body {
   /* color: #333; */
 }
 
+.app {
+  font-family: 'Open Sans Variable', sans-serif;
+}
+
 .theme-toggler {
   scale: 1.5;
   padding: 10px;

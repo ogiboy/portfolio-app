@@ -12,6 +12,8 @@ import { ThemeProvider } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 import '@theme-toggles/react/css/Within.css'
+// Supports weights 300-800
+import '@fontsource-variable/open-sans/wdth-italic.css'
 
 import type { NextComponentType, NextPageContext } from 'next'
 
@@ -98,7 +100,6 @@ const Welcome = () => {
 
 interface AppPropsWithoutRouter {
   Component: NextComponentType<NextPageContext, any, any>
-  pageProps: any
 }
 
 const Wrapper = ({ Component, pageProps }: AppPropsWithoutRouter) => {
@@ -110,8 +111,7 @@ const Wrapper = ({ Component, pageProps }: AppPropsWithoutRouter) => {
 }
 
 const App = () => {
-  let emptyProp
-  return <Wrapper Component={Welcome} pageProps={emptyProp} />
+  return <Wrapper Component={Welcome} />
 }
 
 const Page = () => {
