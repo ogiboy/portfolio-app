@@ -1,10 +1,23 @@
-import '@/styles/navbar-styles.css'
+import { useTheme } from 'next-themes'
+import { Within } from '@theme-toggles/react'
 
-const h2 = () => {
+import '@/styles/navbar-styles.css'
+import '@theme-toggles/react/css/Within.css'
+
+const Navbar = () => {
+  const { systemTheme, theme, setTheme } = useTheme()
+
   return (
-    <div className="navbar-container">
-      <h2>Home</h2>
-    </div>
+    <nav>
+      <Within
+        toggled={systemTheme === theme}
+        toggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        className="theme-toggler"
+        placeholder="theme-toggler"
+        tabIndex={999}
+        duration={1000}
+      />
+    </nav>
   )
 }
-export default h2
+export default Navbar
