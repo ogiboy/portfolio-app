@@ -3,6 +3,8 @@
 import Navbar from '@/components/Navbar'
 import Link from 'next/link'
 
+import { VscSignIn } from 'react-icons/vsc'
+import { VscAccount } from 'react-icons/vsc'
 import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
@@ -32,6 +34,11 @@ const Welcome = () => {
     setIsMounted(true)
   }, [])
 
+  useEffect(() => {
+    console.log('sysTh: ' + systemTheme)
+    console.log('theme: ' + theme)
+  }, [systemTheme, theme])
+
   const myLinks: Links[] = [
     {
       id: 0,
@@ -50,6 +57,18 @@ const Welcome = () => {
       platform: 'linkedin',
       link: 'https://www.linkedin.com/in/hoguzcantoptas/',
       img: <AiOutlineLinkedin />,
+    },
+    {
+      id: 3,
+      platform: 'about me',
+      link: 'aboutme',
+      img: <VscAccount />,
+    },
+    {
+      id: 4,
+      platform: 'sign in',
+      link: 'signin',
+      img: <VscSignIn />,
     },
   ]
 
@@ -76,7 +95,7 @@ const Welcome = () => {
         <p className="text-2xl text-center">Under construction</p>
         <div className="links-area flex flex-col min-h-32">
           <h3 className="text-center underline m-2">Links</h3>
-          <div className="w-full flex justify-evenly items-center min-h-20">
+          <div className="w-full flex justify-center items-center min-h-20">
             {myLinks.map((link) => {
               return (
                 <Link
