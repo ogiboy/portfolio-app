@@ -63,8 +63,8 @@ const Navbar = () => {
             {error && <div>{error.message}</div>} */}
             {user ? (
               <Image
-                src={user.picture}
-                alt={user.name}
+                src={user.picture!}
+                alt={user.name!}
                 width={30}
                 height={30}
                 className="rounded-lg"
