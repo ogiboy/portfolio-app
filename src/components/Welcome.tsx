@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import Navbar from './Navbar'
 
-import { VscSignIn } from 'react-icons/vsc'
-import { VscSignOut } from 'react-icons/vsc'
-import { VscAccount } from 'react-icons/vsc'
+import { GrContactInfo } from 'react-icons/gr'
 import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
@@ -48,19 +46,11 @@ const Welcome = () => {
       id: 3,
       platform: 'about me',
       link: 'aboutme',
-      img: <VscAccount />,
-    },
-    {
-      id: 4,
-      platform: user ? 'sign out' : 'sign in',
-      link: user ? '/api/auth/logout' : '/api/auth/login',
-      img: user ? <VscSignOut /> : <VscSignIn />,
+      img: <GrContactInfo />,
     },
   ]
 
   if (!isMounted) return null
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>{error.message}</div>
 
   return (
     <div className="app text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
@@ -72,15 +62,7 @@ const Welcome = () => {
           COMING SOON
         </h1>
         <p className="text-2xl text-center">Under construction</p>
-        <div>
-          {user && (
-            <div>
-              <img src={user.picture} alt={user.name} />
-              <h2>{user.name}</h2>
-              <p>{user.email}</p>
-            </div>
-          )}
-        </div>
+
         <div className="links-area flex flex-col min-h-32">
           <h3 className="text-center underline m-2">Links</h3>
           <div className="w-full flex justify-center items-center min-h-20">

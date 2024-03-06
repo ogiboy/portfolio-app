@@ -22,7 +22,6 @@ export default function RootLayout({
           {children}
           <SpeedInsights />
           <Analytics />
-          {/* <footer><Taskbar /></footer> */}
         </body>
       </UserProvider>
     </html>

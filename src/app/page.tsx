@@ -1,6 +1,5 @@
 'use client'
 
-import Navbar from '@/components/Navbar'
 import Welcome from '@/components/Welcome'
 import { ThemeProvider } from 'next-themes'
 
