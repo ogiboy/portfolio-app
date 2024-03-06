@@ -3,7 +3,6 @@ import { UserProvider } from '@auth0/nextjs-auth0/client'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/react'
 
-import Taskbar from '@/components/Taskbar'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -23,7 +22,6 @@ export default function RootLayout({
           {children}
           <SpeedInsights />
           <Analytics />
-          {/* <footer><Taskbar /></footer> */}
         </body>
       </UserProvider>
     </html>
