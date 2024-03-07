@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Navbar from './Navbar'
+import Modal from './Modal'
 
 import { GrContactInfo } from 'react-icons/gr'
 import { AiOutlineLinkedin } from 'react-icons/ai'
@@ -18,6 +19,11 @@ interface Links {
 const Welcome = () => {
   const [isMounted, setIsMounted] = useState(false)
   const { user, error, isLoading } = useUser()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  function onClose() {
+    setIsOpen(false)
+  }
 
   useEffect(() => {
     setIsMounted(true)
@@ -53,26 +59,35 @@ const Welcome = () => {
   if (!isMounted) return null
 
   return (
-    <div className="app text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
+    <div className="app w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
       <header>
         <Navbar />
+        {isOpen && <Modal isOpen={isOpen} onClose={onClose} />}
       </header>
-      <div className="main w-4/5 my-20 mx-auto min-h-80 flex flex-col justify-evenly items-center">
+      <div className="main w-4/5 my-28 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
           COMING SOON
         </h1>
         <p className="text-2xl text-center">Under construction</p>
 
-        <div className="links-area flex flex-col min-h-32">
+        <div className="w-3/4 links-area flex flex-col min-h-32">
           <h3 className="text-center underline m-2">Links</h3>
-          <div className="w-full flex justify-center items-center min-h-20">
+          <div className="links w-full flex justify-center items-center min-h-40">
             {myLinks.map((link) => {
               return (
                 <Link
-                  className="w-28 flex flex-col justify-evenly items-center mx-2 hover:bg-slate-300 dark:hover:bg-slate-500 rounded"
+                  className="flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap last-of-type:hover:text-red-400"
                   href={link.link}
                   key={link.id}
                   referrerPolicy="no-referrer"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (link.platform === 'about me') {
+                      setIsOpen(true)
+                    } else {
+                      window.open(link.link, '_blank')
+                    }
+                  }}
                 >
                   <div className="flex justify-center items-baseline text-lg scale-125 m-3">
                     {link.img}
