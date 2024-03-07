@@ -82,7 +82,7 @@ const Navbar = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute flex flex-col mx-2 my-1">
+            <Menu.Items className="absolute flex flex-col mx-2 my-1 z-50">
               {menuItems.map((item) => (
                 <Menu.Item key={item.id}>
                   {({ active }) => (
