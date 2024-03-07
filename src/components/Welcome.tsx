@@ -76,7 +76,7 @@ const Welcome = () => {
             {myLinks.map((link) => {
               return (
                 <Link
-                  className="flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap last-of-type:hover:text-red-400"
+                  className="w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap last-of-type:hover:text-red-300"
                   href={link.link}
                   key={link.id}
                   referrerPolicy="no-referrer"
