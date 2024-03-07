@@ -70,7 +70,7 @@ const Navbar = () => {
                 className="rounded-lg"
               />
             ) : (
-              <VscAccount className="scale-125" />
+              <VscAccount className="scale-150" />
             )}
             <span className="mx-2">Welcome, {user ? user.name : 'Guest'}</span>
           </Menu.Button>
