@@ -9,14 +9,16 @@ import { AiOutlineHome } from 'react-icons/ai'
 import { RxDashboard } from 'react-icons/rx'
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
-
 import { useTheme } from 'next-themes'
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 import '@theme-toggles/react/css/Within.css'
 
 const Navbar = () => {
   const { systemTheme, theme, setTheme } = useTheme()
+
+  const pathname = usePathname()
 
   const { user, isLoading, error } = useUser()
   interface MenuItemsType {
@@ -47,14 +49,9 @@ const Navbar = () => {
     },
   ]
 
-  useEffect(() => {
-    console.log(systemTheme)
-    console.log(theme)
-  }, [systemTheme, theme])
-
   return (
     <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-full max-h-fit flex justify-between items-center flex-row-reverse">
-      <div className="themeToggle">
+      <div className="themeToggle hover:shadow-lg rounded-2xl">
         <Within
           toggled={systemTheme === theme}
           toggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
@@ -75,12 +72,14 @@ const Navbar = () => {
                 alt={user.name!}
                 width={30}
                 height={30}
-                className="rounded-lg"
+                className="rounded-lg hover:shadow-lg"
               />
             ) : (
-              <VscAccount className="scale-150" />
+              <VscAccount className="scale-150 hover:shadow-lg" />
             )}
-            <span className="mx-2">Welcome, {user ? user.name : 'Guest'}</span>
+            <span className="mx-2 hover:shadow-lg rounded-2xl">
+              Welcome, {user ? user.name : 'Guest'}
+            </span>
           </Menu.Button>
           <Transition
             enter="transition ease-out duration-100"
@@ -94,7 +93,12 @@ const Navbar = () => {
               {menuItems.map((item) => (
                 <Menu.Item key={item.id}>
                   {({ active }) => (
-                    <Link href={item.link}>
+                    <Link
+                      className={`active:text-blue-300 ${
+                        active && 'text-blue-700 rounded-lg p-1 shadow-xl'
+                      }`}
+                      href={item.link}
+                    >
                       <span>{item.img}</span>
                       {item.name}
                     </Link>
