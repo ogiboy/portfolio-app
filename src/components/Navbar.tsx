@@ -47,7 +47,7 @@ const Navbar = () => {
 
   return (
     <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-full max-h-fit flex justify-between items-center flex-row-reverse">
-      <div className="themeToggle hover:shadow-lg rounded-2xl">
+      <div className="themeToggle shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl">
         <Within
           toggled={systemTheme === theme}
           toggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
@@ -73,9 +73,9 @@ const Navbar = () => {
                 className="rounded-lg hover:shadow-lg"
               />
             ) : (
-              <VscAccount className="scale-150 hover:shadow-lg" />
+              <VscAccount className="scale-150 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl" />
             )}
-            <span className="mx-2 hover:shadow-md rounded-2xl">
+            <span className="mx-2 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl">
               Welcome, {user ? user.name : 'Guest'}
             </span>
           </Menu.Button>
