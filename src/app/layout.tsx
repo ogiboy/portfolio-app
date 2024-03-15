@@ -24,9 +24,7 @@ export default function RootLayout({
       <UserProvider>
         <body>
           <ThemeProvider attribute="class">
-            <div className="bg-red-500">
-              <Navbar />
-            </div>
+            <Navbar />
             {children}
           </ThemeProvider>
           <SpeedInsights />

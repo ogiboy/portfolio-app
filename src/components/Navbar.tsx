@@ -75,7 +75,7 @@ const Navbar = () => {
             ) : (
               <VscAccount className="scale-150 hover:shadow-lg" />
             )}
-            <span className="mx-2 hover:shadow-lg rounded-2xl">
+            <span className="mx-2 hover:shadow-md rounded-2xl">
               Welcome, {user ? user.name : 'Guest'}
             </span>
           </Menu.Button>
@@ -91,7 +91,13 @@ const Navbar = () => {
               {menuItems.map((item) => (
                 <Menu.Item key={item.id}>
                   {({ active }) => (
-                    <Link href={item.link}>
+                    <Link
+                      className={`${
+                        active &&
+                        'text-slate-200 bg-slate-700 rounded-md p-1 dark:text-slate-700 dark:bg-slate-200'
+                      }`}
+                      href={item.link}
+                    >
                       <span>{item.img}</span>
                       {item.name}
                     </Link>

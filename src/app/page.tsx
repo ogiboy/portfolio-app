@@ -6,7 +6,11 @@ import Welcome from '@/components/Welcome'
 import '@fontsource-variable/open-sans/wdth-italic.css'
 
 const App = () => {
-  return <Welcome />
+  return (
+    <div className="h-screen w-screen">
+      <Welcome />
+    </div>
+  )
 }
 
 export default App
