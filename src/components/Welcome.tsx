@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Navbar from './Navbar'
 import Modal from './Modal'
 
 import { GrContactInfo } from 'react-icons/gr'
@@ -7,7 +6,6 @@ import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
-import { useUser } from '@auth0/nextjs-auth0/client'
 
 interface Links {
   id: number
@@ -18,7 +16,6 @@ interface Links {
 
 const Welcome = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const { user, error, isLoading } = useUser()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   function onClose() {
@@ -59,12 +56,9 @@ const Welcome = () => {
   if (!isMounted) return null
 
   return (
-    <div className="app w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
-      <header>
-        <Navbar />
-        {isOpen && <Modal isOpen={isOpen} onClose={onClose} />}
-      </header>
-      <div className="main w-4/5 my-28 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
+    <div className="app pt-10 w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
+      <header>{isOpen && <Modal isOpen={isOpen} onClose={onClose} />}</header>
+      <div className="main w-4/5 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
           COMING SOON
         </h1>
