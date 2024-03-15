@@ -61,10 +61,10 @@ const Welcome = () => {
   return (
     <div className="app w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
       <header>
-        <Navbar />
+        {/* <Navbar /> */}
         {isOpen && <Modal isOpen={isOpen} onClose={onClose} />}
       </header>
-      <div className="main w-4/5 my-28 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
+      <div className="main w-4/5 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
           COMING SOON
         </h1>

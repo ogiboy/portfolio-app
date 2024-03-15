@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { useTheme } from 'next-themes'
 import { Within } from '@theme-toggles/react'
 import { VscSignIn } from 'react-icons/vsc'
 import { VscSignOut } from 'react-icons/vsc'
@@ -11,10 +10,14 @@ import { RxDashboard } from 'react-icons/rx'
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 
+import { useTheme } from 'next-themes'
+import { useEffect } from 'react'
+
 import '@theme-toggles/react/css/Within.css'
 
 const Navbar = () => {
   const { systemTheme, theme, setTheme } = useTheme()
+
   const { user, isLoading, error } = useUser()
   interface MenuItemsType {
     id: number
@@ -44,8 +47,13 @@ const Navbar = () => {
     },
   ]
 
+  useEffect(() => {
+    console.log(systemTheme)
+    console.log(theme)
+  }, [systemTheme, theme])
+
   return (
-    <nav className="nav w-full flex justify-between items-center flex-row-reverse">
+    <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-full max-h-fit flex justify-between items-center flex-row-reverse">
       <div className="themeToggle">
         <Within
           toggled={systemTheme === theme}
