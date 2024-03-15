@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Navbar from './Navbar'
 import Modal from './Modal'
 
 import { GrContactInfo } from 'react-icons/gr'
@@ -18,7 +17,6 @@ interface Links {
 
 const Welcome = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const { user, error, isLoading } = useUser()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   function onClose() {

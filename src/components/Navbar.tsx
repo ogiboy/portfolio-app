@@ -10,15 +10,11 @@ import { RxDashboard } from 'react-icons/rx'
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useTheme } from 'next-themes'
-import { useEffect } from 'react'
-import { usePathname } from 'next/navigation'
 
 import '@theme-toggles/react/css/Within.css'
 
 const Navbar = () => {
   const { systemTheme, theme, setTheme } = useTheme()
-
-  const pathname = usePathname()
 
   const { user, isLoading, error } = useUser()
   interface MenuItemsType {
@@ -59,6 +55,8 @@ const Navbar = () => {
           placeholder="theme-toggler"
           tabIndex={999}
           duration={1000}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
         />
       </div>
       <div className="menus m-2 ">
@@ -93,12 +91,7 @@ const Navbar = () => {
               {menuItems.map((item) => (
                 <Menu.Item key={item.id}>
                   {({ active }) => (
-                    <Link
-                      className={`active:text-blue-300 ${
-                        active && 'text-blue-700 rounded-lg p-1 shadow-xl'
-                      }`}
-                      href={item.link}
-                    >
+                    <Link href={item.link}>
                       <span>{item.img}</span>
                       {item.name}
                     </Link>
