@@ -18,7 +18,7 @@ const AddPetForm = () => {
     <div>
       <form
         className="border-2 rounded-lg w-5/12 mx-auto my-10 flex flex-col justify-center items-center"
-        onSubmit={(e) => handlePetSubmit(e)}
+        // onSubmit={(e) => handlePetSubmit(e)}
       >
         <label className="my-1" htmlFor="pets">
           Add Pet
