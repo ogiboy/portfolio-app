@@ -5,13 +5,13 @@ const AddPetForm = () => {
   const [petName, setPetName] = useState('')
   const [shownPets, setShownPets] = useState([])
 
-  const handlePetSubmit = async (e) => {
+  const handlePetSubmit = async () => {
     console.log({
       POSTGRES_URL: process.env.POSTGRES_URL,
       POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
     })
-    e.preventDefault()
-    const { pets } = await sql`SELECT * FROM pets`
+    // e.preventDefault()
+    // const { pets } = await sql`SELECT * FROM pets`
   }
 
   return (
