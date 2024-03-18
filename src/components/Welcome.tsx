@@ -8,6 +8,8 @@ import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { closeModal, openModal } from '@/app/features/modal/modalSlice'
 
 interface Links {
   id: number
@@ -18,10 +20,14 @@ interface Links {
 
 const Welcome = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  // const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const dispatch = useDispatch()
+  const { isOpen } = useSelector((store) => store.modal)
 
   function onClose() {
-    setIsOpen(false)
+    // setIsOpen(false)
+    dispatch(closeModal())
   }
 
   useEffect(() => {
@@ -79,7 +85,7 @@ const Welcome = () => {
                   onClick={(e) => {
                     e.preventDefault()
                     if (link.platform === 'about me') {
-                      setIsOpen(true)
+                      dispatch(openModal())
                     } else {
                       window.open(link.link, '_blank')
                     }

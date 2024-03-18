@@ -1,21 +1,18 @@
-import { sql } from '@vercel/postgres'
+import { db, sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
+import defaultImage from '../../../../public/windows_slanted-1.png'
 
 export async function POST(request: Request) {
   try {
-    const { petName } = await request.json()
+    const { petName, ownerName } = await request.json()
 
-    if (!petName) throw new Error('Pet and owner names required')
+    const imagePath = '/windows_slanted-1.png'
 
-    await sql`INSERT INTO Pets (Name) VALUES (${petName}})`
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+    await sql`INSERT INTO pets (name, owner, image) VALUES (${petName}, ${ownerName}, ${imagePath})`
 
-  try {
-    const pets = await sql`SELECT * FROM Pets`
-    return NextResponse.json({ pets }, { status: 200 })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return new NextResponse('Pet added successfully', { status: 200 })
+  } catch (error) {
+    console.error('Error adding pet:', error)
+    return new NextResponse('Failed to add pet', { status: 500 })
   }
 }

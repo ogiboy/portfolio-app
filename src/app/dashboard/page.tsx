@@ -1,7 +1,6 @@
 'use client'
 
 import { useUser } from '@auth0/nextjs-auth0/client'
-import { sql } from '@vercel/postgres'
 
 import Link from 'next/link'
 import AddPetForm from '@/components/AddPetForm'
@@ -9,7 +8,7 @@ import AddPetForm from '@/components/AddPetForm'
 const Dashboard = () => {
   const { user, error, isLoading } = useUser()
 
-  if (isLoading) return <div>Loading...</div>
+  // if (isLoading) return <div>Loading...</div>
 
   if (error) return <div>{error.message}</div>
 
@@ -22,7 +21,7 @@ const Dashboard = () => {
       >
         Home
       </Link>
-      {/* <AddPetForm /> */}
+      <AddPetForm />
     </div>
   )
 }

@@ -1,18 +1,17 @@
+import { closeModal } from '@/app/features/modal/modalSlice'
 import { Dialog, Transition } from '@headlessui/react'
-
 import { MdOutlineClose } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux'
 
-interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-}
+const Modal = () => {
+  const dispatch = useDispatch()
+  const { isOpen } = useSelector((store) => store.modal)
 
-const Modal = ({ isOpen, onClose }: ModalProps) => {
   return (
     <Transition show={isOpen} appear>
       <Dialog
         open={isOpen}
-        onClose={() => onClose()}
+        onClose={() => dispatch(closeModal())}
         className="absolute bottom-20 z-50 w-full text-center"
       >
         <Transition.Child
