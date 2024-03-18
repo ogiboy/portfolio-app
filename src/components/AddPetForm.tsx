@@ -3,29 +3,37 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const AddPetForm = () => {
-  const [petName, setPetName] = useState('')
+  const [petName, setPetName] = useState<string>('')
   const [ownerName, setOwnerName] = useState<string>('')
   const [shownPets, setShownPets] = useState([])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      petName &&
-        ownerName &&
-        (await axios.post('/api/add-pet', { petName, ownerName }))
-      setPetName('')
-      setOwnerName('')
+      if (petName && ownerName) {
+        const id = crypto.randomUUID()
+        await axios.post('/api/add-pet', { id, petName, ownerName })
+        await handleShowPets()
+      } else {
+        throw new Error('petname ownername not found')
+      }
     } catch (error) {
       console.error('error adding pet', error)
     } finally {
-      handleShowPets()
+      setPetName('')
+      setOwnerName('')
     }
   }
 
   const handleShowPets = async () => {
     try {
       const response = await axios.get('/api/see-pets')
-      setShownPets(response.data)
+      console.log(response)
+      if (!response) {
+        throw new Error('see-pets doesnt work')
+      } else {
+        setShownPets(response.data)
+      }
     } catch (error) {
       console.log('error fetching pets', error)
     }
@@ -35,9 +43,9 @@ const AddPetForm = () => {
     handleShowPets()
   }, [])
 
-  // useEffect(() => {
-  //   console.log(shownPets)
-  // }, [shownPets])
+  useEffect(() => {
+    console.log(shownPets)
+  }, [shownPets])
 
   return (
     <div className="w-96 min-h-96 my-5 rounded border-2 flex flex-col justify-around items-center">
@@ -77,12 +85,13 @@ const AddPetForm = () => {
         <p>Recently added pets</p>
       </div>
       <div className="rounded border-2 w-4/5 min-h-36 my-5 truncate">
-        {shownPets.map((pet: any) => (
-          <ul key={pet.id}>
-            <li>{pet.name}</li>
-            <li>{pet.owner}</li>
-          </ul>
-        ))}
+        <ul>
+          {shownPets.map((pet: any) => (
+            <li key={pet.id}>
+              {pet.name} - {pet.owner}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )
