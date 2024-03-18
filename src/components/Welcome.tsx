@@ -10,6 +10,7 @@ import { FiGithub } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal, openModal } from '@/app/features/modal/modalSlice'
+import { RootState } from '@/app/store'
 
 interface Links {
   id: number
@@ -23,7 +24,7 @@ const Welcome = () => {
   // const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const dispatch = useDispatch()
-  const { isOpen } = useSelector((store) => store.modal)
+  const { isOpen } = useSelector((store: RootState) => store.modal)
 
   function onClose() {
     // setIsOpen(false)
@@ -65,7 +66,7 @@ const Welcome = () => {
 
   return (
     <div className="app pt-10 w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
-      <header>{isOpen && <Modal isOpen={isOpen} onClose={onClose} />}</header>
+      <header>{isOpen && <Modal />}</header>
       <div className="main w-4/5 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
           COMING SOON

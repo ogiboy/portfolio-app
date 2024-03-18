@@ -2,10 +2,11 @@ import { closeModal } from '@/app/features/modal/modalSlice'
 import { Dialog, Transition } from '@headlessui/react'
 import { MdOutlineClose } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
 
 const Modal = () => {
   const dispatch = useDispatch()
-  const { isOpen } = useSelector((store) => store.modal)
+  const { isOpen } = useSelector((store: RootState) => store.modal)
 
   return (
     <Transition show={isOpen} appear>
@@ -38,7 +39,7 @@ const Modal = () => {
             </Dialog.Title>
             <Dialog.Description>I just need more time.</Dialog.Description>
 
-            <button className="" onClick={() => onClose()}>
+            <button className="" onClick={() => dispatch(closeModal())}>
               <MdOutlineClose />
             </button>
           </Dialog.Panel>
