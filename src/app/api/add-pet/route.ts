@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const { id, petName, ownerName } = await request.json()
 
-    console.log('id: ' + id, 'petName: ' + petName, 'owner: ' + ownerName)
+    // console.log('id: ' + id, 'petName: ' + petName, 'owner: ' + ownerName)
 
     await sql`INSERT INTO pets (id, name, owner) VALUES (${id}, ${petName}, ${ownerName})`
 

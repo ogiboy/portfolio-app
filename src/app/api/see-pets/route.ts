@@ -3,15 +3,13 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const result = await sql`SELECT * FROM pets LIMIT 10`
+    const { rows } = await sql`select * from pets`
 
-    const pets = result.rows.map((row: any) => ({
+    const pets = rows.map((row: any) => ({
       id: row.id,
       name: row.name,
       owner: row.owner,
     }))
-
-    console.log(JSON.stringify(pets))
 
     return new NextResponse(JSON.stringify(pets), { status: 200 })
   } catch (error) {

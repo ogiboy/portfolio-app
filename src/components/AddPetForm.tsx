@@ -13,7 +13,6 @@ const AddPetForm = () => {
       if (petName && ownerName) {
         const id = crypto.randomUUID()
         await axios.post('/api/add-pet', { id, petName, ownerName })
-        await handleShowPets()
       } else {
         throw new Error('petname ownername not found')
       }
@@ -22,10 +21,12 @@ const AddPetForm = () => {
     } finally {
       setPetName('')
       setOwnerName('')
+      handleShowPets()
     }
   }
 
   const handleShowPets = async () => {
+    console.log('handleshownpets runing')
     try {
       const response = await axios.get('/api/see-pets')
       console.log(response)
@@ -80,6 +81,9 @@ const AddPetForm = () => {
         >
           Submit
         </button>
+        {/* <button type="button" onClick={() => handleShowPets()}>
+          see pets
+        </button> */}
       </form>
       <div>
         <p>Recently added pets</p>
