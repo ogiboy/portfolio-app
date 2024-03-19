@@ -10,12 +10,14 @@ import { RxDashboard } from 'react-icons/rx'
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useTheme } from 'next-themes'
+import { useDispatch } from 'react-redux'
+import { openModal } from '@/app/features/modal/modalSlice'
 
 import '@theme-toggles/react/css/Within.css'
 
 const Navbar = () => {
   const { systemTheme, theme, setTheme } = useTheme()
-
+  const dispatch = useDispatch()
   const { user, isLoading, error } = useUser()
   interface MenuItemsType {
     id: number
@@ -97,6 +99,12 @@ const Navbar = () => {
                         'text-slate-200 bg-slate-700 rounded-md p-1 dark:text-slate-700 dark:bg-slate-200'
                       }`}
                       href={item.link}
+                      onClick={(e) => {
+                        if (item.name === 'dashboard') {
+                          e.preventDefault()
+                          dispatch(openModal())
+                        }
+                      }}
                     >
                       <span>{item.img}</span>
                       {item.name}

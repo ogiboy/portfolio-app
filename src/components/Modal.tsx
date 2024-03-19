@@ -33,7 +33,7 @@ const Modal = () => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <Dialog.Panel className="rounded mx-auto">
+          <Dialog.Panel className="rounded mx-auto z-50">
             <Dialog.Title as="h3" className="font-bold">
               So Sorry To Show You This Error But...
             </Dialog.Title>

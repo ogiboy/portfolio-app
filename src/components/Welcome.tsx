@@ -8,8 +8,7 @@ import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { closeModal, openModal } from '@/app/features/modal/modalSlice'
+import { useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
 
 interface Links {
@@ -20,16 +19,8 @@ interface Links {
 }
 
 const Welcome = () => {
-  const [isMounted, setIsMounted] = useState(false)
-  // const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const dispatch = useDispatch()
+  const [isMounted, setIsMounted] = useState<boolean>(false)
   const { isOpen } = useSelector((store: RootState) => store.modal)
-
-  function onClose() {
-    // setIsOpen(false)
-    dispatch(closeModal())
-  }
 
   useEffect(() => {
     setIsMounted(true)
@@ -57,7 +48,7 @@ const Welcome = () => {
     {
       id: 3,
       platform: 'about me',
-      link: 'aboutme',
+      link: 'myResume.pdf',
       img: <GrContactInfo />,
     },
   ]
@@ -79,18 +70,10 @@ const Welcome = () => {
             {myLinks.map((link) => {
               return (
                 <Link
-                  className="w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap last-of-type:hover:text-red-300"
+                  className="w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap"
                   href={link.link}
                   key={link.id}
-                  referrerPolicy="no-referrer"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (link.platform === 'about me') {
-                      dispatch(openModal())
-                    } else {
-                      window.open(link.link, '_blank')
-                    }
-                  }}
+                  target="_blank"
                 >
                   <div className="flex justify-center items-baseline text-lg scale-125 m-3">
                     {link.img}
