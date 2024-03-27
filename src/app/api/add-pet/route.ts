@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
-    const { id, petName, ownerName } = await request.json()
+    const { date, petName, ownerName } = await request.json()
 
     // console.log('id: ' + id, 'petName: ' + petName, 'owner: ' + ownerName)
 
-    await sql`INSERT INTO pets (id, name, owner) VALUES (${id}, ${petName}, ${ownerName})`
+    await sql`INSERT INTO petlist (date, petname, owner) VALUES (${date}, ${petName}, ${ownerName})`
 
     return new NextResponse('Pet added successfully', { status: 200 })
   } catch (error) {

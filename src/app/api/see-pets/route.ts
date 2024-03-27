@@ -2,12 +2,15 @@ import { sql, db } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
+  const client = await db.connect()
   try {
-    const { rows } = await sql`select * from pets`
+    const { rows } = await client.sql`select * from petlist limit 500`
+
+    console.log(rows)
 
     const pets = rows.map((row: any) => ({
-      id: row.id,
-      name: row.name,
+      date: new Date(row.date),
+      petName: row.petname,
       owner: row.owner,
     }))
 
