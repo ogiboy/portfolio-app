@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   // if (isLoading) return <div>Loading...</div>
 
-  if (error) return <div>{error.message}</div>
+  // if (error) return <div>{error.message}</div>
 
   return (
     <div className="w-screen h-screen flex flex-col items-center flex-start text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300">

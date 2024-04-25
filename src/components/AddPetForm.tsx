@@ -9,7 +9,7 @@ const AddPetForm = () => {
   const [petName, setPetName] = useState<string>('')
   const [ownerName, setOwnerName] = useState<string>('')
   const [shownPets, setShownPets] = useState([])
-  const [sort, setSort] = useState<'asc' | 'desc'>('asc')
+  const [sort, setSort] = useState<'asc' | 'desc'>('desc')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -88,9 +88,6 @@ const AddPetForm = () => {
         >
           Submit
         </button>
-        {/* <button type="button" onClick={() => handleShowPets()}>
-          see pets
-        </button> */}
       </form>
       <div className="w-4/5 h-fit flex justify-evenly items-center">
         <p className="underline w-4/5 h-fit text-lg text-center">

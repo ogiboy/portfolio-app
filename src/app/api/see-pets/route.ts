@@ -1,12 +1,15 @@
-import { sql, db } from '@vercel/postgres'
+import { sql, db, Client } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  const client = await db.connect()
-  try {
-    const { rows } = await client.sql`select * from petlist limit 500`
+export const dynamic = 'force-dynamic'
 
-    console.log(rows)
+export async function GET() {
+  try {
+    const client = await db.connect()
+
+    const { rows } = await client.sql`SELECT * FROM petlist LIMIT 500`
+
+    // console.log(rows)
 
     const pets = rows.map((row: any) => ({
       date: new Date(row.date),
@@ -18,5 +21,6 @@ export async function GET() {
   } catch (error) {
     console.log('error fetching data', error)
     return new NextResponse('failed to fetch pets', { status: 500 })
+  } finally {
   }
 }
