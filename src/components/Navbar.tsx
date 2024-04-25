@@ -99,12 +99,6 @@ const Navbar = () => {
                         'text-slate-200 bg-slate-700 rounded-md p-1 dark:text-slate-700 dark:bg-slate-200'
                       }`}
                       href={item.link}
-                      onClick={(e) => {
-                        if (item.name === 'dashboard') {
-                          e.preventDefault()
-                          dispatch(openModal())
-                        }
-                      }}
                     >
                       <span>{item.img}</span>
                       {item.name}
