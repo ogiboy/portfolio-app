@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'MyPortfolioApp: Dashboard',
+  title: 'MyPortfolioApp: Projects',
   description: "Oğuzcan Toptaş: Developer's Portfolio",
 }
 
-export default function DashboardLayout({
+export default function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode

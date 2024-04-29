@@ -1,5 +1,5 @@
 import { closeModal } from '@/app/features/modal/modalSlice'
-import { RootState } from '@/app/store'
+import { RootState } from '@/store/store'
 
 import { MdOutlineClose } from 'react-icons/md'
 import { Dialog, Transition } from '@headlessui/react'

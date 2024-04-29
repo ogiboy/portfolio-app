@@ -7,9 +7,11 @@ import { GrContactInfo } from 'react-icons/gr'
 import { AiOutlineLinkedin } from 'react-icons/ai'
 import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
+import { BsFiletypeHtml } from 'react-icons/bs'
+
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/app/store'
+import { RootState } from '@/store/store'
 import { openModal } from '@/app/features/modal/modalSlice'
 
 interface Links {
@@ -54,12 +56,18 @@ const Welcome = () => {
       link: 'myResume.pdf',
       img: <GrContactInfo />,
     },
+    {
+      id: 4,
+      platform: 'projects',
+      link: '/projects',
+      img: <BsFiletypeHtml />,
+    },
   ]
 
   if (!isMounted) return null
 
   return (
-    <div className="app pt-10 w-full text-slate-600 bg-slate-200 h-screen dark:bg-slate-700 dark:text-slate-300 cursor-default">
+    <main className="app pt-10 w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
       <header>{isOpen && <Modal />}</header>
       <div className="main w-4/5 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
@@ -69,14 +77,14 @@ const Welcome = () => {
 
         <div className="w-3/4 links-area flex flex-col min-h-32">
           <h3 className="text-center underline m-2">Links</h3>
-          <div className="links w-full flex justify-center items-center min-h-40">
+          <nav className="links w-full flex justify-center items-center min-h-40">
             {myLinks.map((link) => {
               return (
                 <Link
-                  className="w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded last-of-type:text-nowrap"
+                  className="min-w-20 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded text-nowrap"
                   href={link.link}
                   key={link.id}
-                  target="_blank"
+                  target={link.platform === 'projects' ? '_self' : '_blank'}
                   onClick={(e) => {
                     if (link.platform === 'about me') {
                       e.preventDefault()
@@ -91,10 +99,10 @@ const Welcome = () => {
                 </Link>
               )
             })}
-          </div>
+          </nav>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 

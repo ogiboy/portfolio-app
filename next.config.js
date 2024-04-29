@@ -4,7 +4,7 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.(pdf)$/,
       use: {
-        loader: 'file-loader', // veya 'url-loader' olarak değiştirin
+        loader: 'file-loader',
         options: {
           publicPath: '/_next',
           name: 'static/media/[name].[hash].[ext]',
@@ -27,6 +27,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
       },
     ],
   },

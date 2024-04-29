@@ -100,7 +100,7 @@ const AddPetForm = () => {
           {sort === 'asc' ? sortUpBtnImage : sortDownBtnImage}
         </button>
       </div>
-      <div className="rounded border-2 dark:border-slate-300 border-slate-700 w-4/5 min-h-36 max-h-61 my-5 overflow-scroll">
+      <div className="rounded border-2 dark:border-slate-300 border-slate-700 w-4/5 min-h-36 max-h-60 my-5 overflow-scroll">
         <ul>
           {orderBy(shownPets, 'date', sort).map((pet: any) => (
             <li
