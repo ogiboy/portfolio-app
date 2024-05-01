@@ -67,8 +67,12 @@ const Welcome = () => {
   if (!isMounted) return null
 
   return (
-    <main className="app pt-10 w-full text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default">
-      <header>{isOpen && <Modal />}</header>
+    <main className="app pt-10 w-screen text-slate-600 bg-slate-200 h-full dark:bg-slate-700 dark:text-slate-300 cursor-default overflow-hidden">
+      {isOpen && (
+        <header>
+          <Modal />
+        </header>
+      )}
       <div className="main w-4/5 mx-auto min-h-96 flex flex-col justify-evenly items-center lg:scale-125">
         <h1 className="heading text-5xl font-bold italic text-center">
           COMING SOON
@@ -77,7 +81,7 @@ const Welcome = () => {
 
         <div className="w-3/4 links-area flex flex-col min-h-32">
           <h3 className="text-center underline m-2">Links</h3>
-          <nav className="links w-full flex justify-center items-center min-h-40">
+          <nav className="links flex justify-center items-center min-h-40 max-h-56 flex-wrap">
             {myLinks.map((link) => {
               return (
                 <Link

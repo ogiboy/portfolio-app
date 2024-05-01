@@ -2,16 +2,17 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { Within } from '@theme-toggles/react'
+
 import { VscSignIn } from 'react-icons/vsc'
 import { VscSignOut } from 'react-icons/vsc'
 import { VscAccount } from 'react-icons/vsc'
 import { AiOutlineHome } from 'react-icons/ai'
 import { RxDashboard } from 'react-icons/rx'
+
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useTheme } from 'next-themes'
 import { useDispatch } from 'react-redux'
-import { openModal } from '@/app/features/modal/modalSlice'
 
 import '@theme-toggles/react/css/Within.css'
 
@@ -64,8 +65,6 @@ const Navbar = () => {
       <div className="menus m-2 ">
         <Menu>
           <Menu.Button className="flex justify-between items-center">
-            {/* {isLoading && <div>Loading...</div>}
-            {error && <div>{error.message}</div>} */}
             {user ? (
               <Image
                 src={user.picture!}
@@ -89,7 +88,7 @@ const Navbar = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute flex flex-col mx-2 my-1 z-50">
+            <Menu.Items className="absolute flex flex-col justify-around mx-2 my-2 z-50 bg-black/10 dark:bg-white/10 rounded-md p-2 w-24 h-36">
               {menuItems.map((item) => (
                 <Menu.Item key={item.id}>
                   {({ active }) => (

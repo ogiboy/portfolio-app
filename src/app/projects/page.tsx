@@ -119,6 +119,51 @@ const Projects: React.FC = () => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
     },
+    {
+      id: 11,
+      name: 'GitHub User Search',
+      url: 'https://github-user-search-lilac-kappa.vercel.app/',
+      gitUrl: 'https://github.com/ogiboy/githubUserSearch',
+      image: 'https://picsum.photos/200/300',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+    },
+    {
+      id: 12,
+      name: 'Random Photos App',
+      url: 'https://photos-app-mu.vercel.app/',
+      gitUrl: 'https://github.com/ogiboy/photosApp',
+      image: 'https://picsum.photos/200/300',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+    },
+    {
+      id: 13,
+      name: 'Search Pokemons',
+      url: 'https://search-pokemons-two.vercel.app/',
+      gitUrl: 'https://github.com/ogiboy/searchPokemons',
+      image: 'https://picsum.photos/200/300',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+    },
+    {
+      id: 14,
+      name: 'BMI Calculator',
+      url: 'https://react-bmi-calculator-three.vercel.app/',
+      gitUrl: 'https://github.com/ogiboy/reactBmiCalculator',
+      image: 'https://picsum.photos/200/300',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+    },
+    {
+      id: 15,
+      name: 'Google Landing Page',
+      url: 'https://ogiboy.github.io/google-landing-page/',
+      gitUrl: 'https://github.com/ogiboy/google-landing-page',
+      image: 'https://picsum.photos/200/300',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+    },
   ]
 
   return (
