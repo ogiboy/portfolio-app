@@ -1,12 +1,12 @@
 'use client'
 
-import { useUser } from '@auth0/nextjs-auth0/client'
+// import { useUser } from '@auth0/nextjs-auth0/client'
 
 import Link from 'next/link'
-import AddPetForm from '@/components/AddPetForm'
+import Form from '@/components/Form'
 
 const Dashboard = () => {
-  const { user, error, isLoading } = useUser()
+  // const { user, error, isLoading } = useUser()
 
   // if (isLoading) return <div>Loading...</div>
 
@@ -21,7 +21,7 @@ const Dashboard = () => {
       >
         Home
       </Link>
-      <AddPetForm />
+      <Form />
     </div>
   )
 }

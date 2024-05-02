@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { BiSortUp } from 'react-icons/bi'
 import { BiSortDown } from 'react-icons/bi'
 
-const AddPetForm = () => {
+const Form = () => {
   const [petName, setPetName] = useState<string>('')
   const [ownerName, setOwnerName] = useState<string>('')
   const [shownPets, setShownPets] = useState([])
@@ -62,7 +62,7 @@ const AddPetForm = () => {
         className="border-2 dark:border-slate-300 border-slate-700 rounded-lg w-4/5 mx-auto my-10 flex flex-col justify-center items-center"
       >
         <label className="my-1" htmlFor="pets">
-          Add Pet
+          Drop a comment
         </label>
 
         <input
@@ -71,15 +71,18 @@ const AddPetForm = () => {
           id="pets"
           onChange={(e) => setPetName(e.target.value)}
           value={petName}
-          placeholder="Pet Name"
+          placeholder="Your name"
+          autoComplete="name given-name"
+          required
         />
-        <input
-          className="border rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
-          type="text"
+        <textarea
+          className="border resize-none rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
           id="owner"
+          name="owner"
           onChange={(e) => setOwnerName(e.target.value)}
           value={ownerName}
-          placeholder="Owner Name"
+          placeholder="Comment goes here"
+          required
         />
 
         <button
@@ -91,7 +94,7 @@ const AddPetForm = () => {
       </form>
       <div className="w-4/5 h-fit flex justify-evenly items-center">
         <p className="underline w-4/5 h-fit text-lg text-center">
-          Recently added pets
+          Recently added comments
         </p>
         <button
           onClick={() => setSort(sort === 'asc' ? 'desc' : 'asc')}
@@ -103,16 +106,22 @@ const AddPetForm = () => {
       <div className="rounded border-2 dark:border-slate-300 border-slate-700 w-4/5 min-h-36 max-h-60 my-5 overflow-scroll">
         <ul>
           {orderBy(shownPets, 'date', sort).map((pet: any) => (
-            <li
-              className="active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
+            <figure
+              className=" min-h-16 active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
               key={pet.date}
             >
-              {pet.petName} - {pet.owner}
-            </li>
+              <blockquote>
+                <p>&quot;{pet.petName}&quot;</p>
+              </blockquote>
+              <figcaption className="text-right">
+                <cite>-{pet.owner}</cite>
+              </figcaption>
+              <hr />
+            </figure>
           ))}
         </ul>
       </div>
     </div>
   )
 }
-export default AddPetForm
+export default Form
