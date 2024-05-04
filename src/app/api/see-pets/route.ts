@@ -1,4 +1,4 @@
-import { sql, db, Client } from '@vercel/postgres'
+import { db } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'

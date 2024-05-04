@@ -3,14 +3,12 @@
 import Card from '@/components/Card'
 
 import { animated, useScroll, useSpring } from '@react-spring/web'
-import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import someProjects from '../data/data'
 
 const Projects: React.FC = () => {
   const { scrollYProgress } = useScroll()
-  const { theme } = useTheme()
 
   const [springs, api] = useSpring(() => ({
     width: '25%',
