@@ -48,7 +48,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-screen max-h-fit flex justify-between items-center flex-row-reverse fixed top-0 pb-1 border-b border-slate-300">
+    <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-screen max-h-fit flex justify-between items-center flex-row-reverse fixed top-0 pb-1 border-b border-slate-300 dark:border-slate-800 rounded-sm">
       <div className="themeToggle shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl">
         <Within
           toggled={systemTheme === theme}

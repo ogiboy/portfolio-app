@@ -6,7 +6,7 @@ import { animated, useScroll, useSpring } from '@react-spring/web'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
-import someProjects from './data'
+import someProjects from '../data/data'
 
 const Projects: React.FC = () => {
   const { scrollYProgress } = useScroll()
@@ -30,7 +30,7 @@ const Projects: React.FC = () => {
 
   return (
     <div className="w-screen mt-10 h-full text-center text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-700">
-      <h1 className="text-lg">Projects</h1>
+      <h1 className="text-lg p-2">Projects</h1>
       <main className="flex flex-wrap items-center justify-evenly w-full h-full">
         {someProjects.map((item) => {
           const { id, name, url, gitUrl, image, description } = item
