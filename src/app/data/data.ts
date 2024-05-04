@@ -13,7 +13,7 @@ const someProjects: Project[] = [
     name: 'Weather Simplified',
     url: 'https://ogiboy.github.io/weatherSimplified/',
     gitUrl: 'https://github.com/ogiboy/weatherSimplified',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/weather_simplified.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -22,7 +22,7 @@ const someProjects: Project[] = [
     name: 'Graduation Project',
     url: 'https://graduation-project-flame.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/graduation-project',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/BilgeAdam_Students.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -31,7 +31,7 @@ const someProjects: Project[] = [
     name: 'Ataturk Quote Generator',
     url: 'https://quote-generator-with-ataturk.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/quoteGeneratorWithAtaturk',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/quote_generator.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -40,7 +40,7 @@ const someProjects: Project[] = [
     name: 'Carousel Demo',
     url: 'https://carouseldemoapp.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/carouseldemoapp',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/carousel_demo.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -49,7 +49,7 @@ const someProjects: Project[] = [
     name: 'Netflix Survey Form',
     url: 'https://ogiboy.github.io/netflix-survey-form',
     gitUrl: 'https://github.com/ogiboy/netflix-survey-form',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/netflix-survey-form.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -58,7 +58,7 @@ const someProjects: Project[] = [
     name: 'Context API Todo List',
     url: 'https://context-api-todo-list.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/ContextApiTodoList',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/context-api-todo-list.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -67,7 +67,7 @@ const someProjects: Project[] = [
     name: 'Cat Adoption Form',
     url: 'https://cat-adoption-rose.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/catAdoption',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/cat-adoption.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -76,7 +76,7 @@ const someProjects: Project[] = [
     name: 'Redux Toolkit Playlist',
     url: 'https://redux-tk-playlist.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/reduxTkPlaylist',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/redux-tk-playlist.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -85,7 +85,7 @@ const someProjects: Project[] = [
     name: 'Take Notes App',
     url: 'https://interview5-modal-notes-app-a4fq.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/Interview5ModalNotesApp',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/Notes-App.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -94,7 +94,7 @@ const someProjects: Project[] = [
     name: 'Activity Generator',
     url: 'https://interview3-activity-generator.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/interview3ActivityGenerator',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/activity-generator.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -103,7 +103,7 @@ const someProjects: Project[] = [
     name: 'Generate Robots',
     url: 'https://interview2-generate-robots.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/Interview2GenerateRobots',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/generate-robots.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -112,7 +112,7 @@ const someProjects: Project[] = [
     name: 'Shopping List',
     url: 'https://shopping-list-five-weld.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/shoppingList',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/shopping-list.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -121,7 +121,7 @@ const someProjects: Project[] = [
     name: 'GitHub User Search',
     url: 'https://github-user-search-lilac-kappa.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/githubUserSearch',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/GitHub-User-Search.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -130,7 +130,7 @@ const someProjects: Project[] = [
     name: 'Random Photos App',
     url: 'https://photos-app-mu.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/photosApp',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/Photos-App.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -139,7 +139,7 @@ const someProjects: Project[] = [
     name: 'Search Pokemons',
     url: 'https://search-pokemons-two.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/searchPokemons',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/poke-filter.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -148,7 +148,7 @@ const someProjects: Project[] = [
     name: 'BMI Calculator',
     url: 'https://react-bmi-calculator-three.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/reactBmiCalculator',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/bmi-calc.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
@@ -157,7 +157,7 @@ const someProjects: Project[] = [
     name: 'Google Landing Page',
     url: 'https://ogiboy.github.io/google-landing-page/',
     gitUrl: 'https://github.com/ogiboy/google-landing-page',
-    image: 'https://picsum.photos/200/300',
+    image: '/images/google-landing-page.png',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
   },
