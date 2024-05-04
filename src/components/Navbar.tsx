@@ -12,13 +12,12 @@ import { RxDashboard } from 'react-icons/rx'
 import { Menu, Transition } from '@headlessui/react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useTheme } from 'next-themes'
-import { useDispatch } from 'react-redux'
 
 import '@theme-toggles/react/css/Within.css'
 
 const Navbar = () => {
   const { systemTheme, theme, setTheme } = useTheme()
-  const dispatch = useDispatch()
+
   const { user, isLoading, error } = useUser()
   interface MenuItemsType {
     id: number
@@ -49,7 +48,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-full max-h-fit flex justify-between items-center flex-row-reverse">
+    <nav className="nav text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 w-screen max-h-fit flex justify-between items-center flex-row-reverse fixed top-0 pb-1 border-b border-slate-300">
       <div className="themeToggle shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl">
         <Within
           toggled={systemTheme === theme}

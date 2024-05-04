@@ -9,7 +9,10 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [require('@headlessui/tailwindcss')],
+  plugins: [
+    require('@headlessui/tailwindcss'),
+    // require('tailwind-scrollbar-hide'),
+  ],
   darkMode: 'class',
 }
 export default config
