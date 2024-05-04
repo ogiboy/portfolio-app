@@ -67,7 +67,7 @@ const Welcome = () => {
   if (!isMounted) return null
 
   return (
-    <main className="app pt-10 w-screen h-full text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 cursor-default overflow-hidden">
+    <main className="app mt-10 pt-10 w-screen h-full text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 cursor-default overflow-hidden">
       {isOpen && (
         <header>
           <Modal />

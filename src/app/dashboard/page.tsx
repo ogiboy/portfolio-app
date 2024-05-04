@@ -39,7 +39,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center flex-start text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300">
+    <div className="w-screen h-screen mt-10 flex flex-col items-center flex-start text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300">
       <h1 className="w-screen max-h-fit text-center text-xl m-5">Dashboard</h1>
       <animated.div
         style={{
