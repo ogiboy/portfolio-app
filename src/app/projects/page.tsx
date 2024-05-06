@@ -1,5 +1,4 @@
 'use client'
-
 import Card from '@/components/Card'
 
 import { animated, useScroll, useSpring } from '@react-spring/web'

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import orderBy from 'lodash/orderBy'
+import Loading from '@/app/dashboard/loading'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { BiSortUp } from 'react-icons/bi'
 import { BiSortDown } from 'react-icons/bi'
 
@@ -30,7 +31,7 @@ const Form = () => {
   }
 
   const handleShowPets = async () => {
-    console.log('handleshownpets runing')
+    // console.log('handleshownpets runing')
     try {
       const response = await axios.get('/api/see-pets')
       console.dir(response.data)
@@ -48,9 +49,9 @@ const Form = () => {
     handleShowPets()
   }, [])
 
-  useEffect(() => {
-    console.log('useEffect shownPets:' + shownPets)
-  }, [shownPets])
+  // useEffect(() => {
+  //   console.log('useEffect shownPets:' + shownPets)
+  // }, [shownPets])
 
   const sortUpBtnImage = <BiSortUp />
   const sortDownBtnImage = <BiSortDown />
@@ -105,20 +106,22 @@ const Form = () => {
       </div>
       <div className="rounded border-2 dark:border-slate-300 border-slate-700 w-4/5 min-h-36 max-h-60 my-5 overflow-scroll">
         <ul>
-          {orderBy(shownPets, 'date', sort).map((pet: any) => (
-            <figure
-              className=" min-h-16 active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
-              key={pet.date}
-            >
-              <blockquote>
-                <p>&quot;{pet.petName}&quot;</p>
-              </blockquote>
-              <figcaption className="text-right">
-                <cite>-{pet.owner}</cite>
-              </figcaption>
-              <hr />
-            </figure>
-          ))}
+          <Suspense fallback={<div>Loading...</div>}>
+            {orderBy(shownPets, 'date', sort).map((pet: any) => (
+              <figure
+                className=" min-h-16 active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
+                key={pet.date}
+              >
+                <blockquote>
+                  <p>&quot;{pet.petName}&quot;</p>
+                </blockquote>
+                <figcaption className="text-right">
+                  <cite>-{pet.owner}</cite>
+                </figcaption>
+                <hr />
+              </figure>
+            ))}
+          </Suspense>
         </ul>
       </div>
     </div>

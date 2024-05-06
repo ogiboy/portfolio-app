@@ -1,3 +1,5 @@
+import type { StaticImageData } from 'next/image'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -8,7 +10,7 @@ interface CardProps {
   name: string
   url: string
   gitUrl: string
-  image: string
+  image: StaticImageData
   description: string
 }
 
@@ -25,7 +27,14 @@ const Card: React.FC<CardProps> = ({
   return (
     <div className="border rounded-lg dark:border-slate-300 border-slate-700 flex flex-col flex-nowrap items-center justify-center min-w-72 max-w-80 min-h-96 max-h-fit m-5">
       <h2>{name}</h2>
-      <Image src={image} height={200} width={350} alt={name} className="grow" />
+      <Image
+        src={image}
+        height={200}
+        width={350}
+        alt={name}
+        placeholder="blur"
+        className="grow"
+      />
       <p>{description}</p>
       <div className="w-full h-fit flex justify-center items-center m-2 p-1 scale-150 space-x-5">
         <Link
