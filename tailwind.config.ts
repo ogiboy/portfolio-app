@@ -7,7 +7,14 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'main-bg': "url('/cat_tower_enhanced.jpeg')",
+      },
+      backgroundSize: {
+        '200%': '200%',
+      },
+    },
   },
   plugins: [
     require('@headlessui/tailwindcss'),
