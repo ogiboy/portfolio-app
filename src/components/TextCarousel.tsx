@@ -37,7 +37,7 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
     <div className="textCarousel w-screen mx-auto text-7xl text-left text-nowrap">
       {transitions((style, text) => (
         <animated.div className="w-full" style={style}>
-          <p>{text}</p>
+          <p className=" text-orange-900">{text}</p>
         </animated.div>
       ))}
     </div>
