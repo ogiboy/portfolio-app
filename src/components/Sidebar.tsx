@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
 import { openModal } from '@/app/features/modal/modalSlice'
 
+// Supports weights 400-900
+import '@fontsource-variable/cinzel'
+
 interface Links {
   id: number
   platform: string
@@ -72,8 +75,10 @@ const Sidebar: React.FC = () => {
 
   return (
     <main
-      className={`sidebar text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 cursor-default w-2/3 h-2/3 flex flex-col items-center justify-center hover:border hover:w-full transition-all ease-in-out ${
-        isActive ? 'border-2' : 'border-none'
+      className={`text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 cursor-default w-2/3 h-fit flex flex-col items-center justify-center hover:border hover:w-28 transition-all ease-in-out ${
+        isActive
+          ? 'border-2 dark:border-slate-300 border-slate-700'
+          : 'border-none'
       } rounded-md mx-2`}
     >
       {isOpen && (
@@ -81,11 +86,11 @@ const Sidebar: React.FC = () => {
           <Modal />
         </header>
       )}
-      <nav className="w-full h-2/3 flex flex-col items-center justify-evenly scale-75">
+      <nav className="w-full h-2/3 flex flex-col items-center justify-center scale-75 font-sidebarFont">
         {myLinks.map((link) => {
           return (
             <Link
-              className="min-w-20 max-w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded text-nowrap hover:scale-150 hover:my-3 transition-all ease-in duration-300"
+              className="min-w-20 max-w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded text-nowrap hover:scale-150 hover:my-3 hover:bg-opacity-50 dark:hover:bg-opacity-50 transition-all ease-in duration-300"
               href={link.link}
               key={link.id}
               target={link.platform === 'projects' ? '_self' : '_blank'}

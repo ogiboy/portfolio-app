@@ -2,17 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.sidebar {
-  font-family: 'Open Sans Variable', sans-serif;
-}
-
 .theme-toggler {
   scale: 1.9;
   padding: 10px;
   margin: 1px;
-}
-
-.textCarousel {
-  /* font-family: 'Cinzel Variable', serif; */
-  font-family: 'Dancing Script Variable', cursive;
 }

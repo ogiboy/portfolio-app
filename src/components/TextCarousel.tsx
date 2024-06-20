@@ -3,9 +3,6 @@
 import { animated, useTransition } from '@react-spring/web'
 import React, { useEffect, useState } from 'react'
 
-// Supports weights 400-900
-import '@fontsource-variable/cinzel'
-
 // Supports weights 400-700
 import '@fontsource-variable/dancing-script'
 
@@ -31,13 +28,13 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
     const timer = setInterval(updateIndex, 4000)
 
     return () => clearInterval(timer)
-  })
+  }, [texts])
 
   return (
-    <div className="textCarousel w-screen mx-auto text-7xl text-left text-nowrap">
+    <div className="w-screen h-screen px-5 text-9xl text-wrap font-carouselFont cursor-default flex justify-center items-center">
       {transitions((style, text) => (
-        <animated.div className="w-full" style={style}>
-          <p className=" text-orange-900">{text}</p>
+        <animated.div className="w-full text-center" style={style}>
+          <p className="select-none pb-28">{text}</p>
         </animated.div>
       ))}
     </div>

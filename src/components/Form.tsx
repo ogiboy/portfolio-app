@@ -67,21 +67,21 @@ const Form = () => {
         </label>
 
         <input
-          className="border rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
+          className="border caret-indigo-700 dark:caret-indigo-700 rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
           type="text"
           id="pets"
-          onChange={(e) => setPetName(e.target.value)}
-          value={petName}
+          onChange={(e) => setOwnerName(e.target.value)}
+          value={ownerName}
           placeholder="Your name"
           autoComplete="name given-name"
           required
         />
         <textarea
-          className="border resize-none rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
+          className="border caret-indigo-700 dark:caret-indigo-700 resize-none rounded-lg my-1 p-1 w-2/3 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500"
           id="owner"
           name="owner"
-          onChange={(e) => setOwnerName(e.target.value)}
-          value={ownerName}
+          onChange={(e) => setPetName(e.target.value)}
+          value={petName}
           placeholder="Comment goes here"
           required
         />

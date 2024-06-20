@@ -4,7 +4,7 @@ import Card from '@/components/Card'
 import { animated, useScroll, useSpring } from '@react-spring/web'
 import { useEffect } from 'react'
 
-import someProjects from '../data/data'
+import someProjects from '../lib/data'
 
 const Projects: React.FC = () => {
   const { scrollYProgress } = useScroll()
@@ -26,9 +26,9 @@ const Projects: React.FC = () => {
   }, [api, scrollYProgress])
 
   return (
-    <div className="w-screen mt-10 h-full text-center text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-700">
+    <div className="w-screen h-full text-center text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-700 overflow-hidden">
       <h1 className="text-lg p-2">Projects</h1>
-      <main className="flex flex-wrap items-center justify-evenly w-full h-full">
+      <main className="flex flex-wrap items-center justify-evenly w-screen h-full">
         {someProjects.map((item) => {
           const { id, name, url, gitUrl, image, description } = item
           return (

@@ -10,9 +10,21 @@ const config: Config = {
     extend: {
       backgroundImage: {
         'main-bg': "url('/cat_tower_enhanced.jpeg')",
+        stars:
+          "url('https://awv3node-homepage.surge.sh/build/assets/stars.svg')",
       },
       backgroundSize: {
         '200%': '200%',
+      },
+      fontFamily: {
+        carouselFont: ['Dancing Script Variable', 'cursive'],
+        sidebarFont: ['Cinzel Variable', 'serif'],
+      },
+      colors: {
+        firstParallax: '#7286D3',
+        secondParallax: '#8EA7E9',
+        thirdParallax: '#E5E0FF',
+        mainTextClr: '#FFF2F2',
       },
     },
   },
