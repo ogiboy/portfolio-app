@@ -13,19 +13,12 @@ import tardis from '../../public/tardis.svg'
 import cubes from '../../public/Sticker-cubes.svg'
 import codingBooks from '../../public/Sticker-coding-books.svg'
 import fixingBugs from '../../public/Fixing-Bugs.svg'
+import texts from '../app/lib/hello'
 
 import { HiChevronDoubleDown } from 'react-icons/hi'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 
 const App: React.FC = () => {
-  const texts: string[] = [
-    'Meow',
-    'Hello',
-    'Merhaba',
-    'Under Construction',
-    'Yapım Aşamasında',
-  ]
-
   const logoZIndex = 10
   const logoScale = 4
 
@@ -129,7 +122,7 @@ const App: React.FC = () => {
         factor={1}
         speed={1.5}
         style={{ zIndex: 9 }}
-        className="text-6xl bg-secondParallax font-sidebarFont flex flex-col justify-evenly items-center"
+        className="text-3xl bg-secondParallax font-sidebarFont flex flex-col justify-evenly items-center"
       >
         <h1>I&apos;m Oğuzcan,</h1>
 

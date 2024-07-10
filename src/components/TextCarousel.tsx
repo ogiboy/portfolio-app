@@ -1,5 +1,3 @@
-'use client'
-
 import { animated, useTransition } from '@react-spring/web'
 import React, { useEffect, useState } from 'react'
 
@@ -31,7 +29,7 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
   }, [texts])
 
   return (
-    <div className="w-screen h-screen px-5 text-9xl text-wrap font-carouselFont cursor-default flex justify-center items-center">
+    <div className="w-screen h-screen px-5 text-wrap font-carouselFont cursor-default flex justify-center items-center text-7xl">
       {transitions((style, text) => (
         <animated.div className="w-full text-center" style={style}>
           <p className="select-none pb-28">{text}</p>
