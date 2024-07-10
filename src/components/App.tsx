@@ -208,8 +208,12 @@ const App: React.FC = () => {
         factor={1}
         speed={0.5}
         className="border-2 bg-thirdParallax"
-      >
-        za
+      ></ParallaxLayer>
+
+      <ParallaxLayer speed={2.5} offset={2} style={{ zIndex: 56 }}>
+        <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
+          Feel free to reach out for collabs
+        </p>
       </ParallaxLayer>
     </Parallax>
   )
