@@ -17,6 +17,7 @@ import photosAppImg from '/public/images/Photos-App.png'
 import pokeFilterImg from '/public/images/poke-filter.png'
 import bmiCalcImg from '/public/images/bmi-calc.png'
 import googleLandingImg from '/public/images/google-landing-page.png'
+import isletmecii from '/public/images/isletmecii.png'
 
 interface Project {
   id: number
@@ -28,6 +29,15 @@ interface Project {
 }
 
 const someProjects: Project[] = [
+  {
+    id: 17,
+    name: 'İşletmecii - Idler Game',
+    url: 'https://idler-game.vercel.app/',
+    gitUrl: 'https://github.com/ogiboy/idler-game',
+    image: isletmecii,
+    description:
+      'An idler clicker style game with next.js tailwindcss reduxtoolkit',
+  },
   {
     id: 0,
     name: 'Weather Simplified',

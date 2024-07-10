@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({
     'border rounded-md p-1 mb-2 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500'
 
   return (
-    <div className="border rounded-lg dark:border-slate-300 border-slate-700 flex flex-col flex-nowrap items-center justify-center min-w-72 max-w-80 min-h-96 max-h-fit m-5">
+    <div className="border rounded-lg dark:border-slate-300 border-slate-700 flex flex-col flex-nowrap items-center justify-center min-w-72 max-w-80 min-h-[500px] max-h-[1000px] m-5">
       <h2>{name}</h2>
       <Image
         src={image}
