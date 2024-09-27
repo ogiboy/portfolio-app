@@ -243,7 +243,7 @@ const App: React.FC = () => {
             feel free
           </p>
           <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
-            to react out
+            to reach out
           </p>
           <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
             for collabs
