@@ -1,7 +1,7 @@
 import { db } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
@@ -21,6 +21,5 @@ export async function GET() {
   } catch (error) {
     console.log('error fetching data', error)
     return new NextResponse('failed to fetch pets', { status: 500 })
-  } finally {
   }
 }

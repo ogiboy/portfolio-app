@@ -5,6 +5,7 @@ import Loading from '@/app/dashboard/loading'
 import { Suspense, useEffect, useState } from 'react'
 import { BiSortUp } from 'react-icons/bi'
 import { BiSortDown } from 'react-icons/bi'
+import { revalidatePath } from 'next/cache'
 
 const Form = () => {
   const [petName, setPetName] = useState<string>('')
@@ -27,6 +28,7 @@ const Form = () => {
       setPetName('')
       setOwnerName('')
       handleShowPets()
+      revalidatePath('/dashboard')
     }
   }
 

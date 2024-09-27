@@ -17,13 +17,40 @@ import texts from '../app/lib/hello'
 
 import { HiChevronDoubleDown } from 'react-icons/hi'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
+import { useTrail, animated } from '@react-spring/web'
+import React, { useState } from 'react'
 
 const App: React.FC = () => {
   const logoZIndex = 10
   const logoScale = 4
 
+  const [isOpen, setIsOpen] = useState(true)
+
+  const Trail: React.FC<{ open: boolean; children: React.ReactNode }> = ({
+    open,
+    children,
+  }) => {
+    const items = React.Children.toArray(children)
+    const trail = useTrail(items.length, {
+      config: { mass: 5, tension: 2000, friction: 200 },
+      opacity: open ? 1 : 0,
+      x: open ? 0 : 20,
+      height: open ? 'auto' : 0,
+      from: { opacity: 0, x: 20, height: 0 },
+    })
+    return (
+      <div>
+        {trail.map(({ height, ...style }, index) => (
+          <animated.div key={index} style={{ ...style, overflow: 'hidden' }}>
+            <animated.div style={{ height }}>{items[index]}</animated.div>
+          </animated.div>
+        ))}
+      </div>
+    )
+  }
+
   return (
-    <Parallax pages={3} className="text-mainTextClr">
+    <Parallax pages={3} className="text-mainTextClr antialiased">
       {/* text carousel parallax */}
       {/* first page */}
       <ParallaxLayer
@@ -211,9 +238,20 @@ const App: React.FC = () => {
       ></ParallaxLayer>
 
       <ParallaxLayer speed={2.5} offset={2} style={{ zIndex: 56 }}>
-        <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
+        <Trail open={isOpen}>
+          <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
+            feel free
+          </p>
+          <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
+            to react out
+          </p>
+          <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
+            for collabs
+          </p>
+        </Trail>
+        {/* <p className="text-pink-500 text-4xl p-10 w-screen text-center mt-28">
           Feel free to reach out for collabs
-        </p>
+        </p> */}
       </ParallaxLayer>
     </Parallax>
   )
