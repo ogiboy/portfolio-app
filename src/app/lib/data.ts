@@ -36,7 +36,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/idler-game',
     image: isletmecii,
     description:
-      'An idler clicker style game with next.js tailwindcss reduxtoolkit',
+      'An idler clicker style game built with Next.js, TailwindCSS and Redux Toolkit. Players can manage a virtual business, earn money, hire employees and upgrade facilities.',
   },
   {
     id: 0,
@@ -45,7 +45,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/weatherSimplified',
     image: weatherImage,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A weather application built with HTML, CSS, and JavaScript that provides current weather information. Features a clean interface and uses a weather API to display real-time weather data.',
   },
   {
     id: 1,
@@ -54,7 +54,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/graduation-project',
     image: gradProjectImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A platform showcasing BilgeAdam front-end development bootcamp graduates. Built with Next.js, React, Material UI, and TypeScript, featuring a gallery of students with their profiles.',
   },
   {
     id: 2,
@@ -63,7 +63,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/quoteGeneratorWithAtaturk',
     image: quoteImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A quote generator application built with React featuring quotes from Mustafa Kemal Atatürk. Users can generate random quotes with a clean and responsive interface.',
   },
   {
     id: 3,
@@ -72,7 +72,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/carouseldemoapp',
     image: carouselImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A modern image carousel component built with Next.js and CSS. Features smooth transitions, responsive design, and customizable controls.',
   },
   {
     id: 4,
@@ -81,7 +81,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/netflix-survey-form',
     image: surveyFormImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A Netflix-inspired survey form built with HTML and CSS. Features a responsive design with custom form elements and a dark theme.',
   },
   {
     id: 5,
@@ -90,7 +90,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/ContextApiTodoList',
     image: contextImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A todo list application built with React and Context API for state management. Features CRUD operations for tasks with a clean SCSS-styled interface.',
   },
   {
     id: 6,
@@ -99,7 +99,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/catAdoption',
     image: catAdoptImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A cat adoption application form built with React and SCSS. Features a multi-step form process with validation and a responsive design.',
   },
   {
     id: 7,
@@ -108,7 +108,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/reduxTkPlaylist',
     image: reduxPlaylistImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A playlist management application built with React and Redux Toolkit. Users can create and manage music playlists with a modern interface.',
   },
   {
     id: 8,
@@ -117,7 +117,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/Interview5ModalNotesApp',
     image: notesAppImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A note-taking application built with React featuring a modal interface. Users can create, edit, and delete notes with a simple and intuitive design.',
   },
   {
     id: 9,
@@ -126,7 +126,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/interview3ActivityGenerator',
     image: activityGenImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A random activity generator app built with React and CSS. Uses an external API to suggest activities based on type, participants, and price range.',
   },
   {
     id: 10,
@@ -135,7 +135,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/Interview2GenerateRobots',
     image: robotsImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A fun robot avatar generator built with React and CSS. Creates unique robot avatars using RoboHash API with a colorful and playful interface.',
   },
   {
     id: 11,
@@ -144,7 +144,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/shoppingList',
     image: shoppingImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A shopping list application built with React. Features include adding and removing items, marking items as completed, and local storage persistence.',
   },
   {
     id: 12,
@@ -153,7 +153,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/githubUserSearch',
     image: userSearchImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A GitHub user search application built with React. Uses the GitHub API to search and display user profiles with their repositories and stats.',
   },
   {
     id: 13,
@@ -162,7 +162,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/photosApp',
     image: photosAppImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A random photo gallery application built with React. Fetches and displays random photos from an API with a responsive grid layout and search functionality.',
   },
   {
     id: 14,
@@ -171,7 +171,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/searchPokemons',
     image: pokeFilterImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A Pokemon search application built with React. Features filtering and searching Pokemon by name using the PokeAPI with a responsive grid display.',
   },
   {
     id: 15,
@@ -180,7 +180,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/reactBmiCalculator',
     image: bmiCalcImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      'A Body Mass Index (BMI) calculator built with React. Provides instant BMI calculations with input validation and health status indicators.',
   },
   {
     id: 16,
@@ -189,7 +189,7 @@ const someProjects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/google-landing-page',
     image: googleLandingImg,
     description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est rem esse magni, perspiciatis alias eaque asperiores recusandae in consequuntur possimus reprehenderit repellat voluptatum iusto quidem molestias maiores, incidunt eveniet non?',
+      "A clone of the Google homepage built with HTML and CSS. Features responsive design and pixel-perfect recreation of Google's search interface.",
   },
 ]
 
