@@ -1,29 +1,11 @@
 'use client'
 import Card from '@/components/Card'
+import { motion, useScroll } from 'framer-motion'
 
-import { animated, useScroll, useSpring } from '@react-spring/web'
-import { useEffect } from 'react'
-
-import someProjects from '../lib/data'
+import someProjects from '../../lib/data'
 
 const Projects: React.FC = () => {
   const { scrollYProgress } = useScroll()
-
-  const [springs, api] = useSpring(() => ({
-    width: '25%',
-    height: 25,
-    borderRadius: 2,
-  }))
-
-  useEffect(() => {
-    api.start({
-      width: scrollYProgress.to((progress) => `${progress * 100}%`),
-    })
-
-    return () => {
-      api.stop()
-    }
-  }, [api, scrollYProgress])
 
   return (
     <div className="w-screen h-full text-center text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-700 overflow-hidden">
@@ -44,9 +26,10 @@ const Projects: React.FC = () => {
         })}
       </main>
       <footer className="fixed bottom-0 w-screen h-3 bg-slate-700 dark:bg-slate-200">
-        <animated.div
+        <motion.div
           style={{
-            ...springs,
+            width: scrollYProgress,
+            height: '100%',
           }}
           className="bg-slate-200 dark:bg-slate-700"
         />

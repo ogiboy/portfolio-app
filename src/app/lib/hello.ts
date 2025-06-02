@@ -1,5 +1,4 @@
 const helloMessage: string[] = [
-  'Meow',
   'Hello',
   'Merhaba',
   'Bonjour',

@@ -1,0 +1,15 @@
+{
+  "Navbar": {
+    "title": "Hoşgeldin",
+    "user": "Ziyaretçi",
+    "Home": "Ana Sayfa",
+    "Dashboard": "Gösterge Paneli",
+    "Login": "Giriş",
+    "Logout": "Çıkış"
+  },
+  "Sidebar": {
+    "aboutme": "Hakkımda",
+    "projects": "Projeler",
+    "email": "E-posta"
+  }
+}

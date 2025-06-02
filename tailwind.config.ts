@@ -29,8 +29,7 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@headlessui/tailwindcss'),
-    // require('tailwind-scrollbar-hide'),
+    // Add any other plugins here
   ],
   darkMode: 'class',
 }

@@ -1,19 +1,12 @@
+const createNextIntlPlugin = require('next-intl/plugin')
+
+const withNextIntl = createNextIntlPlugin()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.(pdf)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          publicPath: '/_next',
-          name: 'static/media/[name].[hash].[ext]',
-        },
-      },
-    })
-    return config
+  experimental: {
+    scrollRestoration: true,
   },
-
   images: {
     remotePatterns: [
       {
@@ -36,4 +29,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withNextIntl(nextConfig)

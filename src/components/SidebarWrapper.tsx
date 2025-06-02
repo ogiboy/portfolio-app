@@ -2,7 +2,7 @@ import Sidebar from './Sidebar'
 
 const SidebarWrapper = () => {
   return (
-    <div className="flex items-center h-screen w-24 align-middle opacity-30 hover:opacity-100 transition-all ease-in-out duration-700 cursor-default z-50">
+    <div className="fixed left-0 flex items-center h-screen w-24 align-middle opacity-30 hover:opacity-100 hover:w-32 transition-all ease-in-out duration-700 cursor-default z-50">
       <Sidebar />
     </div>
   )

@@ -1,82 +1,118 @@
+'use client'
+
 import { closeModal } from '@/app/features/modal/modalSlice'
 import { RootState } from '@/store/store'
-
 import { MdOutlineClose } from 'react-icons/md'
-import { Dialog, Transition } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-import resume from '../../public/myResume.pdf'
+const overlayVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.2 },
+  },
+}
+
+const modalVariants = {
+  hidden: {
+    scale: 0.95,
+    opacity: 0,
+    y: 20,
+    transition: {
+      type: 'spring',
+      duration: 0.2,
+    },
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      duration: 0.3,
+      bounce: 0.3,
+    },
+  },
+}
 
 const Modal = () => {
   const dispatch = useDispatch()
   const { isOpen } = useSelector((store: RootState) => store.modal)
-
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (isOpen && iframeRef.current) {
-      iframeRef.current.focus()
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') dispatch(closeModal())
     }
-  }, [isOpen])
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+
+      // Focus trap
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      if (focusableElements?.length) {
+        const firstElement = focusableElements[0] as HTMLElement
+        firstElement.focus()
+      }
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, dispatch])
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) dispatch(closeModal())
+  }
 
   return (
-    <Transition show={isOpen} appear>
-      <Dialog
-        open={isOpen}
-        onClose={() => dispatch(closeModal())}
-        className="absolute top-10 left-10 text-center w-2/3 h-2/3 flex flex-col justify-between"
-      >
-        <Transition.Child
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+          variants={overlayVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          onClick={handleOverlayClick}
         >
-          <div className="fixed inset-0 bg-black/25" aria-hidden="true" />
-        </Transition.Child>
-        <Transition.Child
-          enter="ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-          className="grow"
-        >
-          <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-            <Dialog.Panel className="rounded mx-auto relative h-full w-full flex flex-col items-center justify-between">
-              <Dialog.Title as="h3" className="font-bold my-2">
-                my Resume
-              </Dialog.Title>
-              <Dialog.Description
-                as="div"
-                className="w-full h-full flex justify-center"
-              >
-                <iframe
-                  src={resume}
-                  className="w-full px-10 mx-auto z-50"
-                  title="pdf viewer"
-                  tabIndex={0}
-                  ref={iframeRef}
-                ></iframe>
-              </Dialog.Description>
-
+          <motion.div
+            ref={modalRef}
+            className="relative w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-zinc-800"
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">My Resume</h2>
               <button
-                className="border-2 my-2"
                 onClick={() => dispatch(closeModal())}
+                className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-zinc-700"
+                aria-label="Close modal"
               >
-                <MdOutlineClose />
+                <MdOutlineClose className="h-5 w-5" />
               </button>
-            </Dialog.Panel>
-          </div>
-        </Transition.Child>
-      </Dialog>
-    </Transition>
+            </div>
+
+            <div className="w-full h-full flex justify-center">
+              {/* Content goes here */}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
+
 export default Modal
 
 //
