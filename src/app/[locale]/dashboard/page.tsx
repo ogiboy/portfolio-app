@@ -1,21 +1,11 @@
 'use client'
 
-// import { useUser } from '@auth0/nextjs-auth0/client'
-
 import Form from '@/components/Form'
 import { Link } from '@/i18n/navigation'
 
-// import { animated, useSpring, useScroll } from '@react-spring/web'
-
 const Dashboard = () => {
-  // const { user, error, isLoading } = useUser()
-
-  // if (isLoading) return <div>Loading...</div>
-
-  // if (error) return <div>{error.message}</div>
-
   return (
-    <div className="w-screen h-screen flex flex-col items-center flex-start text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300">
+    <div className="w-screen min-h-screen flex flex-col items-center flex-start text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300">
       <h1 className="w-screen max-h-fit text-center text-xl mt-16">
         Dashboard
       </h1>

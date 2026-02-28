@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type JSX } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -49,12 +49,12 @@ const Dropdown = ({ items }: DropdownProps) => {
   }
 
   const itemVariants = {
-    closed: { 
-      x: -20, 
+    closed: {
+      x: -20,
       opacity: 0,
     },
-    open: { 
-      x: 0, 
+    open: {
+      x: 0,
       opacity: 1,
       transition: {
         type: 'spring',
@@ -105,10 +105,7 @@ const Dropdown = ({ items }: DropdownProps) => {
               exit="closed"
             >
               {items.map((item) => (
-                <motion.div
-                  key={item.id}
-                  variants={itemVariants}
-                >
+                <motion.div key={item.id} variants={itemVariants}>
                   <Link
                     href={item.link}
                     className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-zinc-700/50 transition-colors"

@@ -1,4 +1,4 @@
-const createNextIntlPlugin = require('next-intl/plugin')
+import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin()
 
@@ -7,6 +7,13 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  //   webpack(config) {
+  //     config.module.rules.push({
+  //       test: /\.svg$/,
+  //       use: ['@svgr/webpack'],
+  //     })
+  //     return config
+  //   },
   images: {
     remotePatterns: [
       {
@@ -29,4 +36,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withNextIntl(nextConfig)
+export default withNextIntl(nextConfig)

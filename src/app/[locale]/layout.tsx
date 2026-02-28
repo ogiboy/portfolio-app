@@ -1,4 +1,5 @@
 import '../globals.css'
+
 import Navbar from '@/components/Navbar'
 import Providers from '@/components/Providers'
 import { hasLocale } from 'next-intl'
@@ -10,13 +11,14 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }) {
+  const params = await props.params
+
+  const { children } = props
+
   const { locale } = params
 
   if (!hasLocale(routing.locales, locale)) {
@@ -26,13 +28,13 @@ export default async function RootLayout({
   const messages = await getMessages({ locale })
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body className="antialiased scroll-smooth">
-        <Providers locale={locale} messages={messages}>
+    <Providers locale={locale} messages={messages}>
+      <html lang={locale} suppressHydrationWarning>
+        <body className="antialiased scroll-smooth">
           <Navbar />
           {children}
-        </Providers>
-      </body>
-    </html>
+        </body>
+      </html>
+    </Providers>
   )
 }

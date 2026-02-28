@@ -8,16 +8,16 @@ import { IoMailUnreadOutline } from 'react-icons/io5'
 import { FiGithub } from 'react-icons/fi'
 import { BsFiletypeHtml } from 'react-icons/bs'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
 import { openModal } from '@/app/features/modal/modalSlice'
 
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 // Supports weights 400-900
-import '@fontsource-variable/cinzel'
-import { useTranslations } from 'next-intl'
+// import '@fontsource-variable/cinzel'
 
 // window.history.scrollRestoration
 

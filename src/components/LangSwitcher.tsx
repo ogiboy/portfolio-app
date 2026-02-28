@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import turkishFlag from '/public/lang/tr-flag.svg'
-import usaFlag from '/public/lang/us-flag.svg'
+import turkishFlag from '../../public/lang/tr-flag.svg'
+import usaFlag from '../../public/lang/us-flag.svg'
 import { Link, usePathname } from '@/i18n/navigation'
 import { useLocale } from 'next-intl'
 

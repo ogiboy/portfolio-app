@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState, useCallback } from 'react'
 
 // Supports weights 400-700
-import '@fontsource-variable/dancing-script'
+// import '@fontsource-variable/dancing-script'
 
 interface TextCarouselProps {
   texts: string[]

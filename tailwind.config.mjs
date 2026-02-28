@@ -1,10 +1,9 @@
-import type { Config } from 'tailwindcss'
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+const config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -17,8 +16,8 @@ const config: Config = {
         '200%': '200%',
       },
       fontFamily: {
-        carouselFont: ['Dancing Script Variable', 'cursive'],
-        sidebarFont: ['Cinzel Variable', 'serif'],
+        // carouselFont: ['Dancing Script Variable', 'cursive'],
+        // sidebarFont: ['Cinzel Variable', 'serif'],
       },
       colors: {
         firstParallax: '#7286D3',
