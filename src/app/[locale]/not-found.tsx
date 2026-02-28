@@ -1,4 +1,4 @@
-import { Link } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation';
 
 export default function NotFound() {
   return (
@@ -7,5 +7,5 @@ export default function NotFound() {
       <p className="text-[#f9f9f9] ">Could not find requested resource</p>
       <Link href="/">Return Home</Link>
     </div>
-  )
+  );
 }

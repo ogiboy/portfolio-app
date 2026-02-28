@@ -3,6 +3,9 @@
 }
 .theme-toggle {
   --theme-toggle__within--duration: 0.5s;
+  border: none;
+  background: 0 0;
+  cursor: pointer;
 }
 .theme-toggle__within * {
   transform-origin: center;
@@ -21,11 +24,6 @@
 }
 .theme-toggle--toggled.theme-toggle .theme-toggle__within g path {
   transform: scale(0.65);
-}
-.theme-toggle {
-  border: none;
-  background: 0 0;
-  cursor: pointer;
 }
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle:not(.theme-toggle--force-motion) * {

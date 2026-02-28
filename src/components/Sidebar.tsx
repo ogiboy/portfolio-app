@@ -1,44 +1,36 @@
-'use client'
+'use client';
 
-import Modal from './Modal'
+import Modal from './Modal';
 
-import { GrContactInfo } from 'react-icons/gr'
-import { AiOutlineLinkedin } from 'react-icons/ai'
-import { IoMailUnreadOutline } from 'react-icons/io5'
-import { FiGithub } from 'react-icons/fi'
-import { BsFiletypeHtml } from 'react-icons/bs'
+import { GrContactInfo } from 'react-icons/gr';
+import { AiOutlineLinkedin } from 'react-icons/ai';
+import { IoMailUnreadOutline } from 'react-icons/io5';
+import { FiGithub } from 'react-icons/fi';
+import { BsFiletypeHtml } from 'react-icons/bs';
 
-import { useEffect, useState, type JSX } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store/store'
-import { openModal } from '@/app/features/modal/modalSlice'
+import { useState, type JSX } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-
-// Supports weights 400-900
-// import '@fontsource-variable/cinzel'
-
-// window.history.scrollRestoration
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 interface Links {
-  id: number
-  platform: string
-  link: string
-  img: JSX.Element
+  id: number;
+  platform: string;
+  link: string;
+  img: JSX.Element;
 }
 
 const Sidebar: React.FC = () => {
-  const { isOpen } = useSelector((store: RootState) => store.modal)
-  const [isActive, setIsActive] = useState<boolean>(false)
-  const t = useTranslations('Sidebar')
-
-  const dispatch = useDispatch()
+  const { isOpen } = useSelector((store: RootState) => store.modal);
+  const [, setIsHovered] = useState<boolean>(false);
+  const t = useTranslations('Sidebar');
 
   const myLinks: Links[] = [
     {
       id: 0,
-      platform: 'github',
+      platform: 'GitHub',
       link: 'https://github.com/ogiboy',
       img: <FiGithub />,
     },
@@ -50,7 +42,7 @@ const Sidebar: React.FC = () => {
     },
     {
       id: 2,
-      platform: 'linkedin',
+      platform: 'LinkedIn',
       link: 'https://www.linkedin.com/in/hoguzcantoptas/',
       img: <AiOutlineLinkedin />,
     },
@@ -66,56 +58,35 @@ const Sidebar: React.FC = () => {
       link: '/projects',
       img: <BsFiletypeHtml />,
     },
-  ]
-
-  useEffect(() => {
-    const ringing = setInterval(() => {
-      setIsActive((prevIsActive) => !prevIsActive)
-    }, 1000)
-
-    return () => {
-      clearInterval(ringing)
-    }
-  }, [])
+  ];
 
   return (
     <main
-      className={`text-slate-600 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 cursor-default w-2/3 h-fit flex flex-col items-center justify-center hover:border hover:w-28 transition-all ease-in-out ${
-        isActive
-          ? 'border-2 dark:border-slate-300 border-slate-700'
-          : 'border-none'
-      } rounded-md mx-2`}
+      className="relative flex flex-col items-center gap-1 p-2 rounded-xl border border-white/8 bg-white/5 backdrop-blur-md w-16 hover:w-28 transition-all duration-500 ease-in-out overflow-hidden group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {isOpen && (
-        <header>
-          <Modal />
-        </header>
-      )}
-      <nav className="w-full h-2/3 flex flex-col items-center justify-center scale-75 font-sidebarFont">
-        {myLinks.map((link) => {
-          return (
-            <Link
-              className="min-w-20 max-w-24 flex flex-col justify-evenly items-center mx-4 hover:bg-slate-300 dark:hover:bg-slate-500 rounded text-nowrap hover:scale-150 hover:my-3 hover:bg-opacity-50 dark:hover:bg-opacity-50 transition-all ease-in duration-300"
-              href={link.link}
-              key={link.id}
-              // target={link.platform === 'projects' ? '_self' : '_blank'}
-              // onClick={(e) => {
-              //   if (link.platform === 'about me') {
-              //     e.preventDefault()
-              //     dispatch(openModal())
-              //   }
-              // }}
-            >
-              <div className="flex justify-center items-baseline text-lg scale-125 m-3">
-                {link.img}
-              </div>
+      {isOpen && <Modal />}
+
+      <nav className="w-full flex flex-col items-center gap-1">
+        {myLinks.map((link) => (
+          <Link
+            key={link.id}
+            href={link.link}
+            className="relative w-full flex items-center gap-2.5 px-2 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-200"
+            title={link.platform}
+          >
+            <span className="text-base flex-shrink-0 w-5 flex items-center justify-center">
+              {link.img}
+            </span>
+            <span className="text-xs font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
               {link.platform}
-            </Link>
-          )
-        })}
+            </span>
+          </Link>
+        ))}
       </nav>
     </main>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

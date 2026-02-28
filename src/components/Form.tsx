@@ -1,61 +1,61 @@
-import axios from 'axios'
-import orderBy from 'lodash/orderBy'
+import axios from 'axios';
+import orderBy from 'lodash/orderBy';
 
-import { Suspense, useEffect, useState } from 'react'
-import { BiSortUp } from 'react-icons/bi'
-import { BiSortDown } from 'react-icons/bi'
+import { Suspense, useEffect, useState } from 'react';
+import { BiSortUp } from 'react-icons/bi';
+import { BiSortDown } from 'react-icons/bi';
 // import { revalidatePath } from 'next/cache'
 
 const Form = () => {
-  const [petName, setPetName] = useState<string>('')
-  const [ownerName, setOwnerName] = useState<string>('')
-  const [shownPets, setShownPets] = useState([])
-  const [sort, setSort] = useState<'asc' | 'desc'>('desc')
+  const [petName, setPetName] = useState<string>('');
+  const [ownerName, setOwnerName] = useState<string>('');
+  const [shownPets, setShownPets] = useState([]);
+  const [sort, setSort] = useState<'asc' | 'desc'>('desc');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (petName && ownerName) {
-        const date = new Date()
-        await axios.post('/api/add-pet', { date, petName, ownerName })
+        const date = new Date();
+        await axios.post('/api/add-pet', { date, petName, ownerName });
       } else {
-        throw new Error('petname ownername not found')
+        throw new Error('petname ownername not found');
       }
     } catch (error) {
-      console.error('error adding pet', error)
+      console.error('error adding pet', error);
     } finally {
-      setPetName('')
-      setOwnerName('')
-      handleShowPets()
+      setPetName('');
+      setOwnerName('');
+      handleShowPets();
       // revalidatePath('/dashboard')
     }
-  }
+  };
 
   const handleShowPets = async () => {
     // console.log('handleshownpets runing')
     try {
-      const response = await axios.get('/api/see-pets')
-      console.dir(response.data)
+      const response = await axios.get('/api/see-pets');
+      console.dir(response.data);
       if (!response) {
-        throw new Error('see-pets doesnt work')
+        throw new Error('see-pets doesnt work');
       } else {
-        setShownPets(response.data)
+        setShownPets(response.data);
       }
     } catch (error) {
-      console.log('error fetching pets', error)
+      console.log('error fetching pets', error);
     }
-  }
+  };
 
   useEffect(() => {
-    handleShowPets()
-  }, [])
+    handleShowPets();
+  }, []);
 
   // useEffect(() => {
   //   console.log('useEffect shownPets:' + shownPets)
   // }, [shownPets])
 
-  const sortUpBtnImage = <BiSortUp />
-  const sortDownBtnImage = <BiSortDown />
+  const sortUpBtnImage = <BiSortUp />;
+  const sortDownBtnImage = <BiSortDown />;
 
   return (
     <div className="w-96 min-h-96 my-5 rounded border-2 dark:border-slate-300 border-slate-700 flex flex-col justify-around items-center cursor-default">
@@ -108,24 +108,26 @@ const Form = () => {
       <div className="rounded border-2 dark:border-slate-300 border-slate-700 w-4/5 min-h-36 max-h-60 my-5 overflow-scroll">
         <ul>
           <Suspense fallback={<div>Loading...</div>}>
-            {orderBy(shownPets, 'date', sort).map((pet: any) => (
-              <figure
-                className=" min-h-16 active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
-                key={pet.date}
-              >
-                <blockquote>
-                  <p>&quot;{pet.petName}&quot;</p>
-                </blockquote>
-                <figcaption className="text-right">
-                  <cite>-{pet.owner}</cite>
-                </figcaption>
-                <hr />
-              </figure>
-            ))}
+            {orderBy(shownPets, 'date', sort).map(
+              (pet: { date: string; owner: string; petName: string }) => (
+                <figure
+                  className=" min-h-16 active:ring-2 px-1 py-1 mx-2 my-1 hover:shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500 rounded-2xl"
+                  key={pet.date}
+                >
+                  <blockquote>
+                    <p>&quot;{pet.petName}&quot;</p>
+                  </blockquote>
+                  <figcaption className="text-right">
+                    <cite>-{pet.owner}</cite>
+                  </figcaption>
+                  <hr />
+                </figure>
+              ),
+            )}
           </Suspense>
         </ul>
       </div>
     </div>
-  )
-}
-export default Form
+  );
+};
+export default Form;

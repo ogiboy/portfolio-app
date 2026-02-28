@@ -1,20 +1,19 @@
-'use client'
-import { useDispatch, useSelector } from 'react-redux'
-import './theme-toggle.css'
-import React from 'react'
-import { toggleTheme } from '@/app/features/theme/themeSlice'
+'use client';
+import { useDispatch, useSelector } from 'react-redux';
+import './theme-toggle.css';
+import { toggleTheme } from '@/app/features/theme/themeSlice';
 
-import type { RootState } from '@/store/store'
+import type { RootState } from '@/store/store';
 
 type Props = {
-  toggled: boolean
-  onToggle: (toggled: boolean) => void
-}
+  toggled: boolean;
+  onToggle: (toggled: boolean) => void;
+};
 
 const Within = ({ toggled, onToggle }: Props) => {
   const handleClick = () => {
-    onToggle(!toggled)
-  }
+    onToggle(!toggled);
+  };
 
   return (
     <button
@@ -49,17 +48,21 @@ const Within = ({ toggled, onToggle }: Props) => {
         />
       </svg>
     </button>
-  )
-}
+  );
+};
 
-const Toggle = () => {
-  const theme = useSelector((state: RootState) => state.theme.theme)
-  const dispatch = useDispatch()
+const Toggle = ({ classname }: { classname: string }) => {
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  const dispatch = useDispatch();
 
   const handleToggle = () => {
-    dispatch(toggleTheme())
-  }
-  return <Within toggled={theme === 'dark'} onToggle={handleToggle} />
-}
+    dispatch(toggleTheme());
+  };
+  return (
+    <div className={classname}>
+      <Within toggled={theme === 'dark'} onToggle={handleToggle} />
+    </div>
+  );
+};
 
-export default Toggle
+export default Toggle;

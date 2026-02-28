@@ -1,21 +1,22 @@
-'use client'
+'use client';
 
-import { closeModal } from '@/app/features/modal/modalSlice'
-import { RootState } from '@/store/store'
-import { MdOutlineClose } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
-import { useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { closeModal } from '@/app/features/modal/modalSlice';
+import { RootState } from '@/store/store';
+import { MdOutlineClose } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 
-const overlayVariants = {
+const overlayVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: { duration: 0.2 },
   },
-}
+};
 
-const modalVariants = {
+const modalVariants: Variants = {
   hidden: {
     scale: 0.95,
     opacity: 0,
@@ -35,41 +36,41 @@ const modalVariants = {
       bounce: 0.3,
     },
   },
-}
+};
 
 const Modal = () => {
-  const dispatch = useDispatch()
-  const { isOpen } = useSelector((store: RootState) => store.modal)
-  const modalRef = useRef<HTMLDivElement>(null)
+  const dispatch = useDispatch();
+  const { isOpen } = useSelector((store: RootState) => store.modal);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') dispatch(closeModal())
-    }
+      if (e.key === 'Escape') dispatch(closeModal());
+    };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'hidden'
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
 
       // Focus trap
       const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
       if (focusableElements?.length) {
-        const firstElement = focusableElements[0] as HTMLElement
-        firstElement.focus()
+        const firstElement = focusableElements[0] as HTMLElement;
+        firstElement.focus();
       }
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen, dispatch])
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, dispatch]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) dispatch(closeModal())
-  }
+    if (e.target === e.currentTarget) dispatch(closeModal());
+  };
 
   return (
     <AnimatePresence>
@@ -110,10 +111,10 @@ const Modal = () => {
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;
 
 //
 //

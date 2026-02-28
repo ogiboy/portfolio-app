@@ -7,6 +7,9 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  turbopack: {
+    root: '/Users/ogiboy/Documents/Projects/portfolio-app',
+  },
   //   webpack(config) {
   //     config.module.rules.push({
   //       test: /\.svg$/,

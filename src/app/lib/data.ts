@@ -1,31 +1,31 @@
-import type { StaticImageData } from 'next/image'
+import type { StaticImageData } from 'next/image';
 
-import weatherImage from '../../../public/images/weather_simplified.png'
-import gradProjectImg from '../../../public/images/BilgeAdam_Students.png'
-import quoteImg from '../../../public/images/quote_generator.png'
-import carouselImg from '../../../public/images/carousel_demo.png'
-import surveyFormImg from '../../../public/images/netflix-survey-form.png'
-import contextImg from '../../../public/images/context-api-todo-list.png'
-import catAdoptImg from '../../../public/images/cat-adoption.png'
-import reduxPlaylistImg from '../../../public/images/redux-tk-playlist.png'
-import notesAppImg from '../../../public/images/Notes-App.png'
-import activityGenImg from '../../../public/images/activity-generator.png'
-import robotsImg from '../../../public/images/generate-robots.png'
-import shoppingImg from '../../../public/images/shopping-list.png'
-import userSearchImg from '../../../public/images/GitHub-User-Search.png'
-import photosAppImg from '../../../public/images/Photos-App.png'
-import pokeFilterImg from '../../../public/images/poke-filter.png'
-import bmiCalcImg from '../../../public/images/bmi-calc.png'
-import googleLandingImg from '../../../public/images/google-landing-page.png'
-import isletmecii from '../../../public/images/isletmecii.png'
+import weatherImage from '../../../public/images/weather_simplified.png';
+import gradProjectImg from '../../../public/images/BilgeAdam_Students.png';
+import quoteImg from '../../../public/images/quote_generator.png';
+import carouselImg from '../../../public/images/carousel_demo.png';
+import surveyFormImg from '../../../public/images/netflix-survey-form.png';
+import contextImg from '../../../public/images/context-api-todo-list.png';
+import catAdoptImg from '../../../public/images/cat-adoption.png';
+import reduxPlaylistImg from '../../../public/images/redux-tk-playlist.png';
+import notesAppImg from '../../../public/images/Notes-App.png';
+import activityGenImg from '../../../public/images/activity-generator.png';
+import robotsImg from '../../../public/images/generate-robots.png';
+import shoppingImg from '../../../public/images/shopping-list.png';
+import userSearchImg from '../../../public/images/GitHub-User-Search.png';
+import photosAppImg from '../../../public/images/Photos-App.png';
+import pokeFilterImg from '../../../public/images/poke-filter.png';
+import bmiCalcImg from '../../../public/images/bmi-calc.png';
+import googleLandingImg from '../../../public/images/google-landing-page.png';
+import isletmecii from '../../../public/images/isletmecii.png';
 
 interface Project {
-  id: number
-  name: string
-  url: string
-  gitUrl: string
-  image: StaticImageData
-  description: string
+  id: number;
+  name: string;
+  url: string;
+  gitUrl: string;
+  image: StaticImageData;
+  description: string;
 }
 
 const someProjects: Project[] = [
@@ -191,6 +191,6 @@ const someProjects: Project[] = [
     description:
       "A clone of the Google homepage built with HTML and CSS. Features responsive design and pixel-perfect recreation of Google's search interface.",
   },
-]
+];
 
-export default someProjects
+export default someProjects;

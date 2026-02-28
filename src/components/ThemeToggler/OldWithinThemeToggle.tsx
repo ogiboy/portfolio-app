@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { forwardRef } from 'react'
-import type { CSSProperties, MouseEvent } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/store/store'
-import { toggleTheme } from '@/app/features/theme/themeSlice'
-import './theme-toggle.css'
+import { forwardRef } from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@/store/store';
+import { toggleTheme } from '@/app/features/theme/themeSlice';
+import './theme-toggle.css';
 
 interface WithinToggleProps {
-  duration?: number
-  className?: string
-  style?: CSSProperties
-  title?: string
-  'aria-label'?: string
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
-  suppressHydrationWarning?: boolean
+  duration?: number;
+  className?: string;
+  style?: CSSProperties;
+  title?: string;
+  'aria-label'?: string;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  suppressHydrationWarning?: boolean;
 }
 
 const Within = forwardRef<HTMLButtonElement, WithinToggleProps>(function Within(
@@ -28,11 +28,11 @@ const Within = forwardRef<HTMLButtonElement, WithinToggleProps>(function Within(
     suppressHydrationWarning = false,
     ...rest
   },
-  ref
+  ref,
 ) {
-  const dispatch = useDispatch()
-  const theme = useSelector((state: RootState) => state.theme.theme)
-  const isDark = theme === 'dark'
+  const dispatch = useDispatch();
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  const isDark = theme === 'dark';
 
   const classes = [
     'theme-toggle',
@@ -40,12 +40,12 @@ const Within = forwardRef<HTMLButtonElement, WithinToggleProps>(function Within(
     className,
   ]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    dispatch(toggleTheme())
-    onClick?.(e)
-  }
+    dispatch(toggleTheme());
+    onClick?.(e);
+  };
 
   return (
     <button
@@ -89,7 +89,7 @@ const Within = forwardRef<HTMLButtonElement, WithinToggleProps>(function Within(
         />
       </svg>
     </button>
-  )
-})
+  );
+});
 
-export default Within
+export default Within;

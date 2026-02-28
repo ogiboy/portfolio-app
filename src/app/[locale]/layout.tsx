@@ -1,31 +1,31 @@
-import '../globals.css'
+import '../globals.css';
 
-import Navbar from '@/components/Navbar'
-import Providers from '@/components/Providers'
-import { hasLocale } from 'next-intl'
-import { routing } from '@/i18n/routing'
-import { notFound } from 'next/navigation'
-import { getMessages } from 'next-intl/server'
+import Navbar from '@/components/Navbar';
+import Providers from '@/components/Providers';
+import { hasLocale } from 'next-intl';
+import { routing } from '@/i18n/routing';
+import { notFound } from 'next/navigation';
+import { getMessages } from 'next-intl/server';
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export default async function RootLayout(props: {
-  children: React.ReactNode
-  params: Promise<{ locale: string }>
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
-  const params = await props.params
+  const params = await props.params;
 
-  const { children } = props
+  const { children } = props;
 
-  const { locale } = params
+  const { locale } = params;
 
   if (!hasLocale(routing.locales, locale)) {
-    notFound()
+    notFound();
   }
 
-  const messages = await getMessages({ locale })
+  const messages = await getMessages({ locale });
 
   return (
     <Providers locale={locale} messages={messages}>
@@ -36,5 +36,5 @@ export default async function RootLayout(props: {
         </body>
       </html>
     </Providers>
-  )
+  );
 }

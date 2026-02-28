@@ -1,17 +1,15 @@
-import type { StaticImageData } from 'next/image'
-
-import Image from 'next/image'
-import Link from 'next/link'
-
-import { AiOutlineLink } from 'react-icons/ai'
-import { FiGithub } from 'react-icons/fi'
+import type { StaticImageData } from 'next/image';
+import Image from 'next/image';
+import Link from 'next/link';
+import { AiOutlineLink } from 'react-icons/ai';
+import { FiGithub } from 'react-icons/fi';
 
 interface CardProps {
-  name: string
-  url: string
-  gitUrl: string
-  image: StaticImageData
-  description: string
+  name: string;
+  url: string;
+  gitUrl: string;
+  image: StaticImageData;
+  description: string;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -21,40 +19,68 @@ const Card: React.FC<CardProps> = ({
   image,
   description,
 }) => {
-  const linkClasses =
-    'border rounded-md p-1 mb-2 shadow-lg shadow-slate-400 hover:shadow-slate-500 dark:shadow-slate-800 dark:hover:shadow-slate-500'
-
   return (
-    <div className="border rounded-lg dark:border-slate-300 border-slate-700 flex flex-col flex-nowrap items-center justify-center min-w-72 max-w-80 min-h-[500px] max-h-[1000px] m-5">
-      <h2>{name}</h2>
-      <Image
-        src={image}
-        height={200}
-        width={350}
-        alt={name}
-        placeholder="blur"
-        className="grow"
-      />
-      <p>{description}</p>
-      <div className="w-full h-fit flex justify-center items-center m-2 p-1 scale-150 space-x-5">
-        <Link
-          href={url}
-          target="_blank"
-          className={linkClasses}
-          title="Go to project website"
-        >
-          <AiOutlineLink />
-        </Link>
-        <Link
-          href={gitUrl}
-          target="_blank"
-          className={linkClasses}
-          title="Go to project repository"
-        >
-          <FiGithub />
-        </Link>
+    <div className="group relative flex flex-col bg-zinc-900/60 border border-white/6 rounded-2xl overflow-hidden w-72 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/8 transition-all duration-300 backdrop-blur-sm">
+      {/* Image */}
+      <div className="relative h-44 overflow-hidden bg-zinc-800">
+        <Image
+          src={image}
+          fill
+          alt={name}
+          placeholder="blur"
+          className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/70 via-transparent to-transparent" />
+
+        {/* Hover links */}
+        <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Link
+            href={url}
+            target="_blank"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/90 text-white text-xs font-mono hover:bg-indigo-400 transition-colors"
+          >
+            <AiOutlineLink className="text-sm" /> Live
+          </Link>
+          <Link
+            href={gitUrl}
+            target="_blank"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/15 text-white text-xs font-mono hover:bg-white/25 transition-colors backdrop-blur-sm"
+          >
+            <FiGithub className="text-sm" /> Code
+          </Link>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col gap-2 p-4">
+        <h2 className="font-display text-sm font-semibold text-white leading-snug">
+          {name}
+        </h2>
+        <p className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+          {description}
+        </p>
+
+        {/* Bottom links — always visible on mobile */}
+        <div className="flex gap-3 pt-2 mt-auto">
+          <Link
+            href={url}
+            target="_blank"
+            className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors font-mono"
+          >
+            <AiOutlineLink /> Live
+          </Link>
+          <Link
+            href={gitUrl}
+            target="_blank"
+            className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 transition-colors font-mono"
+          >
+            <FiGithub /> GitHub
+          </Link>
+        </div>
       </div>
     </div>
-  )
-}
-export default Card
+  );
+};
+
+export default Card;

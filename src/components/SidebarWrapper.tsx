@@ -1,10 +1,10 @@
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar';
 
 const SidebarWrapper = () => {
   return (
-    <div className="fixed left-0 flex items-center h-screen w-24 align-middle opacity-30 hover:opacity-100 hover:w-32 transition-all ease-in-out duration-700 cursor-default z-50">
+    <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 opacity-40 hover:opacity-100 transition-opacity duration-500">
       <Sidebar />
     </div>
-  )
-}
-export default SidebarWrapper
+  );
+};
+export default SidebarWrapper;

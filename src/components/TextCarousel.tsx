@@ -1,17 +1,17 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useCallback } from 'react';
 
 // Supports weights 400-700
 // import '@fontsource-variable/dancing-script'
 
 interface TextCarouselProps {
-  texts: string[]
+  texts: string[];
 }
 
 const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
-  const [index, setIndex] = useState<number>(0)
-  const [direction, setDirection] = useState<number>(1)
-  const [cursorStyle, setCursorStyle] = useState<string>('cursor-grab')
+  const [index, setIndex] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1);
+  const [cursorStyle, setCursorStyle] = useState<string>('cursor-grab');
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -28,46 +28,47 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
       x: direction < 0 ? 1000 : -1000,
       opacity: 0,
     }),
-  }
+  };
 
-  const swipeConfidenceThreshold = 10000
+  const swipeConfidenceThreshold = 10000;
   const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity
-  }
+    return Math.abs(offset) * velocity;
+  };
 
   const paginate = useCallback(
     (newDirection: number) => {
-      setDirection(newDirection)
+      setDirection(newDirection);
       setIndex(
-        (prevIndex) => (prevIndex + newDirection + texts.length) % texts.length
-      )
+        (prevIndex) => (prevIndex + newDirection + texts.length) % texts.length,
+      );
     },
-    [texts.length]
-  )
+    [texts.length],
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setDirection(1)
-      setIndex((prevIndex) => (prevIndex + 1) % texts.length)
-    }, 4000)
-    return () => clearInterval(timer)
-  }, [texts.length])
+      setDirection(1);
+      setIndex((prevIndex) => (prevIndex + 1) % texts.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [texts.length]);
 
   function handleMouseDown(e: React.MouseEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    setCursorStyle('cursor-grabbing')
+    e.preventDefault();
+    e.stopPropagation();
+    setCursorStyle('cursor-grabbing');
   }
 
   function handleMouseUp(e: React.MouseEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    setCursorStyle('cursor-grab')
+    e.preventDefault();
+    e.stopPropagation();
+    setCursorStyle('cursor-grab');
   }
 
   return (
     <div
-      className={`w-screen h-screen px-5 text-wrap font-carouselFont flex justify-center items-center text-7xl overflow-hidden`}
+      className={`w-screen h-screen px-5 text-wrap font-carouselFont flex justify-center items-center text-7xl md:text-8xl overflow-hidden`}
+      style={{ color: 'rgba(255,255,255,0.85)' }}
     >
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
@@ -85,12 +86,12 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
           onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x)
+            const swipe = swipePower(offset.x, velocity.x);
 
             if (swipe < -swipeConfidenceThreshold) {
-              paginate(1)
+              paginate(1);
             } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-1)
+              paginate(-1);
             }
           }}
           className={`w-full text-center absolute ${cursorStyle}`}
@@ -101,6 +102,6 @@ const TextCarousel: React.FC<TextCarouselProps> = ({ texts }) => {
         </motion.div>
       </AnimatePresence>
     </div>
-  )
-}
-export default TextCarousel
+  );
+};
+export default TextCarousel;

@@ -1,28 +1,27 @@
-'use client'
+'use client';
 
 import { useState, type JSX } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client'
-import { useTranslations } from 'next-intl'
-import Image from 'next/image'
-import { VscAccount } from 'react-icons/vsc'
-import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
+import { useUser } from '@auth0/nextjs-auth0/client';
+import Image from 'next/image';
+import { VscAccount } from 'react-icons/vsc';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Variants } from 'framer-motion';
+import Link from 'next/link';
 
 interface DropdownProps {
   items: {
-    id: number
-    name: string
-    link: string
-    img: JSX.Element
-  }[]
+    id: number;
+    name: string;
+    link: string;
+    img: JSX.Element;
+  }[];
 }
 
 const Dropdown = ({ items }: DropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { user } = useUser()
-  const t = useTranslations('Navbar')
+  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUser();
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     closed: {
       scale: 0.95,
       opacity: 0,
@@ -46,9 +45,9 @@ const Dropdown = ({ items }: DropdownProps) => {
         delayChildren: 0.1,
       },
     },
-  }
+  };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     closed: {
       x: -20,
       opacity: 0,
@@ -62,7 +61,7 @@ const Dropdown = ({ items }: DropdownProps) => {
         damping: 40,
       },
     },
-  }
+  };
 
   return (
     <div className="relative inline-block">
@@ -123,7 +122,7 @@ const Dropdown = ({ items }: DropdownProps) => {
         )}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
-export default Dropdown
+export default Dropdown;

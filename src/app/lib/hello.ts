@@ -14,6 +14,6 @@ const helloMessage: string[] = [
   'హలో',
   '侬好',
   '안녕하세요',
-]
+];
 
-export default helloMessage
+export default helloMessage;
