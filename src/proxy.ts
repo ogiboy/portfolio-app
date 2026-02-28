@@ -27,7 +27,7 @@ export const config = {
   matcher: [
     // Tüm public route'lar için
     '/',
-    String.raw`/((?!api|trpc|_next|_vercel|.*\..*).*)`,
+    '/((?!api|trpc|_next|_vercel|.*[.].*).*)',
     // Özel olarak dashboard ve projects route'ları için
     '/(dashboard|projects)/:path*',
   ],

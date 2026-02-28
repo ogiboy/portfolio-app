@@ -53,11 +53,7 @@ const Navbar = () => {
 
       {/* Right: theme + lang */}
       <div className="flex items-center gap-2">
-        <ThemeButton
-          className={
-            'w-8 h-8 flex items-center justify-center rounded-lg border border-white/8 bg-white/5 hover:bg-white/10 transition-colors'
-          }
-        />
+        <ThemeButton classname="w-8 h-8 flex items-center justify-center rounded-lg border border-white/8 bg-white/5 hover:bg-white/10 transition-colors" />
 
         <div className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/8 bg-white/5 hover:bg-white/10 transition-colors overflow-hidden">
           <LangSwitcher />
