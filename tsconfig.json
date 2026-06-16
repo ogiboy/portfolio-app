@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2024",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,15 +13,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -33,11 +23,20 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "tailwind.config.mjs",
     ".next/dev/types/**/*.ts",
-    ".next/dev/dev/types/**/*.ts"
+    "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".codex",
+    ".agents",
+    ".claude",
+    ".claude-flow",
+    ".vercel",
+    ".pnpm-store",
+    "playwright-report",
+    "test-results",
+    "CLAUDE.md",
+    "skills-lock.json"
   ]
 }

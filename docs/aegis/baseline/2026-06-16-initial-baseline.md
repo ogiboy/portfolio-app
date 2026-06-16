@@ -1,6 +1,7 @@
 # Initial Baseline: 2026-06-16
 
 ## Repo State
+
 - Branch: `ui-update`.
 - Framework: Next.js App Router with `src/app/[locale]` routes.
 - Styling: Tailwind CSS v4 with legacy `tailwind.config.mjs` tokens and Google Font CSS import.
@@ -9,11 +10,13 @@
 - Existing content: 18 project records with local images.
 
 ## Verification Before Implementation
+
 - `npm run lint` passed.
 - `npm run build` passed.
 - `pnpm audit --prod` reported vulnerable dependency surface.
 
 ## Risks
+
 - Mixed npm/pnpm lockfile state.
 - Private feature dependencies not aligned with public portfolio v1.
 - Client-heavy motion architecture.

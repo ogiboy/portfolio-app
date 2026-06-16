@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const config = {
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './messages/**/*.json'],
-  darkMode: 'class',
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "./messages/**/*.json"],
+  darkMode: "class",
   theme: {
     extend: {},
   },

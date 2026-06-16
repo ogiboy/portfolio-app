@@ -1,64 +1,41 @@
-'use client';
-import Card from '@/components/Card';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import someProjects from '../../lib/data';
+import type { Metadata } from "next";
+import { ProjectCard } from "@/components/site/project-card";
+import { Badge } from "@/components/ui/badge";
+import { projects } from "@/content/projects";
+import { siteCopy, type Locale } from "@/content/site";
 
-const Projects: React.FC = () => {
-  const { scrollYProgress } = useScroll();
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-
-  return (
-    <div className="w-screen min-h-screen bg-firstParallax text-mainTextClr font-body">
-      {/* Grid pattern */}
-      <div className="fixed inset-0 bg-grid-pattern opacity-50 pointer-events-none" />
-
-      {/* Glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-indigo-600/8 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Header */}
-      <div className="relative pt-28 pb-12 px-8 text-center">
-        <p className="text-xs font-mono text-indigo-400 tracking-[0.3em] uppercase mb-4">
-          portfolio
-        </p>
-        <h1 className="font-display text-5xl font-bold text-white">Projects</h1>
-        <p className="text-slate-400 mt-4 text-sm">
-          {someProjects.length} projects built across the stack
-        </p>
-      </div>
-
-      {/* Grid */}
-      <main className="relative flex flex-wrap justify-center gap-6 px-8 pb-24">
-        {someProjects.map((item) => {
-          const { id, name, url, gitUrl, image, description } = item;
-          return (
-            <motion.div
-              key={id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-            >
-              <Card
-                name={name}
-                url={url}
-                image={image}
-                description={description}
-                gitUrl={gitUrl}
-              />
-            </motion.div>
-          );
-        })}
-      </main>
-
-      {/* Scroll progress bar (fixed) */}
-      <footer className="fixed bottom-0 w-screen h-0.5 bg-white/5">
-        <motion.div
-          style={{ width: progressWidth }}
-          className="h-full bg-gradient-to-r from-indigo-500 to-violet-500"
-        />
-      </footer>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Projects",
 };
 
-export default Projects;
+export default async function ProjectsPage({
+  params,
+}: Readonly<{ params: Promise<{ locale: Locale }> }>) {
+  const { locale } = await params;
+  const copy = siteCopy[locale].projects;
+
+  return (
+    <main className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+      <Badge>{copy.archiveLabel}</Badge>
+      <div className="mt-8 grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+        <h1 className="font-display text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
+          {copy.title}
+        </h1>
+        <p className="text-lg leading-relaxed text-muted-foreground">
+          {copy.intro}
+        </p>
+      </div>
+      <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        {projects.map((project) => (
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            liveLabel={copy.live}
+            codeLabel={copy.code}
+            caseLabel={copy.caseLabel}
+          />
+        ))}
+      </div>
+    </main>
+  );
+}

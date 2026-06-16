@@ -1,15 +1,5 @@
 {
-  "Navbar": {
-    "title": "Welcome",
-    "user": "Guest",
-    "Home": "Home",
-    "Dashboard": "Dashboard",
-    "Login": "Login",
-    "Logout": "Logout"
-  },
-  "Sidebar": {
-    "aboutme": "About Me",
-    "projects": "Projects",
-    "email": "Email"
+  "Meta": {
+    "locale": "en"
   }
 }

@@ -1,9 +1,11 @@
 # Portfolio App Overhaul Roadmap
 
 ## Objective
+
 Rebuild the portfolio as a public, client-first hybrid portfolio with EN/TR support, Brutalist Dev Lab design language, shadcn primitives, GSAP motion, pnpm tooling, CI gates, and changelog-based release hygiene.
 
 ## Commit Slices
+
 1. `chore: add agent governance and roadmap records`
 2. `chore: standardize pnpm and node tooling`
 3. `fix: update dependencies and remove vulnerable surface`
@@ -15,6 +17,7 @@ Rebuild the portfolio as a public, client-first hybrid portfolio with EN/TR supp
 9. `docs: prepare v0.2.0 release notes`
 
 ## Acceptance
+
 - Public routes work in English and Turkish.
 - Legacy dashboard/Auth0/Postgres guestbook code is retired without live data deletion.
 - All existing projects remain available in the archive.

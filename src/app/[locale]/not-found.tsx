@@ -1,11 +1,20 @@
-import { Link } from '@/i18n/navigation';
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="w-screen h-screen bg-mainColor/90 font-robotoSlab italic flex flex-col justify-center items-center pb-5">
-      <h2 className="text-[#f9f9f9] ">Not Found</h2>
-      <p className="text-[#f9f9f9] ">Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
-    </div>
+    <main className="grid min-h-[70dvh] place-items-center px-4 text-center">
+      <div>
+        <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+          404
+        </p>
+        <h1 className="mt-4 font-display text-5xl tracking-[-0.08em]">
+          Not found.
+        </h1>
+        <Button asChild className="mt-8">
+          <Link href="/">Return home</Link>
+        </Button>
+      </div>
+    </main>
   );
 }
