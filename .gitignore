@@ -40,3 +40,12 @@ node_modules.nosync
 old.env
 
 my-project.zip
+# local agent/runtime caches
+.agents/
+.claude/
+.claude-flow/
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db
+skills-lock.json
+CLAUDE.md
