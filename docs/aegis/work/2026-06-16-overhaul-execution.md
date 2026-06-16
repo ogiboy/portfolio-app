@@ -14,3 +14,4 @@ Implement the accepted portfolio overhaul roadmap in commit slices on `ui-update
 - `pnpm dev` remains Turbopack-based; `pnpm build` uses Webpack because the current Turbopack production build stalls on Next.js 16.2.9.
 - PostCSS is overridden to `8.5.15` in `pnpm-workspace.yaml` to remove the production audit finding.
 - WASM game center first pass is implemented as `/[locale]/labs/retro-game-center` with copied static assets, lazy iframe boot, and `/wasm/*` route-handler asset serving.
+- Remote CI typecheck requires tracked static image module declarations because `next-env.d.ts` remains ignored as a generated local file.
