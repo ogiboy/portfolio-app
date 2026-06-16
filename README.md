@@ -15,10 +15,12 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 ## Scripts
 
 - `pnpm lint`: ESLint with Next.js and Prettier compatibility.
+- `pnpm format:check`: Prettier plus Tailwind class sorting.
 - `pnpm typecheck`: TypeScript verification.
 - `pnpm test`: Vitest content and unit checks.
 - `pnpm test:e2e`: Playwright public-route smoke checks.
-- `pnpm build`: Next.js production build.
+- `pnpm build`: Next.js production build through Webpack.
+- `pnpm build:turbopack`: explicit follow-up check for the Turbopack production build path.
 - `pnpm audit`: production dependency audit at high severity.
 
 ## Architecture
@@ -27,7 +29,13 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 - Client behavior isolated to leaf components under `src/components/client`.
 - Public portfolio v1 has no private dashboard, Auth0, or database-backed guestbook.
 - Content lives in typed modules under `src/content`.
+- Tailwind v4 tokens live in `src/app/globals.css`; there is no parallel Tailwind config.
+- shadcn settings live in `components.json` and use CSS variables with owned component code.
 - Governance records live under `.ai/` and `docs/aegis/`.
+
+## WASM Game Center
+
+The roadmap includes a live WASM game center demo sourced from `home-media-portal`. The first pass is intentionally backend-free: static assets, lazy iframe boot, and a dedicated lab route. Django, Docker, or Kubernetes only enter the architecture if durable scores, authenticated saves, ROM administration, or a broader ops showcase become real requirements.
 
 ## Release Gates
 
@@ -35,6 +43,7 @@ Before preparing a release or push:
 
 ```bash
 pnpm lint
+pnpm format:check
 pnpm typecheck
 pnpm test
 pnpm test:e2e

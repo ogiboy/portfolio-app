@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { NextIntlClientProvider } from "next-intl";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { NextIntlClientProvider } from 'next-intl';
 
 export default function Providers({
   children,
@@ -14,11 +14,7 @@ export default function Providers({
   locale: string;
 }>) {
   return (
-    <NextIntlClientProvider
-      locale={locale}
-      messages={messages}
-      timeZone="Europe/Istanbul"
-    >
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone="Europe/Istanbul">
       {children}
       <SpeedInsights />
       <Analytics />

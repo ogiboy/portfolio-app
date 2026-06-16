@@ -1,0 +1,17 @@
+.next/
+.vercel/
+.codex/
+.agents/
+.claude/
+.claude-flow/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+pnpm-lock.yaml
+public/wasm/
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db
+skills-lock.json
+CLAUDE.md

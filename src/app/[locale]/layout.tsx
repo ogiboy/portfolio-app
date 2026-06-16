@@ -1,45 +1,30 @@
-import "../globals.css";
+import '../globals.css';
 
-import type { Metadata } from "next";
-import { Archivo_Black, JetBrains_Mono, Space_Grotesk } from "next/font/google";
-import { hasLocale } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
-import Providers from "@/components/Providers";
-import { SiteFooter } from "@/components/site/site-footer";
-import { SiteHeader } from "@/components/site/site-header";
-import { routing } from "@/i18n/routing";
-import type { Locale } from "@/content/site";
-
-const display = Archivo_Black({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-display",
-});
-
-const sans = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import type { Metadata } from 'next';
+import { hasLocale } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import Providers from '@/components/Providers';
+import { SiteFooter } from '@/components/site/site-footer';
+import { SiteHeader } from '@/components/site/site-header';
+import { routing } from '@/i18n/routing';
+import type { Locale } from '@/content/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio-app-three-rho.vercel.app"),
+  metadataBase: new URL('https://portfolio-app-three-rho.vercel.app'),
   title: {
-    default: "Oğuzcan Toptaş - Frontend Portfolio",
-    template: "%s | Oğuzcan Toptaş",
+    default: 'Oğuzcan Toptaş - Frontend Portfolio',
+    template: '%s | Oğuzcan Toptaş',
   },
   description:
-    "Client-first frontend portfolio by Oğuzcan Toptaş, built with Next.js, shadcn primitives, and cinematic motion.",
+    'Client-first frontend portfolio by Oğuzcan Toptaş, built with Next.js, shadcn primitives, and cinematic motion.',
   openGraph: {
-    title: "Oğuzcan Toptaş - Frontend Portfolio",
+    title: 'Oğuzcan Toptaş - Frontend Portfolio',
     description:
-      "Client-first frontend portfolio with brutalist design systems, Next.js architecture, and production delivery discipline.",
-    type: "website",
+      'Client-first frontend portfolio with brutalist design systems, Next.js architecture, and production delivery discipline.',
+    type: 'website',
   },
 };
 
@@ -65,7 +50,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body>

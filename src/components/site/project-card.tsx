@@ -1,14 +1,10 @@
-import Image from "next/image";
-import {
-  ArrowRight,
-  ArrowSquareOut,
-  GithubLogo,
-} from "@phosphor-icons/react/dist/ssr";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import type { Project } from "@/content/projects";
-import { Link } from "@/i18n/navigation";
+import Image from 'next/image';
+import { ArrowRight, ArrowSquareOut, GithubLogo } from '@phosphor-icons/react/dist/ssr';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import type { Project } from '@/content/projects';
+import { Link } from '@/i18n/navigation';
 
 export function ProjectCard({
   project,
@@ -23,7 +19,7 @@ export function ProjectCard({
 }>) {
   return (
     <Card className="group overflow-hidden">
-      <div className="relative aspect-[4/3] border-b-2 border-foreground bg-muted">
+      <div className="border-foreground bg-muted relative aspect-[4/3] border-b-2">
         <Image
           src={project.image}
           alt={project.name}
@@ -37,14 +33,14 @@ export function ProjectCard({
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge>{project.category}</Badge>
-            <span className="font-mono text-xs font-bold text-muted-foreground">
+            <span className="text-muted-foreground font-mono text-xs font-bold">
               {project.year}
             </span>
           </div>
-          <h3 className="mt-6 font-display text-3xl leading-none tracking-[-0.06em]">
+          <h3 className="font-display mt-6 text-3xl leading-none tracking-[-0.06em]">
             {project.name}
           </h3>
-          <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+          <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
             {project.description}
           </p>
         </div>
@@ -54,7 +50,7 @@ export function ProjectCard({
             {project.stack.slice(0, 4).map((item) => (
               <span
                 key={item}
-                className="border border-foreground bg-background px-2 py-1 font-mono text-[0.65rem] font-bold uppercase tracking-[0.12em]"
+                className="border-foreground bg-background border px-2 py-1 font-mono text-[0.65rem] font-bold tracking-[0.12em] uppercase"
               >
                 {item}
               </span>

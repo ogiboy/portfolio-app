@@ -14,6 +14,7 @@
 - Prefer small, reviewable commit slices aligned to roadmap phases.
 - Run verification before claiming completion or preparing a push.
 - Keep changelog and release notes aligned with shipped behavior.
+- Keep Prettier explicit through `.prettierrc` and `.prettierignore`; do not format lockfiles or vendored WASM assets.
 
 ## Architecture Rules
 
@@ -22,6 +23,8 @@
 - Keep public portfolio v1 free of private dashboard, Auth0, and database-backed guestbook code.
 - Use shadcn/Radix primitives for accessible UI foundations and customize them through project tokens.
 - Use GSAP only in isolated client leaves with `prefers-reduced-motion` handling.
+- Use Tailwind v4 CSS-first configuration in `src/app/globals.css`; do not reintroduce a parallel Tailwind config unless a plugin requires it.
+- Keep the WASM game center behind an isolated lab route with lazy loading and no home-page payload impact.
 
 ## Design Rules
 
@@ -32,6 +35,7 @@
 
 ## Verification Gates
 
+- `pnpm format:check`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`

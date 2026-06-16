@@ -1,23 +1,18 @@
-import Image from "next/image";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowSquareOut,
-  GithubLogo,
-} from "@phosphor-icons/react/dist/ssr";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { getNextProject, getProject, projects } from "@/content/projects";
-import { siteCopy, type Locale } from "@/content/site";
-import { Link } from "@/i18n/navigation";
+import Image from 'next/image';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, ArrowRight, ArrowSquareOut, GithubLogo } from '@phosphor-icons/react/dist/ssr';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { getNextProject, getProject, projects } from '@/content/projects';
+import { siteCopy, type Locale } from '@/content/site';
+import { Link } from '@/i18n/navigation';
 
 export function generateStaticParams() {
   return projects.flatMap((project) => [
-    { slug: project.slug, locale: "en" },
-    { slug: project.slug, locale: "tr" },
+    { slug: project.slug, locale: 'en' },
+    { slug: project.slug, locale: 'tr' },
   ]);
 }
 
@@ -27,7 +22,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   return {
-    title: project ? project.name : "Project",
+    title: project ? project.name : 'Project',
     description: project?.description,
   };
 }
@@ -53,15 +48,13 @@ export default async function ProjectDetailPage({
         <div className="mt-8 grid gap-10 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
             <Badge>{project.category}</Badge>
-            <h1 className="mt-6 font-display text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
+            <h1 className="font-display mt-6 text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
               {project.name}
             </h1>
           </div>
-          <p className="text-xl leading-relaxed text-muted-foreground">
-            {project.description}
-          </p>
+          <p className="text-muted-foreground text-xl leading-relaxed">{project.description}</p>
         </div>
-        <div className="relative mt-12 aspect-[16/10] overflow-hidden border-2 border-foreground bg-muted shadow-[10px_10px_0_0_var(--shadow-hard)]">
+        <div className="border-foreground bg-muted relative mt-12 aspect-[16/10] overflow-hidden border-2 shadow-[10px_10px_0_0_var(--shadow-hard)]">
           <Image
             src={project.image}
             alt={project.name}
@@ -74,18 +67,16 @@ export default async function ProjectDetailPage({
         </div>
       </section>
 
-      <section className="border-y-2 border-foreground bg-card px-4 py-16 md:px-8">
+      <section className="border-foreground bg-card border-y-2 px-4 py-16 md:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.18em] uppercase">
               {copy.yearLabel}
             </p>
-            <p className="mt-2 font-display text-3xl tracking-[-0.05em]">
-              {project.year}
-            </p>
+            <p className="font-display mt-2 text-3xl tracking-[-0.05em]">{project.year}</p>
           </div>
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.18em] uppercase">
               {copy.stackLabel}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -113,12 +104,10 @@ export default async function ProjectDetailPage({
         <Separator />
         <div className="mt-8 grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.18em] uppercase">
               {copy.nextProject}
             </p>
-            <h2 className="mt-3 font-display text-4xl tracking-[-0.06em]">
-              {nextProject.name}
-            </h2>
+            <h2 className="font-display mt-3 text-4xl tracking-[-0.06em]">{nextProject.name}</h2>
           </div>
           <Button asChild size="lg">
             <Link href={`/projects/${nextProject.slug}`}>

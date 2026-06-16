@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { Project } from "@/content/projects";
+import Image from 'next/image';
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { Project } from '@/content/projects';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -23,26 +23,24 @@ export function CinematicWorkRail({
 
   useGSAP(
     () => {
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      const mobileViewport = window.matchMedia("(max-width: 767px)").matches;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const mobileViewport = window.matchMedia('(max-width: 767px)').matches;
 
       if (reduceMotion || mobileViewport || !root.current || !track.current) {
         return;
       }
 
-      const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]");
+      const cards = gsap.utils.toArray<HTMLElement>('[data-work-card]');
 
       gsap.from(cards, {
         opacity: 0,
         y: 48,
         duration: 0.8,
-        ease: "power3.out",
+        ease: 'power3.out',
         stagger: 0.08,
         scrollTrigger: {
           trigger: root.current,
-          start: "top 70%",
+          start: 'top 70%',
           once: true,
         },
       });
@@ -55,10 +53,10 @@ export function CinematicWorkRail({
 
       gsap.to(track.current, {
         x: -distance,
-        ease: "none",
+        ease: 'none',
         scrollTrigger: {
           trigger: root.current,
-          start: "top top",
+          start: 'top top',
           end: () => `+=${distance}`,
           pin: true,
           scrub: 1,
@@ -72,7 +70,7 @@ export function CinematicWorkRail({
   return (
     <section
       ref={root}
-      className="overflow-hidden border-y-2 border-foreground bg-foreground py-16 text-background md:py-0"
+      className="border-foreground bg-foreground text-background overflow-hidden border-y-2 py-16 md:py-0"
     >
       <div
         ref={track}
@@ -82,18 +80,16 @@ export function CinematicWorkRail({
           <h2 className="font-display text-4xl leading-[0.95] tracking-[-0.06em] md:text-6xl">
             {title}
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-background/75">
-            {intro}
-          </p>
+          <p className="text-background/75 mt-6 text-lg leading-relaxed">{intro}</p>
         </div>
 
         {projects.map((project) => (
           <article
             key={project.slug}
             data-work-card
-            className="grid overflow-hidden border-2 border-background bg-background text-foreground shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-[26rem]"
+            className="border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-[26rem]"
           >
-            <div className="relative aspect-[4/3] border-b-2 border-foreground bg-muted">
+            <div className="border-foreground bg-muted relative aspect-[4/3] border-b-2">
               <Image
                 src={project.image}
                 alt={project.name}
@@ -104,10 +100,10 @@ export function CinematicWorkRail({
               />
             </div>
             <div className="p-5">
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.14em] uppercase">
                 {project.category}
               </p>
-              <h3 className="mt-4 font-display text-3xl leading-none tracking-[-0.05em]">
+              <h3 className="font-display mt-4 text-3xl leading-none tracking-[-0.05em]">
                 {project.name}
               </h3>
             </div>

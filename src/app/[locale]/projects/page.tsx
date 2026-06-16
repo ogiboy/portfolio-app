@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { ProjectCard } from "@/components/site/project-card";
-import { Badge } from "@/components/ui/badge";
-import { projects } from "@/content/projects";
-import { siteCopy, type Locale } from "@/content/site";
+import type { Metadata } from 'next';
+import { ProjectCard } from '@/components/site/project-card';
+import { Badge } from '@/components/ui/badge';
+import { projects } from '@/content/projects';
+import { siteCopy, type Locale } from '@/content/site';
 
 export const metadata: Metadata = {
-  title: "Projects",
+  title: 'Projects',
 };
 
 export default async function ProjectsPage({
@@ -21,9 +21,7 @@ export default async function ProjectsPage({
         <h1 className="font-display text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
           {copy.title}
         </h1>
-        <p className="text-lg leading-relaxed text-muted-foreground">
-          {copy.intro}
-        </p>
+        <p className="text-muted-foreground text-lg leading-relaxed">{copy.intro}</p>
       </div>
       <div className="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project) => (
