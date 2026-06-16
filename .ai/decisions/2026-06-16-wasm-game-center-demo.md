@@ -25,3 +25,4 @@ Add the WASM game center to the portfolio roadmap as an isolated live-demo lab. 
 - The demo can ship on Vercel without a separate backend.
 - The current engine HTML still references CDN-hosted `jquery` and `rivets` scripts inside the sandboxed frame; self-hosting those vendor scripts is the next hardening step when package registry access is available.
 - Django, Docker, and Kubernetes remain optional future architecture, not blockers for the first live demo.
+- Browser QA hardened the iframe sandbox after implementation: `allow-same-origin` was removed, fullscreen is delegated through the iframe `allow` attribute, and Playwright smoke now asserts the sandbox does not include same-origin escape.

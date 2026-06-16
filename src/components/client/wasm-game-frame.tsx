@@ -53,8 +53,7 @@ export function WasmGameFrame({
             loading="lazy"
             referrerPolicy="no-referrer"
             allow="fullscreen; gamepad"
-            allowFullScreen
-            sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-downloads"
+            sandbox="allow-scripts allow-pointer-lock allow-downloads"
             className="absolute inset-0 h-full w-full"
           />
         ) : (

@@ -17,4 +17,9 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /retro game center boots/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /boot demo/i }).click();
+  const gameFrame = page.locator('iframe').first();
+  await expect(gameFrame).toHaveAttribute('sandbox', /allow-scripts/);
+  await expect(gameFrame).not.toHaveAttribute('sandbox', /allow-same-origin/);
 });

@@ -186,7 +186,7 @@ export const siteCopy: LocalizedCopy<{
       ],
       qaTitle: 'Current guardrails',
       qa: [
-        'Sandboxed iframe with explicit permissions for scripts, same-origin asset fetches, pointer lock, downloads, fullscreen, and gamepad.',
+        'Sandboxed iframe with explicit permissions for scripts, pointer lock, downloads, fullscreen, and gamepad without same-origin escape.',
         'Shareware ROM manifest copied as static assets after size review.',
         'External vendor scripts are contained inside the engine frame and documented for future self-hosting.',
       ],
@@ -306,7 +306,7 @@ export const siteCopy: LocalizedCopy<{
       ],
       qaTitle: 'Mevcut güvenlik sınırları',
       qa: [
-        'Script, same-origin asset fetch, pointer lock, download, fullscreen ve gamepad için açık izinli sandbox iframe.',
+        'Script, pointer lock, download, fullscreen ve gamepad için açık izinli, same-origin kaçışı olmayan sandbox iframe.',
         'Shareware ROM manifesti size review sonrası statik asset olarak kopyalandı.',
         'Harici vendor scriptleri engine frame içinde sınırlı ve gelecekte self-host için dokümante edildi.',
       ],

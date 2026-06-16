@@ -7,3 +7,7 @@
 ## Specs
 
 - `specs/2026-06-16-portfolio-overhaul-design.md`: accepted full rebuild design and delivery plan.
+
+## Release
+
+- `release/2026-06-16-v0.2.0-checklist.md`: release gate evidence, browser QA, remote CI, and known follow-ups.
