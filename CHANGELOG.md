@@ -17,9 +17,10 @@
 - Public project archive and localized project detail routes.
 - Isolated GSAP work rail with reduced-motion fallback.
 - Vitest, Playwright, GitHub Actions CI, and release gate scripts.
-- Roadmap scope for a home-media-portal WASM game center live demo.
+- Home-media-portal WASM game center live demo under an isolated localized lab route.
 - Explicit Prettier config, ignore rules, and Tailwind-aware class sorting.
 - React Compiler package wiring and a PostCSS override that clears the production audit.
+- Narrow `/wasm/*` asset route with MIME, cache, and security headers for the retro runtime.
 
 ### Removed
 

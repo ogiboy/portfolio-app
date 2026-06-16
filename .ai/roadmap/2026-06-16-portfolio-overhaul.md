@@ -21,7 +21,7 @@ Rebuild the portfolio as a public, client-first hybrid portfolio with EN/TR supp
 
 - Source: `home-media-portal` WASM game center and retro engine.
 - Target: isolated portfolio lab route with a live demo and case-study framing.
-- First pass: static public assets, lazy iframe boot, reduced-motion safe shell, no database.
+- First pass: implemented as static public assets, lazy iframe boot, route-handler MIME/cache control, reduced-motion safe shell, no database.
 - Later pass: optional Django or service backend only if scores, authenticated saves, ROM catalog management, or telemetry become product requirements.
 - Ops showcase: Docker/Kubernetes can be documented as an architecture expansion, but must not become a runtime dependency for the public portfolio launch.
 
@@ -40,4 +40,4 @@ Rebuild the portfolio as a public, client-first hybrid portfolio with EN/TR supp
 - Legacy dashboard/Auth0/Postgres guestbook code is retired without live data deletion.
 - All existing projects remain available in the archive.
 - CI validates lint, typecheck, unit tests, Playwright smoke, build, and production audit.
-- WASM live demo is planned behind an isolated route and does not increase the home page initial JS or asset payload.
+- WASM live demo is behind an isolated lab route and does not increase the home page initial JS or asset payload.

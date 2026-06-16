@@ -8,7 +8,7 @@ Rebuild the app as a public, client-first hybrid portfolio with EN/TR support, B
 
 - Public home, project archive, project detail, contact path, and localized copy.
 - All existing projects remain available.
-- WASM game center live demo is included as an isolated lab route after asset/license review.
+- WASM game center live demo is included as an isolated lab route after asset size review.
 - Legacy Auth0/dashboard/Postgres guestbook app code is retired.
 - No live database deletion.
 
@@ -18,7 +18,7 @@ Rebuild the app as a public, client-first hybrid portfolio with EN/TR support, B
 - Client components only for interactive navigation, theme affordances if retained, GSAP scenes, and project filtering.
 - Typed project content model drives archive and detail pages.
 - shadcn/Radix primitives provide UI foundation.
-- WASM demo runs as a lazy client leaf with static assets or a narrow asset route if MIME/cache control requires it.
+- WASM demo runs as a lazy client leaf with static assets and a narrow asset route for MIME/cache control.
 
 ## Backend Position
 

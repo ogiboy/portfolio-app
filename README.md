@@ -35,7 +35,7 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 
 ## WASM Game Center
 
-The roadmap includes a live WASM game center demo sourced from `home-media-portal`. The first pass is intentionally backend-free: static assets, lazy iframe boot, and a dedicated lab route. Django, Docker, or Kubernetes only enter the architecture if durable scores, authenticated saves, ROM administration, or a broader ops showcase become real requirements.
+The live WASM game center demo is available at `/en/labs/retro-game-center` and `/tr/labs/retro-game-center`. It is sourced from `home-media-portal` and intentionally backend-free: static assets, lazy iframe boot, and a narrow `/wasm/*` asset route for MIME and cache headers. Django, Docker, or Kubernetes only enter the architecture if durable scores, authenticated saves, ROM administration, or a broader ops showcase become real requirements.
 
 ## Release Gates
 

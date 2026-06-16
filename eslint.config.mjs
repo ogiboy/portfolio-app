@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     'coverage/**',
     'playwright-report/**',
     'test-results/**',
+    'public/wasm/**',
     'next-env.d.ts',
     '.codex/**',
     '.agents/**',

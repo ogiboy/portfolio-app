@@ -27,6 +27,9 @@ describe('portfolio content', () => {
     expect(siteCopy.tr.home.primaryCta).toBeTruthy();
     expect(siteCopy.en.projects.caseLabel).toBeTruthy();
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
+    expect(siteCopy.en.lab.launchLabel).toBeTruthy();
+    expect(siteCopy.tr.lab.launchLabel).toBeTruthy();
+    expect(siteCopy.en.lab.specs.length).toBe(siteCopy.tr.lab.specs.length);
   });
 
   it('avoids banned dash characters in visible copy', () => {

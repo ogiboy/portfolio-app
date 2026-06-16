@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { ArrowRight, EnvelopeSimple } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, EnvelopeSimple, GameController } from '@phosphor-icons/react/dist/ssr';
 import { CinematicWorkRail } from '@/components/client/cinematic-work-rail';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
@@ -136,6 +136,26 @@ export default async function HomePage({
         intro={copy.home.motionIntro}
         projects={projects.slice(0, 6)}
       />
+
+      <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+        <div className="border-foreground bg-background grid gap-8 border-2 p-6 shadow-[10px_10px_0_0_var(--shadow-hard)] md:grid-cols-[1fr_auto] md:items-end md:p-8">
+          <div>
+            <Badge>{copy.lab.eyebrow}</Badge>
+            <h2 className="font-display mt-6 max-w-4xl text-4xl leading-[0.95] tracking-[-0.06em] md:text-6xl">
+              {copy.lab.title}
+            </h2>
+            <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
+              {copy.lab.intro}
+            </p>
+          </div>
+          <Button asChild size="lg">
+            <Link href="/labs/retro-game-center">
+              <GameController aria-hidden="true" weight="bold" />
+              {copy.lab.launchLabel}
+            </Link>
+          </Button>
+        </div>
+      </section>
 
       <section id="process" className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
         <div className="max-w-3xl">

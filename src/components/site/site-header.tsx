@@ -26,6 +26,9 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
             <Link href="/projects">{copy.projects}</Link>
           </Button>
           <Button asChild size="sm" variant="ghost">
+            <Link href="/labs/retro-game-center">{copy.lab}</Link>
+          </Button>
+          <Button asChild size="sm" variant="ghost">
             <Link href="/#process">{copy.process}</Link>
           </Button>
         </nav>

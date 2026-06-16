@@ -12,4 +12,9 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await page.goto('/en/projects');
   await expect(page.getByRole('heading', { name: /project archive/i })).toBeVisible();
   await expect(page.getByRole('link', { name: /case/i }).first()).toBeVisible();
+
+  await page.goto('/en/labs/retro-game-center');
+  await expect(page.getByRole('heading', { name: /retro game center boots/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
+  await expect(page.locator('iframe')).toHaveCount(0);
 });

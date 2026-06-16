@@ -15,6 +15,7 @@ export const siteCopy: LocalizedCopy<{
   nav: {
     home: string;
     projects: string;
+    lab: string;
     process: string;
     contact: string;
     language: string;
@@ -54,6 +55,23 @@ export const siteCopy: LocalizedCopy<{
     yearLabel: string;
     stackLabel: string;
   };
+  lab: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    launchLabel: string;
+    openLabel: string;
+    frameTitle: string;
+    frameIntro: string;
+    idleTitle: string;
+    idleBody: string;
+    specsTitle: string;
+    specsIntro: string;
+    specs: Array<{ title: string; body: string }>;
+    qaTitle: string;
+    qa: string[];
+    back: string;
+  };
   footer: {
     line: string;
   };
@@ -62,6 +80,7 @@ export const siteCopy: LocalizedCopy<{
     nav: {
       home: 'Home',
       projects: 'Projects',
+      lab: 'Lab',
       process: 'Process',
       contact: 'Contact',
       language: 'TR',
@@ -135,6 +154,44 @@ export const siteCopy: LocalizedCopy<{
       yearLabel: 'Year',
       stackLabel: 'Stack',
     },
+    lab: {
+      eyebrow: 'Live lab / WASM',
+      title: 'Retro Game Center boots DOOM Shareware inside the portfolio.',
+      intro:
+        'A scoped live demo from home-media-portal: DOSBox-X for Web, a curated ROM manifest, and a lazy iframe shell that keeps the public homepage light.',
+      launchLabel: 'Boot demo',
+      openLabel: 'Open tab',
+      frameTitle: 'DOSBox-X runtime',
+      frameIntro:
+        'The engine is loaded only after interaction. WASM, ROM files, and emulator scripts stay behind the lab route.',
+      idleTitle: 'DOS runtime is staged, not loaded.',
+      idleBody:
+        'Press boot to load the WASM engine, ROM manifest, and emulator assets inside the isolated frame.',
+      specsTitle: 'Why this belongs in a portfolio',
+      specsIntro:
+        'This is not a toy embed. It shows how heavy browser runtimes can be scoped, cached, and presented without damaging the main site.',
+      specs: [
+        {
+          title: 'Isolated payload',
+          body: 'The 16 MB runtime lives under /wasm and does not load from the home route or project archive.',
+        },
+        {
+          title: 'Narrow asset server',
+          body: 'A route handler serves WASM, ROM, and engine files with explicit MIME types and cache headers.',
+        },
+        {
+          title: 'No backend dependency',
+          body: 'Scores, saves, auth, and admin tooling stay out of v0.2.0 until they become real product requirements.',
+        },
+      ],
+      qaTitle: 'Current guardrails',
+      qa: [
+        'Sandboxed iframe with explicit permissions for scripts, same-origin asset fetches, pointer lock, downloads, fullscreen, and gamepad.',
+        'Shareware ROM manifest copied as static assets after size review.',
+        'External vendor scripts are contained inside the engine frame and documented for future self-hosting.',
+      ],
+      back: 'Back to home',
+    },
     footer: {
       line: 'Built with Next.js, shadcn primitives, GSAP, and a strict no-template rule.',
     },
@@ -143,6 +200,7 @@ export const siteCopy: LocalizedCopy<{
     nav: {
       home: 'Ana sayfa',
       projects: 'Projeler',
+      lab: 'Lab',
       process: 'Süreç',
       contact: 'İletişim',
       language: 'EN',
@@ -215,6 +273,44 @@ export const siteCopy: LocalizedCopy<{
       nextProject: 'Sonraki proje',
       yearLabel: 'Yıl',
       stackLabel: 'Stack',
+    },
+    lab: {
+      eyebrow: 'Canlı lab / WASM',
+      title: 'Retro Game Center portföy içinde DOOM Shareware başlatıyor.',
+      intro:
+        'home-media-portal içinden alınmış sınırlı canlı demo: DOSBox-X for Web, seçilmiş ROM manifesti ve ana sayfayı hafif tutan lazy iframe kabuğu.',
+      launchLabel: 'Demoyu başlat',
+      openLabel: 'Sekmede aç',
+      frameTitle: 'DOSBox-X runtime',
+      frameIntro:
+        'Engine yalnızca kullanıcı etkileşiminden sonra yüklenir. WASM, ROM dosyaları ve emulator scriptleri lab route arkasında kalır.',
+      idleTitle: 'DOS runtime hazır, ama henüz yüklenmedi.',
+      idleBody:
+        'WASM engine, ROM manifesti ve emulator assetlerini izole frame içinde yüklemek için başlat düğmesine bas.',
+      specsTitle: 'Bu neden portföyde yer alıyor',
+      specsIntro:
+        'Bu rastgele bir embed değil. Ağır browser runtime işlerinin ana siteyi bozmadan nasıl scope, cache ve sunum disiplinine alınacağını gösteriyor.',
+      specs: [
+        {
+          title: 'İzole payload',
+          body: '16 MB runtime /wasm altında yaşar ve ana sayfa ya da proje arşivinden yüklenmez.',
+        },
+        {
+          title: 'Dar asset sunucusu',
+          body: 'Route handler WASM, ROM ve engine dosyalarını açık MIME tipleri ve cache headerları ile servis eder.',
+        },
+        {
+          title: 'Backend bağımlılığı yok',
+          body: 'Skor, save, auth ve admin araçları gerçek ürün ihtiyacı olana kadar v0.2.0 dışında kalır.',
+        },
+      ],
+      qaTitle: 'Mevcut güvenlik sınırları',
+      qa: [
+        'Script, same-origin asset fetch, pointer lock, download, fullscreen ve gamepad için açık izinli sandbox iframe.',
+        'Shareware ROM manifesti size review sonrası statik asset olarak kopyalandı.',
+        'Harici vendor scriptleri engine frame içinde sınırlı ve gelecekte self-host için dokümante edildi.',
+      ],
+      back: 'Ana sayfaya dön',
     },
     footer: {
       line: 'Next.js, shadcn primitives, GSAP ve katı template karşıtı kuralla inşa edildi.',
