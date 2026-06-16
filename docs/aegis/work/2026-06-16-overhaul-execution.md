@@ -17,3 +17,4 @@ Implement the accepted portfolio overhaul roadmap in commit slices on `ui-update
 - Remote CI typecheck requires tracked static image module declarations because `next-env.d.ts` remains ignored as a generated local file.
 - Release checklist added at `docs/aegis/release/2026-06-16-v0.2.0-checklist.md` with local gates, remote CI, browser QA, and known follow-ups.
 - WASM iframe sandbox was hardened to `allow-scripts allow-pointer-lock allow-downloads`, removing `allow-same-origin` to avoid sandbox escape warnings.
+- Vercel preview deploy error was traced to pnpm 9 selection. Repo-level `vercel.json` now enables corepack, activates pnpm 11.7.0, and runs `pnpm build`.
