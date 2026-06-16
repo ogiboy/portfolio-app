@@ -18,3 +18,5 @@ Implement the accepted portfolio overhaul roadmap in commit slices on `ui-update
 - Release checklist added at `docs/aegis/release/2026-06-16-v0.2.0-checklist.md` with local gates, remote CI, browser QA, and known follow-ups.
 - WASM iframe sandbox was hardened to `allow-scripts allow-pointer-lock allow-downloads`, removing `allow-same-origin` to avoid sandbox escape warnings.
 - Vercel preview deploy error was traced to pnpm 9 selection. Repo-level `vercel.json` now enables corepack, activates pnpm 11.7.0, and runs `pnpm build`.
+- Vercel Node compatibility was aligned by relaxing package engines to `>=24.15.0 <25`; `.node-version` remains the stricter local/CI runtime pin at `24.16.0`.
+- Vercel commands now use `corepack pnpm@11.7.0 install --frozen-lockfile` and `corepack pnpm@11.7.0 build` directly.
