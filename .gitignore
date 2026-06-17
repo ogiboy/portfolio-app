@@ -38,3 +38,17 @@ next-env.d.ts
 
 node_modules.nosync
 old.env
+
+my-project.zip
+# local agent/runtime caches
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db
+.pnpm-store/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
