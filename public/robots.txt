@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /wasm/
+Disallow: /en/dashboard
+Disallow: /tr/dashboard
