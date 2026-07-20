@@ -11,9 +11,10 @@ import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
 import { routing } from '@/i18n/routing';
 import type { Locale } from '@/content/site';
+import { siteOrigin } from '@/lib/site-url';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://portfolio-app-three-rho.vercel.app'),
+  metadataBase: new URL(siteOrigin),
   title: {
     default: 'Oğuzcan Toptaş - Frontend Portfolio',
     template: '%s | Oğuzcan Toptaş',
