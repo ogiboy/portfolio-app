@@ -1,16 +1,22 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
-test('renders localized public portfolio routes', async ({ page }) => {
-  await page.goto('/en');
-  await expect(page).toHaveTitle('H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab');
-  await expect(
-    page.getByRole('banner').getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*home/i }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: /public software, homelab systems/i }),
-  ).toBeVisible();
-  await expect(page.getByRole('link', { name: /see the archive/i })).toBeVisible();
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+async function expectLocalizedHomeMetadata({
+  page,
+  locale,
+  title,
+  description,
+}: {
+  page: Page;
+  locale: 'en' | 'tr';
+  title: string;
+  description: string;
+}) {
+  const canonical = `https://www.oguzcantoptas.com/${locale}`;
+
+  await expect(page).toHaveTitle(title);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', description);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
     'href',
     'https://www.oguzcantoptas.com/en',
   );
@@ -18,12 +24,68 @@ test('renders localized public portfolio routes', async ({ page }) => {
     'href',
     'https://www.oguzcantoptas.com/tr',
   );
+  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute(
+    'href',
+    'https://www.oguzcantoptas.com/en',
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /index.*follow/);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', title);
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    'content',
+    description,
+  );
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    new RegExp(`/${locale}/opengraph-image(?:\\?.*)?$`),
+  );
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    'content',
+    'summary_large_image',
+  );
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', title);
+  await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute(
+    'content',
+    description,
+  );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+    'content',
+    new RegExp(`/${locale}/twitter-image(?:\\?.*)?$`),
+  );
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
     'Halil Oğuzcan Toptaş',
   );
+}
 
+test('renders localized public portfolio routes', async ({ page }) => {
+  await page.goto('/en');
+  await expectLocalizedHomeMetadata({
+    page,
+    locale: 'en',
+    title: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
+    description:
+      'Developer and homelab portfolio of Halil Oğuzcan Toptaş: production web software, automation, project archives, and a live WebAssembly lab.',
+  });
+  await expect(
+    page.getByRole('banner').getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*home/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /public software, homelab systems/i }),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: /see the archive/i })).toBeVisible();
   await page.goto('/tr');
-  await expect(page).toHaveTitle('H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab');
+  await expectLocalizedHomeMetadata({
+    page,
+    locale: 'tr',
+    title: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
+    description:
+      'Halil Oğuzcan Toptaş geliştirme ve homelab portföyü: production web yazılımları, otomasyon, proje arşivi ve canlı WebAssembly laboratuvarı.',
+  });
+  await expect(
+    page
+      .getByRole('banner')
+      .getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*ana sayfa/i }),
+  ).toBeVisible();
   await expect(
     page.getByRole('heading', { name: /public yazılımlar, homelab sistemleri/i }),
   ).toBeVisible();
@@ -34,7 +96,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expect(page.getByRole('link', { name: /case/i }).first()).toBeVisible();
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
-    'https://www.oguzcantoptas.com/en/opengraph-image',
+    /\/en\/opengraph-image(?:\?.*)?$/,
   );
 
   await page.goto('/en/labs/retro-game-center');
