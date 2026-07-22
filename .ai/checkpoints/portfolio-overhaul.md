@@ -1,6 +1,6 @@
 # Checkpoint: Portfolio Overhaul and Agent Readiness
 
-Status: active; canonical-origin slice committed and agent-readiness runtime locally verified.
+Status: active; `AR-1` governance committed and accepted, `AR-2` runtime locally verified.
 
 Updated: 2026-07-22
 
@@ -10,19 +10,19 @@ Non-negotiable constraints (immutable): preserve compatible user work; pnpm only
 
 Completion criteria (immutable): approved features remain present; full package gates pass for the final commit; EN/TR, reduced-motion, discovery, and WASM journeys are browser-verified; commits are focused and pushed; hosted checks/review are reconciled; merge and production are separately proven; deferred protocol surfaces remain absent unless prerequisites exist.
 
-Worktree / branch / commit: `/Users/ogiboy/.codex/worktrees/dce4/portfolio-app` / `ui-update` / `3b72500` plus owned working-tree changes.
+Worktree / branch / commit: `/Users/ogiboy/.codex/worktrees/dce4/portfolio-app` / `ui-update` / `2f2e9d2` plus owned `AR-2` and documentation working-tree changes.
 
-Last completed slice / commit: `3b72500 fix: correct canonical portfolio origin`; focused format, lint, typecheck, and unit verification passed before commit.
+Last completed slice / commit: `2f2e9d2 chore: harden project governance and delivery policy`; focused format, lint, typecheck, release-policy, governance/release tests, staged secret scan, and generated-artifact checks passed.
 
-Current task: `AR-1` harden governance and executable release/evidence contracts before committing the already-verified `AR-2` runtime slice.
+Current task: seal the accepted `AR-1` records, then commit the independently reviewed `AR-2` runtime slice.
 
-Completed: canonical fallback committed; `AR-2` Markdown negotiation, Agent Skills index/artifact, and progressive read-only WebMCP implemented; targeted Prettier, ESLint, TypeScript, release check, 18 Vitest tests, and 4 Playwright tests passed on 2026-07-22.
+Completed: canonical fallback and `AR-1` governance committed; the Aegis baseline/checkpoint/evidence content is accepted from `2f2e9d2`; `AR-2` Markdown negotiation, Agent Skills index/artifact, and progressive read-only WebMCP passed targeted Prettier, ESLint, TypeScript, release check, 18 Vitest tests, 4 Playwright tests, and two independent re-reviews.
 
-Pending: complete and seal `AR-1`; commit `AR-2`; execute `AR-3` full gates, `AR-4` preview/browser QA, and `AR-5` delivery reconciliation; then close the checkpoint.
+Pending: commit `AR-2`; retire the unused legacy data helper; finish README/changelog; execute `AR-3` full gates, `AR-4` preview/browser QA, and `AR-5` delivery reconciliation; then close the checkpoint.
 
-Owned dirty files: governance/config under `.ai/`, `.github/`, `docs/aegis/`, `AGENTS.md`, `README.md`, `SECURITY.md`, `.coderabbit.yaml`; runtime/tests under `src/app/.well-known/agent-skills/`, `src/app/api/agent/`, `src/components/`, `src/lib/`, `src/proxy.ts`, `src/types/`, `tests/`, `e2e/`, and `playwright.config.ts`; unused `src/app/lib/data.ts` is intentionally deleted.
+Owned dirty files: runtime/tests under `src/app/.well-known/agent-skills/`, `src/app/api/agent/`, `src/components/`, `src/lib/`, `src/proxy.ts`, `src/types/`, `tests/`, and `e2e/`; README/changelog closeout; unused `src/app/lib/data.ts` is intentionally deleted.
 
-Unrelated changes: `.vscode/settings.json` is user-owned SonarLint project configuration; preserve it and include it only as an explicit tooling slice. No unexpected concurrent mutation is currently known.
+Unrelated changes: none known. The user-owned SonarLint setting was preserved in the committed tooling slice.
 
 Decisions: see `2026-06-16-public-v1-scope.md`, `2026-06-16-wasm-game-center-demo.md`, `2026-07-20-governance-authority.md`, `2026-07-22-canonical-site-origin.md`, `2026-07-22-manual-release-workflow.md`, and `2026-07-22-agent-readiness-delivery.md`.
 
@@ -38,6 +38,6 @@ Drift: this file supersedes older mutable status statements. Dated Aegis snapsho
 
 Compatibility boundary: preserve public EN/TR routes, project archive/detail pages, contact flow, Brutalist design system, reduced-motion behavior, public read-only API/catalog/sitemap/robots surfaces, and isolated WASM game center. Do not introduce OAuth, `auth.md`, MCP server card, DNS-AID, Django, Docker, or Kubernetes without accepted prerequisites.
 
-Next action: finish governance corrections, obtain architecture/runtime review, commit focused slices, then run every local gate before push.
+Next action: commit this lifecycle seal, commit `AR-2`, remove the verified-unused legacy helper in its own slice, finish documentation, then run every local gate before push.
 
 Closure / archive condition: archive only after the final commit is merged, the intended production deployment is identified, all required production journeys and discovery endpoints are verified, and the final evidence record links each independent state.

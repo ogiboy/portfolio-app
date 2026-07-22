@@ -9,7 +9,7 @@
 
 ## Governance Initiative Snapshots
 
-- `baseline/2026-07-22-post-change-baseline.md`: Draft dated post-change baseline snapshot; historical snapshots remain untouched.
+- `baseline/2026-07-22-post-change-baseline.md`: Accepted dated post-change baseline snapshot; historical snapshots remain untouched.
 - `plans/2026-07-22-governance-and-agent-readiness.md`: Execution-readiness plan keyed to roadmap IDs.
 - `work/2026-07-20-governance-and-agent-readiness/10-intent.md`: Intent, scope, and non-goals.
 - `work/2026-07-20-governance-and-agent-readiness/20-checkpoint.md`: Dated checkpoint snapshot and drift boundary.

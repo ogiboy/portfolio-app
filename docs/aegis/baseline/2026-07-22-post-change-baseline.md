@@ -1,6 +1,6 @@
 # Post-Change Baseline Snapshot: 2026-07-22
 
-Status: Draft
+Status: Accepted
 
 Captured: 2026-07-22 Europe/Istanbul
 
@@ -8,7 +8,7 @@ Source commit: `3b72500dc4ce82ba6ef22a86d51479f69da12e96`
 
 Source fingerprint: `f825cbc31af30549ff71ec58766c82d33bec9dbc91c644bc257d8d5b39f9c7c8` dirty iteration; tracked diff `3ef8e9890af94f7d56db76bdc380aba7f35e01817e809065e1bca0983248cec0`; untracked 47-file manifest `c14997fde68c4a451b516a032ef44d3c959c99dc89f79f3e228883bfe3d6f640`; self-referential snapshot/evidence files and the active checkpoint excluded
 
-Accepted in commit: pending
+Accepted source commit: `2f2e9d26414a2d0ffd3edd26e4100e782985e14b`
 
 Supersedes: none
 

@@ -11,11 +11,11 @@ Status: Draft | Accepted | Superseded
 Captured:
 Source commit:
 Source fingerprint:
-Accepted in commit:
+Accepted source commit:
 Supersedes:
 ```
 
-`Draft` records may change during the owned slice. Acceptance is a separate commit that records the exact source commit and replaces `pending` with its acceptance commit identifier. Once `Accepted`, the record is immutable. Corrections or later observations require a new dated record with `Supersedes`; the earlier record remains intact.
+`Draft` records may change during the owned slice. Acceptance is a separate seal commit that changes lifecycle metadata only and records the exact prior source commit whose substantive content was reviewed. Once `Accepted`, the record is immutable. Corrections or later observations require a new dated record with `Supersedes`; the earlier record remains intact.
 
 ## Folders
 
