@@ -12,7 +12,12 @@ export const contact = {
 };
 
 export const siteCopy: LocalizedCopy<{
+  brand: {
+    homeLabel: string;
+    signature: string;
+  };
   nav: {
+    label: string;
     home: string;
     projects: string;
     lab: string;
@@ -72,12 +77,35 @@ export const siteCopy: LocalizedCopy<{
     qa: string[];
     back: string;
   };
+  privacy: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    aggregateTitle: string;
+    aggregateBody: string;
+    boundariesTitle: string;
+    boundariesBody: string;
+    controlTitle: string;
+    controlBody: string;
+    sentryTitle: string;
+    sentryBody: string;
+    enabledLabel: string;
+    disabledLabel: string;
+    enableAction: string;
+    disableAction: string;
+  };
   footer: {
     line: string;
+    privacyLabel: string;
   };
 }> = {
   en: {
+    brand: {
+      homeLabel: 'H.O.T. - Halil Oğuzcan Toptaş, home',
+      signature: 'Halil Oğuzcan Toptaş / Developer + homelab portfolio / 2026',
+    },
     nav: {
+      label: 'Primary navigation',
       home: 'Home',
       projects: 'Projects',
       lab: 'Lab',
@@ -86,31 +114,31 @@ export const siteCopy: LocalizedCopy<{
       language: 'TR',
     },
     home: {
-      eyebrow: 'Independent frontend systems / Istanbul',
-      title: 'I build sharp web interfaces that turn rough product ideas into usable launches.',
+      eyebrow: 'Independent developer / homelab hobbyist / Istanbul',
+      title: 'I build public software, homelab systems, and browser experiments with a pulse.',
       subtitle:
-        'Brutalist clarity, production-grade Next.js, and the discipline to ship fast without making the codebase brittle.',
+        'Production-minded Next.js, automation, homelab operations, and playful runtimes, documented with the decisions and failure modes intact.',
       primaryCta: 'Start a project',
       secondaryCta: 'See the archive',
       stackLabel: 'Operating stack',
       stackNote:
-        'No ornamental dashboards. No anonymous template energy. A public surface that explains why the work should be trusted.',
-      proof: ['Next.js', 'React', 'TypeScript', 'Design systems', 'Motion', 'Vercel'],
-      servicesTitle: 'What clients usually need',
+        'No ornamental dashboards. No anonymous template energy. One public lab for shipped work, infrastructure experiments, and honest build notes.',
+      proof: ['Next.js', 'TypeScript', 'Homelab', 'Automation', 'WASM', 'Delivery'],
+      servicesTitle: 'One developer lab, three operating modes',
       servicesIntro:
-        'A clear site, a reliable interface, and someone who can move from concept to shipped product without hand-waving the details.',
+        'Client work, self-hosted systems, and browser experiments share the same rule: make the boundaries visible and prove what ships.',
       services: [
         {
-          title: 'Portfolio and launch sites',
-          body: 'High-contrast public pages that explain the offer, show proof, and make the next step obvious.',
+          title: 'Product interfaces',
+          body: 'High-contrast public pages and reliable frontend systems that explain the offer, show proof, and make the next step obvious.',
         },
         {
-          title: 'Frontend rebuilds',
-          body: 'Modern App Router architecture, typed content, accessible primitives, and CI gates that keep the surface stable.',
+          title: 'Homelab + automation',
+          body: 'Small, inspectable systems for learning self-hosting, operations, repeatable workflows, and the failure paths between them.',
         },
         {
-          title: 'Interface polish',
-          body: 'Motion, layout, copy structure, and responsive details that make a product feel intentional instead of assembled.',
+          title: 'Browser experiments',
+          body: 'Motion, WebAssembly, game runtimes, and interface studies isolated so the playful work never compromises the main product.',
         },
       ],
       selectedTitle: 'Selected work, not a template grid',
@@ -192,12 +220,40 @@ export const siteCopy: LocalizedCopy<{
       ],
       back: 'Back to home',
     },
+    privacy: {
+      eyebrow: 'Privacy / telemetry',
+      title: 'Useful signals, not a surveillance profile.',
+      intro:
+        'This portfolio uses cookieless, aggregate Vercel Web Analytics and Speed Insights to understand route interest and performance. It does not run ads or sell visitor data.',
+      aggregateTitle: 'What is measured',
+      aggregateBody:
+        'Page and route views, referrer category, coarse device/browser information, approximate region, and performance measurements may be aggregated by Vercel. No custom portfolio events are active.',
+      boundariesTitle: 'What is not sent',
+      boundariesBody:
+        'The portfolio does not send names, email addresses, form content, authentication data, stable account identifiers, or advertising profiles to analytics. There is no account system on public v1.',
+      controlTitle: 'Your local control',
+      controlBody:
+        'Use the control below to stop Analytics and Speed Insights on future page loads. Disabling stores the preference and reloads this page without provider scripts. The preference stays in local storage on this device and can be changed at any time.',
+      sentryTitle: 'Error replay status',
+      sentryBody:
+        'Sentry and Session Replay are not active. They will remain off until masking, retention, sampling, privacy, and provider credentials are explicitly approved and documented.',
+      enabledLabel: 'Aggregate analytics are enabled in this browser.',
+      disabledLabel: 'Aggregate analytics are disabled in this browser.',
+      enableAction: 'Enable analytics',
+      disableAction: 'Disable analytics',
+    },
     footer: {
-      line: 'Built with Next.js, shadcn primitives, GSAP, and a strict no-template rule.',
+      line: 'A personal developer and homelab portfolio built with Next.js, shadcn primitives, GSAP, and a strict no-template rule.',
+      privacyLabel: 'Privacy',
     },
   },
   tr: {
+    brand: {
+      homeLabel: 'H.O.T. - Halil Oğuzcan Toptaş, ana sayfa',
+      signature: 'Halil Oğuzcan Toptaş / Geliştirici + homelab portföyü / 2026',
+    },
     nav: {
+      label: 'Ana gezinme',
       home: 'Ana sayfa',
       projects: 'Projeler',
       lab: 'Lab',
@@ -206,32 +262,31 @@ export const siteCopy: LocalizedCopy<{
       language: 'EN',
     },
     home: {
-      eyebrow: 'Bağımsız frontend sistemleri / İstanbul',
-      title:
-        'Ham ürün fikirlerini kullanılabilir lansmanlara dönüştüren keskin web arayüzleri kuruyorum.',
+      eyebrow: 'Bağımsız geliştirici / homelab meraklısı / İstanbul',
+      title: 'Public yazılımlar, homelab sistemleri ve nabzı olan browser deneyleri kuruyorum.',
       subtitle:
-        'Brutalist netlik, production seviyesinde Next.js ve kod tabanını kırılganlaştırmadan hızlı teslim disiplini.',
+        'Production odaklı Next.js, otomasyon, homelab operasyonları ve oyunbaz runtime işleri; kararları ve hata yollarıyla birlikte belgeleniyor.',
       primaryCta: 'Proje başlat',
       secondaryCta: 'Arşivi gör',
       stackLabel: 'Çalışma stacki',
       stackNote:
-        'Süs dashboard yok. Anonim template hissi yok. İşin neden güvenilir olduğunu anlatan public bir yüzey var.',
-      proof: ['Next.js', 'React', 'TypeScript', 'Tasarım sistemleri', 'Motion', 'Vercel'],
-      servicesTitle: 'Müşterilerin genelde ihtiyacı olan şey',
+        'Süs dashboard yok. Anonim template hissi yok. Yayınlanmış işler, altyapı deneyleri ve dürüst build notları için tek bir public lab var.',
+      proof: ['Next.js', 'TypeScript', 'Homelab', 'Otomasyon', 'WASM', 'Teslim'],
+      servicesTitle: 'Tek geliştirici labı, üç çalışma modu',
       servicesIntro:
-        'Net bir site, güvenilir bir arayüz ve fikri soyut konuşmadan yayına alınmış ürüne taşıyan uygulama disiplini.',
+        'Müşteri işleri, self-hosted sistemler ve browser deneyleri aynı kurala bağlı: sınırları görünür yap ve yayınlanan işi kanıtla.',
       services: [
         {
-          title: 'Portfolyo ve lansman siteleri',
-          body: 'Teklifi anlatan, kanıt gösteren ve bir sonraki adımı belirgin yapan yüksek kontrastlı public sayfalar.',
+          title: 'Ürün arayüzleri',
+          body: 'Teklifi anlatan, kanıt gösteren ve bir sonraki adımı belirgin yapan yüksek kontrastlı public sayfalar ve güvenilir frontend sistemleri.',
         },
         {
-          title: 'Frontend rebuild işleri',
-          body: 'Modern App Router mimarisi, typed içerik, erişilebilir primitives ve yüzeyi stabil tutan CI kapıları.',
+          title: 'Homelab + otomasyon',
+          body: 'Self-hosting, operasyon, tekrar edilebilir iş akışları ve aralarındaki hata yollarını öğrenmek için küçük ve incelenebilir sistemler.',
         },
         {
-          title: 'Arayüz parlatma',
-          body: 'Ürünün toplama değil bilinçli hissettirmesi için motion, layout, copy yapısı ve responsive detaylar.',
+          title: 'Browser deneyleri',
+          body: 'Oyunbaz işlerin ana ürünü tehlikeye atmaması için izole edilen motion, WebAssembly, oyun runtime ve arayüz çalışmaları.',
         },
       ],
       selectedTitle: 'Template grid değil, seçilmiş işler',
@@ -312,8 +367,31 @@ export const siteCopy: LocalizedCopy<{
       ],
       back: 'Ana sayfaya dön',
     },
+    privacy: {
+      eyebrow: 'Gizlilik / telemetri',
+      title: 'Gözetim profili değil, işe yarayan sinyaller.',
+      intro:
+        'Bu portföy route ilgisini ve performansı anlamak için çerezsiz, toplu Vercel Web Analytics ve Speed Insights kullanır. Reklam çalıştırmaz ve ziyaretçi verisi satmaz.',
+      aggregateTitle: 'Neler ölçülüyor',
+      aggregateBody:
+        'Sayfa ve route görüntülemeleri, yönlendiren kaynak kategorisi, genel cihaz/browser bilgisi, yaklaşık bölge ve performans ölçümleri Vercel tarafından toplulaştırılabilir. Özel portföy eventleri aktif değildir.',
+      boundariesTitle: 'Neler gönderilmiyor',
+      boundariesBody:
+        'Portföy analitiğe isim, e-posta adresi, form içeriği, kimlik doğrulama verisi, kalıcı hesap kimliği veya reklam profili göndermez. Public v1 içinde hesap sistemi yoktur.',
+      controlTitle: 'Yerel kontrolünüz',
+      controlBody:
+        'Gelecek sayfa yüklemelerinde Analytics ve Speed Insights çalışmasını durdurmak için aşağıdaki kontrolü kullanın. Kapatma tercihi kaydeder ve bu sayfayı provider scriptleri olmadan yeniden yükler. Tercih bu cihazın local storage alanında kalır ve her zaman değiştirilebilir.',
+      sentryTitle: 'Hata replay durumu',
+      sentryBody:
+        'Sentry ve Session Replay aktif değildir. Maskeleme, saklama, örnekleme, gizlilik ve provider kimlik bilgileri açıkça onaylanıp belgelenene kadar kapalı kalacaktır.',
+      enabledLabel: 'Bu browser içinde toplu analitik açık.',
+      disabledLabel: 'Bu browser içinde toplu analitik kapalı.',
+      enableAction: 'Analitiği aç',
+      disableAction: 'Analitiği kapat',
+    },
     footer: {
-      line: 'Next.js, shadcn primitives, GSAP ve katı template karşıtı kuralla inşa edildi.',
+      line: 'Next.js, shadcn primitives, GSAP ve katı template karşıtı kuralla inşa edilmiş kişisel geliştirici ve homelab portföyü.',
+      privacyLabel: 'Gizlilik',
     },
   },
 };

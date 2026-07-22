@@ -2,9 +2,31 @@
 
 ## Unreleased
 
+### Added
+
+- Portable Markdown negotiation for public EN/TR portfolio routes.
+- Agent Skills discovery index and digest-bound navigation skill artifact.
+- Progressive read-only WebMCP tools with unsupported-browser and reduced-capability fallbacks.
+- Project-local ADR lifecycle, sole mutable checkpoint contract, delivery evidence classes, and stricter PR/release templates.
+- Localized canonical metadata, reciprocal hreflang links, safe JSON-LD, sitemap alternates, and optional Google verification metadata.
+- H.O.T. icon, web app manifest, and generated Open Graph/Twitter cards for consistent browser and social identity.
+- Localized privacy pages and a durable opt-out for aggregate Vercel Analytics and Speed Insights.
+- Explicit SonarQube Cloud Automatic Analysis scope for maintained source, configuration, workflow, and test files.
+
 ### Changed
 
+- Corrected the canonical site origin used by sitemap, API catalog, OpenAPI, and agent discovery.
+- Hardened CI, dependency update, CodeRabbit, security, browser QA, and release governance around evidence-backed states.
+- Repositioned the site as Halil Oğuzcan Toptaş's developer and homelab portfolio under the H.O.T. identity.
+- Converted the retired dashboard route into a permanent compatibility redirect instead of an indexable dead surface.
 - Forced Next.js transitive image processing onto patched `sharp@0.35.1` to remove the vulnerable `0.34.x` branch from production resolution.
+- Hardened CI installation by disabling package lifecycle scripts by default and rebuilding only the native dependencies approved in the pnpm policy.
+- Aligned Vercel install and build commands with the repository's Corepack-managed pnpm pin.
+- Raised the stale PostCSS workspace override and removed the duplicate CI pnpm pin that conflicted with current lockfile validation.
+
+### Removed
+
+- Unused legacy data helper left over from the retired dashboard/database surface.
 
 ## 0.2.0 - 2026-06-16
 

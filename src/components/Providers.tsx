@@ -1,8 +1,8 @@
 'use client';
 
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
+import { SiteTelemetry } from '@/components/client/site-telemetry';
+import { WebMcpTools } from '@/components/client/webmcp-tools';
 
 export default function Providers({
   children,
@@ -16,8 +16,8 @@ export default function Providers({
   return (
     <NextIntlClientProvider locale={locale} messages={messages} timeZone="Europe/Istanbul">
       {children}
-      <SpeedInsights />
-      <Analytics />
+      <SiteTelemetry />
+      <WebMcpTools />
     </NextIntlClientProvider>
   );
 }

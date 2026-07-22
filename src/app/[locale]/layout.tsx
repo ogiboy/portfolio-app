@@ -11,22 +11,15 @@ import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
 import { routing } from '@/i18n/routing';
 import type { Locale } from '@/content/site';
+import { createRootMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://portfolio-app-three-rho.vercel.app'),
-  title: {
-    default: 'Oğuzcan Toptaş - Frontend Portfolio',
-    template: '%s | Oğuzcan Toptaş',
-  },
-  description:
-    'Client-first frontend portfolio by Oğuzcan Toptaş, built with Next.js, shadcn primitives, and cinematic motion.',
-  openGraph: {
-    title: 'Oğuzcan Toptaş - Frontend Portfolio',
-    description:
-      'Client-first frontend portfolio with brutalist design systems, Next.js architecture, and production delivery discipline.',
-    type: 'website',
-  },
-};
+export async function generateMetadata({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>): Promise<Metadata> {
+  const { locale } = await params;
+  const safeLocale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  return createRootMetadata(safeLocale);
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

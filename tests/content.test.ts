@@ -29,7 +29,13 @@ describe('portfolio content', () => {
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
     expect(siteCopy.en.lab.launchLabel).toBeTruthy();
     expect(siteCopy.tr.lab.launchLabel).toBeTruthy();
-    expect(siteCopy.en.lab.specs.length).toBe(siteCopy.tr.lab.specs.length);
+    expect(siteCopy.en.lab.specs).toHaveLength(siteCopy.tr.lab.specs.length);
+    for (const locale of ['en', 'tr'] as const) {
+      expect(siteCopy[locale].brand.homeLabel).toContain('H.O.T.');
+      expect(siteCopy[locale].brand.homeLabel).toContain('Halil Oğuzcan Toptaş');
+    }
+    expect(siteCopy.en.privacy.disableAction).toBeTruthy();
+    expect(siteCopy.tr.privacy.disableAction).toBeTruthy();
   });
 
   it('avoids banned dash characters in visible copy', () => {

@@ -45,7 +45,7 @@ export function WasmGameFrame({
         </div>
       </div>
 
-      <div className="relative aspect-[4/3] min-h-[28rem] bg-black md:aspect-[16/10]">
+      <div className="relative aspect-[4/3] bg-black md:aspect-[16/10]">
         {booted ? (
           <iframe
             title={title}

@@ -1,0 +1,180 @@
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
+import { parseDocument } from 'yaml';
+
+const root = process.cwd();
+const readProjectFile = (path: string) => readFileSync(join(root, path), 'utf8');
+
+function parseJsonFile<T>(path: string) {
+  return JSON.parse(readProjectFile(path)) as T;
+}
+
+function parseYamlText<T>(source: string) {
+  const document = parseDocument(source, { uniqueKeys: true });
+  if (document.errors.length > 0) {
+    throw new Error(document.errors.map((error) => error.message).join('\n'));
+  }
+  return document.toJS() as T;
+}
+
+function parseYamlFile<T>(path: string) {
+  return parseYamlText<T>(readProjectFile(path));
+}
+
+function parsePropertiesText(source: string) {
+  const properties: Record<string, string> = {};
+
+  for (const rawLine of source.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#') || line.startsWith('!')) continue;
+
+    const entry = /^([^:=\s]+)\s*[:=]\s*(.*)$/.exec(line);
+    if (!entry) throw new Error(`Invalid properties entry: ${line}`);
+
+    const [, key, value] = entry;
+    if (Object.hasOwn(properties, key)) throw new Error(`Duplicate properties key: ${key}`);
+    properties[key] = value;
+  }
+
+  return properties;
+}
+
+type WorkflowStep = {
+  name?: string;
+  run?: string;
+  uses?: string;
+  with?: Record<string, unknown>;
+};
+
+type WorkflowConfig = {
+  jobs: {
+    verify: {
+      steps: WorkflowStep[];
+    };
+  };
+};
+
+describe('project governance contracts', () => {
+  it('keeps exactly one mutable overhaul checkpoint with the complete handoff schema', () => {
+    const checkpointFiles = readdirSync(join(root, '.ai/checkpoints'))
+      .filter((file) => file.startsWith('portfolio-overhaul') && file.endsWith('.md'))
+      .sort();
+    const checkpoint = readProjectFile('.ai/checkpoints/portfolio-overhaul.md');
+
+    expect(checkpointFiles).toEqual(['portfolio-overhaul.md']);
+    for (const field of [
+      'Status:',
+      'Updated:',
+      'Objective (immutable until closure):',
+      'Non-negotiable constraints (immutable):',
+      'Completion criteria (immutable):',
+      'Worktree / branch / commit:',
+      'Last completed slice / commit:',
+      'Current task:',
+      'Completed:',
+      'Pending:',
+      'Owned dirty files:',
+      'Unrelated changes:',
+      'Decisions:',
+      'Required gates / delivery expectations:',
+      'Evidence:',
+      'Hosted state:',
+      'Blockers:',
+      'Drift:',
+      'Compatibility boundary:',
+      'Next action:',
+      'Closure / archive condition:',
+    ]) {
+      expect(checkpoint).toContain(field);
+    }
+  });
+
+  it('preserves the accepted release decision and supersedes it in a new record', () => {
+    const original = readProjectFile('.ai/decisions/2026-06-16-release-workflow.md');
+    const replacement = readProjectFile('.ai/decisions/2026-07-22-manual-release-workflow.md');
+
+    expect(original).toContain('# Decision: Changelog Release Workflow');
+    expect(original).not.toContain('Supersedes:');
+    expect(replacement).toContain('Supersedes: `2026-06-16-release-workflow.md`');
+  });
+
+  it('keeps every delivery state as an independent evidence class', () => {
+    const checklist = readProjectFile('.ai/checklists/evidence-bundle.md');
+
+    for (const evidenceClass of [
+      'local',
+      'pushed',
+      'hosted-check',
+      'preview',
+      'browser',
+      'review',
+      'merge',
+      'production',
+      'external',
+    ]) {
+      expect(checklist).toContain(`\`${evidenceClass}\``);
+    }
+  });
+
+  it('scopes SonarQube Cloud automatic analysis without pretending to publish coverage', () => {
+    const sonarConfig = parsePropertiesText(readProjectFile('.sonarcloud.properties'));
+
+    expect(sonarConfig).toEqual({
+      'sonar.sources':
+        'src,scripts,.github/workflows,next.config.mjs,eslint.config.mjs,postcss.config.js,playwright.config.ts,vitest.config.ts',
+      'sonar.tests': 'tests,e2e',
+      'sonar.sourceEncoding': 'UTF-8',
+    });
+  });
+
+  it('keeps CI lifecycle scripts disabled by default and rebuilds only approved packages', () => {
+    const workflow = parseYamlFile<WorkflowConfig>('.github/workflows/ci.yml');
+    const steps = workflow.jobs.verify.steps;
+    const step = (name: string) => steps.find((candidate) => candidate.name === name);
+
+    expect(step('Install dependencies without lifecycle scripts')?.run).toBe(
+      'pnpm install --frozen-lockfile --ignore-scripts',
+    );
+    expect(step('Build approved native dependencies')?.run).toBe(
+      'pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver',
+    );
+    expect(step('Set up Playwright browser')?.run).toBe('pnpm browser:setup');
+    expect(steps.map((candidate) => candidate.run).filter(Boolean)).not.toContain(
+      'pnpm exec playwright install',
+    );
+    expect(step('Setup pnpm')?.with).toEqual({ run_install: false });
+  });
+
+  it('lets Vercel resolve the repository package-manager pin through Corepack', () => {
+    const vercelConfig = parseJsonFile<{ buildCommand: string; installCommand: string }>(
+      'vercel.json',
+    );
+
+    expect(vercelConfig.installCommand).toBe('corepack pnpm install --frozen-lockfile');
+    expect(vercelConfig.buildCommand).toBe('corepack pnpm build');
+    expect(Object.values(vercelConfig).join('\n')).not.toContain('pnpm@');
+  });
+
+  it('keeps pnpm version ownership and PostCSS resolution unambiguous', () => {
+    const packageManifest = parseJsonFile<{
+      packageManager: string;
+      engines: { pnpm: string };
+      devDependencies: { postcss: string };
+    }>('package.json');
+    const workspace = parseYamlFile<{ overrides: { postcss: string } }>('pnpm-workspace.yaml');
+
+    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.16\.0\+/);
+    expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
+    expect(packageManifest.devDependencies.postcss).toBe('^8.5.21');
+    expect(workspace.overrides.postcss).toBe('^8.5.21');
+  });
+
+  it('ignores commented properties and rejects duplicate effective configuration keys', () => {
+    expect(parsePropertiesText('# gate=disabled\ngate=enabled')).toEqual({ gate: 'enabled' });
+    expect(() => parsePropertiesText('gate=first\ngate=second')).toThrow(
+      'Duplicate properties key: gate',
+    );
+    expect(() => parseYamlText('jobs: {}\njobs: {}')).toThrow();
+  });
+});
