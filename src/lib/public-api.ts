@@ -14,7 +14,20 @@ export function getPortfolioApiPayload() {
     version: publicApiVersion,
     locales: [...routing.locales],
     contact,
-    projects: projects.map(({ image: _image, ...project }) => project),
+    projects: projects.map(
+      ({ id, slug, name, year, category, url, gitUrl, description, stack, featured }) => ({
+        id,
+        slug,
+        name,
+        year,
+        category,
+        url,
+        gitUrl,
+        description,
+        stack,
+        featured,
+      }),
+    ),
   };
 }
 
