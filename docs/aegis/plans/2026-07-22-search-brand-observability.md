@@ -30,7 +30,7 @@ This plan keeps the expanded search and telemetry work tied to the approved over
 ## Complexity Budget
 
 - Artifact class: bounded cross-route public contract.
-- Target owners: `src/lib/seo.ts`, `src/lib/structured-data.ts`, route metadata exports, `src/components/site/brand-mark.tsx`, one telemetry leaf, localized content, tests, and governance records.
+- Target owners: `src/lib/seo.ts`, `src/lib/structured-data.ts`, route metadata exports, `src/components/site/hot-mark.tsx`, isolated telemetry leaves, localized content, tests, and governance records.
 - Current pressure: metadata is duplicated but small; `siteCopy` is large but remains the canonical localized owner.
 - Projected pressure: moderate and within budget if builders stay data-only and client behavior remains isolated.
 - Planned governance: no dependency additions, no generic SEO framework, no analytics abstraction beyond current providers, and no provider mutation in the implementation commit.

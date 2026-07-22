@@ -18,5 +18,8 @@
 ## Search and Observability Initiative
 
 - `plans/2026-07-22-search-brand-observability.md`: Execution plan for H.O.T. identity, technical SEO, structured data, privacy-first telemetry, and provider-gated follow-ups.
+- `work/2026-07-22-search-brand-observability/10-intent.md`: Search, identity, privacy, and observability scope with explicit non-goals.
+- `work/2026-07-22-search-brand-observability/20-checkpoint.md`: Dated implementation checkpoint and compatibility boundary.
+- `work/2026-07-22-search-brand-observability/90-evidence.md`: Independent local, browser, review, remote, and provider evidence for the initiative.
 
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.

@@ -8,11 +8,16 @@
 - Agent Skills discovery index and digest-bound navigation skill artifact.
 - Progressive read-only WebMCP tools with unsupported-browser and reduced-capability fallbacks.
 - Project-local ADR lifecycle, sole mutable checkpoint contract, delivery evidence classes, and stricter PR/release templates.
+- Localized canonical metadata, reciprocal hreflang links, safe JSON-LD, sitemap alternates, and optional Google verification metadata.
+- H.O.T. icon, web app manifest, and generated Open Graph/Twitter cards for consistent browser and social identity.
+- Localized privacy pages and a durable opt-out for aggregate Vercel Analytics and Speed Insights.
 
 ### Changed
 
 - Corrected the canonical site origin used by sitemap, API catalog, OpenAPI, and agent discovery.
 - Hardened CI, dependency update, CodeRabbit, security, browser QA, and release governance around evidence-backed states.
+- Repositioned the site as Halil Oğuzcan Toptaş's developer and homelab portfolio under the H.O.T. identity.
+- Converted the retired dashboard route into a permanent compatibility redirect instead of an indexable dead surface.
 
 ### Removed
 
