@@ -1,44 +1,51 @@
 # Agent Operating Guide
 
-## Project Mode
+## Authority Order
 
-- Development mode: full-auto within the current branch.
-- Primary branch for this overhaul: `ui-update`.
-- Do not rewrite history or reset user work unless explicitly requested.
+Apply project guidance in this order:
+
+1. This `AGENTS.md` defines operational rules.
+2. `.ai/architecture.instructions.md` defines the current owner map.
+3. `.ai/decisions/` records accepted rationale.
+4. `.ai/roadmap/` records future sequence.
+5. `.ai/checkpoints/portfolio-overhaul.md` records the sole mutable state of the active overhaul.
+6. `docs/aegis/` records dated initiative intent, plans, snapshots, and evidence.
+7. `package.json` defines local commands.
+8. CI enforces the remote verification contract.
+9. `SECURITY.md` defines vulnerability reporting.
+10. CodeRabbit is advisory review guidance only and does not override any item above.
+
+## Working Rules
+
+- Work within the current branch and preserve unrelated user changes.
+- Use pnpm and keep `pnpm-lock.yaml` as the only package lockfile.
+- Do not rewrite history, reset user work, deploy, publish, change DNS, or use credentials without explicit authority.
 - Keep local runtime artifacts out of commits: `.env.local`, `.vercel`, `.next`, `agentdb.rvf`, `agentdb.rvf.lock`, `ruvector.db`, `.DS_Store`.
+- Use conventional commit subjects for visible commits.
+- Keep diffs focused, reversible, and aligned to the current owner map.
+- Use project-local capabilities progressively: load one to three relevant skill bodies, then stop unless more context is required.
 
-## Delivery Rules
+## Architecture and Product Boundaries
 
-- Use `pnpm` as the package manager and keep `pnpm-lock.yaml` as the only package lockfile.
-- Use conventional commit subjects for every visible commit.
-- Prefer small, reviewable commit slices aligned to roadmap phases.
-- Run verification before claiming completion or preparing a push.
-- Keep changelog and release notes aligned with shipped behavior.
-- Keep Prettier explicit through `.prettierrc` and `.prettierignore`; do not format lockfiles or vendored WASM assets.
+- This is a client-facing, server-first public EN/TR portfolio.
+- Default to Next.js App Router Server Components. Push browser-only behavior into leaf components.
+- Public portfolio v1 has no separate or stateful backend, authentication, database, private dashboard, Auth0, or database-backed guestbook.
+- Thin, read-only Next.js Route Handlers are part of the server-first app.
+- Keep shadcn/Radix primitives accessible and customized through project tokens.
+- Use GSAP only in isolated client leaves with `prefers-reduced-motion` support.
+- Keep Tailwind v4 CSS-first configuration in `src/app/globals.css`.
+- Keep the WASM game center behind its isolated lab route with lazy loading and no home-page payload impact.
 
-## Architecture Rules
+## Design and Content Rules
 
-- Default to Next.js App Router Server Components.
-- Push client-only behavior into leaf components.
-- Keep public portfolio v1 free of private dashboard, Auth0, and database-backed guestbook code.
-- Use shadcn/Radix primitives for accessible UI foundations and customize them through project tokens.
-- Use GSAP only in isolated client leaves with `prefers-reduced-motion` handling.
-- Use Tailwind v4 CSS-first configuration in `src/app/globals.css`; do not reintroduce a parallel Tailwind config unless a plugin requires it.
-- Keep the WASM game center behind an isolated lab route with lazy loading and no home-page payload impact.
-
-## Design Rules
-
-- Direction: Brutalist Dev Lab.
+- Direction: Brutalist Dev Lab with sharp grid structure, monochrome base, acid accents, and deliberate motion.
 - Avoid generic AI-purple gradients, glassmorphism defaults, and Inter as the primary font.
-- Use strong typographic hierarchy, sharp grid structure, monochrome/acid accents, and deliberate motion.
-- EN/TR copy must remain complete for public routes.
+- The EN/TR route shell and `siteCopy` are localized. Project records currently remain shared source-language content.
+- Never claim complete project-content parity until the data model is localized and browser-verified.
 
-## Verification Gates
+## Verification
 
-- `pnpm format:check`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm test:e2e`
-- `pnpm build`
-- `pnpm audit --prod --audit-level high`
+- During a focused slice, run the smallest relevant checks for the touched surface.
+- Before any push or release, run every gate in `package.json`: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm release:check`, `pnpm test`, `pnpm test:e2e`, `pnpm build`, and `pnpm audit --prod --audit-level high`.
+- An unavailable required check is a blocker, not a pass. Record the reason and next action without fabricating success.
+- For UI work, verify the real browser journey and relevant failure behavior, not only static checks.

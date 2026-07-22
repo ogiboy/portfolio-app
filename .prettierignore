@@ -4,6 +4,7 @@
 .agents/
 .claude/
 .claude-flow/
+.omx/
 node_modules/
 coverage/
 playwright-report/
@@ -13,5 +14,6 @@ public/wasm/
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
+.wrangler/
 skills-lock.json
 CLAUDE.md

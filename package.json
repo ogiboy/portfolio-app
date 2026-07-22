@@ -8,6 +8,10 @@
     "node": ">=24.15.0 <25",
     "pnpm": ">=11.7.0"
   },
+  "releasePolicy": {
+    "bootstrapVersion": "0.2.0",
+    "conventionalCommitBaseline": "3b72500dc4ce82ba6ef22a86d51479f69da12e96"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
@@ -19,9 +23,11 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "audit": "pnpm audit --prod --audit-level high",
+    "release:plan": "node scripts/release/release-state.ts",
+    "release:check": "node scripts/release/release-state.ts --check",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:e2e && pnpm build && pnpm audit"
+    "ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm release:check && pnpm test && pnpm test:e2e && pnpm build && pnpm audit"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -26,8 +26,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
-.env
+.env*
+!.env.example
+.dev.vars*
 
 # vercel
 .vercel
@@ -44,10 +45,12 @@ my-project.zip
 .agents/
 .claude/
 .claude-flow/
+.omx/
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
 .pnpm-store/
+.wrangler/
 
 # Playwright
 /test-results/

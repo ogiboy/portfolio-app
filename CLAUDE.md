@@ -1,5 +1,9 @@
 # Ruflo — Claude Code Configuration
 
+> Project authority: follow `AGENTS.md`, `.ai/architecture.instructions.md`, accepted decisions,
+> and the active checkpoint before this generated capability reference. Use pnpm for repository
+> commands; Ruflo/Claude tooling does not override product, safety, or external-write boundaries.
+
 ## Rules
 
 - Do what has been asked; nothing more, nothing less
@@ -148,7 +152,7 @@ Any string works as a custom agent type.
 - ALWAYS verify build succeeds before committing
 
 ```bash
-npm run build && npm test
+pnpm build && pnpm test
 ```
 
 ## CLI Quick Reference
