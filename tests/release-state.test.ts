@@ -1,10 +1,62 @@
-import { describe, expect, it } from 'vitest';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   collectReleaseState,
   nextVersion,
   parseConventionalSubject,
   validateReleaseVersionState,
 } from '../scripts/release/release-state';
+
+const fixtures: string[] = [];
+
+function git(cwd: string, ...args: string[]) {
+  return execFileSync('/usr/bin/git', args, { cwd, encoding: 'utf8' }).trim();
+}
+
+function writeReleaseFiles(cwd: string, conventionalCommitBaseline?: string) {
+  writeFileSync(
+    join(cwd, 'package.json'),
+    `${JSON.stringify(
+      {
+        name: 'release-state-fixture',
+        version: '0.2.0',
+        releasePolicy: {
+          bootstrapVersion: '0.2.0',
+          conventionalCommitBaseline,
+        },
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  writeFileSync(
+    join(cwd, 'CHANGELOG.md'),
+    '# Changelog\n\n## Unreleased\n\n## 0.2.0 - 2026-07-22\n',
+  );
+}
+
+function createFixture() {
+  const cwd = mkdtempSync(join(tmpdir(), 'portfolio-release-state-'));
+  fixtures.push(cwd);
+  git(cwd, 'init', '--quiet');
+  git(cwd, 'config', 'user.name', 'Release Test');
+  git(cwd, 'config', 'user.email', 'release-test@example.com');
+  return cwd;
+}
+
+function commitAll(cwd: string, subject: string) {
+  git(cwd, 'add', '.');
+  git(cwd, 'commit', '--quiet', '-m', subject);
+}
+
+afterEach(() => {
+  for (const fixture of fixtures.splice(0)) {
+    rmSync(fixture, { recursive: true, force: true });
+  }
+});
 
 describe('manual release state', () => {
   it('parses the allowed Conventional Commit contract', () => {
@@ -47,11 +99,46 @@ describe('manual release state', () => {
     ).toBe('0.3.0');
   });
 
-  it('reports a valid repository release baseline', () => {
-    const state = collectReleaseState();
+  it('selects only an exact stable tag for the release baseline', () => {
+    const fixture = createFixture();
+    writeReleaseFiles(fixture);
+    writeFileSync(join(fixture, 'baseline.txt'), 'baseline\n');
+    commitAll(fixture, 'chore: initialize release fixture');
+    git(fixture, 'tag', 'v0.2.0');
 
+    writeFileSync(join(fixture, 'feature.txt'), 'feature\n');
+    commitAll(fixture, 'feat: add fixture behavior');
+    git(fixture, 'tag', 'v0.3.0-rc.1');
+    git(fixture, 'tag', 'v9.9.9-preview');
+
+    const state = collectReleaseState(fixture);
+
+    expect(state.latestTag).toBe('v0.2.0');
     expect(state.baseVersion).toBe('0.2.0');
-    expect(state.releaseRange).toMatch(/\.\.HEAD$/);
+    expect(state.releaseRange).toBe('v0.2.0..HEAD');
+    expect(state.nextVersion).toBe('0.3.0');
+    expect(state.errors).toEqual([]);
+    expect(state.invalidCommits).toEqual([]);
+  });
+
+  it('falls back to the configured baseline when only prerelease tags exist', () => {
+    const fixture = createFixture();
+    writeReleaseFiles(fixture);
+    writeFileSync(join(fixture, 'baseline.txt'), 'baseline\n');
+    commitAll(fixture, 'chore: initialize release fixture');
+    const baseline = git(fixture, 'rev-parse', 'HEAD');
+
+    writeReleaseFiles(fixture, baseline);
+    commitAll(fixture, 'chore: configure release baseline');
+    git(fixture, 'tag', 'v0.3.0-rc.1');
+    writeFileSync(join(fixture, 'fix.txt'), 'fix\n');
+    commitAll(fixture, 'fix: repair fixture behavior');
+
+    const state = collectReleaseState(fixture);
+
+    expect(state.latestTag).toBeNull();
+    expect(state.releaseRange).toBe(`${baseline}..HEAD`);
+    expect(state.nextVersion).toBe('0.2.1');
     expect(state.errors).toEqual([]);
     expect(state.invalidCommits).toEqual([]);
   });

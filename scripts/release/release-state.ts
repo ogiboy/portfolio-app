@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 const conventionalSubjectPattern =
   /^(feat|fix|perf|docs|build|ci|chore|refactor|test|style)(?:\(([a-z0-9._/-]+)\))?(!)?: (\S.*)$/;
 const semverPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+const stableTagPattern = /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const releasableTypes = new Set(['feat', 'fix', 'perf', 'refactor']);
 const gitExecutable = '/usr/bin/git';
 
@@ -152,13 +153,22 @@ function releaseCommits(cwd: string, range: string): ReleaseCommit[] {
     .filter((commit) => commit.parents.length < 2);
 }
 
+function latestStableTag(cwd: string) {
+  const tags = git(
+    cwd,
+    ['tag', '--merged', 'HEAD', '--list', 'v*', '--sort=-version:refname'],
+    true,
+  );
+  return tags.split('\n').find((tag) => stableTagPattern.test(tag)) ?? '';
+}
+
 export function collectReleaseState(cwd = process.cwd()) {
   const packageManifest = JSON.parse(
     readFileSync(resolve(cwd, 'package.json'), 'utf8'),
   ) as PackageManifest;
   const changelog = readFileSync(resolve(cwd, 'CHANGELOG.md'), 'utf8');
   const packageVersion = packageManifest.version ?? '';
-  const latestTag = git(cwd, ['describe', '--tags', '--match', 'v[0-9]*', '--abbrev=0'], true);
+  const latestTag = latestStableTag(cwd);
   const bootstrapVersion = packageManifest.releasePolicy?.bootstrapVersion ?? '';
   const configuredBaseline = packageManifest.releasePolicy?.conventionalCommitBaseline ?? '';
   const rangeStart = latestTag || configuredBaseline;
