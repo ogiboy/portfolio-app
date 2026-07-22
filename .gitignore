@@ -41,6 +41,7 @@ old.env
 
 my-project.zip
 # local agent/runtime caches
+/.agents/skills/
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
