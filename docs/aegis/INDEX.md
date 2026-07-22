@@ -15,4 +15,8 @@
 - `work/2026-07-20-governance-and-agent-readiness/20-checkpoint.md`: Dated checkpoint snapshot and drift boundary.
 - `work/2026-07-20-governance-and-agent-readiness/90-evidence.md`: Dated evidence bundle and closeout gaps.
 
+## Search and Observability Initiative
+
+- `plans/2026-07-22-search-brand-observability.md`: Execution plan for H.O.T. identity, technical SEO, structured data, privacy-first telemetry, and provider-gated follow-ups.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.
