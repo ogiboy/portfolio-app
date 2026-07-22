@@ -21,6 +21,7 @@
 - Converted the retired dashboard route into a permanent compatibility redirect instead of an indexable dead surface.
 - Forced Next.js transitive image processing onto patched `sharp@0.35.1` to remove the vulnerable `0.34.x` branch from production resolution.
 - Hardened CI installation by disabling package lifecycle scripts by default and rebuilding only the native dependencies approved in the pnpm policy.
+- Aligned Vercel install and build commands with the repository's Corepack-managed pnpm pin.
 
 ### Removed
 

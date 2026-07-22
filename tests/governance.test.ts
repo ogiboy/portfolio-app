@@ -89,4 +89,12 @@ describe('project governance contracts', () => {
     expect(workflow).toContain('pnpm browser:setup');
     expect(workflow).not.toContain('pnpm exec playwright install');
   });
+
+  it('lets Vercel resolve the repository package-manager pin through Corepack', () => {
+    const vercelConfig = readProjectFile('vercel.json');
+
+    expect(vercelConfig).toContain('"installCommand": "corepack pnpm install --frozen-lockfile"');
+    expect(vercelConfig).toContain('"buildCommand": "corepack pnpm build"');
+    expect(vercelConfig).not.toContain('pnpm@11.7.0');
+  });
 });
