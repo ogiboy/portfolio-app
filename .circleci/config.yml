@@ -1,77 +1,85 @@
-# This config was automatically generated from your source code
-# Stacks detected: cicd:github-actions:.github/workflows,deps:node:.
 version: 2.1
-orbs:
-  node: circleci/node@5
-jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          cache-path: ~/project/node_modules
-          override-ci-command: npm install
-      - run:
-          name: Run tests
-          command: npm test --passWithNoTests
-  build-node:
-    # Build node project
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          cache-path: ~/project/node_modules
-          override-ci-command: npm install
-      - run:
-          command: npm run build
-      - run:
-          name: Create the ~/artifacts directory if it doesn't exist
-          command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
-      - run:
-          name: Copy artifacts
-          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
-      - store_artifacts:
-          path: ~/artifacts
-          destination: node-build
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+
+executors:
+  node:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:24.16.0-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
+    resource_class: large
+    environment:
+      NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  verify:
+    executor: node
     steps:
+      - checkout
+
       - run:
-          name: Plan deployment
-          command: |-
-            circleci run release plan deploy \
-              --environment-name="default" \
-              --component-name="deploy" \
-              --target-version="1.0.${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:7}"
-      # Replace this with steps to deploy to users
+          name: Verify pinned pnpm toolchain
+          command: corepack pnpm --version
+
+      - restore_cache:
+          keys:
+            - pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+            - pnpm-v2-{{ arch }}-
+
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Install dependencies without lifecycle scripts
+          command: corepack pnpm install --frozen-lockfile --ignore-scripts
+
       - run:
-          name: found github actions config
-          command: ':'
+          name: Build approved native dependencies
+          command: >-
+            corepack pnpm rebuild @parcel/watcher @swc/core bufferutil sharp
+            unrs-resolver
+
       - run:
-          name: Update deployment status to running
-          command: circleci run release update deploy --status=RUNNING
+          name: Set up Playwright browser
+          command: corepack pnpm exec playwright install --with-deps chromium
+
+      - save_cache:
+          key: pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+          paths:
+            - ~/.local/share/pnpm/store
+            - ~/.cache/ms-playwright
+
       - run:
-          name: Update deployment status to success
-          command: circleci run release update deploy --status=SUCCESS
-          when: on_success
+          name: Format check
+          command: corepack pnpm format:check
+
       - run:
-          name: Update deployment status to failed
-          command: circleci run release update deploy --status=FAILED
-          when: on_fail
+          name: Lint
+          command: corepack pnpm lint
+
+      - run:
+          name: Typecheck
+          command: corepack pnpm typecheck
+
+      - run:
+          name: Unit tests
+          command: corepack pnpm test
+
+      - run:
+          name: Build
+          command: corepack pnpm build
+
+      - run:
+          name: E2E tests
+          command: corepack pnpm exec playwright test --reporter=line,html
+
+      - store_artifacts:
+          path: playwright-report
+          destination: playwright-report
+
+      - store_artifacts:
+          path: test-results
+          destination: test-results
+
+      - run:
+          name: Production audit
+          command: corepack pnpm audit --prod --audit-level high
+
 workflows:
-  build-and-test:
+  verify:
     jobs:
-      - test-node
-      - build-node:
-          requires:
-            - test-node
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - verify
