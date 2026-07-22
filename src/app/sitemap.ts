@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { projects } from '@/content/projects';
 import { routing } from '@/i18n/routing';
+import { localizedLanguageUrls } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
 type SitemapPage = {
@@ -13,6 +14,7 @@ const staticPages: SitemapPage[] = [
   { path: '', changeFrequency: 'monthly', priority: 1 },
   { path: '/projects', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/labs/retro-game-center', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/privacy', changeFrequency: 'yearly', priority: 0.3 },
 ];
 
 const projectPages: SitemapPage[] = projects.map((project) => ({
@@ -32,12 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: page.changeFrequency,
       priority: page.priority,
       alternates: {
-        languages: Object.fromEntries(
-          routing.locales.map((alternateLocale) => [
-            alternateLocale,
-            localizedUrl(alternateLocale, page.path),
-          ]),
-        ),
+        languages: localizedLanguageUrls(page.path),
       },
     })),
   );

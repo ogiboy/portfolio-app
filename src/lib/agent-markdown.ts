@@ -1,5 +1,6 @@
 import { projects } from '@/content/projects';
 import { contact, siteCopy, type Locale } from '@/content/site';
+import { identity } from '@/lib/seo';
 
 export const agentMarkdownCacheControl = 'private, no-store';
 
@@ -21,7 +22,7 @@ function homeMarkdown(locale: Locale): MarkdownDocument {
 
   return {
     locale,
-    body: `# Oğuzcan Toptaş Portfolio\n\n${copy.home.title}\n\n${copy.home.subtitle}\n\n## ${copy.home.servicesTitle}\n\n${copy.home.servicesIntro}\n\n${copy.home.services
+    body: `# ${identity.brand} - ${identity.fullName} Portfolio\n\n${copy.home.title}\n\n${copy.home.subtitle}\n\n## ${copy.home.servicesTitle}\n\n${copy.home.servicesIntro}\n\n${copy.home.services
       .map((service) => `### ${service.title}\n\n${service.body}`)
       .join('\n\n')}\n\n## ${copy.home.selectedTitle}\n\n${copy.home.selectedIntro}\n\n${projects
       .filter((project) => project.featured)

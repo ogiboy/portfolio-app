@@ -1,6 +1,7 @@
 import { projects } from '@/content/projects';
 import { contact } from '@/content/site';
 import { routing } from '@/i18n/routing';
+import { identity } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
 export const publicApiVersion = '0.2.0';
@@ -10,7 +11,7 @@ export const discoveryCacheControl =
 
 export function getPortfolioApiPayload() {
   return {
-    name: 'Oğuzcan Toptaş Portfolio',
+    name: `${identity.brand} - ${identity.fullName} Portfolio`,
     version: publicApiVersion,
     locales: [...routing.locales],
     contact,
@@ -35,7 +36,7 @@ export function getOpenApiDocument() {
   return {
     openapi: '3.1.0',
     info: {
-      title: 'Oğuzcan Toptaş Portfolio API',
+      title: `${identity.brand} - ${identity.fullName} Portfolio API`,
       version: publicApiVersion,
       description: 'Read-only public portfolio and service-health endpoints.',
     },

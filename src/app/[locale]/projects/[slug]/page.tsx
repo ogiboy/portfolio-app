@@ -2,12 +2,15 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, ArrowSquareOut, GithubLogo } from '@phosphor-icons/react/dist/ssr';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getNextProject, getProject, projects } from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
+import { createRouteMetadata } from '@/lib/seo';
+import { buildProjectStructuredData } from '@/lib/structured-data';
 
 export function generateStaticParams() {
   return projects.flatMap((project) => [
@@ -18,12 +21,26 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: Readonly<{ params: Promise<{ slug: string }> }>): Promise<Metadata> {
-  const { slug } = await params;
+}: Readonly<{ params: Promise<{ locale: string; slug: string }> }>): Promise<Metadata> {
+  const { locale, slug } = await params;
   const project = getProject(slug);
+  if (!project) {
+    return { title: 'Project', robots: { index: false, follow: false } };
+  }
+
+  const metadata = createRouteMetadata({
+    locale: locale === 'tr' ? 'tr' : 'en',
+    path: `/projects/${project.slug}`,
+    title: project.name,
+    description: project.description,
+  });
+
   return {
-    title: project ? project.name : 'Project',
-    description: project?.description,
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      type: 'article',
+    },
   };
 }
 
@@ -39,6 +56,7 @@ export default async function ProjectDetailPage({
 
   return (
     <main>
+      <JsonLd data={buildProjectStructuredData(locale, project)} />
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-20">
         <Button asChild variant="ghost" size="sm">
           <Link href="/projects">

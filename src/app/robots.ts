@@ -1,13 +1,14 @@
 import type { MetadataRoute } from 'next';
-import { siteUrl } from '@/lib/site-url';
+import { siteOrigin, siteUrl } from '@/lib/site-url';
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/wasm/', '/en/dashboard', '/tr/dashboard'],
+      disallow: '/wasm/',
     },
     sitemap: siteUrl('/sitemap.xml'),
+    host: siteOrigin,
   };
 }

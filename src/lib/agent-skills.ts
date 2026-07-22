@@ -1,4 +1,5 @@
 import { siteUrl } from '@/lib/site-url';
+import { identity } from '@/lib/seo';
 
 export const portfolioNavigationDescription =
   'Read-only navigation and public data discovery for this portfolio.';
@@ -10,7 +11,7 @@ description: ${portfolioNavigationDescription}
 
 # Portfolio navigation
 
-Use this read-only skill to discover Oğuzcan Toptaş's public portfolio.
+Use this read-only skill to discover ${identity.brand} - ${identity.fullName}'s public developer and homelab portfolio.
 
 ## Public routes
 

@@ -1,7 +1,7 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import { ArrowRight, EnvelopeSimple, GameController } from '@phosphor-icons/react/dist/ssr';
 import { CinematicWorkRail } from '@/components/client/cinematic-work-rail';
+import { JsonLd } from '@/components/seo/json-ld';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,10 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { featuredProjects, projects } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
-
-export const metadata: Metadata = {
-  title: 'Frontend Portfolio',
-};
+import { buildHomeStructuredData } from '@/lib/structured-data';
 
 export default async function HomePage({
   params,
@@ -24,6 +21,7 @@ export default async function HomePage({
 
   return (
     <main className="overflow-x-hidden">
+      <JsonLd data={buildHomeStructuredData(locale)} />
       <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-16 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-20">
         <div>
           <Badge>{copy.home.eyebrow}</Badge>

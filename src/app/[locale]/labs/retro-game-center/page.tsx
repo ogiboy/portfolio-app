@@ -7,17 +7,26 @@ import {
   ShieldCheck,
 } from '@phosphor-icons/react/dist/ssr';
 import { WasmGameFrame } from '@/components/client/wasm-game-frame';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
+import { createRouteMetadata, seoCopy } from '@/lib/seo';
+import { buildLabStructuredData } from '@/lib/structured-data';
 
-export const metadata: Metadata = {
-  title: 'Retro Game Center',
-  description:
-    'A lazy-loaded WASM game center lab that boots DOOM Shareware inside an isolated portfolio route.',
-};
+export async function generateMetadata({
+  params,
+}: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {
+  const { locale } = await params;
+  return createRouteMetadata({
+    locale,
+    path: '/labs/retro-game-center',
+    title: 'Retro Game Center',
+    description: seoCopy[locale].labDescription,
+  });
+}
 
 export default async function RetroGameCenterPage({
   params,
@@ -28,6 +37,7 @@ export default async function RetroGameCenterPage({
 
   return (
     <main>
+      <JsonLd data={buildLabStructuredData(locale)} />
       <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-14 md:grid-cols-[0.82fr_1.18fr] md:px-8 md:py-20">
         <div>
           <Button asChild variant="ghost" size="sm">

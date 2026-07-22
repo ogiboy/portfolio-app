@@ -8,7 +8,7 @@ import { siteUrl } from '@/lib/site-url';
 describe('public discovery metadata', () => {
   it('lists every localized public page from the typed content model', () => {
     const entries = sitemap();
-    const expectedPagesPerLocale = projects.length + 3;
+    const expectedPagesPerLocale = projects.length + 4;
 
     expect(entries).toHaveLength(expectedPagesPerLocale * routing.locales.length);
     expect(entries.map((entry) => entry.url)).toEqual(
@@ -16,6 +16,7 @@ describe('public discovery metadata', () => {
         siteUrl('/en'),
         siteUrl('/tr'),
         siteUrl('/en/projects'),
+        siteUrl('/tr/privacy'),
         siteUrl('/tr/labs/retro-game-center'),
         siteUrl(`/en/projects/${projects[0].slug}`),
       ]),
@@ -29,9 +30,10 @@ describe('public discovery metadata', () => {
       rules: {
         userAgent: '*',
         allow: '/',
-        disallow: ['/wasm/', '/en/dashboard', '/tr/dashboard'],
+        disallow: '/wasm/',
       },
       sitemap: siteUrl('/sitemap.xml'),
+      host: new URL(siteUrl('/')).origin,
     });
   });
 });

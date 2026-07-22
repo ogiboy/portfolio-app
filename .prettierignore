@@ -17,3 +17,4 @@ ruvector.db
 .wrangler/
 skills-lock.json
 CLAUDE.md
+src/app/icon.svg

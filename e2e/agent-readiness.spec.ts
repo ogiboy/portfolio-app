@@ -14,7 +14,7 @@ test('negotiates markdown only for an explicit positive markdown Accept header',
   expect(rootMarkdown.headers().vary).toContain('Accept-Language');
   expect(rootMarkdown.headers().vary).toContain('Cookie');
   expect(rootMarkdown.headers()['set-cookie']).toBeUndefined();
-  await expect(rootMarkdown.text()).resolves.toContain('# Oğuzcan Toptaş Portfolio');
+  await expect(rootMarkdown.text()).resolves.toContain('# H.O.T. - Halil Oğuzcan Toptaş Portfolio');
 
   const rootTurkishMarkdown = await request.get('/', {
     headers: { Accept: 'text/markdown', 'Accept-Language': 'tr' },
