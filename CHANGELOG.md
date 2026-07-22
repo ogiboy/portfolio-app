@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Portable Markdown negotiation for public EN/TR portfolio routes.
+- Agent Skills discovery index and digest-bound navigation skill artifact.
+- Progressive read-only WebMCP tools with unsupported-browser and reduced-capability fallbacks.
+- Project-local ADR lifecycle, sole mutable checkpoint contract, delivery evidence classes, and stricter PR/release templates.
+
+### Changed
+
+- Corrected the canonical site origin used by sitemap, API catalog, OpenAPI, and agent discovery.
+- Hardened CI, dependency update, CodeRabbit, security, browser QA, and release governance around evidence-backed states.
+
+### Removed
+
+- Unused legacy data helper left over from the retired dashboard/database surface.
+
 ## 0.2.0 - 2026-06-16
 
 ### Changed
