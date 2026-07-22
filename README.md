@@ -4,7 +4,7 @@ Public EN/TR developer and homelab portfolio for Halil Oğuzcan Toptaş. H.O.T. 
 
 ## Getting Started
 
-Use Node `24.16.0` and pnpm `11.7.0`.
+Use Node `24.16.0` and the Corepack-managed pnpm version declared in `package.json`.
 
 ```bash
 pnpm dev

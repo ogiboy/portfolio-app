@@ -22,6 +22,7 @@
 - Forced Next.js transitive image processing onto patched `sharp@0.35.1` to remove the vulnerable `0.34.x` branch from production resolution.
 - Hardened CI installation by disabling package lifecycle scripts by default and rebuilding only the native dependencies approved in the pnpm policy.
 - Aligned Vercel install and build commands with the repository's Corepack-managed pnpm pin.
+- Raised the stale PostCSS workspace override and removed the duplicate CI pnpm pin that conflicted with current lockfile validation.
 
 ### Removed
 
