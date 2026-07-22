@@ -18,6 +18,7 @@
 - Hardened CI, dependency update, CodeRabbit, security, browser QA, and release governance around evidence-backed states.
 - Repositioned the site as Halil Oğuzcan Toptaş's developer and homelab portfolio under the H.O.T. identity.
 - Converted the retired dashboard route into a permanent compatibility redirect instead of an indexable dead surface.
+- Forced Next.js transitive image processing onto patched `sharp@0.35.1` to remove the vulnerable `0.34.x` branch from production resolution.
 
 ### Removed
 
