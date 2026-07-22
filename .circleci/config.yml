@@ -56,8 +56,16 @@ jobs:
           command: pnpm lint
 
       - run:
+          name: Verify TypeScript toolchain
+          command: pnpm qa:typescript
+
+      - run:
           name: Typecheck
           command: pnpm typecheck
+
+      - run:
+          name: Typecheck compatibility
+          command: pnpm typecheck:compat
 
       - run:
           name: Unit tests
