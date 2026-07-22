@@ -16,7 +16,11 @@ function git(cwd: string, ...args: string[]) {
   return execFileSync('/usr/bin/git', args, { cwd, encoding: 'utf8' }).trim();
 }
 
-function writeReleaseFiles(cwd: string, conventionalCommitBaseline?: string) {
+function writeReleaseFiles(
+  cwd: string,
+  conventionalCommitBaseline?: string,
+  conventionalCommitExceptions?: Array<{ reason: string; sha: string }>,
+) {
   writeFileSync(
     join(cwd, 'package.json'),
     `${JSON.stringify(
@@ -26,6 +30,7 @@ function writeReleaseFiles(cwd: string, conventionalCommitBaseline?: string) {
         releasePolicy: {
           bootstrapVersion: '0.2.0',
           conventionalCommitBaseline,
+          conventionalCommitExceptions,
         },
       },
       null,
@@ -141,6 +146,58 @@ describe('manual release state', () => {
     expect(state.nextVersion).toBe('0.2.1');
     expect(state.errors).toEqual([]);
     expect(state.invalidCommits).toEqual([]);
+  });
+
+  it('allows a documented exception for one exact legacy commit', () => {
+    const fixture = createFixture();
+    writeReleaseFiles(fixture);
+    writeFileSync(join(fixture, 'baseline.txt'), 'baseline\n');
+    commitAll(fixture, 'chore: initialize release fixture');
+    const baseline = git(fixture, 'rev-parse', 'HEAD');
+
+    writeFileSync(join(fixture, 'legacy.txt'), 'legacy\n');
+    commitAll(fixture, 'Legacy provider commit');
+    const legacyCommit = git(fixture, 'rev-parse', 'HEAD');
+
+    writeReleaseFiles(fixture, baseline, [
+      { reason: 'Imported before policy enforcement.', sha: legacyCommit },
+    ]);
+    commitAll(fixture, 'chore: document legacy commit exception');
+
+    const state = collectReleaseState(fixture);
+
+    expect(state.releaseRange).toBe(`${baseline}..HEAD`);
+    expect(state.errors).toEqual([]);
+    expect(state.invalidCommits).toEqual([]);
+    expect(state.commits).toContainEqual(
+      expect.objectContaining({ sha: legacyCommit, subject: 'Legacy provider commit' }),
+    );
+  });
+
+  it('rejects incomplete legacy commit exceptions', () => {
+    const fixture = createFixture();
+    writeReleaseFiles(fixture);
+    writeFileSync(join(fixture, 'baseline.txt'), 'baseline\n');
+    commitAll(fixture, 'chore: initialize release fixture');
+    const baseline = git(fixture, 'rev-parse', 'HEAD');
+
+    writeFileSync(join(fixture, 'legacy.txt'), 'legacy\n');
+    commitAll(fixture, 'Legacy provider commit');
+    const legacyCommit = git(fixture, 'rev-parse', 'HEAD');
+
+    writeReleaseFiles(fixture, baseline, [
+      { reason: 'Imported before policy enforcement.', sha: legacyCommit.slice(0, 7) },
+    ]);
+    commitAll(fixture, 'chore: configure incomplete legacy exception');
+
+    const state = collectReleaseState(fixture);
+
+    expect(state.errors).toContain(
+      'Each releasePolicy.conventionalCommitExceptions entry requires a full lowercase commit SHA and a reason.',
+    );
+    expect(state.invalidCommits).toEqual([
+      { sha: legacyCommit, subject: 'Legacy provider commit' },
+    ]);
   });
 
   it('accepts only an exact pre-tag release commit for the planned version', () => {

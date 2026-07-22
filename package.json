@@ -10,7 +10,13 @@
   },
   "releasePolicy": {
     "bootstrapVersion": "0.2.0",
-    "conventionalCommitBaseline": "3b72500dc4ce82ba6ef22a86d51479f69da12e96"
+    "conventionalCommitBaseline": "3b72500dc4ce82ba6ef22a86d51479f69da12e96",
+    "conventionalCommitExceptions": [
+      {
+        "sha": "56ecae78955bb6d0ee370e50122360f88080c040",
+        "reason": "Legacy CircleCI setup commit merged through PR #17."
+      }
+    ]
   },
   "scripts": {
     "dev": "next dev --turbopack",
