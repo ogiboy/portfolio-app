@@ -1,4 +1,4 @@
-const DEFAULT_SITE_ORIGIN = 'https://portfolio-app-three-rho.vercel.app';
+const DEFAULT_SITE_ORIGIN = 'https://www.oguzcantoptas.com';
 
 function resolveSiteOrigin() {
   const configuredOrigin = process.env.NEXT_PUBLIC_SITE_URL?.trim();
