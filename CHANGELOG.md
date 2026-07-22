@@ -11,6 +11,7 @@
 - Localized canonical metadata, reciprocal hreflang links, safe JSON-LD, sitemap alternates, and optional Google verification metadata.
 - H.O.T. icon, web app manifest, and generated Open Graph/Twitter cards for consistent browser and social identity.
 - Localized privacy pages and a durable opt-out for aggregate Vercel Analytics and Speed Insights.
+- Explicit SonarQube Cloud Automatic Analysis scope for maintained source, configuration, workflow, and test files.
 
 ### Changed
 
@@ -19,6 +20,7 @@
 - Repositioned the site as Halil Oğuzcan Toptaş's developer and homelab portfolio under the H.O.T. identity.
 - Converted the retired dashboard route into a permanent compatibility redirect instead of an indexable dead surface.
 - Forced Next.js transitive image processing onto patched `sharp@0.35.1` to remove the vulnerable `0.34.x` branch from production resolution.
+- Hardened CI installation by disabling package lifecycle scripts by default and rebuilding only the native dependencies approved in the pnpm policy.
 
 ### Removed
 

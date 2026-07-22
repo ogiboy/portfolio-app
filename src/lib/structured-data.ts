@@ -5,12 +5,7 @@ import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
 export type JsonLdValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonLdValue[]
-  | { [key: string]: JsonLdValue };
+  string | number | boolean | null | JsonLdValue[] | { [key: string]: JsonLdValue };
 
 const websiteId = siteUrl('/#website');
 const personId = siteUrl('/#person');

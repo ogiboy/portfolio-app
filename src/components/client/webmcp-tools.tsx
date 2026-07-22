@@ -43,6 +43,86 @@ function failure(error: unknown) {
 }
 
 const emptyInputSchema = { additionalProperties: false, properties: {}, type: 'object' } as const;
+const projectSearchInputSchema: JsonSchema = {
+  additionalProperties: false,
+  properties: { query: { minLength: 1, type: 'string' } },
+  required: ['query'],
+  type: 'object',
+};
+
+function projectMatchesQuery(project: PublicProject, query: string) {
+  const searchableValues = [
+    project.name,
+    project.category,
+    project.description,
+    project.year,
+    ...project.stack,
+  ];
+
+  return searchableValues.some((value) => value.toLocaleLowerCase().includes(query));
+}
+
+async function portfolioOverview() {
+  try {
+    const portfolio = await getPortfolio();
+    return result({
+      name: portfolio.name,
+      version: portfolio.version,
+      contact: portfolio.contact,
+      projectCount: portfolio.projects.length,
+      projectsUrl: '/en/projects',
+    });
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+async function searchPortfolioProjects(input: Record<string, unknown>) {
+  try {
+    const query = typeof input.query === 'string' ? input.query.trim().toLocaleLowerCase() : '';
+    if (!query) {
+      return failure(new Error('A non-empty query is required.'));
+    }
+
+    const portfolio = await getPortfolio();
+    const matchingProjects = portfolio.projects.filter((project) =>
+      projectMatchesQuery(project, query),
+    );
+
+    return result({ query, count: matchingProjects.length, projects: matchingProjects });
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+const portfolioTools: ModelContextTool[] = [
+  {
+    name: 'portfolio_overview',
+    description:
+      'Read the public portfolio overview, contact channels, and available project count.',
+    inputSchema: emptyInputSchema,
+    annotations: { readOnlyHint: true },
+    execute: portfolioOverview,
+  },
+  {
+    name: 'search_public_portfolio_projects',
+    description:
+      'Search public portfolio projects by name, category, description, year, or technology.',
+    inputSchema: projectSearchInputSchema,
+    annotations: { readOnlyHint: true },
+    execute: searchPortfolioProjects,
+  },
+];
+
+function registerPortfolioTools(modelContext: ModelContext, signal: AbortSignal) {
+  return Promise.all(portfolioTools.map((tool) => modelContext.registerTool(tool, { signal })));
+}
+
+function reportRegistrationFailure(error: unknown, signal: AbortSignal) {
+  if (!signal.aborted) {
+    console.error('WebMCP tool registration failed.', error);
+  }
+}
 
 export function WebMcpTools() {
   useEffect(() => {
@@ -52,81 +132,9 @@ export function WebMcpTools() {
     }
 
     const controller = new AbortController();
-
-    const tools: ModelContextTool[] = [
-      {
-        name: 'portfolio_overview',
-        description:
-          'Read the public portfolio overview, contact channels, and available project count.',
-        inputSchema: emptyInputSchema,
-        annotations: { readOnlyHint: true },
-        async execute() {
-          try {
-            const portfolio = await getPortfolio();
-            return result({
-              name: portfolio.name,
-              version: portfolio.version,
-              contact: portfolio.contact,
-              projectCount: portfolio.projects.length,
-              projectsUrl: '/en/projects',
-            });
-          } catch (error) {
-            return failure(error);
-          }
-        },
-      },
-      {
-        name: 'search_public_portfolio_projects',
-        description:
-          'Search public portfolio projects by name, category, description, year, or technology.',
-        inputSchema: {
-          additionalProperties: false,
-          properties: { query: { minLength: 1, type: 'string' } },
-          required: ['query'],
-          type: 'object',
-        },
-        annotations: { readOnlyHint: true },
-        async execute(input) {
-          try {
-            const query =
-              typeof input.query === 'string' ? input.query.trim().toLocaleLowerCase() : '';
-            if (!query) {
-              return failure(new Error('A non-empty query is required.'));
-            }
-
-            const portfolio = await getPortfolio();
-            const projects = portfolio.projects.filter((project) =>
-              [
-                project.name,
-                project.category,
-                project.description,
-                project.year,
-                ...project.stack,
-              ].some((value) => value.toLocaleLowerCase().includes(query)),
-            );
-
-            return result({ query, count: projects.length, projects });
-          } catch (error) {
-            return failure(error);
-          }
-        },
-      },
-    ];
-
-    const registration = Promise.all(
-      tools.map((tool) =>
-        Promise.resolve().then(() => {
-          if (controller.signal.aborted) return;
-          return modelContext.registerTool(tool, { signal: controller.signal });
-        }),
-      ),
+    void registerPortfolioTools(modelContext, controller.signal).catch((error: unknown) =>
+      reportRegistrationFailure(error, controller.signal),
     );
-
-    void registration.catch((error: unknown) => {
-      if (!controller.signal.aborted) {
-        console.error('WebMCP tool registration failed.', error);
-      }
-    });
 
     return () => controller.abort();
   }, []);

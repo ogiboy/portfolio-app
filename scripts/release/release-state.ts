@@ -7,6 +7,7 @@ const conventionalSubjectPattern =
   /^(feat|fix|perf|docs|build|ci|chore|refactor|test|style)(?:\(([a-z0-9._/-]+)\))?(!)?: (\S.*)$/;
 const semverPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const releasableTypes = new Set(['feat', 'fix', 'perf', 'refactor']);
+const gitExecutable = '/usr/bin/git';
 
 type ConventionalSubject = {
   breaking: boolean;
@@ -39,7 +40,7 @@ type ReleaseVersionState = {
 
 function git(cwd: string, args: string[], optional = false) {
   try {
-    return execFileSync('git', args, {
+    return execFileSync(gitExecutable, args, {
       cwd,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -51,7 +52,7 @@ function git(cwd: string, args: string[], optional = false) {
 }
 
 export function parseConventionalSubject(subject: string): ConventionalSubject | undefined {
-  const match = subject.match(conventionalSubjectPattern);
+  const match = conventionalSubjectPattern.exec(subject);
   if (!match) return undefined;
 
   return {
@@ -63,7 +64,7 @@ export function parseConventionalSubject(subject: string): ConventionalSubject |
 }
 
 export function nextVersion(baseVersion: string, commits: ReleaseCommit[]) {
-  const match = baseVersion.match(semverPattern);
+  const match = semverPattern.exec(baseVersion);
   if (!match) throw new Error(`Invalid semantic version: ${baseVersion}`);
 
   let [major, minor, patch] = match.slice(1).map(Number);
@@ -177,7 +178,7 @@ export function collectReleaseState(cwd = process.cwd()) {
     errors.push(`Release range start is not a commit: ${rangeStart}`);
   }
 
-  const latestReleasedVersion = changelog.match(/^## (\d+\.\d+\.\d+)(?: - .+)?$/m)?.[1] ?? '';
+  const latestReleasedVersion = /^## (\d+\.\d+\.\d+)(?: - .+)?$/m.exec(changelog)?.[1] ?? '';
   if (!changelog.includes('## Unreleased')) {
     errors.push('CHANGELOG.md must contain an Unreleased section.');
   }

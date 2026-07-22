@@ -1,9 +1,9 @@
 import type { Locale } from '@/content/site';
-import { createSocialImage, socialImageContentType, socialImageSize } from '@/lib/social-image';
+import { createSocialImage } from '@/lib/social-image';
+
+export { socialImageContentType as contentType, socialImageSize as size } from '@/lib/social-image';
 
 export const alt = 'H.O.T. developer and homelab portfolio by Halil Oğuzcan Toptaş';
-export const size = socialImageSize;
-export const contentType = socialImageContentType;
 
 export default async function OpenGraphImage({
   params,

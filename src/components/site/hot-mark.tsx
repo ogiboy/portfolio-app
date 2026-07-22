@@ -2,7 +2,7 @@ export function HotMark({ className = '' }: Readonly<{ className?: string }>) {
   return (
     <span className={`hot-mark ${className}`.trim()} aria-hidden="true">
       <span className="hot-mark__signal">
-        <svg className="hot-mark__flame" viewBox="0 0 24 30" role="presentation">
+        <svg className="hot-mark__flame" viewBox="0 0 24 30">
           <path d="M13.8 1.4c1.3 5.2-3.9 7.1-2.1 11.1 1.1-1.2 1.8-2.8 1.8-4.4 4.3 3.1 7 7 7 11.2 0 5.2-3.8 9.3-8.8 9.3S3 24.7 3 19.7c0-3.8 2.1-7.4 6.2-10.7-.2 3 1.1 4.9 2.4 5.9-1.1-4.7.3-8.8 2.2-13.5Z" />
           <path
             className="hot-mark__core"

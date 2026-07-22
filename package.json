@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.7.0",
+  "packageManager": "pnpm@11.16.0+sha512.b767e9a98fc87aec0f42daefcd0e84941c2cdb45d73c4e1e68860fb2bdfdbe032ab592105479e5e05c237f740c8a5ffdbbb52385797ddc2296745a1bbb883e8d",
   "engines": {
     "node": ">=24.15.0 <25",
     "pnpm": ">=11.7.0"
@@ -22,6 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "browser:setup": "playwright install --with-deps chromium",
     "audit": "pnpm audit --prod --audit-level high",
     "release:plan": "node scripts/release/release-state.ts",
     "release:check": "node scripts/release/release-state.ts --check",
@@ -53,7 +54,7 @@
     "@eslint/eslintrc": "^3.3.6",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.3",
-    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.13.3",

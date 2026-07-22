@@ -41,11 +41,14 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Install Playwright
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Build approved native dependencies
+        run: pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver
+
+      - name: Set up Playwright browser
+        run: pnpm browser:setup
 
       - name: Format check
         id: format

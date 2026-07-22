@@ -29,7 +29,7 @@ describe('portfolio content', () => {
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
     expect(siteCopy.en.lab.launchLabel).toBeTruthy();
     expect(siteCopy.tr.lab.launchLabel).toBeTruthy();
-    expect(siteCopy.en.lab.specs.length).toBe(siteCopy.tr.lab.specs.length);
+    expect(siteCopy.en.lab.specs).toHaveLength(siteCopy.tr.lab.specs.length);
     expect(siteCopy.en.brand.homeLabel).toContain('H.O.T.');
     expect(siteCopy.tr.brand.homeLabel).toContain('Halil Oğuzcan Toptaş');
     expect(siteCopy.en.privacy.disableAction).toBeTruthy();

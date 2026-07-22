@@ -107,22 +107,22 @@ export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined
 
 export function markdownResponse(
   pathname: string,
-  options: { includeBody: boolean; status?: number; varyLocale?: boolean } = { includeBody: true },
+  options?: { includeBody: boolean; status?: number; varyLocale?: boolean },
 ) {
   const document = getAgentMarkdown(pathname);
-  const status = options.status ?? (document ? 200 : 404);
-  const requestedLocale = asLocale(pathname.split('/').filter(Boolean)[0] ?? '');
+  const status = options?.status ?? (document ? 200 : 404);
+  const requestedLocale = asLocale(pathname.split('/').find(Boolean) ?? '');
   const locale = document?.locale ?? requestedLocale ?? 'en';
   const body =
     document?.body ?? '# Not found\n\nThe requested public portfolio page was not found.\n';
 
-  return new Response(options.includeBody ? body : null, {
+  return new Response((options?.includeBody ?? true) ? body : null, {
     status,
     headers: {
       'Cache-Control': agentMarkdownCacheControl,
       'Content-Language': locale,
       'Content-Type': 'text/markdown; charset=utf-8',
-      Vary: options.varyLocale ? 'Accept, Accept-Language, Cookie' : 'Accept',
+      Vary: options?.varyLocale ? 'Accept, Accept-Language, Cookie' : 'Accept',
     },
   });
 }

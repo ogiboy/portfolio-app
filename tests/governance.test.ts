@@ -66,4 +66,27 @@ describe('project governance contracts', () => {
       expect(checklist).toContain(`\`${evidenceClass}\``);
     }
   });
+
+  it('scopes SonarQube Cloud automatic analysis without pretending to publish coverage', () => {
+    const sonarConfig = readProjectFile('.sonarcloud.properties');
+
+    expect(sonarConfig).toContain(
+      'sonar.sources=src,scripts,.github/workflows,next.config.mjs,eslint.config.mjs,postcss.config.js,playwright.config.ts,vitest.config.ts',
+    );
+    expect(sonarConfig).toContain('sonar.tests=tests,e2e');
+    expect(sonarConfig).toContain('sonar.sourceEncoding=UTF-8');
+    expect(sonarConfig).not.toContain('sonar.javascript.lcov.reportPaths');
+    expect(sonarConfig).not.toContain('sonar.projectKey');
+  });
+
+  it('keeps CI lifecycle scripts disabled by default and rebuilds only approved packages', () => {
+    const workflow = readProjectFile('.github/workflows/ci.yml');
+
+    expect(workflow).toContain('pnpm install --frozen-lockfile --ignore-scripts');
+    expect(workflow).toContain(
+      'pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver',
+    );
+    expect(workflow).toContain('pnpm browser:setup');
+    expect(workflow).not.toContain('pnpm exec playwright install');
+  });
 });
