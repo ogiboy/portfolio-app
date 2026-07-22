@@ -14,7 +14,7 @@ The original changelog workflow established the right evidence requirements but 
 
 - `package.json` is the canonical version source.
 - Ordinary feature-branch work does not bump the version.
-- After merge, a maintainer creates a dedicated `chore(release): x.y.z` commit that updates `package.json` and `CHANGELOG.md`, reruns `release:check`, and tags that exact HEAD only after full local gates, checklist completion, hosted CI reconciliation, and Vercel preview evidence.
+- After merge, a maintainer creates a dedicated `chore(release): x.y.z` commit that updates `package.json` and `CHANGELOG.md`, reruns `release:check`, and tags that exact HEAD only after full local gates, checklist completion, hosted CI reconciliation, Vercel preview evidence, and completed production verification recorded as its own evidence class.
 - Conventional commits, `CHANGELOG.md`, the release checklist, CI evidence, preview verification, and production verification remain required and distinct.
 - Keep the release flow manual. Do not add semantic-release unless a later accepted decision supersedes this policy.
 

@@ -21,7 +21,7 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 - `pnpm test:e2e`: Playwright public-route smoke checks.
 - `pnpm build`: Next.js production build through Webpack.
 - `pnpm build:turbopack`: Explicit follow-up check for the Turbopack production build path.
-- `pnpm audit`: Production dependency audit at high severity.
+- `pnpm audit --prod --audit-level high`: Production dependency audit at high severity.
 - `pnpm release:plan`: Read-only JSON release plan from the exact Git range.
 - `pnpm release:check`: Validate package/changelog alignment and Conventional Commits without publishing.
 
