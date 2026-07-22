@@ -157,4 +157,13 @@ a:focus-visible .hot-mark__flame {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .hot-mark__flame {
+    transition: none;
+  }
+
+  a:hover .hot-mark__flame,
+  a:focus-visible .hot-mark__flame {
+    transform: none;
+  }
 }

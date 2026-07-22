@@ -17,6 +17,7 @@ export const siteCopy: LocalizedCopy<{
     signature: string;
   };
   nav: {
+    label: string;
     home: string;
     projects: string;
     lab: string;
@@ -104,6 +105,7 @@ export const siteCopy: LocalizedCopy<{
       signature: 'Halil Oğuzcan Toptaş / Developer + homelab portfolio / 2026',
     },
     nav: {
+      label: 'Primary navigation',
       home: 'Home',
       projects: 'Projects',
       lab: 'Lab',
@@ -222,7 +224,7 @@ export const siteCopy: LocalizedCopy<{
       eyebrow: 'Privacy / telemetry',
       title: 'Useful signals, not a surveillance profile.',
       intro:
-        'This portfolio uses aggregate Vercel Web Analytics and Speed Insights to understand route interest and performance. It does not run ads or sell visitor data.',
+        'This portfolio uses cookieless, aggregate Vercel Web Analytics and Speed Insights to understand route interest and performance. It does not run ads or sell visitor data.',
       aggregateTitle: 'What is measured',
       aggregateBody:
         'Page and route views, referrer category, coarse device/browser information, approximate region, and performance measurements may be aggregated by Vercel. No custom portfolio events are active.',
@@ -251,6 +253,7 @@ export const siteCopy: LocalizedCopy<{
       signature: 'Halil Oğuzcan Toptaş / Geliştirici + homelab portföyü / 2026',
     },
     nav: {
+      label: 'Ana gezinme',
       home: 'Ana sayfa',
       projects: 'Projeler',
       lab: 'Lab',
@@ -368,7 +371,7 @@ export const siteCopy: LocalizedCopy<{
       eyebrow: 'Gizlilik / telemetri',
       title: 'Gözetim profili değil, işe yarayan sinyaller.',
       intro:
-        'Bu portföy route ilgisini ve performansı anlamak için toplu Vercel Web Analytics ve Speed Insights kullanır. Reklam çalıştırmaz ve ziyaretçi verisi satmaz.',
+        'Bu portföy route ilgisini ve performansı anlamak için çerezsiz, toplu Vercel Web Analytics ve Speed Insights kullanır. Reklam çalıştırmaz ve ziyaretçi verisi satmaz.',
       aggregateTitle: 'Neler ölçülüyor',
       aggregateBody:
         'Sayfa ve route görüntülemeleri, yönlendiren kaynak kategorisi, genel cihaz/browser bilgisi, yaklaşık bölge ve performans ölçümleri Vercel tarafından toplulaştırılabilir. Özel portföy eventleri aktif değildir.',

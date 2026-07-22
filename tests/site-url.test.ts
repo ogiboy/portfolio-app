@@ -40,7 +40,23 @@ describe('site URL resolution', () => {
     process.env[siteUrlEnv] = 'http://preview.example.com';
 
     await expect(loadSiteUrl()).rejects.toThrow(
-      'NEXT_PUBLIC_SITE_URL must use HTTPS outside localhost.',
+      'NEXT_PUBLIC_SITE_URL must use HTTPS, except HTTP on localhost.',
+    );
+  });
+
+  it('allows HTTP only for localhost', async () => {
+    process.env[siteUrlEnv] = 'http://localhost:3100/path';
+
+    const { siteOrigin } = await loadSiteUrl();
+
+    expect(siteOrigin).toBe('http://localhost:3100');
+  });
+
+  it('rejects unsupported schemes on localhost', async () => {
+    process.env[siteUrlEnv] = 'ftp://localhost';
+
+    await expect(loadSiteUrl()).rejects.toThrow(
+      'NEXT_PUBLIC_SITE_URL must use HTTPS, except HTTP on localhost.',
     );
   });
 });

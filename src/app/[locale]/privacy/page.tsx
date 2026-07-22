@@ -47,7 +47,15 @@ export default async function PrivacyPage({
               <h2 className="font-display text-3xl leading-none tracking-[-0.05em]">
                 {boundary.title}
               </h2>
-              <p className="text-muted-foreground mt-5 text-sm leading-relaxed">{boundary.body}</p>
+              <p
+                className={
+                  index === 1
+                    ? 'text-primary-foreground mt-5 text-sm leading-relaxed'
+                    : 'text-muted-foreground mt-5 text-sm leading-relaxed'
+                }
+              >
+                {boundary.body}
+              </p>
             </CardContent>
           </Card>
         ))}

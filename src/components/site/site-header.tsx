@@ -19,7 +19,7 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
           <HotMark />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
+        <nav className="hidden items-center gap-1 md:flex" aria-label={copy.nav.label}>
           <Button asChild size="sm" variant="ghost">
             <Link href="/">{copy.nav.home}</Link>
           </Button>
