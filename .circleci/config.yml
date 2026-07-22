@@ -1,0 +1,89 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: cimg/node:24.16.0-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
+    resource_class: large
+    environment:
+      NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  verify:
+    executor: node
+    steps:
+      - checkout
+
+      - run:
+          name: Activate pinned pnpm toolchain
+          command: |
+            mkdir -p "$HOME/.local/bin"
+            corepack enable --install-directory "$HOME/.local/bin"
+            echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            pnpm --version
+
+      - restore_cache:
+          keys:
+            - pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+            - pnpm-v2-{{ arch }}-
+
+      - run:
+          name: Install dependencies without lifecycle scripts
+          command: pnpm install --frozen-lockfile --ignore-scripts
+
+      - run:
+          name: Build approved native dependencies
+          command: >-
+            pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver
+
+      - run:
+          name: Set up Playwright browser
+          command: pnpm exec playwright install --with-deps chromium
+
+      - save_cache:
+          key: pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+          paths:
+            - ~/.local/share/pnpm/store
+            - ~/.cache/ms-playwright
+
+      - run:
+          name: Format check
+          command: pnpm format:check
+
+      - run:
+          name: Lint
+          command: pnpm lint
+
+      - run:
+          name: Typecheck
+          command: pnpm typecheck
+
+      - run:
+          name: Unit tests
+          command: pnpm test
+
+      - run:
+          name: Build
+          command: pnpm build
+
+      - run:
+          name: E2E tests
+          command: pnpm exec playwright test --reporter=line,html
+
+      - store_artifacts:
+          path: playwright-report
+          destination: playwright-report
+
+      - store_artifacts:
+          path: test-results
+          destination: test-results
+
+      - run:
+          name: Production audit
+          command: pnpm audit --prod --audit-level high
+
+workflows:
+  verify:
+    jobs:
+      - verify
