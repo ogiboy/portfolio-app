@@ -27,7 +27,11 @@ type ReleaseCommit = {
 };
 
 type PackageManifest = {
-  releasePolicy?: { bootstrapVersion?: string; conventionalCommitBaseline?: string };
+  releasePolicy?: {
+    bootstrapVersion?: string;
+    conventionalCommitBaseline?: string;
+    conventionalCommitExceptions?: Array<{ reason?: string; sha?: string }>;
+  };
   version?: string;
 };
 
@@ -171,6 +175,11 @@ export function collectReleaseState(cwd = process.cwd()) {
   const latestTag = latestStableTag(cwd);
   const bootstrapVersion = packageManifest.releasePolicy?.bootstrapVersion ?? '';
   const configuredBaseline = packageManifest.releasePolicy?.conventionalCommitBaseline ?? '';
+  const configuredExceptions = packageManifest.releasePolicy?.conventionalCommitExceptions ?? [];
+  const validExceptions = configuredExceptions.filter(
+    (exception) => /^[0-9a-f]{40}$/.test(exception.sha ?? '') && Boolean(exception.reason?.trim()),
+  );
+  const exceptionShas = new Set(validExceptions.map((exception) => exception.sha));
   const rangeStart = latestTag || configuredBaseline;
   const errors: string[] = [];
 
@@ -187,6 +196,11 @@ export function collectReleaseState(cwd = process.cwd()) {
   } else if (!git(cwd, ['rev-parse', '--verify', `${rangeStart}^{commit}`], true)) {
     errors.push(`Release range start is not a commit: ${rangeStart}`);
   }
+  if (validExceptions.length !== configuredExceptions.length) {
+    errors.push(
+      'Each releasePolicy.conventionalCommitExceptions entry requires a full lowercase commit SHA and a reason.',
+    );
+  }
 
   const latestReleasedVersion = /^## (\d+\.\d+\.\d+)(?: - .+)?$/m.exec(changelog)?.[1] ?? '';
   if (!changelog.includes('## Unreleased')) {
@@ -196,7 +210,7 @@ export function collectReleaseState(cwd = process.cwd()) {
   const releaseRange = rangeStart ? `${rangeStart}..HEAD` : '';
   const commits = releaseRange ? releaseCommits(cwd, releaseRange) : [];
   const invalidCommits = commits
-    .filter((commit) => !parseConventionalSubject(commit.subject))
+    .filter((commit) => !parseConventionalSubject(commit.subject) && !exceptionShas.has(commit.sha))
     .map(({ sha, subject }) => ({ sha, subject }));
   if (invalidCommits.length > 0) {
     errors.push(`${invalidCommits.length} non-merge commit(s) do not use Conventional Commits.`);
