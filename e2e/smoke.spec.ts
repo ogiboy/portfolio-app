@@ -108,6 +108,14 @@ test('renders localized public portfolio routes', async ({ page }) => {
   const gameFrame = page.locator('iframe').first();
   await expect(gameFrame).toHaveAttribute('sandbox', /allow-scripts/);
   await expect(gameFrame).not.toHaveAttribute('sandbox', /allow-same-origin/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/tr/labs/retro-game-center');
+  const mobileLayout = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
