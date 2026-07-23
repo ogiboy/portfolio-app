@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, Menu } from 'lucide-react';
+import { NavigationLink } from '@/components/client/navigation-link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Sheet,
@@ -11,7 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Link } from '@/i18n/navigation';
 
 type MobileNavigationProps = {
   label: string;
@@ -54,34 +54,34 @@ export function MobileNavigation({
         </SheetHeader>
 
         <nav className="mt-10 grid gap-3" aria-label={label}>
-          <Link
+          <NavigationLink
             href="/"
             className={buttonVariants({ variant: 'secondary' })}
             onClick={() => setOpen(false)}
           >
             {homeLabel}
-          </Link>
-          <Link
+          </NavigationLink>
+          <NavigationLink
             href="/projects"
             className={buttonVariants({ variant: 'secondary' })}
             onClick={() => setOpen(false)}
           >
             {projectsLabel}
-          </Link>
-          <Link
+          </NavigationLink>
+          <NavigationLink
             href="/labs/retro-game-center"
             className={buttonVariants({ variant: 'secondary' })}
             onClick={() => setOpen(false)}
           >
             {labLabel}
-          </Link>
-          <Link
+          </NavigationLink>
+          <NavigationLink
             href="/#process"
             className={buttonVariants({ variant: 'secondary' })}
             onClick={() => setOpen(false)}
           >
             {processLabel}
-          </Link>
+          </NavigationLink>
           <a
             href={contactHref}
             className={buttonVariants({ className: 'mt-3' })}

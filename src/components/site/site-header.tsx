@@ -1,6 +1,7 @@
 import { ExternalLink } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/client/locale-switcher';
 import { MobileNavigation } from '@/components/client/mobile-navigation';
+import { NavigationLink } from '@/components/client/navigation-link';
 import { HotMark } from '@/components/site/hot-mark';
 import { buttonVariants } from '@/components/ui/button';
 import { contact, siteCopy, type Locale } from '@/content/site';
@@ -21,21 +22,27 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label={copy.nav.label}>
-          <Link href="/" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+          <NavigationLink href="/" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
             {copy.nav.home}
-          </Link>
-          <Link href="/projects" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+          </NavigationLink>
+          <NavigationLink
+            href="/projects"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
             {copy.nav.projects}
-          </Link>
-          <Link
+          </NavigationLink>
+          <NavigationLink
             href="/labs/retro-game-center"
             className={buttonVariants({ size: 'sm', variant: 'ghost' })}
           >
             {copy.nav.lab}
-          </Link>
-          <Link href="/#process" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+          </NavigationLink>
+          <NavigationLink
+            href="/#process"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
             {copy.nav.process}
-          </Link>
+          </NavigationLink>
         </nav>
 
         <div className="flex items-center gap-2">
