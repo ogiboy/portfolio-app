@@ -3665,7 +3665,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-initial-access-with-evilginx3/SKILL.md",
-      "computedHash": "ddd6299f867b10aac77982c50b321c3454795ae2eeb5297dfc973b1e6a7be5d0"
+      "computedHash": "0d484fb7475c3ecd168e0f28c7f3420b853dfdc1561552a1bfc70ce2bc968e1f"
     },
     "performing-insider-threat-investigation": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3839,7 +3839,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-oauth-scope-minimization-review/SKILL.md",
-      "computedHash": "93dff726cbfe8220e4f969b4a9a0d6151db89f95ca2c37fe08c6aa65a99a2dae"
+      "computedHash": "9206ec40141ae096be9b991370d4d3420da717ea089b5bcb168f28d3ae16c5b3"
     },
     "performing-oil-gas-cybersecurity-assessment": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3887,13 +3887,13 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-paste-site-monitoring-for-credentials/SKILL.md",
-      "computedHash": "9d43ab50976ff481a8fb2b1ab780854358d124ffe21b81a5b84992a1c9cae9bb"
+      "computedHash": "28d00127c45e1db42f09f796212969123794c75e666e8889097ae4ab272eaae9"
     },
     "performing-phishing-simulation-with-gophish": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-phishing-simulation-with-gophish/SKILL.md",
-      "computedHash": "f82ffd0a70e25e55a5e06259922b4fcc29231093e276cad39f3c00c64f8f0679"
+      "computedHash": "ea934c2d5697a90197acf4fe072997fcb585c707e30dd83a4bc1f763914faa7f"
     },
     "performing-physical-intrusion-assessment": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3965,19 +3965,19 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-ransomware-response/SKILL.md",
-      "computedHash": "41648ded377f4adb2aa6c6c80e0f9fbcc11e695df8d30ef4121b825400037178"
+      "computedHash": "2a4490c1271f9b03fbc8d66da3a1bd507c78a1d094b38fcbf21476b943b3ecb2"
     },
     "performing-ransomware-tabletop-exercise": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-ransomware-tabletop-exercise/SKILL.md",
-      "computedHash": "da4b462c453a9dbd3ced11f74e3e326ad9b2b46502854a0fa19a4da07da26872"
+      "computedHash": "14b5467faacaea02a5f17c405b55a4bb696bbf98542804a35826af1de1603f89"
     },
     "performing-red-team-phishing-with-gophish": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-red-team-phishing-with-gophish/SKILL.md",
-      "computedHash": "cc3d5dedb83a332f9e9d1be7c549a2339a4026bfba08309f5787371eb9a07950"
+      "computedHash": "f92da2ce94cf6d83dd8f411358b460848d7299a86d83f63cdcd0530e8ce2a9fc"
     },
     "performing-red-team-with-covenant": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -4031,7 +4031,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-service-account-credential-rotation/SKILL.md",
-      "computedHash": "04fb6f6a9e08cf02afcf39075afb0cb041fe84b04ad1637b2a7cdfd5117be992"
+      "computedHash": "6cf371f567319ee51dde18d11c5c640e846e0c93a89955fcf187a6d5c3413a5e"
     },
     "performing-soap-web-service-security-testing": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -4271,7 +4271,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/recovering-from-ransomware-attack/SKILL.md",
-      "computedHash": "92fdb4667ad3b55611898f8bdb67caca68725162c9994df87ba12faee4cecd6d"
+      "computedHash": "ab1f03c95bc85849aad2299c5a82867f493114cbacbf77f90abb745b05eb983d"
     },
     "redesign-existing-projects": {
       "source": "Leonxlnx/taste-skill",
@@ -4313,7 +4313,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/reverse-engineering-ransomware-encryption-routine/SKILL.md",
-      "computedHash": "f482475ec9e18f72a6256ab4d9a1b0e54bb56c921ae737fb0015c50b0aebbd2e"
+      "computedHash": "99d4746e7836c1ada3f40d972c66042d32dc709324c9f71106b03326320b79b3"
     },
     "reverse-engineering-rust-malware": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -4367,7 +4367,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/securing-aws-iam-permissions/SKILL.md",
-      "computedHash": "465bad21fe8ba22b9e2ce153d41a1e7f80859c924025c2087897ebba37c9d379"
+      "computedHash": "7a9944f670022695918d740702dff4f372236104f1a05e9b66f8e362dd756697"
     },
     "securing-aws-lambda-execution-roles": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -4559,7 +4559,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/testing-ransomware-recovery-procedures/SKILL.md",
-      "computedHash": "06481313ffe9fde8ea30b3057611f7cbbe6e607752c7893e48745e3dae1b2fa4"
+      "computedHash": "9d020e9512692843633b09a164230fa92dc52b2e4a05a369c9599d17d0a3f2ea"
     },
     "testing-websocket-api-security": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -4571,7 +4571,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/tracking-threat-actor-infrastructure/SKILL.md",
-      "computedHash": "f6d409969efdcf3c2d2f26f758a825a052cfaca049927ebf8007e2a3f5515f95"
+      "computedHash": "4ac2d93cf57a6e890c19c5ce3106cae354fd0b19eb59659998abecee7333aa73"
     },
     "triaging-security-alerts-in-splunk": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
