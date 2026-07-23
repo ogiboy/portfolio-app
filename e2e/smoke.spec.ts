@@ -132,6 +132,23 @@ test('renders localized public portfolio routes', async ({ page }) => {
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
+test('keeps the hero Signal arrival finite and removes it for reduced motion', async ({ page }) => {
+  await page.goto('/en');
+
+  const heroCopy = page.locator('.hero-signal__copy');
+  await expect(heroCopy).toBeVisible();
+  await expect(heroCopy).toHaveCSS('animation-name', 'hero-signal-arrival');
+  await expect(heroCopy).toHaveCSS('animation-duration', '0.52s');
+  await expect(heroCopy).toHaveCSS('animation-iteration-count', '1');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/en');
+
+  await expect(heroCopy).toBeVisible();
+  await expect(heroCopy).toHaveCSS('animation-name', 'none');
+  await expect(heroCopy).toHaveCSS('transform', 'none');
+});
+
 test('turns a WASM runtime asset 404 into an explicit retry state', async ({ page }) => {
   await page.route('**/wasm/engine/main.ttf', (route) =>
     route.fulfill({ body: 'missing', contentType: 'text/plain', status: 404 }),

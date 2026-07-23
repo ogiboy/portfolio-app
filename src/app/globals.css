@@ -192,6 +192,30 @@ a:focus-visible .hot-mark__flame {
   animation: project-continuity-latch var(--motion-latch) var(--ease-signal) both;
 }
 
+@keyframes hero-signal-arrival {
+  from {
+    transform: translate3d(0, 18px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-signal__copy,
+.hero-signal__actions,
+.hero-signal__proof {
+  animation: hero-signal-arrival var(--motion-scan) var(--ease-scan) both;
+}
+
+.hero-signal__actions {
+  animation-delay: var(--motion-signal);
+}
+
+.hero-signal__proof {
+  animation-delay: var(--motion-signal);
+}
+
 ::selection {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -231,6 +255,13 @@ a:focus-visible .hot-mark__flame {
   .project-continuity {
     animation: none;
     box-shadow: var(--shadow-pressed);
+    transform: none;
+  }
+
+  .hero-signal__copy,
+  .hero-signal__actions,
+  .hero-signal__proof {
+    animation: none;
     transform: none;
   }
 
