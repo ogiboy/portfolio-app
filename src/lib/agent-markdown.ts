@@ -1,4 +1,4 @@
-import { projects } from '@/content/projects';
+import { getProjectCategory, getProjectDescription, projects } from '@/content/projects';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { identity } from '@/lib/seo';
 
@@ -28,7 +28,7 @@ function homeMarkdown(locale: Locale): MarkdownDocument {
       .filter((project) => project.featured)
       .map(
         (project) =>
-          `- [${project.name}](/${locale}/projects/${project.slug}) - ${project.description}`,
+          `- [${project.name}](/${locale}/projects/${project.slug}) - ${getProjectDescription(project, locale)}`,
       )
       .join(
         '\n',
@@ -44,7 +44,7 @@ function projectArchiveMarkdown(locale: Locale): MarkdownDocument {
     body: `# ${copy.title}\n\n${copy.intro}\n\n${projects
       .map(
         (project) =>
-          `## [${project.name}](/${locale}/projects/${project.slug})\n\n${project.description}\n\n- ${copy.yearLabel}: ${project.year}\n- Category: ${project.category}\n- ${copy.stackLabel}: ${project.stack.join(', ')}\n- [Live project](${project.url})\n- [Source code](${project.gitUrl})`,
+          `## [${project.name}](/${locale}/projects/${project.slug})\n\n${getProjectDescription(project, locale)}\n\n- ${copy.yearLabel}: ${project.year}\n- ${copy.categoryLabel}: ${getProjectCategory(project, locale)}\n- ${copy.stackLabel}: ${project.stack.join(', ')}\n- [${copy.live}](${project.url})\n- [${copy.code}](${project.gitUrl})`,
       )
       .join('\n\n')}\n`,
   };
@@ -59,7 +59,7 @@ function projectMarkdown(locale: Locale, slug: string): MarkdownDocument | undef
   const copy = siteCopy[locale].projects;
   return {
     locale,
-    body: `# ${project.name}\n\n${project.description}\n\n- ${copy.yearLabel}: ${project.year}\n- Category: ${project.category}\n- ${copy.stackLabel}: ${project.stack.join(', ')}\n- [Live project](${project.url})\n- [Source code](${project.gitUrl})\n\n[${copy.back}](/${locale}/projects)\n`,
+    body: `# ${project.name}\n\n${getProjectDescription(project, locale)}\n\n- ${copy.yearLabel}: ${project.year}\n- ${copy.categoryLabel}: ${getProjectCategory(project, locale)}\n- ${copy.stackLabel}: ${project.stack.join(', ')}\n- [${copy.live}](${project.url})\n- [${copy.code}](${project.gitUrl})\n\n[${copy.back}](/${locale}/projects)\n`,
   };
 }
 

@@ -1,15 +1,21 @@
 'use client';
 
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { LazyMotion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useCinematicMotionEligibility } from '@/components/client/use-cinematic-motion-eligibility';
-import type { Project } from '@/content/projects';
 import { cn } from '@/lib/utils';
 
 const loadMotionFeatures = () => import('./motion-features').then((module) => module.default);
 const subscribeToHydration = () => () => undefined;
+
+export type CinematicProject = {
+  category: string;
+  image: StaticImageData;
+  name: string;
+  slug: string;
+};
 
 export function CinematicWorkRail({
   title,
@@ -18,7 +24,7 @@ export function CinematicWorkRail({
 }: Readonly<{
   title: string;
   intro: string;
-  projects: Project[];
+  projects: CinematicProject[];
 }>) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);

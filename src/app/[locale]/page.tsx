@@ -8,7 +8,12 @@ import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { contact, siteCopy, type Locale } from '@/content/site';
-import { featuredProjects, projects } from '@/content/projects';
+import {
+  featuredProjects,
+  getProjectCategory,
+  getProjectDescription,
+  projects,
+} from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 import { buildHomeStructuredData } from '@/lib/structured-data';
 
@@ -117,6 +122,8 @@ export default async function HomePage({
             <ProjectCard
               key={project.slug}
               project={project}
+              category={getProjectCategory(project, locale)}
+              description={getProjectDescription(project, locale)}
               liveLabel={copy.projects.live}
               codeLabel={copy.projects.code}
               caseLabel={copy.projects.caseLabel}
@@ -128,7 +135,12 @@ export default async function HomePage({
       <CinematicWorkRail
         title={copy.home.motionTitle}
         intro={copy.home.motionIntro}
-        projects={projects.slice(0, 6)}
+        projects={projects.slice(0, 6).map((project) => ({
+          category: getProjectCategory(project, locale),
+          image: project.image,
+          name: project.name,
+          slug: project.slug,
+        }))}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">

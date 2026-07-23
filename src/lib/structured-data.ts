@@ -1,5 +1,5 @@
 import type { Project } from '@/content/projects';
-import { projects } from '@/content/projects';
+import { getProjectDescription, projects } from '@/content/projects';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
@@ -104,7 +104,8 @@ export function buildProjectStructuredData(locale: Locale, project: Project): Js
         '@id': `${url}#project`,
         url,
         name: project.name,
-        description: project.description,
+        description: getProjectDescription(project, locale),
+        inLanguage: locale,
         codeRepository: project.gitUrl,
         runtimePlatform: 'Web',
         keywords: project.stack.join(', '),

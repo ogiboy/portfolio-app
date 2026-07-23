@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   formatProjectPosition,
   getNextProject,
+  getProjectCategory,
+  getProjectDescription,
   getProjectPosition,
   projects,
 } from '@/content/projects';
@@ -21,9 +23,22 @@ describe('portfolio content', () => {
     for (const project of projects) {
       expect(project.name).toBeTruthy();
       expect(project.description.length).toBeGreaterThan(24);
+      expect(project.descriptionTr.length).toBeGreaterThan(24);
+      expect(project.descriptionTr).not.toBe(project.description);
+      expect(project.categoryTr).toBeTruthy();
       expect(project.url).toMatch(/^https?:\/\//);
       expect(project.gitUrl).toMatch(/^https?:\/\//);
       expect(project.stack.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('serves direct project narratives for both locales', () => {
+    for (const project of projects) {
+      expect(getProjectDescription(project, 'en')).toBe(project.description);
+      expect(getProjectDescription(project, 'tr')).toBe(project.descriptionTr);
+      expect(getProjectCategory(project, 'en')).toBe(project.category);
+      expect(getProjectCategory(project, 'tr')).toBe(project.categoryTr);
+      expect(project.description).not.toMatch(/\b(clean|modern|playful|simple|smooth|unique)\b/i);
     }
   });
 

@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
-import { getProjectPosition, projects } from '@/content/projects';
+import {
+  getProjectCategory,
+  getProjectDescription,
+  getProjectPosition,
+  projects,
+} from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildProjectsStructuredData } from '@/lib/structured-data';
@@ -40,6 +45,8 @@ export default async function ProjectsPage({
           <ProjectCard
             key={project.slug}
             project={project}
+            category={getProjectCategory(project, locale)}
+            description={getProjectDescription(project, locale)}
             liveLabel={copy.live}
             codeLabel={copy.code}
             caseLabel={copy.caseLabel}

@@ -8,6 +8,8 @@ import { Link } from '@/i18n/navigation';
 
 export function ProjectCard({
   project,
+  category,
+  description,
   liveLabel,
   codeLabel,
   caseLabel,
@@ -15,6 +17,8 @@ export function ProjectCard({
   position,
 }: Readonly<{
   project: Project;
+  category: string;
+  description: string;
   liveLabel: string;
   codeLabel: string;
   caseLabel: string;
@@ -36,7 +40,7 @@ export function ProjectCard({
       <CardContent className="grid min-h-80 content-between gap-8">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge>{project.category}</Badge>
+            <Badge>{category}</Badge>
             {position && archiveLabel && (
               <span
                 className="text-muted-foreground font-mono text-xs font-bold tracking-[0.12em] uppercase"
@@ -52,9 +56,7 @@ export function ProjectCard({
           <h3 className="font-display mt-6 text-3xl leading-none tracking-[-0.06em]">
             {project.name}
           </h3>
-          <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
-            {project.description}
-          </p>
+          <p className="text-muted-foreground mt-5 text-sm leading-relaxed">{description}</p>
         </div>
 
         <div className="grid gap-4">

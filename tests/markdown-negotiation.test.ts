@@ -55,6 +55,12 @@ describe('markdown negotiation', () => {
     expect(getAgentMarkdown('/en/projects/graduation-project')?.body).toContain(
       'Graduation Project',
     );
+    expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
+      'BilgeAdam front-end development bootcamp mezunlarını',
+    );
+    expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
+      '- Kategori: Platform',
+    );
     expect(getAgentMarkdown('/en/dashboard')).toBeUndefined();
     expect(getAgentMarkdown('/fr/projects')).toBeUndefined();
     expect(getAgentMarkdown('/en/projects/not-a-project')).toBeUndefined();

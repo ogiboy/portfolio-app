@@ -60,6 +60,7 @@ export const siteCopy: LocalizedCopy<{
     caseLabel: string;
     back: string;
     nextProject: string;
+    categoryLabel: string;
     yearLabel: string;
     stackLabel: string;
   };
@@ -205,6 +206,7 @@ export const siteCopy: LocalizedCopy<{
       caseLabel: 'Case',
       back: 'Back to projects',
       nextProject: 'Next project',
+      categoryLabel: 'Category',
       yearLabel: 'Year',
       stackLabel: 'Stack',
     },
@@ -378,6 +380,7 @@ export const siteCopy: LocalizedCopy<{
       caseLabel: 'Detay',
       back: 'Projelere dön',
       nextProject: 'Sonraki proje',
+      categoryLabel: 'Kategori',
       yearLabel: 'Yıl',
       stackLabel: 'Stack',
     },

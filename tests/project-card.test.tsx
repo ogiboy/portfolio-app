@@ -22,6 +22,8 @@ describe('ProjectCard', () => {
     render(
       <ProjectCard
         project={project}
+        category={project.category}
+        description={project.description}
         liveLabel="Live"
         codeLabel="Code"
         caseLabel="Case"
@@ -40,8 +42,19 @@ describe('ProjectCard', () => {
   });
 
   it('does not invent an archive position for selected-work cards', () => {
-    render(<ProjectCard project={project} liveLabel="Live" codeLabel="Code" caseLabel="Case" />);
+    render(
+      <ProjectCard
+        project={project}
+        category={project.categoryTr}
+        description={project.descriptionTr}
+        liveLabel="Canlı"
+        codeLabel="Kod"
+        caseLabel="Detay"
+      />,
+    );
 
     expect(screen.queryByText(/Archive/)).not.toBeInTheDocument();
+    expect(screen.getByText(project.categoryTr)).toBeInTheDocument();
+    expect(screen.getByText(project.descriptionTr)).toBeInTheDocument();
   });
 });

@@ -68,6 +68,12 @@ describe('structured data', () => {
     expect(JSON.stringify(buildProjectStructuredData('en', projects[0]))).toContain(
       projects[0].gitUrl,
     );
+    expect(JSON.stringify(buildProjectStructuredData('tr', projects[0]))).toContain(
+      projects[0].descriptionTr,
+    );
+    expect(JSON.stringify(buildProjectStructuredData('tr', projects[0]))).toContain(
+      '"inLanguage":"tr"',
+    );
   });
 
   it('escapes HTML-significant characters before JSON-LD rendering', () => {
