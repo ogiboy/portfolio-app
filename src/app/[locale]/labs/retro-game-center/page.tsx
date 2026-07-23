@@ -57,6 +57,14 @@ export default async function RetroGameCenterPage({
           openLabel={copy.openLabel}
           idleTitle={copy.idleTitle}
           idleBody={copy.idleBody}
+          bootingTitle={copy.bootingTitle}
+          bootingBody={copy.bootingBody}
+          readyLabel={copy.readyLabel}
+          errorTitle={copy.errorTitle}
+          errorBody={copy.errorBody}
+          timeoutTitle={copy.timeoutTitle}
+          timeoutBody={copy.timeoutBody}
+          retryLabel={copy.retryLabel}
         />
       </section>
 

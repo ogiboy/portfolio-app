@@ -12,6 +12,9 @@
 - H.O.T. icon, web app manifest, and generated Open Graph/Twitter cards for consistent browser and social identity.
 - Localized privacy pages and a durable opt-out for aggregate Vercel Analytics and Speed Insights.
 - Explicit SonarQube Cloud Automatic Analysis scope for maintained source, configuration, workflow, and test files.
+- Truthful WASM boot states with timeout, retry, separate-tab recovery, and post-intent runtime loading.
+- Localized mobile navigation with focus trapping, Escape recovery, and complete primary-route access.
+- Localized runtime-error and 404 recovery paths with retry, home, and project-archive actions.
 
 ### Changed
 
@@ -26,6 +29,8 @@
 - Upgraded the Corepack-managed pnpm toolchain to 11.17.0 and aligned the latest Radix Dialog and next-intl patch releases.
 - Replaced deprecated Phosphor icon aliases with tree-shakeable Lucide icons while preserving server-owned route surfaces.
 - Added a two-day Dependabot cooldown plus exact-version exceptions for audited provenance republishes so automated updates respect pnpm's explicit 24-hour supply-chain quarantine.
+- Limited cinematic motion to eligible desktop fine-pointer sessions while preserving natural reduced-motion, coarse-pointer, mobile, and Save Data flows.
+- Aligned shadcn ownership with Lucide and the current unified Radix Sheet primitive while preserving the custom Brutalist component styling.
 
 ### Removed
 

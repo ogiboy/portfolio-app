@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/client/locale-switcher';
+import { MobileNavigation } from '@/components/client/mobile-navigation';
 import { HotMark } from '@/components/site/hot-mark';
 import { buttonVariants } from '@/components/ui/button';
 import { contact, siteCopy, type Locale } from '@/content/site';
@@ -38,6 +39,18 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <MobileNavigation
+            label={copy.nav.label}
+            description={copy.nav.menuDescription}
+            openLabel={copy.nav.openMenu}
+            closeLabel={copy.nav.closeMenu}
+            homeLabel={copy.nav.home}
+            projectsLabel={copy.nav.projects}
+            labLabel={copy.nav.lab}
+            processLabel={copy.nav.process}
+            contactLabel={copy.nav.contact}
+            contactHref={`mailto:${contact.email}`}
+          />
           <LocaleSwitcher label={copy.nav.language} />
           <a
             href={`mailto:${contact.email}`}

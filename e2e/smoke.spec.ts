@@ -99,15 +99,27 @@ test('renders localized public portfolio routes', async ({ page }) => {
     /\/en\/opengraph-image(?:\?.*)?$/,
   );
 
+  const wasmRequests: string[] = [];
+  page.on('request', (request) => {
+    const path = new URL(request.url()).pathname;
+    if (path.startsWith('/wasm/')) wasmRequests.push(path);
+  });
+
   await page.goto('/en/labs/retro-game-center');
   await expect(page.getByRole('heading', { name: /retro game center boots/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
+  expect(wasmRequests).toEqual([]);
 
   await page.getByRole('button', { name: /boot demo/i }).click();
   const gameFrame = page.locator('iframe').first();
   await expect(gameFrame).toHaveAttribute('sandbox', /allow-scripts/);
   await expect(gameFrame).not.toHaveAttribute('sandbox', /allow-same-origin/);
+  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+    timeout: 20_000,
+  });
+  expect(wasmRequests).toContain('/wasm/engine/main.wasm');
+  expect(wasmRequests).toContain('/wasm/roms/doom/DOOM1.WAD');
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/tr/labs/retro-game-center');
@@ -116,6 +128,55 @@ test('renders localized public portfolio routes', async ({ page }) => {
     scrollWidth: document.documentElement.scrollWidth,
   }));
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
+});
+
+test('turns a WASM runtime asset 404 into an explicit retry state', async ({ page }) => {
+  await page.route('**/wasm/engine/main.ttf', (route) =>
+    route.fulfill({ body: 'missing', contentType: 'text/plain', status: 404 }),
+  );
+  await page.goto('/en/labs/retro-game-center');
+
+  await page.getByRole('button', { name: /boot demo/i }).click();
+
+  await expect(page.getByRole('heading', { name: /the dos machine did not boot/i })).toBeVisible({
+    timeout: 20_000,
+  });
+  await expect(page.getByRole('button', { name: /retry boot/i })).toBeVisible();
+  await expect(page.locator('iframe')).toHaveCount(0);
+});
+
+test('finishes WASM initialization when IndexedDB cannot be read', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'indexedDB', {
+      configurable: true,
+      value: {
+        open() {
+          const request: {
+            onsuccess?: (event: { target: { result: { transaction(): never } } }) => void;
+          } = {};
+          window.setTimeout(() => {
+            request.onsuccess?.({
+              target: {
+                result: {
+                  transaction() {
+                    throw new Error('IndexedDB transaction unavailable');
+                  },
+                },
+              },
+            });
+          }, 0);
+          return request;
+        },
+      },
+    });
+  });
+  await page.goto('/en/labs/retro-game-center');
+
+  await page.getByRole('button', { name: /boot demo/i }).click();
+
+  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+    timeout: 20_000,
+  });
 });
 
 test('keeps canonical locale routes free of locale-cookie cache variance', async ({ request }) => {
@@ -133,6 +194,74 @@ test('keeps canonical locale routes free of locale-cookie cache variance', async
   expect(detectedRoot.headers().vary).toContain('Accept-Language');
   expect(detectedRoot.headers()['cache-control']).toContain('private');
   expect(detectedRoot.headers()['cache-control']).toContain('no-store');
+});
+
+test('serves sandbox-compatible WASM asset headers', async ({ request }) => {
+  const manifest = await request.get('/wasm/manifest.json');
+  expect(manifest.status()).toBe(200);
+  expect(manifest.headers()['access-control-allow-origin']).toBe('*');
+  expect(manifest.headers()['cross-origin-resource-policy']).toBe('cross-origin');
+  expect(manifest.headers()['cache-control']).toContain('max-age=60');
+
+  const runtime = await request.get('/wasm/engine/main.wasm');
+  expect(runtime.status()).toBe(200);
+  expect(runtime.headers()['content-type']).toContain('application/wasm');
+  expect(runtime.headers()['cache-control']).toContain('immutable');
+
+  const frame = await request.get('/wasm/engine/index.html');
+  expect(frame.headers()['content-security-policy']).toContain('wasm-unsafe-eval');
+  expect(frame.headers()['content-security-policy']).toContain('http://127.0.0.1:*');
+});
+
+test('provides localized mobile navigation with focus recovery', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/en');
+
+  const englishTrigger = page.getByRole('button', { name: 'Open navigation' });
+  await expect(englishTrigger).toBeVisible();
+  await englishTrigger.click();
+
+  const englishDialog = page.getByRole('dialog', { name: 'Primary navigation' });
+  await expect(englishDialog).toBeVisible();
+  for (const name of ['Home', 'Projects', 'Lab', 'Process', 'Contact']) {
+    await expect(englishDialog.getByRole('link', { name })).toBeVisible();
+  }
+
+  await page.keyboard.press('Escape');
+  await expect(englishDialog).toBeHidden();
+  await expect(englishTrigger).toBeFocused();
+
+  await englishTrigger.click();
+  await englishDialog.getByRole('link', { name: 'Projects' }).click();
+  await expect(page).toHaveURL(/\/en\/projects$/);
+  await expect(englishDialog).toBeHidden();
+
+  await page.goto('/tr');
+  const turkishTrigger = page.getByRole('button', { name: 'Navigasyonu aç' });
+  await turkishTrigger.click();
+  const turkishDialog = page.getByRole('dialog', { name: 'Ana gezinme' });
+  await expect(turkishDialog).toBeVisible();
+  for (const name of ['Ana sayfa', 'Projeler', 'Lab', 'Süreç', 'İletişim']) {
+    await expect(turkishDialog.getByRole('link', { name })).toBeVisible();
+  }
+});
+
+test('offers localized recovery from missing routes', async ({ page }) => {
+  await page.goto('/en/route-that-does-not-exist');
+  await expect(page.getByRole('heading', { name: 'This path left the map.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/en');
+  await expect(page.getByRole('link', { name: 'Browse projects' })).toHaveAttribute(
+    'href',
+    '/en/projects',
+  );
+
+  await page.goto('/tr/olmayan-bir-rota');
+  await expect(page.getByRole('heading', { name: 'Bu yol haritadan çıkmış.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/tr');
+  await expect(page.getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute(
+    'href',
+    '/tr/projects',
+  );
 });
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
@@ -205,6 +334,8 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
     )
     .not.toBe('sticky');
   await expect(track.locator('article').first()).toBeVisible();
+  await track.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(track.locator('article').last()).toBeVisible();
   await expect
     .poll(() =>
       track.evaluate((element) => ({
@@ -240,4 +371,46 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
       })),
     )
     .toEqual({ firstCardOpacity: 1, translateX: 0 });
+});
+
+test('keeps the cinematic rail static for coarse pointers and data saver', async ({ browser }) => {
+  const coarseContext = await browser.newContext({
+    hasTouch: true,
+    viewport: { width: 1280, height: 800 },
+  });
+  const coarsePage = await coarseContext.newPage();
+  await coarsePage.goto('/en');
+
+  const coarseRail = coarsePage.locator('[data-cinematic-rail]');
+  await expect
+    .poll(() => coarsePage.evaluate(() => window.matchMedia('(pointer: coarse)').matches))
+    .toBe(true);
+  await expect(coarseRail).toHaveAttribute('data-motion-mode', 'static');
+  await expect.poll(() => coarseRail.evaluate((element) => element.style.height)).toBe('');
+  await expect(coarseRail.locator('article').first()).toBeVisible();
+  await coarseRail.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(coarseRail.locator('article').last()).toBeVisible();
+  await coarseContext.close();
+
+  const saveDataContext = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  await saveDataContext.addInitScript(() => {
+    Object.defineProperty(window.navigator, 'connection', {
+      configurable: true,
+      value: {
+        addEventListener() {},
+        removeEventListener() {},
+        saveData: true,
+      },
+    });
+  });
+  const saveDataPage = await saveDataContext.newPage();
+  await saveDataPage.goto('/en');
+
+  const saveDataRail = saveDataPage.locator('[data-cinematic-rail]');
+  await expect(saveDataRail).toHaveAttribute('data-motion-mode', 'static');
+  await expect.poll(() => saveDataRail.evaluate((element) => element.style.height)).toBe('');
+  await expect(saveDataRail.locator('article').first()).toBeVisible();
+  await saveDataRail.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(saveDataRail.locator('article').last()).toBeVisible();
+  await saveDataContext.close();
 });
