@@ -145,6 +145,40 @@ test('turns a WASM runtime asset 404 into an explicit retry state', async ({ pag
   await expect(page.locator('iframe')).toHaveCount(0);
 });
 
+test('finishes WASM initialization when IndexedDB cannot be read', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'indexedDB', {
+      configurable: true,
+      value: {
+        open() {
+          const request: {
+            onsuccess?: (event: { target: { result: { transaction(): never } } }) => void;
+          } = {};
+          window.setTimeout(() => {
+            request.onsuccess?.({
+              target: {
+                result: {
+                  transaction() {
+                    throw new Error('IndexedDB transaction unavailable');
+                  },
+                },
+              },
+            });
+          }, 0);
+          return request;
+        },
+      },
+    });
+  });
+  await page.goto('/en/labs/retro-game-center');
+
+  await page.getByRole('button', { name: /boot demo/i }).click();
+
+  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+    timeout: 20_000,
+  });
+});
+
 test('keeps canonical locale routes free of locale-cookie cache variance', async ({ request }) => {
   const english = await request.get('/en');
   expect(english.status()).toBe(200);

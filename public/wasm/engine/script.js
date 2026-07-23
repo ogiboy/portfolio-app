@@ -1478,10 +1478,17 @@ class MyClass {
   }
 
   createDB() {
-    if (window['indexedDB'] == undefined) {
-      console.log('indexedDB not available');
+    let databaseInitializationSettled = false;
+    const completeDatabaseInitialization = () => {
+      if (databaseInitializationSettled) return;
+      databaseInitializationSettled = true;
       this.initCount++;
       this.finishInitialization();
+    };
+
+    if (window['indexedDB'] == undefined) {
+      console.log('indexedDB not available');
+      completeDatabaseInitialization();
       return;
     }
 
@@ -1490,8 +1497,7 @@ class MyClass {
       request = indexedDB.open('DOSWASMXDB');
     } catch (error) {
       console.log('indexedDB not available', error);
-      this.initCount++;
-      this.finishInitialization();
+      completeDatabaseInitialization();
       return;
     }
     request.onupgradeneeded = function (ev) {
@@ -1506,14 +1512,15 @@ class MyClass {
     };
 
     request.onsuccess = function (ev) {
-      var db = ev.target.result;
-      var romStore = db
-        .transaction('DOSWASMXSTATES', 'readwrite')
-        .objectStore('DOSWASMXSTATES');
       try {
+        var db = ev.target.result;
+        var romStore = db
+          .transaction('DOSWASMXSTATES', 'readwrite')
+          .objectStore('DOSWASMXSTATES');
         //rewrote using cursor instead of getAllKeys
         //for compatibility with MS EDGE
-        romStore.openCursor().onsuccess = function (ev) {
+        const cursorRequest = romStore.openCursor();
+        cursorRequest.onsuccess = function (ev) {
           var cursor = ev.target.result;
           if (cursor) {
             let rom = cursor.key.toString();
@@ -1531,19 +1538,22 @@ class MyClass {
             }
             cursor.continue();
           } else {
-            myClass.initCount++;
-            myClass.finishInitialization();
+            completeDatabaseInitialization();
           }
+        };
+        cursorRequest.onerror = function (error) {
+          console.log('error reading keys', error);
+          completeDatabaseInitialization();
         };
       } catch (error) {
         console.log('error reading keys');
         console.log(error);
+        completeDatabaseInitialization();
       }
     };
     request.onerror = function () {
       console.log('indexedDB initialization failed');
-      myClass.initCount++;
-      myClass.finishInitialization();
+      completeDatabaseInitialization();
     };
   }
 
