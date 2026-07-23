@@ -7,6 +7,7 @@ describe('WebMcpTools', () => {
     cleanup();
     vi.restoreAllMocks();
     delete document.modelContext;
+    delete navigator.modelContext;
   });
 
   it('does nothing when document.modelContext is unavailable', () => {
@@ -59,6 +60,24 @@ describe('WebMcpTools', () => {
 
     view.unmount();
     expect(overviewOptions.signal.aborted).toBe(true);
+  });
+
+  it('supports the legacy navigator provideContext API used by agent scanners', async () => {
+    const provideContext = vi.fn().mockResolvedValue(undefined);
+    navigator.modelContext = { provideContext };
+
+    const view = render(<WebMcpTools />);
+    await waitFor(() => expect(provideContext).toHaveBeenCalledTimes(1));
+
+    const [{ tools }] = provideContext.mock.calls[0];
+    expect(tools.map((tool: ModelContextTool) => tool.name)).toEqual([
+      'portfolio_overview',
+      'search_public_portfolio_projects',
+    ]);
+    expect(tools.every((tool: ModelContextTool) => tool.annotations.readOnlyHint)).toBe(true);
+
+    view.unmount();
+    await waitFor(() => expect(provideContext).toHaveBeenLastCalledWith({ tools: [] }));
   });
 
   it('aborts pending registrations and reports non-abort registration failures', async () => {

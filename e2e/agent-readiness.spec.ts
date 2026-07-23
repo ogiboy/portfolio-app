@@ -51,6 +51,11 @@ test('keeps Agent Skills artifact and discovery digest in sync', async ({ reques
   expect(artifact).toMatch(
     /^---\nname: portfolio-navigation\ndescription: .+\n---\n\n# Portfolio navigation/,
   );
+
+  const security = await request.get('/.well-known/security.txt');
+  expect(security.status()).toBe(200);
+  expect(security.headers()['content-type']).toContain('text/plain');
+  await expect(security.text()).resolves.toContain('Contact: mailto:ogi@oguzcantoptas.com');
 });
 
 test('serves localized detail, lab, unknown, and HEAD markdown variants', async ({ request }) => {
@@ -102,4 +107,23 @@ test('registers the public read-only WebMCP tools on the English home page', asy
   await expect(
     page.evaluate(() => window.__webMcpRegistrations.map(({ name }) => name)),
   ).resolves.toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
+});
+
+test('provides the same WebMCP tools through the legacy navigator API', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, '__webMcpProvidedTools', { value: [], writable: true });
+    Object.defineProperty(navigator, 'modelContext', {
+      configurable: true,
+      value: {
+        async provideContext({ tools }: { tools: ModelContextTool[] }) {
+          window.__webMcpProvidedTools = tools.map(({ name }) => name);
+        },
+      },
+    });
+  });
+
+  await page.goto('/en');
+  await expect
+    .poll(() => page.evaluate(() => window.__webMcpProvidedTools))
+    .toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
 });

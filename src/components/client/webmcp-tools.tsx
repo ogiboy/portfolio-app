@@ -115,7 +115,21 @@ const portfolioTools: ModelContextTool[] = [
 ];
 
 function registerPortfolioTools(modelContext: ModelContext, signal: AbortSignal) {
-  return Promise.all(portfolioTools.map((tool) => modelContext.registerTool(tool, { signal })));
+  if (modelContext.registerTool) {
+    return Promise.all(portfolioTools.map((tool) => modelContext.registerTool?.(tool, { signal })));
+  }
+
+  if (modelContext.provideContext) {
+    return Promise.resolve(modelContext.provideContext({ tools: portfolioTools }));
+  }
+
+  return Promise.resolve();
+}
+
+function clearProvidedTools(modelContext: ModelContext) {
+  if (modelContext.provideContext && !modelContext.registerTool) {
+    void Promise.resolve(modelContext.provideContext({ tools: [] })).catch(() => undefined);
+  }
 }
 
 function reportRegistrationFailure(error: unknown, signal: AbortSignal) {
@@ -126,7 +140,7 @@ function reportRegistrationFailure(error: unknown, signal: AbortSignal) {
 
 export function WebMcpTools() {
   useEffect(() => {
-    const modelContext = document.modelContext;
+    const modelContext = document.modelContext ?? navigator.modelContext;
     if (!modelContext) {
       return;
     }
@@ -136,7 +150,10 @@ export function WebMcpTools() {
       reportRegistrationFailure(error, controller.signal),
     );
 
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      clearProvidedTools(modelContext);
+    };
   }, []);
 
   return null;

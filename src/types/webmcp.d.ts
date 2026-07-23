@@ -21,10 +21,15 @@ type ModelContextTool = {
 };
 
 interface ModelContext {
-  registerTool(tool: ModelContextTool, options: { signal: AbortSignal }): Promise<void>;
+  provideContext?(context: { tools: ModelContextTool[] }): Promise<void> | void;
+  registerTool?(tool: ModelContextTool, options: { signal: AbortSignal }): Promise<void>;
 }
 
 interface Document {
+  modelContext?: ModelContext;
+}
+
+interface Navigator {
   modelContext?: ModelContext;
 }
 
@@ -34,5 +39,6 @@ type WebMcpRegistration = {
 };
 
 interface Window {
+  __webMcpProvidedTools: string[];
   __webMcpRegistrations: WebMcpRegistration[];
 }

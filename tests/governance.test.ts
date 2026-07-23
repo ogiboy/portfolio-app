@@ -140,6 +140,9 @@ describe('project governance contracts', () => {
       'pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver',
     );
     expect(step('Set up Playwright browser')?.run).toBe('pnpm browser:setup');
+    expect(step('Verify TypeScript toolchain')?.run).toBe('pnpm qa:typescript');
+    expect(step('Typecheck')?.run).toBe('pnpm typecheck');
+    expect(step('Typecheck compatibility')?.run).toBe('pnpm typecheck:compat');
     expect(steps.map((candidate) => candidate.run).filter(Boolean)).not.toContain(
       'pnpm exec playwright install',
     );
@@ -160,14 +163,36 @@ describe('project governance contracts', () => {
     const packageManifest = parseJsonFile<{
       packageManager: string;
       engines: { pnpm: string };
-      devDependencies: { postcss: string };
+      scripts: Record<string, string>;
+      devDependencies: Record<string, string>;
     }>('package.json');
     const workspace = parseYamlFile<{ overrides: { postcss: string } }>('pnpm-workspace.yaml');
 
     expect(packageManifest.packageManager).toMatch(/^pnpm@11\.16\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
     expect(packageManifest.devDependencies.postcss).toBe('^8.5.21');
+    expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
+    expect(packageManifest.devDependencies.typescript).toBe('npm:@typescript/typescript6@^6.0.2');
+    expect(packageManifest.scripts['qa:typescript']).toBe(
+      'node scripts/qa/typescript-toolchain.mjs',
+    );
+    expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
+    expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
     expect(workspace.overrides.postcss).toBe('^8.5.21');
+  });
+
+  it('runs both TypeScript toolchains in CircleCI', () => {
+    const circle = parseYamlFile<{
+      jobs: { verify: { steps: Array<string | { run?: { command?: string; name?: string } }> } };
+    }>('.circleci/config.yml');
+    const runSteps = circle.jobs.verify.steps.flatMap((entry) =>
+      typeof entry === 'string' || !entry.run ? [] : [entry.run],
+    );
+    const command = (name: string) => runSteps.find((step) => step.name === name)?.command;
+
+    expect(command('Verify TypeScript toolchain')).toBe('pnpm qa:typescript');
+    expect(command('Typecheck')).toBe('pnpm typecheck');
+    expect(command('Typecheck compatibility')).toBe('pnpm typecheck:compat');
   });
 
   it('ignores commented properties and rejects duplicate effective configuration keys', () => {
