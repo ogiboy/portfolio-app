@@ -214,7 +214,7 @@ export const siteCopy: LocalizedCopy<{
     },
     lab: {
       eyebrow: 'Live lab / WASM',
-      title: 'Retro Game Center boots DOOM Shareware inside the portfolio.',
+      title: 'Retro Game Center boots DOOM Shareware through WebAssembly.',
       intro:
         'A live demo adapted from home-media-portal: DOSBox-X for Web, a curated ROM manifest, and a lazy iframe that keeps the runtime off the homepage until requested.',
       launchLabel: 'Boot demo',
@@ -390,7 +390,7 @@ export const siteCopy: LocalizedCopy<{
     },
     lab: {
       eyebrow: 'Canlı lab / WASM',
-      title: 'Retro Game Center portföy içinde DOOM Shareware başlatıyor.',
+      title: 'Retro Game Center, DOOM Shareware’ı WebAssembly ile başlatıyor.',
       intro:
         'home-media-portal üzerinden uyarlanmış canlı demo: DOSBox-X for Web, seçilmiş ROM manifesti ve runtime’ı istenene kadar ana sayfadan uzak tutan lazy iframe.',
       launchLabel: 'Demoyu başlat',

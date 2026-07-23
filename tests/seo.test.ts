@@ -12,6 +12,7 @@ import {
 import { siteUrl } from '@/lib/site-url';
 import {
   buildHomeStructuredData,
+  buildPrivacyStructuredData,
   buildProjectStructuredData,
   buildProjectsStructuredData,
 } from '@/lib/structured-data';
@@ -74,6 +75,11 @@ describe('structured data', () => {
     expect(JSON.stringify(buildProjectStructuredData('tr', projects[0]))).toContain(
       '"inLanguage":"tr"',
     );
+    expect(buildPrivacyStructuredData('en')).toMatchObject({
+      '@type': 'WebPage',
+      inLanguage: 'en',
+      description: seoCopy.en.privacyDescription,
+    });
   });
 
   it('escapes HTML-significant characters before JSON-LD rendering', () => {

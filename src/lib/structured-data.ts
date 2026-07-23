@@ -159,3 +159,20 @@ export function buildLabStructuredData(locale: Locale): JsonLdValue {
     isPartOf: { '@id': websiteId },
   };
 }
+
+export function buildPrivacyStructuredData(locale: Locale): JsonLdValue {
+  const copy = siteCopy[locale].privacy;
+  const url = siteUrl(`/${locale}/privacy`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#privacy`,
+    url,
+    name: copy.title,
+    description: seoCopy[locale].privacyDescription,
+    inLanguage: locale,
+    isPartOf: { '@id': websiteId },
+    author: { '@id': personId },
+  };
+}

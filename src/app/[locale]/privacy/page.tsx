@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { AnalyticsPreference } from '@/components/client/analytics-preference';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
+import { buildPrivacyStructuredData } from '@/lib/structured-data';
 
 export async function generateMetadata({
   params,
@@ -32,6 +34,7 @@ export default async function PrivacyPage({
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-8 md:py-24">
+      <JsonLd data={buildPrivacyStructuredData(locale)} />
       <Badge>{copy.eyebrow}</Badge>
       <h1 className="font-display mt-8 max-w-4xl text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
         {copy.title}

@@ -150,7 +150,10 @@ test('renders localized public portfolio routes', async ({ page }) => {
   });
 
   await page.goto('/en/labs/retro-game-center');
-  await expect(page.getByRole('heading', { name: /retro game center boots/i })).toBeVisible();
+  await expect(page).toHaveTitle('Retro Game Center: DOOM in WebAssembly | H.O.T.');
+  await expect(
+    page.getByRole('heading', { name: /retro game center.*doom shareware.*webassembly/i }),
+  ).toBeVisible();
   await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
   expect(wasmRequests).toEqual([]);
@@ -167,6 +170,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/tr/labs/retro-game-center');
+  await expect(page).toHaveTitle('Retro Game Center: WebAssembly ile DOOM | H.O.T.');
   const mobileLayout = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth,
@@ -257,6 +261,16 @@ test('keeps canonical locale routes free of locale-cookie cache variance', async
   expect(detectedRoot.headers()['cache-control']).toContain('no-store');
 });
 
+test('publishes a truthful ads.txt declaration', async ({ request }) => {
+  const response = await request.get('/ads.txt');
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toContain('text/plain');
+  expect(await response.text()).toContain(
+    'placeholder.example.com, placeholder, DIRECT, placeholder',
+  );
+});
+
 test('serves sandbox-compatible WASM asset headers', async ({ request }) => {
   const manifest = await request.get('/wasm/manifest.json');
   expect(manifest.status()).toBe(200);
@@ -330,6 +344,9 @@ test('keeps aggregate telemetry transparent and locally optional', async ({ page
   await expect(page.getByRole('heading', { name: /what this site measures/i })).toBeVisible();
   await expect(page.getByText(/Sentry and Session Replay are not active/i)).toBeVisible();
   await expect(page.getByText(/aggregate analytics are enabled/i)).toBeVisible();
+  expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
+    '"@type":"WebPage"',
+  );
 
   await page.getByRole('button', { name: /disable analytics/i }).click();
   await expect(page.getByText(/aggregate analytics are disabled/i)).toBeVisible();

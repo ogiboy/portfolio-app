@@ -15,6 +15,7 @@ export const seoCopy: Record<
     homeTitle: string;
     homeDescription: string;
     projectsDescription: string;
+    labTitle: string;
     labDescription: string;
     privacyDescription: string;
     role: string;
@@ -28,6 +29,7 @@ export const seoCopy: Record<
       'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
     projectsDescription:
       'Browse frontend projects, API interfaces, utilities, forms, and browser experiments by Halil Oğuzcan Toptaş.',
+    labTitle: 'Retro Game Center: DOOM in WebAssembly',
     labDescription:
       'A live WebAssembly lab running DOOM Shareware through an isolated, lazy-loaded DOSBox-X browser runtime.',
     privacyDescription:
@@ -42,6 +44,7 @@ export const seoCopy: Record<
       'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
     projectsDescription:
       'Halil Oğuzcan Toptaş’ın frontend projelerini, API arayüzlerini, yardımcı araçlarını, formlarını ve browser deneylerini inceleyin.',
+    labTitle: 'Retro Game Center: WebAssembly ile DOOM',
     labDescription:
       'DOOM Shareware çalıştıran, izole ve yalnızca etkileşimden sonra yüklenen DOSBox-X tabanlı canlı WebAssembly laboratuvarı.',
     privacyDescription:

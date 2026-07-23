@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { projects } from '@/content/projects';
 import { routing } from '@/i18n/routing';
@@ -35,5 +37,11 @@ describe('public discovery metadata', () => {
       sitemap: siteUrl('/sitemap.xml'),
       host: new URL(siteUrl('/')).origin,
     });
+  });
+
+  it('declares that no advertising seller is authorized', () => {
+    const adsText = readFileSync(resolve(process.cwd(), 'public/ads.txt'), 'utf8');
+
+    expect(adsText).toContain('placeholder.example.com, placeholder, DIRECT, placeholder');
   });
 });

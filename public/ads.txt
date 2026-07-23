@@ -1,0 +1,2 @@
+# This portfolio does not authorize any digital advertising sellers.
+placeholder.example.com, placeholder, DIRECT, placeholder

@@ -19,7 +19,7 @@ export async function generateMetadata({
   return createRouteMetadata({
     locale,
     path: '/labs/retro-game-center',
-    title: 'Retro Game Center',
+    title: seoCopy[locale].labTitle,
     description: seoCopy[locale].labDescription,
   });
 }
