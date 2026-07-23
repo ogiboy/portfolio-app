@@ -6,7 +6,7 @@ Current expansion of the portfolio overhaul after `AR-2`. The active execution s
 
 ## Outcome
 
-Make H.O.T. discoverable as Halil Oğuzcan Toptaş's developer and homelab portfolio through truthful localized content, technically correct indexing signals, accessible social previews, source-backed agent discovery, and privacy-first measurement.
+Make H.O.T. discoverable as Halil Oğuzcan Toptaş's developer and homelab portfolio through truthful localized content, technically correct indexing signals, accessible social previews, source-backed agent discovery, privacy-first measurement, and a purposeful interface that feels alive without sacrificing performance or access.
 
 ## Delivery Sequence
 
@@ -34,7 +34,8 @@ Make H.O.T. discoverable as Halil Oğuzcan Toptaş's developer and homelab portf
 
 - Search metadata improves eligibility and understanding; it does not guarantee crawl, index, rank, rich results, AI citations, or traffic.
 - Existing Markdown negotiation, Agent Skills, WebMCP, API catalog, OpenAPI, health, robots, and sitemap surfaces remain source-backed and read-only.
-- `llms.txt`, OAuth discovery, protected-resource metadata, `auth.md`, MCP Server Card, and DNS-AID remain absent unless a supported consumer or real service prerequisite exists.
+- The DNSSEC-signed `_index._agents` DNS-AID record advertises only the canonical public index over HTTPS. It does not imply A2A, MCP, OAuth, registration, or a stateful agent service.
+- `llms.txt`, OAuth discovery, protected-resource metadata, `auth.md`, and an MCP Server Card remain absent unless a supported consumer or real service prerequisite exists.
 - Search Console, DNS verification, provider settings, deploys, and recrawl requests are external state and require independent evidence.
 
 ## Verification Contract

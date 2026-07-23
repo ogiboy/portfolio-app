@@ -15,7 +15,7 @@ The portfolio needs truthful machine discovery without inventing authentication,
 - Keep Vercel as the application origin and Cloudflare as DNS/proxy infrastructure. Do not migrate to Pages, Workers, OpenNext, Django, containers, or Kubernetes for this scope.
 - Defer OAuth/OIDC discovery, OAuth Protected Resource Metadata, and `auth.md` because public v1 has no protected API, authorization server, or agent-registration flow.
 - Defer an MCP Server Card because the portfolio does not operate an MCP server.
-- Defer DNS-AID because no stable agent service endpoint exists. DNSSEC alone does not create that prerequisite.
+- DNS-AID was deferred at acceptance time. `2026-07-23-cloudflare-edge-email-dns-aid.md` later supersedes only that deferral by constraining discovery to the existing canonical public index; no A2A, MCP, or OAuth service is implied.
 - Use the current imperative WebMCP API in an isolated client leaf and degrade to a no-op when the browser does not expose it.
 - Serve Markdown from a dedicated read-only handler selected by explicit `Accept: text/markdown`; keep HTML as the browser default. Markdown responses are `private, no-store` until production proves safe shared-cache behavior. The root representation varies on `Accept`, `Accept-Language`, and `Cookie`, and strips locale `Set-Cookie` from the rewrite. Next.js App Page rendering overwrites the proxy-provided HTML `Vary` header with its framework RSC list, so the HTML response must not be claimed to carry `Vary: Accept` without evidence.
 - Treat every branch implementation as non-production until pushed, reviewed, merged, deployed, and production-verified.
@@ -24,7 +24,7 @@ The portfolio needs truthful machine discovery without inventing authentication,
 
 - Human and agent access share source-backed portfolio data without a second backend.
 - Unsupported discovery surfaces fail closed by remaining absent rather than publishing fabricated endpoints or credentials.
-- Cloudflare DNS/Worker changes are not required for this implementation; DNS-AID remains a deliberate prerequisite-gated follow-up.
+- Application discovery still requires no Cloudflare Worker. The later DNS-AID decision records the separately operated DNS entrypoint and its narrower boundary.
 - Framework/header behavior and deployment topology are documented honestly instead of being hidden behind a generic readiness claim; Markdown intentionally trades shared-cache speed for representation safety.
 
 ## Compatibility and Rollback
