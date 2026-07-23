@@ -45,6 +45,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body>

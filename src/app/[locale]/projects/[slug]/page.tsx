@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, ArrowSquareOut, GithubLogo } from '@phosphor-icons/react/dist/ssr';
+import { ArrowLeft, ArrowRight, Code2, ExternalLink } from 'lucide-react';
 import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getNextProject, getProject, projects } from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
@@ -58,11 +58,9 @@ export default async function ProjectDetailPage({
     <main>
       <JsonLd data={buildProjectStructuredData(locale, project)} />
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-20">
-        <Button asChild variant="ghost" size="sm">
-          <Link href="/projects">
-            <ArrowLeft aria-hidden="true" weight="bold" /> {copy.back}
-          </Link>
-        </Button>
+        <Link href="/projects" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+          <ArrowLeft aria-hidden="true" strokeWidth={2.5} /> {copy.back}
+        </Link>
         <div className="mt-8 grid gap-10 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
             <Badge>{project.category}</Badge>
@@ -72,7 +70,7 @@ export default async function ProjectDetailPage({
           </div>
           <p className="text-muted-foreground text-xl leading-relaxed">{project.description}</p>
         </div>
-        <div className="border-foreground bg-muted relative mt-12 aspect-[16/10] overflow-hidden border-2 shadow-[10px_10px_0_0_var(--shadow-hard)]">
+        <div className="border-foreground bg-muted relative mt-12 aspect-16/10 overflow-hidden border-2 shadow-[10px_10px_0_0_var(--shadow-hard)]">
           <Image
             src={project.image}
             alt={project.name}
@@ -91,7 +89,7 @@ export default async function ProjectDetailPage({
             <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.18em] uppercase">
               {copy.yearLabel}
             </p>
-            <p className="font-display mt-2 text-3xl tracking-[-0.05em]">{project.year}</p>
+            <p className="font-display mt-2 text-3xl tracking-tighter">{project.year}</p>
           </div>
           <div>
             <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.18em] uppercase">
@@ -104,16 +102,17 @@ export default async function ProjectDetailPage({
             </div>
           </div>
           <div className="flex flex-wrap items-start gap-3 md:justify-end">
-            <Button asChild>
-              <a href={project.url} target="_blank" rel="noreferrer">
-                <ArrowSquareOut aria-hidden="true" weight="bold" /> {copy.live}
-              </a>
-            </Button>
-            <Button asChild variant="secondary">
-              <a href={project.gitUrl} target="_blank" rel="noreferrer">
-                <GithubLogo aria-hidden="true" weight="bold" /> {copy.code}
-              </a>
-            </Button>
+            <a href={project.url} target="_blank" rel="noreferrer" className={buttonVariants()}>
+              <ExternalLink aria-hidden="true" strokeWidth={2.5} /> {copy.live}
+            </a>
+            <a
+              href={project.gitUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ variant: 'secondary' })}
+            >
+              <Code2 aria-hidden="true" strokeWidth={2.5} /> {copy.code}
+            </a>
           </div>
         </div>
       </section>
@@ -127,11 +126,9 @@ export default async function ProjectDetailPage({
             </p>
             <h2 className="font-display mt-3 text-4xl tracking-[-0.06em]">{nextProject.name}</h2>
           </div>
-          <Button asChild size="lg">
-            <Link href={`/projects/${nextProject.slug}`}>
-              <ArrowRight aria-hidden="true" weight="bold" /> {copy.nextProject}
-            </Link>
-          </Button>
+          <Link href={`/projects/${nextProject.slug}`} className={buttonVariants({ size: 'lg' })}>
+            <ArrowRight aria-hidden="true" strokeWidth={2.5} /> {copy.nextProject}
+          </Link>
         </div>
       </section>
     </main>

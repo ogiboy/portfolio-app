@@ -1,20 +1,16 @@
 import type { Metadata } from 'next';
-import {
-  ArrowLeft,
-  Cpu,
-  GameController,
-  HardDrives,
-  ShieldCheck,
-} from '@phosphor-icons/react/dist/ssr';
+import { ArrowLeft, Cpu, Gamepad2, HardDrive, ShieldCheck } from 'lucide-react';
 import { WasmGameFrame } from '@/components/client/wasm-game-frame';
 import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildLabStructuredData } from '@/lib/structured-data';
+
+const labSignalIcons = [HardDrive, Cpu, ShieldCheck];
 
 export async function generateMetadata({
   params,
@@ -33,19 +29,16 @@ export default async function RetroGameCenterPage({
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {
   const { locale } = await params;
   const copy = siteCopy[locale].lab;
-  const IconSet = [HardDrives, Cpu, ShieldCheck];
 
   return (
     <main>
       <JsonLd data={buildLabStructuredData(locale)} />
       <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-14 md:grid-cols-[0.82fr_1.18fr] md:px-8 md:py-20">
         <div>
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/">
-              <ArrowLeft aria-hidden="true" weight="bold" />
-              {copy.back}
-            </Link>
-          </Button>
+          <Link href="/" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+            <ArrowLeft aria-hidden="true" strokeWidth={2.5} />
+            {copy.back}
+          </Link>
           <div className="mt-10">
             <Badge>{copy.eyebrow}</Badge>
             <h1 className="font-display mt-8 text-5xl leading-[0.9] tracking-[-0.08em] md:text-7xl">
@@ -64,6 +57,14 @@ export default async function RetroGameCenterPage({
           openLabel={copy.openLabel}
           idleTitle={copy.idleTitle}
           idleBody={copy.idleBody}
+          bootingTitle={copy.bootingTitle}
+          bootingBody={copy.bootingBody}
+          readyLabel={copy.readyLabel}
+          errorTitle={copy.errorTitle}
+          errorBody={copy.errorBody}
+          timeoutTitle={copy.timeoutTitle}
+          timeoutBody={copy.timeoutBody}
+          retryLabel={copy.retryLabel}
         />
       </section>
 
@@ -77,12 +78,12 @@ export default async function RetroGameCenterPage({
           </div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {copy.specs.map((spec, index) => {
-              const Icon = IconSet[index] ?? GameController;
+              const Icon = labSignalIcons[index] ?? Gamepad2;
               return (
                 <Card key={spec.title} className={index === 1 ? 'bg-primary' : undefined}>
                   <CardContent>
-                    <Icon aria-hidden="true" weight="bold" className="h-9 w-9" />
-                    <h3 className="font-display mt-8 text-3xl leading-none tracking-[-0.05em]">
+                    <Icon aria-hidden="true" strokeWidth={2.5} className="h-9 w-9" />
+                    <h3 className="font-display mt-8 text-3xl leading-none tracking-tighter">
                       {spec.title}
                     </h3>
                     <p className="text-muted-foreground mt-5 text-sm leading-relaxed">

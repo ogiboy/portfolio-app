@@ -264,7 +264,9 @@ class MyClass {
     reader.onload = function (e) {
       console.log('finished loading');
       var byteArray = new Uint8Array(this.result);
-      myClass.LoadEmulator(byteArray);
+      void myClass
+        .LoadEmulator(byteArray)
+        .catch((error) => myClass.handleEmulatorLoadError(error));
     };
     reader.readAsArrayBuffer(file);
   }
@@ -287,7 +289,12 @@ class MyClass {
   configureEmulator() {
     if (this.rivetsData.password) this.loginSilent();
 
-    let size = localStorage.getItem('doswasmx-height');
+    let size = null;
+    try {
+      size = localStorage.getItem('doswasmx-height');
+    } catch (error) {
+      console.log('localStorage not available', error);
+    }
     if (size) {
       console.log('size found');
       let sizeNum = parseInt(size);
@@ -564,9 +571,9 @@ class MyClass {
 
   //need to wait for both indexedDB and wasm runtime
   finishInitialization() {
-    if (myClass.initCount == 2) {
-      myClass.rivetsData.moduleInitializing = false;
-      myClass.rivetsData.message = '';
+    if (this.initCount == 2) {
+      this.rivetsData.moduleInitializing = false;
+      this.rivetsData.message = '';
 
       $('#githubDiv').show();
       this.loading = false;
@@ -630,7 +637,9 @@ class MyClass {
     reader.onload = function (e) {
       console.log('finished loading');
       var byteArray = new Uint8Array(this.result);
-      myClass.LoadEmulator(byteArray);
+      void myClass
+        .LoadEmulator(byteArray)
+        .catch((error) => myClass.handleEmulatorLoadError(error));
     };
     reader.readAsArrayBuffer(file);
   }
@@ -694,7 +703,7 @@ class MyClass {
     //we want to avoid setting the iso bytes because they were set above
     this.noIso = true;
 
-    this.LoadEmulator(firstBytes);
+    await this.LoadEmulator(firstBytes);
   }
 
   handleMultipleFiles(files, index) {
@@ -773,7 +782,7 @@ class MyClass {
         //then we skip loading img
         this.img_loaded = true;
         this.noIso = true;
-        this.LoadEmulator();
+        return this.LoadEmulator();
       } else if (
         this.rivetsData.initialInstallation ||
         !this.rivetsData.loggedIn
@@ -785,7 +794,7 @@ class MyClass {
             //this means it is their initial windows installation
             this.img_loaded = true;
             this.rivetsData.initialInstallation = true;
-            this.LoadEmulator();
+            return this.LoadEmulator();
           }
         } else {
           //load their disk
@@ -808,28 +817,18 @@ class MyClass {
     }
 
     //write font file
-    let responseText = await $.ajax({
-      url: 'main.ttf',
-      beforeSend: function (xhr) {
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-      },
-    });
-    let responseBytes = new Uint8Array(responseText.length);
-    for (let i = 0; i < responseText.length; i++) {
-      responseBytes[i] = responseText.charCodeAt(i) & 0xff;
-    }
-    console.log('main.ttf', responseText.length);
+    let response = await fetch('main.ttf');
+    if (!response.ok) throw new Error('Failed to load main.ttf');
+    let responseBytes = new Uint8Array(await response.arrayBuffer());
+    console.log('main.ttf', responseBytes.length);
     Module.FS.writeFile('/res/arial.ttf', responseBytes);
 
     //write dosbox.conf
     var rando = Math.floor(Math.random() * Math.floor(100000));
     let file = './dosbox-x-for-web.conf?v=' + rando;
-    responseText = await $.ajax({
-      url: './' + file,
-      beforeSend: function (xhr) {
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-      },
-    });
+    response = await fetch(file);
+    if (!response.ok) throw new Error('Failed to load dosbox-x-for-web.conf');
+    let responseText = await response.text();
     console.log(file, responseText.length);
 
     let multiFileScript = '';
@@ -1138,7 +1137,7 @@ class MyClass {
 
     if (noIso) {
       this.noIso = true;
-      this.LoadEmulator();
+      await this.LoadEmulator();
     } else {
       let romurl = this.readRomProp('value');
       let startupScript = this.readRomProp('startupScript');
@@ -1344,7 +1343,9 @@ class MyClass {
           }
         } else if (arrayBuffer) {
           var byteArray = new Uint8Array(arrayBuffer);
-          myClass.LoadEmulator(byteArray);
+          void myClass
+            .LoadEmulator(byteArray)
+            .catch((error) => myClass.handleEmulatorLoadError(error));
         } else {
           this.rivetsData.lblError =
             'Error downloading data. Try reloading browser.';
@@ -1365,10 +1366,15 @@ class MyClass {
   }
 
   onError(message) {
-    console.log('error triggered', event);
+    console.log('error triggered', message);
     if (!message.includes('user has exited the lock')) {
       this.rivetsData.lblError = message;
     }
+  }
+
+  handleEmulatorLoadError(error) {
+    const message = error instanceof Error ? error.message : String(error);
+    this.onError(message);
   }
 
   //prevent dropdown from popping up from keyboard events
@@ -1452,9 +1458,13 @@ class MyClass {
   }
 
   retrieveSettings() {
-    this.readFromLocalStorage('doswasmx-ram', 'ram');
-    this.readFromLocalStorage('doswasmx-initialhd', 'initialHardDrive');
-    this.readFromLocalStorage('doswasmx-dosversion', 'dosVersion');
+    try {
+      this.readFromLocalStorage('doswasmx-ram', 'ram');
+      this.readFromLocalStorage('doswasmx-initialhd', 'initialHardDrive');
+      this.readFromLocalStorage('doswasmx-dosversion', 'dosVersion');
+    } catch (error) {
+      console.log('localStorage not available', error);
+    }
   }
 
   saveOptions() {
@@ -1468,12 +1478,28 @@ class MyClass {
   }
 
   createDB() {
+    let databaseInitializationSettled = false;
+    const completeDatabaseInitialization = () => {
+      if (databaseInitializationSettled) return;
+      databaseInitializationSettled = true;
+      this.initCount++;
+      this.finishInitialization();
+    };
+
     if (window['indexedDB'] == undefined) {
       console.log('indexedDB not available');
+      completeDatabaseInitialization();
       return;
     }
 
-    var request = indexedDB.open('DOSWASMXDB');
+    var request;
+    try {
+      request = indexedDB.open('DOSWASMXDB');
+    } catch (error) {
+      console.log('indexedDB not available', error);
+      completeDatabaseInitialization();
+      return;
+    }
     request.onupgradeneeded = function (ev) {
       console.log('upgrade needed');
       let db = ev.target.result;
@@ -1486,14 +1512,15 @@ class MyClass {
     };
 
     request.onsuccess = function (ev) {
-      var db = ev.target.result;
-      var romStore = db
-        .transaction('DOSWASMXSTATES', 'readwrite')
-        .objectStore('DOSWASMXSTATES');
       try {
+        var db = ev.target.result;
+        var romStore = db
+          .transaction('DOSWASMXSTATES', 'readwrite')
+          .objectStore('DOSWASMXSTATES');
         //rewrote using cursor instead of getAllKeys
         //for compatibility with MS EDGE
-        romStore.openCursor().onsuccess = function (ev) {
+        const cursorRequest = romStore.openCursor();
+        cursorRequest.onsuccess = function (ev) {
           var cursor = ev.target.result;
           if (cursor) {
             let rom = cursor.key.toString();
@@ -1511,14 +1538,22 @@ class MyClass {
             }
             cursor.continue();
           } else {
-            myClass.initCount++;
-            myClass.finishInitialization();
+            completeDatabaseInitialization();
           }
+        };
+        cursorRequest.onerror = function (error) {
+          console.log('error reading keys', error);
+          completeDatabaseInitialization();
         };
       } catch (error) {
         console.log('error reading keys');
         console.log(error);
+        completeDatabaseInitialization();
       }
+    };
+    request.onerror = function () {
+      console.log('indexedDB initialization failed');
+      completeDatabaseInitialization();
     };
   }
 
@@ -1658,7 +1693,9 @@ class MyClass {
             Module.FS.writeFile(imgName, byteArray);
             console.log('loaded drive from db: ' + imgName);
             myClass.img_loaded = true;
-            myClass.LoadEmulator();
+            void myClass
+              .LoadEmulator()
+              .catch((error) => myClass.handleEmulatorLoadError(error));
           } else {
             //TODO - if we are logged in then this is the
             //base image so we need to apply the diff drive
@@ -1666,7 +1703,9 @@ class MyClass {
         }
         if (saveType == SaveTypes.ISO || saveType == SaveTypes.BaseImage) {
           let byteArray = rom.result; //Uint8Array
-          myClass.LoadEmulator(byteArray);
+          void myClass
+            .LoadEmulator(byteArray)
+            .catch((error) => myClass.handleEmulatorLoadError(error));
         }
       };
       rom.onerror = function (event) {
@@ -1747,7 +1786,7 @@ class MyClass {
     let byteArray = new Uint8Array(await blob.arrayBuffer());
     document.getElementById('myProgress').innerHTML = 'Finished Decompressing';
 
-    myClass.LoadEmulator(byteArray);
+    await myClass.LoadEmulator(byteArray);
   }
 
   toggleOnscreenKeyboard() {
@@ -2822,7 +2861,7 @@ window.onerror = function (message) {
 
 window.onunhandledrejection = function (error) {
   console.log('window.onunhandledrejection', error);
-  myClass.onError(error.reason.message);
+  myClass.handleEmulatorLoadError(error.reason);
 };
 
 window['Module'] = {

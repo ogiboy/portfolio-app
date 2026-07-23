@@ -55,6 +55,16 @@ type WorkflowConfig = {
   };
 };
 
+type DependabotUpdate = {
+  'package-ecosystem': string;
+  cooldown?: {
+    'default-days': number;
+    'semver-major-days': number;
+    'semver-minor-days': number;
+    'semver-patch-days': number;
+  };
+};
+
 describe('project governance contracts', () => {
   it('keeps exactly one mutable overhaul checkpoint with the complete handoff schema', () => {
     const checkpointFiles = readdirSync(join(root, '.ai/checkpoints'))
@@ -169,20 +179,35 @@ describe('project governance contracts', () => {
     expect(Object.values(vercelConfig).join('\n')).not.toContain('pnpm@');
   });
 
-  it('keeps pnpm version ownership and PostCSS resolution unambiguous', () => {
+  it('keeps pnpm version ownership and dependency policy unambiguous', () => {
     const packageManifest = parseJsonFile<{
       packageManager: string;
       engines: { pnpm: string };
       scripts: Record<string, string>;
+      dependencies: Record<string, string>;
       devDependencies: Record<string, string>;
     }>('package.json');
-    const workspace = parseYamlFile<{ overrides: { postcss: string; sharp: string } }>(
-      'pnpm-workspace.yaml',
-    );
+    const workspace = parseYamlFile<{
+      minimumReleaseAge: number;
+      minimumReleaseAgeExclude: string[];
+      overrides: Record<string, string>;
+    }>('pnpm-workspace.yaml');
+    const dependabot = parseYamlFile<{ updates: DependabotUpdate[] }>('.github/dependabot.yml');
+    const componentConfig = parseJsonFile<{
+      iconLibrary: string;
+      rsc: boolean;
+      style: string;
+      tailwind: { config: string; css: string };
+    }>('components.json');
+    const npmUpdates = dependabot.updates.find((update) => update['package-ecosystem'] === 'npm');
 
-    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.16\.0\+/);
+    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.17\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
     expect(packageManifest.devDependencies.postcss).toBe('^8.5.22');
+    expect(packageManifest.dependencies['lucide-react']).toBe('^1.26.0');
+    expect(packageManifest.dependencies['radix-ui']).toBe('^1.6.5');
+    expect(packageManifest.dependencies).not.toHaveProperty('@radix-ui/react-dialog');
+    expect(packageManifest.dependencies).not.toHaveProperty('@phosphor-icons/react');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
     expect(packageManifest.devDependencies.typescript).toBe('npm:@typescript/typescript6@^6.0.2');
     expect(packageManifest.scripts['qa:typescript']).toBe(
@@ -190,8 +215,50 @@ describe('project governance contracts', () => {
     );
     expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
+    expect(componentConfig).toEqual(
+      expect.objectContaining({
+        iconLibrary: 'lucide',
+        rsc: true,
+        style: 'radix-lyra',
+        tailwind: expect.objectContaining({ config: '', css: 'src/app/globals.css' }),
+      }),
+    );
+    expect(readdirSync(join(root, 'src/components/ui'))).toEqual(
+      expect.arrayContaining(['badge.tsx', 'button.tsx', 'card.tsx', 'separator.tsx', 'sheet.tsx']),
+    );
+    expect(readdirSync(join(root, 'src/components/ui'))).not.toContain('dialog.tsx');
     expect(workspace.overrides.postcss).toBe('^8.5.22');
     expect(workspace.overrides.sharp).toBe('0.35.3');
+    expect(workspace.minimumReleaseAge).toBe(1440);
+    expect(workspace.minimumReleaseAgeExclude).toEqual([
+      '@radix-ui/react-dialog@1.1.17 || 1.1.21',
+      '@radix-ui/react-dismissable-layer@1.1.13 || 1.1.17',
+      '@radix-ui/react-focus-scope@1.1.10 || 1.1.14',
+      '@radix-ui/react-portal@1.1.12 || 1.1.15',
+      '@radix-ui/react-primitive@2.1.6 || 2.1.8',
+      '@radix-ui/react-slot@1.3.0 || 1.3.1',
+      '@radix-ui/primitive@1.1.7',
+      '@radix-ui/react-compose-refs@1.1.4',
+      '@radix-ui/react-context@1.2.1',
+      '@radix-ui/react-focus-guards@1.1.5',
+      '@radix-ui/react-id@1.1.3',
+      '@radix-ui/react-presence@1.1.9',
+      '@radix-ui/react-use-callback-ref@1.1.3',
+      '@radix-ui/react-use-controllable-state@1.2.5',
+      '@radix-ui/react-use-effect-event@0.0.4',
+      '@radix-ui/react-use-layout-effect@1.1.3',
+      'icu-minify@4.13.4',
+      'lucide-react@1.26.0',
+      'next-intl-swc-plugin-extractor@4.13.4',
+      'next-intl@4.13.4',
+      'use-intl@4.13.4',
+    ]);
+    expect(npmUpdates?.cooldown).toEqual({
+      'default-days': 2,
+      'semver-major-days': 14,
+      'semver-minor-days': 2,
+      'semver-patch-days': 2,
+    });
   });
 
   it('runs both TypeScript toolchains in CircleCI', () => {
