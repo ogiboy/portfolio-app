@@ -28,4 +28,8 @@
 - `work/2026-07-23-cloudflare-contact-performance/20-checkpoint.md`: Dated implementation snapshot and drift boundary.
 - `work/2026-07-23-cloudflare-contact-performance/90-evidence.md`: Independent local, browser, DNS, email, provider, and production observations.
 
+## Hosted Delivery Closeout
+
+- `work/2026-07-23-hosted-delivery-closeout/90-evidence.md`: Immutable runtime-source, pushed-head, hosted-check, protected-preview, and browser evidence for PR #27.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.
