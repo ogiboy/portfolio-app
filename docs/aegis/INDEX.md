@@ -36,4 +36,8 @@
 
 - `work/2026-07-23-review-finding-closeout/90-evidence.md`: Immutable finding disposition, exact-source local gates, predecessor hosted state, and final-head delivery boundaries for PR #27.
 
+## Dependency Cooldown and Icon Boundary
+
+- `work/2026-07-24-dependency-cooldown/90-evidence.md`: Exact-source package-policy, clean-lockfile, IDE-diagnostic, local-gate, PR #27 baseline, and Dependabot PR #28 failure evidence.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.
