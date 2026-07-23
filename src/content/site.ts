@@ -5,7 +5,7 @@ export type Locale = (typeof routing.locales)[number];
 type LocalizedCopy<T> = Record<Locale, T>;
 
 export const contact = {
-  email: 'oguzcantoptas@gmail.com',
+  email: 'ogi@oguzcantoptas.com',
   github: 'https://github.com/ogiboy',
   linkedin: 'https://www.linkedin.com/in/hoguzcantoptas/',
   resume: '/myResume.pdf',

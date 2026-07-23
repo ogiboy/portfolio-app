@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projects } from '@/content/projects';
-import { siteCopy } from '@/content/site';
+import { contact, siteCopy } from '@/content/site';
 
 describe('portfolio content', () => {
   it('keeps project slugs unique and route-safe', () => {
@@ -23,6 +23,7 @@ describe('portfolio content', () => {
   });
 
   it('keeps EN and TR public copy complete', () => {
+    expect(contact.email).toBe('ogi@oguzcantoptas.com');
     expect(siteCopy.en.home.primaryCta).toBeTruthy();
     expect(siteCopy.tr.home.primaryCta).toBeTruthy();
     expect(siteCopy.en.projects.caseLabel).toBeTruthy();
