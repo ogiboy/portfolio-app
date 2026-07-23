@@ -9,10 +9,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import {
+  cinematicProjects,
   featuredProjects,
   getProjectCategory,
   getProjectDescription,
-  projects,
 } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 import { buildHomeStructuredData } from '@/lib/structured-data';
@@ -140,7 +140,7 @@ export default async function HomePage({
       <CinematicWorkRail
         title={copy.home.motionTitle}
         intro={copy.home.motionIntro}
-        projects={projects.slice(0, 6).map((project) => ({
+        projects={cinematicProjects.map((project) => ({
           category: getProjectCategory(project, locale),
           image: project.image,
           name: project.name,

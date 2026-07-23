@@ -323,6 +323,7 @@ export const projects: Project[] = [
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
+export const cinematicProjects = projects.filter((project) => !project.featured).slice(0, 6);
 
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);

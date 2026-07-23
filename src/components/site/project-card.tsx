@@ -84,6 +84,7 @@ export function ProjectCard({
               target="_blank"
               rel="noreferrer"
               className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              aria-label={`${liveLabel}: ${project.name}`}
             >
               {liveLabel}
               <ExternalLink aria-hidden="true" strokeWidth={2.5} />
@@ -93,6 +94,7 @@ export function ProjectCard({
               target="_blank"
               rel="noreferrer"
               className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+              aria-label={`${codeLabel}: ${project.name}`}
             >
               {codeLabel}
               <Code2 aria-hidden="true" strokeWidth={2.5} />

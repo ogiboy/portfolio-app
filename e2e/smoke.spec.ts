@@ -52,9 +52,24 @@ async function expectLocalizedHomeMetadata({
     'content',
     new RegExp(`/${locale}/twitter-image(?:\\?.*)?$`),
   );
+  const appleIcon = page.locator('link[rel="apple-touch-icon"]');
+  await expect(appleIcon).toHaveAttribute('href', /\/apple-icon\.png(?:\?.*)?$/);
+  const appleIconHref = await appleIcon.getAttribute('href');
+  const appleIconResponse = await page.request.get(
+    new URL(appleIconHref ?? '/', page.url()).toString(),
+  );
+  expect(appleIconResponse.ok()).toBe(true);
+  expect(appleIconResponse.headers()['content-type']).toContain('image/png');
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
     'Halil Oğuzcan Toptaş',
   );
+}
+
+async function expectUniqueHeadingText(page: Page) {
+  const headings = await page.locator('h1, h2, h3, h4, h5, h6').allInnerTexts();
+  const normalized = headings.map((heading) => heading.replace(/\s+/g, ' ').trim());
+
+  expect(new Set(normalized).size).toBe(normalized.length);
 }
 
 test('renders localized public portfolio routes', async ({ page }) => {
@@ -73,6 +88,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
     page.getByRole('heading', { name: /Halil Oğuzcan Toptaş.*web interfaces, homelab systems/i }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /see the archive/i })).toBeVisible();
+  await expectUniqueHeadingText(page);
   await page.goto('/tr');
   await expectLocalizedHomeMetadata({
     page,
@@ -92,6 +108,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /arşivi gör/i })).toBeVisible();
+  await expectUniqueHeadingText(page);
 
   await page.goto('/en/projects');
   await expect(page.getByRole('heading', { name: /project archive/i })).toBeVisible();

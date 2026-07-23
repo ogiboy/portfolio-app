@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  cinematicProjects,
+  featuredProjects,
   formatProjectPosition,
   getNextProject,
   getProjectCategory,
@@ -30,6 +32,13 @@ describe('portfolio content', () => {
       expect(project.gitUrl).toMatch(/^https?:\/\//);
       expect(project.stack.length).toBeGreaterThan(0);
     }
+  });
+
+  it('keeps cinematic project headings distinct from featured project headings', () => {
+    const featuredSlugs = new Set(featuredProjects.map((project) => project.slug));
+
+    expect(cinematicProjects).toHaveLength(6);
+    expect(cinematicProjects.every((project) => !featuredSlugs.has(project.slug))).toBe(true);
   });
 
   it('serves direct project narratives for both locales', () => {

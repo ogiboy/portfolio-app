@@ -37,8 +37,14 @@ describe('ProjectCard', () => {
       'href',
       `/projects/${project.slug}`,
     );
-    expect(screen.getByRole('link', { name: 'Live' })).toHaveAttribute('href', project.url);
-    expect(screen.getByRole('link', { name: 'Code' })).toHaveAttribute('href', project.gitUrl);
+    expect(screen.getByRole('link', { name: `Live: ${project.name}` })).toHaveAttribute(
+      'href',
+      project.url,
+    );
+    expect(screen.getByRole('link', { name: `Code: ${project.name}` })).toHaveAttribute(
+      'href',
+      project.gitUrl,
+    );
   });
 
   it('does not invent an archive position for selected-work cards', () => {
