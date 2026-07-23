@@ -10,6 +10,8 @@ import { Link } from '@/i18n/navigation';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildLabStructuredData } from '@/lib/structured-data';
 
+const labSignalIcons = [HardDrive, Cpu, ShieldCheck];
+
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {
@@ -27,7 +29,6 @@ export default async function RetroGameCenterPage({
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {
   const { locale } = await params;
   const copy = siteCopy[locale].lab;
-  const IconSet = [HardDrive, Cpu, ShieldCheck];
 
   return (
     <main>
@@ -69,7 +70,7 @@ export default async function RetroGameCenterPage({
           </div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {copy.specs.map((spec, index) => {
-              const Icon = IconSet[index] ?? Gamepad2;
+              const Icon = labSignalIcons[index] ?? Gamepad2;
               return (
                 <Card key={spec.title} className={index === 1 ? 'bg-primary' : undefined}>
                   <CardContent>

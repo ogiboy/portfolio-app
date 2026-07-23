@@ -210,15 +210,29 @@ describe('project governance contracts', () => {
     expect(workspace.overrides.postcss).toBe('^8.5.22');
     expect(workspace.overrides.sharp).toBe('0.35.3');
     expect(workspace.minimumReleaseAge).toBe(1440);
-    expect(workspace.minimumReleaseAgeExclude).toEqual(
-      expect.arrayContaining([
-        '@radix-ui/react-dialog@1.1.17 || 1.1.21',
-        '@radix-ui/react-slot@1.3.0 || 1.3.1',
-        'lucide-react@1.26.0',
-        'next-intl@4.13.4',
-        'use-intl@4.13.4',
-      ]),
-    );
+    expect(workspace.minimumReleaseAgeExclude).toEqual([
+      '@radix-ui/react-dialog@1.1.17 || 1.1.21',
+      '@radix-ui/react-dismissable-layer@1.1.13 || 1.1.17',
+      '@radix-ui/react-focus-scope@1.1.10 || 1.1.14',
+      '@radix-ui/react-portal@1.1.12 || 1.1.15',
+      '@radix-ui/react-primitive@2.1.6 || 2.1.8',
+      '@radix-ui/react-slot@1.3.0 || 1.3.1',
+      '@radix-ui/primitive@1.1.7',
+      '@radix-ui/react-compose-refs@1.1.4',
+      '@radix-ui/react-context@1.2.1',
+      '@radix-ui/react-focus-guards@1.1.5',
+      '@radix-ui/react-id@1.1.3',
+      '@radix-ui/react-presence@1.1.9',
+      '@radix-ui/react-use-callback-ref@1.1.3',
+      '@radix-ui/react-use-controllable-state@1.2.5',
+      '@radix-ui/react-use-effect-event@0.0.4',
+      '@radix-ui/react-use-layout-effect@1.1.3',
+      'icu-minify@4.13.4',
+      'lucide-react@1.26.0',
+      'next-intl-swc-plugin-extractor@4.13.4',
+      'next-intl@4.13.4',
+      'use-intl@4.13.4',
+    ]);
     expect(npmUpdates?.cooldown).toEqual({
       'default-days': 2,
       'semver-major-days': 14,
