@@ -30,6 +30,7 @@
 - Replaced deprecated Phosphor icon aliases with tree-shakeable Lucide icons while preserving server-owned route surfaces.
 - Added a two-day Dependabot cooldown plus exact-version exceptions for audited provenance republishes so automated updates respect pnpm's explicit 24-hour supply-chain quarantine.
 - Limited cinematic motion to eligible desktop fine-pointer sessions while preserving natural reduced-motion, coarse-pointer, mobile, and Save Data flows.
+- Aligned shadcn ownership with Lucide and the current unified Radix Sheet primitive while preserving the custom Brutalist component styling.
 
 ### Removed
 
