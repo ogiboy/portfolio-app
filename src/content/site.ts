@@ -105,6 +105,8 @@ export const siteCopy: LocalizedCopy<{
     disabledLabel: string;
     enableAction: string;
     disableAction: string;
+    savedLabel: string;
+    errorLabel: string;
   };
   recovery: {
     errorEyebrow: string;
@@ -278,6 +280,8 @@ export const siteCopy: LocalizedCopy<{
       disabledLabel: 'Aggregate analytics are disabled in this browser.',
       enableAction: 'Enable analytics',
       disableAction: 'Disable analytics',
+      savedLabel: 'Preference saved.',
+      errorLabel: 'Preference could not be saved.',
     },
     recovery: {
       errorEyebrow: 'Runtime interrupted',
@@ -451,6 +455,8 @@ export const siteCopy: LocalizedCopy<{
       disabledLabel: 'Bu browser içinde toplu analitik kapalı.',
       enableAction: 'Analitiği aç',
       disableAction: 'Analitiği kapat',
+      savedLabel: 'Tercih kaydedildi.',
+      errorLabel: 'Tercih kaydedilemedi.',
     },
     recovery: {
       errorEyebrow: 'Çalışma kesintisi',

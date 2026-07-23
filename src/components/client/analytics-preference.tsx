@@ -1,44 +1,73 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAnalyticsPreference } from '@/components/client/use-analytics-preference';
-import { analyticsPreferenceEvent, analyticsStorageKey } from '@/lib/analytics-preference';
+import {
+  analyticsPreferenceEvent,
+  saveAnalyticsPreference,
+  type AnalyticsPreferenceSaveResult,
+} from '@/lib/analytics-preference';
 
 type AnalyticsPreferenceProps = {
   enabledLabel: string;
   disabledLabel: string;
   enableAction: string;
   disableAction: string;
+  savedLabel: string;
+  errorLabel: string;
 };
 
-function updatePreference(nextEnabled: boolean) {
-  try {
-    if (nextEnabled) {
-      window.localStorage.removeItem(analyticsStorageKey);
-    } else {
-      window.localStorage.setItem(analyticsStorageKey, '1');
-    }
-    window.dispatchEvent(new Event(analyticsPreferenceEvent));
-    if (!nextEnabled) {
-      window.location.reload();
-    }
-  } catch {
-    return;
-  }
-}
+type AnalyticsPreferenceLatch = AnalyticsPreferenceSaveResult | 'idle';
+
+const latchDuration = 220;
 
 export function AnalyticsPreference({
   enabledLabel,
   disabledLabel,
   enableAction,
   disableAction,
+  savedLabel,
+  errorLabel,
 }: Readonly<AnalyticsPreferenceProps>) {
   const enabled = useAnalyticsPreference();
+  const [latch, setLatch] = useState<AnalyticsPreferenceLatch>('idle');
+  const latchTimeout = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    return () => window.clearTimeout(latchTimeout.current);
+  }, []);
+
+  function updatePreference(nextEnabled: boolean) {
+    const result = saveAnalyticsPreference(window.localStorage, nextEnabled);
+
+    if (result === 'saved') {
+      window.dispatchEvent(new Event(analyticsPreferenceEvent));
+    }
+
+    setLatch(result);
+    window.clearTimeout(latchTimeout.current);
+    latchTimeout.current = window.setTimeout(() => setLatch('idle'), latchDuration);
+  }
+
+  const preferenceLabel = enabled ? enabledLabel : disabledLabel;
+  const preferenceSentence = /[.!?]$/.test(preferenceLabel)
+    ? preferenceLabel
+    : `${preferenceLabel}.`;
+  const statusMessage =
+    latch === 'saved'
+      ? `${preferenceSentence} ${savedLabel}`
+      : latch === 'error'
+        ? errorLabel
+        : preferenceLabel;
 
   return (
-    <div className="border-foreground bg-card flex flex-col gap-4 border-2 p-5 shadow-[6px_6px_0_0_var(--shadow-hard)] sm:flex-row sm:items-center sm:justify-between">
-      <p className="font-mono text-sm font-bold" aria-live="polite">
-        {enabled ? enabledLabel : disabledLabel}
+    <div
+      className="border-foreground bg-card data-[latch=error]:border-destructive data-[latch=saved]:border-primary flex flex-col gap-4 border-2 p-5 shadow-[6px_6px_0_0_var(--shadow-hard)] transition-[border-color,box-shadow] duration-200 data-[latch=saved]:shadow-[3px_3px_0_0_var(--shadow-hard)] motion-reduce:transition-none sm:flex-row sm:items-center sm:justify-between"
+      data-latch={latch}
+    >
+      <p className="font-mono text-sm font-bold" role="status" aria-atomic="true">
+        {statusMessage}
       </p>
       <Button
         type="button"

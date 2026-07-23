@@ -70,6 +70,8 @@ export default async function PrivacyPage({
             disabledLabel={copy.disabledLabel}
             enableAction={copy.enableAction}
             disableAction={copy.disableAction}
+            savedLabel={copy.savedLabel}
+            errorLabel={copy.errorLabel}
           />
         </div>
       </section>
