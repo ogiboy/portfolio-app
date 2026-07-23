@@ -69,6 +69,10 @@ jobs:
           name: Build
           command: pnpm build
 
+      - run:
+          name: Bundle budget
+          command: pnpm qa:bundle-budget
+
       - save_cache:
           key: pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
           paths:

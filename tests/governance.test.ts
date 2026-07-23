@@ -153,6 +153,10 @@ describe('project governance contracts', () => {
     expect(step('Verify TypeScript toolchain')?.run).toBe('pnpm qa:typescript');
     expect(step('Typecheck')?.run).toBe('pnpm typecheck');
     expect(step('Typecheck compatibility')?.run).toBe('pnpm typecheck:compat');
+    expect(step('Bundle budget')?.run).toBe('pnpm qa:bundle-budget');
+    expect(steps.findIndex((candidate) => candidate.name === 'Bundle budget')).toBeGreaterThan(
+      steps.findIndex((candidate) => candidate.name === 'Build'),
+    );
     expect(step('Restore Next.js build cache')).toEqual({
       name: 'Restore Next.js build cache',
       uses: 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9',
@@ -213,6 +217,10 @@ describe('project governance contracts', () => {
     expect(packageManifest.scripts['qa:typescript']).toBe(
       'node scripts/qa/typescript-toolchain.mjs',
     );
+    expect(packageManifest.scripts['qa:bundle-budget']).toBe('node scripts/qa/bundle-budget.mjs');
+    expect(packageManifest.scripts.ci).toContain(
+      'pnpm build && pnpm qa:bundle-budget && pnpm audit',
+    );
     expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
     expect(componentConfig).toEqual(
@@ -261,7 +269,7 @@ describe('project governance contracts', () => {
     });
   });
 
-  it('runs both TypeScript toolchains in CircleCI', () => {
+  it('runs both TypeScript toolchains and the post-build bundle budget gate in CircleCI', () => {
     const circle = parseYamlFile<{
       jobs: {
         verify: {
@@ -282,6 +290,7 @@ describe('project governance contracts', () => {
     expect(command('Verify TypeScript toolchain')).toBe('pnpm qa:typescript');
     expect(command('Typecheck')).toBe('pnpm typecheck');
     expect(command('Typecheck compatibility')).toBe('pnpm typecheck:compat');
+    expect(command('Bundle budget')).toBe('pnpm qa:bundle-budget');
 
     const buildIndex = circle.jobs.verify.steps.findIndex(
       (entry) => typeof entry !== 'string' && 'run' in entry && entry.run?.name === 'Build',
@@ -289,9 +298,13 @@ describe('project governance contracts', () => {
     const saveIndex = circle.jobs.verify.steps.findIndex(
       (entry) => typeof entry !== 'string' && 'save_cache' in entry,
     );
+    const bundleBudgetIndex = circle.jobs.verify.steps.findIndex(
+      (entry) => typeof entry !== 'string' && 'run' in entry && entry.run?.name === 'Bundle budget',
+    );
     const cacheStep = circle.jobs.verify.steps[saveIndex];
 
     expect(saveIndex).toBeGreaterThan(buildIndex);
+    expect(bundleBudgetIndex).toBeGreaterThan(buildIndex);
     expect(
       typeof cacheStep === 'string' || !('save_cache' in cacheStep)
         ? undefined
