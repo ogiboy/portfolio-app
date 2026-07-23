@@ -18,7 +18,7 @@ describe('portfolio content', () => {
   });
 
   it('keeps all projects publishable', () => {
-    expect(projects.length).toBeGreaterThanOrEqual(12);
+    expect(projects).toHaveLength(18);
 
     for (const project of projects) {
       expect(project.name).toBeTruthy();
