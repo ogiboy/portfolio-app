@@ -164,6 +164,39 @@ test('serves sandbox-compatible WASM asset headers', async ({ request }) => {
   expect(frame.headers()['content-security-policy']).toContain('http://127.0.0.1:*');
 });
 
+test('provides localized mobile navigation with focus recovery', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/en');
+
+  const englishTrigger = page.getByRole('button', { name: 'Open navigation' });
+  await expect(englishTrigger).toBeVisible();
+  await englishTrigger.click();
+
+  const englishDialog = page.getByRole('dialog', { name: 'Primary navigation' });
+  await expect(englishDialog).toBeVisible();
+  for (const name of ['Home', 'Projects', 'Lab', 'Process', 'Contact']) {
+    await expect(englishDialog.getByRole('link', { name })).toBeVisible();
+  }
+
+  await page.keyboard.press('Escape');
+  await expect(englishDialog).toBeHidden();
+  await expect(englishTrigger).toBeFocused();
+
+  await englishTrigger.click();
+  await englishDialog.getByRole('link', { name: 'Projects' }).click();
+  await expect(page).toHaveURL(/\/en\/projects$/);
+  await expect(englishDialog).toBeHidden();
+
+  await page.goto('/tr');
+  const turkishTrigger = page.getByRole('button', { name: 'Navigasyonu aç' });
+  await turkishTrigger.click();
+  const turkishDialog = page.getByRole('dialog', { name: 'Ana gezinme' });
+  await expect(turkishDialog).toBeVisible();
+  for (const name of ['Ana sayfa', 'Projeler', 'Lab', 'Süreç', 'İletişim']) {
+    await expect(turkishDialog.getByRole('link', { name })).toBeVisible();
+  }
+});
+
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
   await expect(page.getByRole('heading', { name: /useful signals/i })).toBeVisible();

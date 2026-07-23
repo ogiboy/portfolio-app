@@ -24,6 +24,9 @@ export const siteCopy: LocalizedCopy<{
     process: string;
     contact: string;
     language: string;
+    openMenu: string;
+    closeMenu: string;
+    menuDescription: string;
   };
   home: {
     eyebrow: string;
@@ -120,6 +123,9 @@ export const siteCopy: LocalizedCopy<{
       process: 'Process',
       contact: 'Contact',
       language: 'TR',
+      openMenu: 'Open navigation',
+      closeMenu: 'Close navigation',
+      menuDescription: 'Move between selected work, the full archive, the lab, and contact.',
     },
     home: {
       eyebrow: 'Independent developer / homelab hobbyist / Istanbul',
@@ -277,6 +283,9 @@ export const siteCopy: LocalizedCopy<{
       process: 'Süreç',
       contact: 'İletişim',
       language: 'EN',
+      openMenu: 'Navigasyonu aç',
+      closeMenu: 'Navigasyonu kapat',
+      menuDescription: 'Seçili işler, tam arşiv, laboratuvar ve iletişim arasında ilerle.',
     },
     home: {
       eyebrow: 'Bağımsız geliştirici / homelab meraklısı / İstanbul',
