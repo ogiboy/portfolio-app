@@ -193,12 +193,20 @@ describe('project governance contracts', () => {
       overrides: Record<string, string>;
     }>('pnpm-workspace.yaml');
     const dependabot = parseYamlFile<{ updates: DependabotUpdate[] }>('.github/dependabot.yml');
+    const componentConfig = parseJsonFile<{
+      iconLibrary: string;
+      rsc: boolean;
+      style: string;
+      tailwind: { config: string; css: string };
+    }>('components.json');
     const npmUpdates = dependabot.updates.find((update) => update['package-ecosystem'] === 'npm');
 
     expect(packageManifest.packageManager).toMatch(/^pnpm@11\.17\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
     expect(packageManifest.devDependencies.postcss).toBe('^8.5.22');
     expect(packageManifest.dependencies['lucide-react']).toBe('^1.26.0');
+    expect(packageManifest.dependencies['radix-ui']).toBe('^1.6.5');
+    expect(packageManifest.dependencies).not.toHaveProperty('@radix-ui/react-dialog');
     expect(packageManifest.dependencies).not.toHaveProperty('@phosphor-icons/react');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
     expect(packageManifest.devDependencies.typescript).toBe('npm:@typescript/typescript6@^6.0.2');
@@ -207,6 +215,18 @@ describe('project governance contracts', () => {
     );
     expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
+    expect(componentConfig).toEqual(
+      expect.objectContaining({
+        iconLibrary: 'lucide',
+        rsc: true,
+        style: 'radix-lyra',
+        tailwind: expect.objectContaining({ config: '', css: 'src/app/globals.css' }),
+      }),
+    );
+    expect(readdirSync(join(root, 'src/components/ui'))).toEqual(
+      expect.arrayContaining(['badge.tsx', 'button.tsx', 'card.tsx', 'separator.tsx', 'sheet.tsx']),
+    );
+    expect(readdirSync(join(root, 'src/components/ui'))).not.toContain('dialog.tsx');
     expect(workspace.overrides.postcss).toBe('^8.5.22');
     expect(workspace.overrides.sharp).toBe('0.35.3');
     expect(workspace.minimumReleaseAge).toBe(1440);

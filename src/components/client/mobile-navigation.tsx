@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { ExternalLink, Menu } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { Link } from '@/i18n/navigation';
 
 type MobileNavigationProps = {
@@ -40,21 +41,17 @@ export function MobileNavigation({
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         <Button className="md:hidden" size="icon" variant="ghost" aria-label={openLabel}>
-          <Menu aria-hidden="true" strokeWidth={2.5} />
+          <Menu data-icon="inline-start" aria-hidden="true" strokeWidth={2.5} />
         </Button>
-      </DialogTrigger>
-      <DialogContent closeLabel={closeLabel}>
-        <div className="pr-14">
-          <DialogTitle className="font-display text-3xl leading-none tracking-tighter">
-            {label}
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground mt-4 text-sm leading-relaxed">
-            {description}
-          </DialogDescription>
-        </div>
+      </SheetTrigger>
+      <SheetContent closeLabel={closeLabel} side="right">
+        <SheetHeader className="pr-14">
+          <SheetTitle>{label}</SheetTitle>
+          <SheetDescription>{description}</SheetDescription>
+        </SheetHeader>
 
         <nav className="mt-10 grid gap-3" aria-label={label}>
           <Link
@@ -91,10 +88,10 @@ export function MobileNavigation({
             onClick={() => setOpen(false)}
           >
             {contactLabel}
-            <ExternalLink aria-hidden="true" strokeWidth={2.5} />
+            <ExternalLink data-icon="inline-end" aria-hidden="true" strokeWidth={2.5} />
           </a>
         </nav>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }

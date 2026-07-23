@@ -59,6 +59,47 @@ function copyForState(frameState: FrameState, copy: WasmGameFrameProps) {
   }
 }
 
+function BootActionIcon({
+  frameState,
+  recoverable,
+}: Readonly<{
+  frameState: FrameState;
+  recoverable: boolean;
+}>) {
+  if (recoverable) {
+    return <RotateCcw data-icon="inline-start" aria-hidden="true" strokeWidth={2.5} />;
+  }
+  if (frameState === 'booting') {
+    return (
+      <LoaderCircle
+        data-icon="inline-start"
+        aria-hidden="true"
+        strokeWidth={2.5}
+        className="animate-spin"
+      />
+    );
+  }
+  return <Gamepad2 data-icon="inline-start" aria-hidden="true" strokeWidth={2.5} />;
+}
+
+function FrameStateIcon({
+  frameState,
+  recoverable,
+}: Readonly<{
+  frameState: FrameState;
+  recoverable: boolean;
+}>) {
+  if (frameState === 'booting') {
+    return (
+      <LoaderCircle aria-hidden="true" strokeWidth={2.5} className="mx-auto size-12 animate-spin" />
+    );
+  }
+  if (recoverable) {
+    return <TriangleAlert aria-hidden="true" strokeWidth={2.5} className="mx-auto size-12" />;
+  }
+  return <Gamepad2 aria-hidden="true" strokeWidth={2.5} className="mx-auto size-12" />;
+}
+
 export function WasmGameFrame({
   title,
   intro,
@@ -159,13 +200,7 @@ export function WasmGameFrame({
               onClick={startBoot}
               disabled={frameState === 'booting'}
             >
-              {recoverable ? (
-                <RotateCcw aria-hidden="true" strokeWidth={2.5} />
-              ) : frameState === 'booting' ? (
-                <LoaderCircle aria-hidden="true" strokeWidth={2.5} className="animate-spin" />
-              ) : (
-                <Gamepad2 aria-hidden="true" strokeWidth={2.5} />
-              )}
+              <BootActionIcon frameState={frameState} recoverable={recoverable} />
               {recoverable ? retryLabel : launchLabel}
             </Button>
           )}
@@ -206,17 +241,7 @@ export function WasmGameFrame({
         {frameState !== 'ready' && (
           <div className="bg-foreground/94 absolute inset-0 z-10 grid place-items-center p-6 text-center">
             <div className="max-w-md" role={recoverable ? 'alert' : 'status'}>
-              {frameState === 'booting' ? (
-                <LoaderCircle
-                  aria-hidden="true"
-                  strokeWidth={2.5}
-                  className="mx-auto h-12 w-12 animate-spin"
-                />
-              ) : recoverable ? (
-                <TriangleAlert aria-hidden="true" strokeWidth={2.5} className="mx-auto h-12 w-12" />
-              ) : (
-                <Gamepad2 aria-hidden="true" strokeWidth={2.5} className="mx-auto h-12 w-12" />
-              )}
+              <FrameStateIcon frameState={frameState} recoverable={recoverable} />
               <h2 className="font-display mt-6 text-4xl leading-none tracking-[-0.06em]">
                 {stateCopy.title}
               </h2>

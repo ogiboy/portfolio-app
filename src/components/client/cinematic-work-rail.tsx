@@ -112,7 +112,7 @@ export function CinematicWorkRail({
                   duration: 0.6,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-[26rem]"
+                className="border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-104"
               >
                 <div className="border-foreground bg-muted relative aspect-4/3 border-b-2">
                   <Image

@@ -116,7 +116,10 @@ const portfolioTools: ModelContextTool[] = [
 
 function registerPortfolioTools(modelContext: ModelContext, signal: AbortSignal) {
   if (modelContext.registerTool) {
-    return Promise.all(portfolioTools.map((tool) => modelContext.registerTool?.(tool, { signal })));
+    const registerTool = modelContext.registerTool;
+    return Promise.all(
+      portfolioTools.map((tool) => Promise.resolve(registerTool(tool, { signal }))),
+    );
   }
 
   if (modelContext.provideContext) {

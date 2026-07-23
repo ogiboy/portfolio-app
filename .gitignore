@@ -58,3 +58,10 @@ ruvector.db
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+.flaskenv*
+!.env.project
+
+# Commit the encrypted vault payload; decryption keys remain local environment secrets.
+.env.vault
+!.env.vault

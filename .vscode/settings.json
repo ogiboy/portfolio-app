@@ -4,6 +4,9 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "css.lint.importStatement": "ignore",
+  "css.lint.important": "ignore",
+  "css.lint.universalSelector": "ignore",
   "sonarlint.connectedMode.project": {
     "connectionId": "ogiboy",
     "projectKey": "ogiboy_portfolio-app"
