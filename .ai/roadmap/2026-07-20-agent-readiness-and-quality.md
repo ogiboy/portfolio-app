@@ -18,7 +18,7 @@ Current roadmap authority for governance and closeout work after the 2026-06-16 
 3. `AR-3`: validate source truthfulness and run every local gate against an exact commit with durable evidence.
 4. `AR-4`: run one owned desktop/mobile EN/TR, accessibility, reduced-motion, discovery, and WASM browser pass against the intended preview.
 5. `AR-5`: reconcile pushed commit, hosted checks, preview, browser, required review, merge, and production from live provider truth.
-6. `AR-6`: publish the public index DNS-AID entrypoint under DNSSEC, preserve Vercel as origin, and record Email Routing security without introducing a Worker or fabricated agent service.
+6. `AR-6` (complete): verify the published public index DNS-AID entrypoint under DNSSEC, preserve Vercel as origin, and record Email Routing security without introducing a Worker or fabricated agent service. Refresh provider evidence before future delivery claims; do not perform another DNS write for this item.
 
 Current completion state, commit, dirty files, provider observations, and next action live only in `.ai/checkpoints/portfolio-overhaul.md`.
 

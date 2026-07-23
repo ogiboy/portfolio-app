@@ -310,7 +310,7 @@ export const siteCopy: LocalizedCopy<{
       ],
       motionTitle: 'Motion süs değil, görevli',
       motionIntro:
-        'Arayüz canlı hissettirmeli: scroll bağlantılı hareket ilişkileri gösterir, dokunsal durumlar niyete cevap verir. Reduced-motion kullanıcıları aynı içerik ve yönü korur.',
+        'Arayüz canlı hissettirmeli: scroll bağlantılı hareket ilişkileri gösterir, dokunsal durumlar niyete cevap verir. Hareket azaltma tercihini kullanan kullanıcılar aynı içerik ve yönü korur.',
       contactTitle: 'Dağınık bir fikrin temiz bir lansmana mı ihtiyacı var?',
       contactIntro:
         'Ürün, portfolyo veya landing page problemini gönder. Bunu uygulanabilir bir kapsama çevirelim.',

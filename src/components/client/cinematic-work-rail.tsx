@@ -43,6 +43,7 @@ export function CinematicWorkRail({
     () => false,
   );
   const [scrollDistance, setScrollDistance] = useState(0);
+  const animateContent = motionReady && !shouldReduceMotion;
   const horizontalMotion = desktopViewport && !shouldReduceMotion && scrollDistance > 0;
   const { scrollYProgress } = useScroll({
     target: root,
@@ -51,30 +52,32 @@ export function CinematicWorkRail({
   const x = useTransform(scrollYProgress, [0, 1], [0, horizontalMotion ? -scrollDistance : 0]);
 
   useLayoutEffect(() => {
-    const trackElement = track.current;
-
-    if (!desktopViewport || shouldReduceMotion || !trackElement) {
-      setScrollDistance(0);
+    if (!desktopViewport || shouldReduceMotion) {
       return;
     }
 
     const measure = () => {
-      setScrollDistance(Math.max(trackElement.scrollWidth - window.innerWidth, 0));
+      const trackElement = track.current;
+      setScrollDistance(
+        trackElement ? Math.max(trackElement.scrollWidth - window.innerWidth, 0) : 0,
+      );
     };
 
     measure();
+    const observedTrack = track.current;
+    if (!observedTrack) return;
+
     window.addEventListener('resize', measure);
 
     const resizeObserver = 'ResizeObserver' in window ? new ResizeObserver(measure) : undefined;
-    resizeObserver?.observe(trackElement);
+    resizeObserver?.observe(observedTrack);
 
     return () => {
       window.removeEventListener('resize', measure);
       resizeObserver?.disconnect();
     };
-  }, [desktopViewport, projects.length, shouldReduceMotion]);
+  }, [animateContent, desktopViewport, projects.length, shouldReduceMotion]);
 
-  const animateContent = motionReady && !shouldReduceMotion;
   const reveal = animateContent ? { opacity: 0, y: 42 } : false;
 
   return (

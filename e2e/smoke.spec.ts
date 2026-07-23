@@ -130,6 +130,9 @@ test('keeps canonical locale routes free of locale-cookie cache variance', async
   expect([307, 308]).toContain(detectedRoot.status());
   expect(detectedRoot.headers().location).toContain('/tr');
   expect(detectedRoot.headers()['set-cookie']).toBeUndefined();
+  expect(detectedRoot.headers().vary).toContain('Accept-Language');
+  expect(detectedRoot.headers()['cache-control']).toContain('private');
+  expect(detectedRoot.headers()['cache-control']).toContain('no-store');
 });
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
@@ -201,9 +204,40 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
       rail.locator(':scope > div').evaluate((element) => getComputedStyle(element).position),
     )
     .not.toBe('sticky');
+  await expect(track.locator('article').first()).toBeVisible();
+  await expect
+    .poll(() =>
+      track.evaluate((element) => ({
+        cardsVisible: [...element.querySelectorAll('article')].every(
+          (article) =>
+            getComputedStyle(article).visibility === 'visible' &&
+            Number.parseFloat(getComputedStyle(article).opacity) > 0.99,
+        ),
+        translateX: new DOMMatrix(getComputedStyle(element).transform).m41,
+      })),
+    )
+    .toEqual({ cardsVisible: true, translateX: 0 });
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect.poll(() => rail.evaluate((element) => element.style.height)).toBe('');
+  await expect
+    .poll(() =>
+      rail.locator(':scope > div').evaluate((element) => getComputedStyle(element).position),
+    )
+    .not.toBe('sticky');
+  const firstMobileProject = track.locator('article').first();
+  await firstMobileProject.scrollIntoViewIfNeeded();
+  await expect(firstMobileProject).toBeVisible();
+  await expect
+    .poll(() =>
+      track.evaluate((element) => ({
+        firstCardOpacity: Number.parseFloat(
+          getComputedStyle(element.querySelector('article') as HTMLElement).opacity,
+        ),
+        translateX: new DOMMatrix(getComputedStyle(element).transform).m41,
+      })),
+    )
+    .toEqual({ firstCardOpacity: 1, translateX: 0 });
 });

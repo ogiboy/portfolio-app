@@ -6,7 +6,7 @@ Accepted; supersedes only the DNS-AID deferral in `2026-07-22-agent-readiness-de
 
 ## Context
 
-The production portfolio uses Vercel as its application origin behind Cloudflare DNS and proxy services. The domain now has a DNSSEC-signed DNS-AID record and an inbound Email Routing alias. These provider surfaces need an explicit boundary so they do not become an invented Worker platform, outbound mailbox, authentication service, or stateful agent backend.
+The production portfolio uses Vercel as its application origin behind Cloudflare DNS and proxy services. Evidence captured on 2026-07-23 records a DNSSEC-signed DNS-AID answer and a working inbound Email Routing alias; see `docs/aegis/work/2026-07-23-cloudflare-contact-performance/90-evidence.md`. These provider surfaces need an explicit boundary so they do not become an invented Worker platform, outbound mailbox, authentication service, or stateful agent backend.
 
 ## Decision
 

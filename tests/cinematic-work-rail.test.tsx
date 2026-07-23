@@ -76,14 +76,20 @@ describe('CinematicWorkRail', () => {
 
   it('measures a desktop scroll stage and keeps its content rendered', async () => {
     installMatchMedia(true);
-    vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockReturnValue(1600);
+    let trackWidth = 1600;
+    vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockImplementation(() => trackWidth);
     vi.stubGlobal('innerWidth', 1000);
     const observe = vi.fn();
     const disconnect = vi.fn();
+    let resizeCallback: ResizeObserverCallback | undefined;
 
     vi.stubGlobal(
       'ResizeObserver',
       class {
+        constructor(callback: ResizeObserverCallback) {
+          resizeCallback = callback;
+        }
+
         disconnect = disconnect;
         observe = observe;
       },
@@ -98,6 +104,12 @@ describe('CinematicWorkRail', () => {
     );
     expect(observe).toHaveBeenCalledTimes(1);
     expect(getByText('Measured Project')).toBeInTheDocument();
+
+    trackWidth = 1900;
+    resizeCallback?.([], {} as ResizeObserver);
+    await waitFor(() =>
+      expect(container.querySelector('section')).toHaveStyle({ height: 'calc(100dvh + 900px)' }),
+    );
 
     cleanup();
     expect(disconnect).toHaveBeenCalledTimes(1);

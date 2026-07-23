@@ -31,6 +31,11 @@ export default function proxy(request: NextRequest) {
     });
   }
 
+  if (request.nextUrl.pathname === '/') {
+    appendVary(intlResponse.headers, 'Accept-Language');
+    intlResponse.headers.set('Cache-Control', 'private, no-store');
+  }
+
   appendVary(intlResponse.headers, 'Accept');
   return intlResponse;
 }
