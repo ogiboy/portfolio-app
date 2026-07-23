@@ -4,7 +4,7 @@ import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import { hasLocale } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Providers from '@/components/Providers';
 import { SiteFooter } from '@/components/site/site-footer';
@@ -38,6 +38,7 @@ export default async function RootLayout({
     notFound();
   }
 
+  setRequestLocale(locale);
   const messages = await getMessages({ locale });
 
   return (

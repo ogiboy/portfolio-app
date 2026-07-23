@@ -32,13 +32,14 @@ Apply project guidance in this order:
 - Public portfolio v1 has no separate or stateful backend, authentication, database, private dashboard, Auth0, or database-backed guestbook.
 - Thin, read-only Next.js Route Handlers are part of the server-first app.
 - Keep shadcn/Radix primitives accessible and customized through project tokens.
-- Use GSAP only in isolated client leaves with `prefers-reduced-motion` support.
+- Use Motion only in isolated client leaves with `prefers-reduced-motion` support and lazy-loaded feature bundles.
 - Keep Tailwind v4 CSS-first configuration in `src/app/globals.css`.
 - Keep the WASM game center behind its isolated lab route with lazy loading and no home-page payload impact.
 
 ## Design and Content Rules
 
 - Direction: Brutalist Dev Lab with sharp grid structure, monochrome base, acid accents, and deliberate motion.
+- The site must feel alive: motion communicates hierarchy, continuity, and interaction causality without delaying first paint or becoming decorative noise.
 - Avoid generic AI-purple gradients, glassmorphism defaults, and Inter as the primary font.
 - The EN/TR route shell and `siteCopy` are localized. Project records currently remain shared source-language content.
 - Never claim complete project-content parity until the data model is localized and browser-verified.

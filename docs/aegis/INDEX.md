@@ -22,4 +22,18 @@
 - `work/2026-07-22-search-brand-observability/20-checkpoint.md`: Dated implementation checkpoint and compatibility boundary.
 - `work/2026-07-22-search-brand-observability/90-evidence.md`: Independent local, browser, review, remote, and provider evidence for the initiative.
 
+## Cloudflare Contact and Alive Performance Initiative
+
+- `work/2026-07-23-cloudflare-contact-performance/10-intent.md`: Motion/performance, DNS-AID, Email Routing, and edge-boundary intent.
+- `work/2026-07-23-cloudflare-contact-performance/20-checkpoint.md`: Dated implementation snapshot and drift boundary.
+- `work/2026-07-23-cloudflare-contact-performance/90-evidence.md`: Independent local, browser, DNS, email, provider, and production observations.
+
+## Hosted Delivery Closeout
+
+- `work/2026-07-23-hosted-delivery-closeout/90-evidence.md`: Immutable runtime-source, pushed-head, hosted-check, protected-preview, and browser evidence for PR #27.
+
+## Review Finding Closeout
+
+- `work/2026-07-23-review-finding-closeout/90-evidence.md`: Immutable finding disposition, exact-source local gates, predecessor hosted state, and final-head delivery boundaries for PR #27.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.

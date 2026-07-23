@@ -118,6 +118,23 @@ test('renders localized public portfolio routes', async ({ page }) => {
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
+test('keeps canonical locale routes free of locale-cookie cache variance', async ({ request }) => {
+  const english = await request.get('/en');
+  expect(english.status()).toBe(200);
+  expect(english.headers()['set-cookie']).toBeUndefined();
+
+  const detectedRoot = await request.get('/', {
+    headers: { 'Accept-Language': 'tr' },
+    maxRedirects: 0,
+  });
+  expect([307, 308]).toContain(detectedRoot.status());
+  expect(detectedRoot.headers().location).toContain('/tr');
+  expect(detectedRoot.headers()['set-cookie']).toBeUndefined();
+  expect(detectedRoot.headers().vary).toContain('Accept-Language');
+  expect(detectedRoot.headers()['cache-control']).toContain('private');
+  expect(detectedRoot.headers()['cache-control']).toContain('no-store');
+});
+
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
   await expect(page.getByRole('heading', { name: /useful signals/i })).toBeVisible();
@@ -133,4 +150,94 @@ test('keeps aggregate telemetry transparent and locally optional', async ({ page
 
   await page.reload();
   await expect(page.getByText(/aggregate analytics are disabled/i)).toBeVisible();
+});
+
+test('keeps cinematic motion alive without trapping reduced-motion or mobile layouts', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/en');
+
+  const rail = page.locator('[data-cinematic-rail]');
+  const track = page.locator('[data-cinematic-track]');
+  await expect(rail).toBeVisible();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toContain('calc(');
+  const initialTrackLeft = await track.evaluate((element) => element.getBoundingClientRect().left);
+
+  await rail.evaluate((element) => {
+    const railElement = element as HTMLElement;
+    const railTop = railElement.getBoundingClientRect().top + window.scrollY;
+    const travel = Math.max(railElement.scrollHeight - window.innerHeight, 0);
+    window.scrollTo({
+      top: railTop + travel / 2,
+      behavior: 'instant',
+    });
+  });
+  await expect
+    .poll(() => track.evaluate((element) => element.getBoundingClientRect().left))
+    .toBeLessThan(initialTrackLeft - 20);
+  await expect
+    .poll(() =>
+      track.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.top >= -1 && rect.bottom <= window.innerHeight + 1;
+      }),
+    )
+    .toBe(true);
+  await expect
+    .poll(() =>
+      track.locator('article').evaluateAll((articles) =>
+        articles.some((article) => {
+          const rect = article.getBoundingClientRect();
+          const visible = rect.right > 0 && rect.left < window.innerWidth;
+          return visible && Number.parseFloat(getComputedStyle(article).opacity) > 0.9;
+        }),
+      ),
+    )
+    .toBe(true);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toBe('');
+  await expect
+    .poll(() =>
+      rail.locator(':scope > div').evaluate((element) => getComputedStyle(element).position),
+    )
+    .not.toBe('sticky');
+  await expect(track.locator('article').first()).toBeVisible();
+  await expect
+    .poll(() =>
+      track.evaluate((element) => ({
+        cardsVisible: [...element.querySelectorAll('article')].every(
+          (article) =>
+            getComputedStyle(article).visibility === 'visible' &&
+            Number.parseFloat(getComputedStyle(article).opacity) > 0.99,
+        ),
+        translateX: new DOMMatrix(getComputedStyle(element).transform).m41,
+      })),
+    )
+    .toEqual({ cardsVisible: true, translateX: 0 });
+
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toBe('');
+  await expect
+    .poll(() =>
+      rail.locator(':scope > div').evaluate((element) => getComputedStyle(element).position),
+    )
+    .not.toBe('sticky');
+  const firstMobileProject = track.locator('article').first();
+  await firstMobileProject.scrollIntoViewIfNeeded();
+  await expect(firstMobileProject).toBeVisible();
+  await expect
+    .poll(() =>
+      track.evaluate((element) => ({
+        firstCardOpacity: Number.parseFloat(
+          getComputedStyle(element.querySelector('article') as HTMLElement).opacity,
+        ),
+        translateX: new DOMMatrix(getComputedStyle(element).transform).m41,
+      })),
+    )
+    .toEqual({ firstCardOpacity: 1, translateX: 0 });
 });

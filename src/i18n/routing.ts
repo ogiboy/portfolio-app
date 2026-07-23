@@ -6,4 +6,10 @@ export const routing = defineRouting({
 
   // Used when no locale matches
   defaultLocale: 'en',
+
+  localePrefix: 'always',
+  localeDetection: true,
+
+  // Locale-prefixed URLs are canonical; root detection does not need persistent visitor state.
+  localeCookie: false,
 });

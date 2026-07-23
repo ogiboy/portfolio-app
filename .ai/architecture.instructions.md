@@ -9,7 +9,7 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - `src/app`: Routes, layouts, metadata, and thin, read-only Route Handlers.
 - `src/content`: Localized EN/TR `siteCopy` and shared source-language project records.
 - `src/components/ui`: Shared accessible UI primitives.
-- `src/components/client`: Browser-only interaction leaves, including GSAP behavior.
+- `src/components/client`: Browser-only interaction leaves, including reduced-motion-safe Motion behavior.
 - `src/lib`: Agent-discovery payload builders and shared server-safe helpers.
 - `public/wasm` and the isolated lab route: WASM vendor assets and their narrow delivery surface.
 - `.github/workflows/ci.yml` and `package.json`: CI and local delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
@@ -30,4 +30,5 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - Keep the EN/TR route shell and `siteCopy` localized. Project records currently remain shared source-language content.
 - Never claim complete project-content parity until the data model is localized and browser-verified.
 - Respect `prefers-reduced-motion` for motion and preserve accessible primitive behavior.
+- Treat an alive interface as a UX contract: movement must reveal hierarchy, continuity, or causality; it must stay out of the critical render path and degrade to equivalent static content.
 - Do not add a separate or stateful backend, authentication, database, dashboard, or private guestbook features to public v1 without an accepted decision and real prerequisites.

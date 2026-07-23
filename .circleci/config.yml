@@ -25,8 +25,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
-            - pnpm-v2-{{ arch }}-
+            - pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+            - pnpm-v3-{{ arch }}-
 
       - run:
           name: Install dependencies without lifecycle scripts
@@ -40,12 +40,6 @@ jobs:
       - run:
           name: Set up Playwright browser
           command: pnpm exec playwright install --with-deps chromium
-
-      - save_cache:
-          key: pnpm-v2-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
-          paths:
-            - ~/.local/share/pnpm/store
-            - ~/.cache/ms-playwright
 
       - run:
           name: Format check
@@ -74,6 +68,13 @@ jobs:
       - run:
           name: Build
           command: pnpm build
+
+      - save_cache:
+          key: pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}
+          paths:
+            - ~/.local/share/pnpm/store
+            - ~/.cache/ms-playwright
+            - .next/cache
 
       - run:
           name: E2E tests

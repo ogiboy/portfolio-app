@@ -143,6 +143,16 @@ describe('project governance contracts', () => {
     expect(step('Verify TypeScript toolchain')?.run).toBe('pnpm qa:typescript');
     expect(step('Typecheck')?.run).toBe('pnpm typecheck');
     expect(step('Typecheck compatibility')?.run).toBe('pnpm typecheck:compat');
+    expect(step('Restore Next.js build cache')).toEqual({
+      name: 'Restore Next.js build cache',
+      uses: 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9',
+      with: {
+        path: '.next/cache',
+        key: "${{ runner.os }}-next-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml') }}-${{ hashFiles('src/**/*', 'messages/**/*', 'next.config.mjs', 'tsconfig.json') }}",
+        'restore-keys':
+          "${{ runner.os }}-next-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml') }}-\n${{ runner.os }}-next-\n",
+      },
+    });
     expect(steps.map((candidate) => candidate.run).filter(Boolean)).not.toContain(
       'pnpm exec playwright install',
     );
@@ -166,11 +176,13 @@ describe('project governance contracts', () => {
       scripts: Record<string, string>;
       devDependencies: Record<string, string>;
     }>('package.json');
-    const workspace = parseYamlFile<{ overrides: { postcss: string } }>('pnpm-workspace.yaml');
+    const workspace = parseYamlFile<{ overrides: { postcss: string; sharp: string } }>(
+      'pnpm-workspace.yaml',
+    );
 
     expect(packageManifest.packageManager).toMatch(/^pnpm@11\.16\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
-    expect(packageManifest.devDependencies.postcss).toBe('^8.5.21');
+    expect(packageManifest.devDependencies.postcss).toBe('^8.5.22');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
     expect(packageManifest.devDependencies.typescript).toBe('npm:@typescript/typescript6@^6.0.2');
     expect(packageManifest.scripts['qa:typescript']).toBe(
@@ -178,21 +190,49 @@ describe('project governance contracts', () => {
     );
     expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
-    expect(workspace.overrides.postcss).toBe('^8.5.21');
+    expect(workspace.overrides.postcss).toBe('^8.5.22');
+    expect(workspace.overrides.sharp).toBe('0.35.3');
   });
 
   it('runs both TypeScript toolchains in CircleCI', () => {
     const circle = parseYamlFile<{
-      jobs: { verify: { steps: Array<string | { run?: { command?: string; name?: string } }> } };
+      jobs: {
+        verify: {
+          steps: Array<
+            | string
+            | { run?: { command?: string; name?: string } }
+            | { restore_cache?: { keys: string[] } }
+            | { save_cache?: { key: string; paths: string[] } }
+          >;
+        };
+      };
     }>('.circleci/config.yml');
     const runSteps = circle.jobs.verify.steps.flatMap((entry) =>
-      typeof entry === 'string' || !entry.run ? [] : [entry.run],
+      typeof entry === 'string' || !('run' in entry) || !entry.run ? [] : [entry.run],
     );
     const command = (name: string) => runSteps.find((step) => step.name === name)?.command;
 
     expect(command('Verify TypeScript toolchain')).toBe('pnpm qa:typescript');
     expect(command('Typecheck')).toBe('pnpm typecheck');
     expect(command('Typecheck compatibility')).toBe('pnpm typecheck:compat');
+
+    const buildIndex = circle.jobs.verify.steps.findIndex(
+      (entry) => typeof entry !== 'string' && 'run' in entry && entry.run?.name === 'Build',
+    );
+    const saveIndex = circle.jobs.verify.steps.findIndex(
+      (entry) => typeof entry !== 'string' && 'save_cache' in entry,
+    );
+    const cacheStep = circle.jobs.verify.steps[saveIndex];
+
+    expect(saveIndex).toBeGreaterThan(buildIndex);
+    expect(
+      typeof cacheStep === 'string' || !('save_cache' in cacheStep)
+        ? undefined
+        : cacheStep.save_cache,
+    ).toEqual({
+      key: 'pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}',
+      paths: ['~/.local/share/pnpm/store', '~/.cache/ms-playwright', '.next/cache'],
+    });
   });
 
   it('ignores commented properties and rejects duplicate effective configuration keys', () => {

@@ -163,7 +163,7 @@ export const siteCopy: LocalizedCopy<{
       ],
       motionTitle: 'Motion has a job',
       motionIntro:
-        'Pinned and scrubbed moments guide attention. Reduced-motion users get the same content without the cinematic layer.',
+        'The interface should feel alive: scroll-linked movement reveals relationships and tactile states answer intent. Reduced-motion users keep the same content and direction.',
       contactTitle: 'Have a messy idea that needs a clean launch?',
       contactIntro:
         'Send the product, portfolio, or landing-page problem. I will help turn it into a buildable scope.',
@@ -243,7 +243,7 @@ export const siteCopy: LocalizedCopy<{
       disableAction: 'Disable analytics',
     },
     footer: {
-      line: 'A personal developer and homelab portfolio built with Next.js, shadcn primitives, GSAP, and a strict no-template rule.',
+      line: 'A personal developer and homelab portfolio built with Next.js, shadcn primitives, Motion, and a strict no-template rule.',
       privacyLabel: 'Privacy',
     },
   },
@@ -310,7 +310,7 @@ export const siteCopy: LocalizedCopy<{
       ],
       motionTitle: 'Motion süs değil, görevli',
       motionIntro:
-        'Pinned ve scrubbed anlar dikkati yönlendirir. Reduced-motion kullanıcıları aynı içeriği sinematik katman olmadan alır.',
+        'Arayüz canlı hissettirmeli: scroll bağlantılı hareket ilişkileri gösterir, dokunsal durumlar niyete cevap verir. Hareket azaltma tercihini kullanan kullanıcılar aynı içerik ve yönü korur.',
       contactTitle: 'Dağınık bir fikrin temiz bir lansmana mı ihtiyacı var?',
       contactIntro:
         'Ürün, portfolyo veya landing page problemini gönder. Bunu uygulanabilir bir kapsama çevirelim.',
@@ -390,7 +390,7 @@ export const siteCopy: LocalizedCopy<{
       disableAction: 'Analitiği kapat',
     },
     footer: {
-      line: 'Next.js, shadcn primitives, GSAP ve katı template karşıtı kuralla inşa edilmiş kişisel geliştirici ve homelab portföyü.',
+      line: 'Next.js, shadcn primitives, Motion ve katı template karşıtı kuralla inşa edilmiş kişisel geliştirici ve homelab portföyü.',
       privacyLabel: 'Gizlilik',
     },
   },

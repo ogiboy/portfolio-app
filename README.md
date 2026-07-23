@@ -1,6 +1,6 @@
 # H.O.T. Developer + Homelab Portfolio
 
-Public EN/TR developer and homelab portfolio for Halil Oğuzcan Toptaş. H.O.T. is the visible identity; the full name remains explicit in page content, metadata, and structured data. The app is client-facing and server-first: Next.js App Router Server Components own route rendering, while browser interactions stay in isolated client leaves. The visual direction is Brutalist Dev Lab with shadcn/Radix primitives, Tailwind v4 tokens, and reduced-motion-safe GSAP motion.
+Public EN/TR developer and homelab portfolio for Halil Oğuzcan Toptaş. H.O.T. is the visible identity; the full name remains explicit in page content, metadata, and structured data. The app is client-facing and server-first: Next.js App Router Server Components own route rendering, while browser interactions stay in isolated client leaves. The visual direction is Brutalist Dev Lab with shadcn/Radix primitives, Tailwind v4 tokens, and reduced-motion-safe Motion.
 
 ## Getting Started
 
@@ -16,7 +16,9 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 
 - `pnpm format:check`: Prettier plus Tailwind class sorting.
 - `pnpm lint`: ESLint with Next.js and Prettier compatibility.
-- `pnpm typecheck`: TypeScript verification.
+- `pnpm qa:typescript`: Verify the pinned TypeScript 7/native and TypeScript 6 compatibility toolchains.
+- `pnpm typecheck`: TypeScript 7/native verification.
+- `pnpm typecheck:compat`: TypeScript 6 compatibility verification.
 - `pnpm test`: Vitest content and unit checks.
 - `pnpm test:e2e`: Playwright public-route smoke checks.
 - `pnpm build`: Next.js production build through Webpack.
@@ -52,7 +54,7 @@ The public machine-readable surface is read-only and source-backed:
 - `/.well-known/agent-skills/index.json` publishes the Agent Skills index, and `/.well-known/agent-skills/portfolio-navigation/SKILL.md` serves the digest-bound skill artifact.
 - Progressive WebMCP exposes read-only portfolio navigation and project discovery when the browser implements the API; unsupported browsers keep normal site behavior.
 
-OAuth/OIDC metadata, Protected Resource Metadata, `auth.md`, an MCP Server Card, and DNS-AID are deliberately absent because this public v1 has no protected API, authorization server, MCP server, agent registration flow, or stable agent service endpoint. Vercel remains the application origin behind Cloudflare DNS/proxy; no Worker migration is required for these routes.
+DNS-AID publishes the DNSSEC-signed `_index._agents.oguzcantoptas.com` ServiceMode entry point for the existing public HTTPS discovery surface. OAuth/OIDC metadata, Protected Resource Metadata, `auth.md`, and an MCP Server Card remain deliberately absent because public v1 has no protected API, authorization server, MCP server, or agent-registration flow. Vercel remains the application origin behind Cloudflare DNS/proxy; no Worker migration is required for these routes.
 
 ## Search and Social Discovery
 
@@ -73,7 +75,9 @@ Before a push or release, run:
 ```bash
 pnpm format:check
 pnpm lint
+pnpm qa:typescript
 pnpm typecheck
+pnpm typecheck:compat
 pnpm release:check
 pnpm test
 pnpm test:e2e
@@ -83,4 +87,4 @@ pnpm audit --prod --audit-level high
 
 ## Deployment
 
-The app is designed for Vercel previews and production deployments behind Cloudflare DNS/proxy. Deployment, publishing, DNS, Search Console, Sentry, credential, and other external-write actions require explicit authority and independent provider evidence.
+The app is designed for Vercel previews and production deployments behind Cloudflare DNS/proxy. Locale-prefixed pages are statically generated and avoid locale-cookie variance; Motion features load only in their below-fold client leaf, images retain blur placeholders, and the WASM runtime boots only after explicit intent. Global skeletons are intentionally absent because these routes have no genuine blocking data wait. Deployment, publishing, DNS, Search Console, Sentry, credential, and other external-write actions require explicit authority and independent provider evidence.
