@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
-import { projects } from '@/content/projects';
+import { getProjectPosition, projects } from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildProjectsStructuredData } from '@/lib/structured-data';
@@ -43,6 +43,8 @@ export default async function ProjectsPage({
             liveLabel={copy.live}
             codeLabel={copy.code}
             caseLabel={copy.caseLabel}
+            archiveLabel={copy.archiveLabel}
+            position={getProjectPosition(project.slug)}
           />
         ))}
       </div>

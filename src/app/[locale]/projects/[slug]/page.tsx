@@ -6,7 +6,13 @@ import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getNextProject, getProject, projects } from '@/content/projects';
+import {
+  formatProjectPosition,
+  getNextProject,
+  getProject,
+  getProjectPosition,
+  projects,
+} from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 import { createRouteMetadata } from '@/lib/seo';
@@ -53,6 +59,7 @@ export default async function ProjectDetailPage({
 
   const copy = siteCopy[locale].projects;
   const nextProject = getNextProject(project.slug);
+  const position = getProjectPosition(project.slug);
 
   return (
     <main>
@@ -63,7 +70,14 @@ export default async function ProjectDetailPage({
         </Link>
         <div className="mt-8 grid gap-10 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
-            <Badge>{project.category}</Badge>
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge>{project.category}</Badge>
+              {position && (
+                <Badge className="project-continuity bg-primary" data-project-continuity>
+                  {copy.archiveLabel} {formatProjectPosition(position)}
+                </Badge>
+              )}
+            </div>
             <h1 className="font-display mt-6 text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
               {project.name}
             </h1>
@@ -126,7 +140,11 @@ export default async function ProjectDetailPage({
             </p>
             <h2 className="font-display mt-3 text-4xl tracking-[-0.06em]">{nextProject.name}</h2>
           </div>
-          <Link href={`/projects/${nextProject.slug}`} className={buttonVariants({ size: 'lg' })}>
+          <Link
+            href={`/projects/${nextProject.slug}`}
+            className={buttonVariants({ size: 'lg' })}
+            aria-label={`${copy.nextProject}: ${nextProject.name}`}
+          >
             <ArrowRight aria-hidden="true" strokeWidth={2.5} /> {copy.nextProject}
           </Link>
         </div>

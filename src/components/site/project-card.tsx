@@ -3,7 +3,7 @@ import { ArrowRight, Code2, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import type { Project } from '@/content/projects';
+import { formatProjectPosition, type Project, type ProjectPosition } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 
 export function ProjectCard({
@@ -11,21 +11,25 @@ export function ProjectCard({
   liveLabel,
   codeLabel,
   caseLabel,
+  archiveLabel,
+  position,
 }: Readonly<{
   project: Project;
   liveLabel: string;
   codeLabel: string;
   caseLabel: string;
+  archiveLabel?: string;
+  position?: ProjectPosition;
 }>) {
   return (
-    <Card className="group overflow-hidden">
+    <Card className="project-card group overflow-hidden" data-project-card={project.slug}>
       <div className="border-foreground bg-muted relative aspect-4/3 border-b-2">
         <Image
           src={project.image}
           alt={project.name}
           fill
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          className="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+          className="project-card__image object-cover grayscale"
           placeholder="blur"
         />
       </div>
@@ -33,6 +37,14 @@ export function ProjectCard({
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge>{project.category}</Badge>
+            {position && archiveLabel && (
+              <span
+                className="text-muted-foreground font-mono text-xs font-bold tracking-[0.12em] uppercase"
+                data-project-position
+              >
+                {archiveLabel} {formatProjectPosition(position)}
+              </span>
+            )}
             <span className="text-muted-foreground font-mono text-xs font-bold">
               {project.year}
             </span>
@@ -57,7 +69,11 @@ export function ProjectCard({
             ))}
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href={`/projects/${project.slug}`} className={buttonVariants({ size: 'sm' })}>
+            <Link
+              href={`/projects/${project.slug}`}
+              className={buttonVariants({ size: 'sm' })}
+              aria-label={`${caseLabel}: ${project.name}`}
+            >
               {caseLabel}
               <ArrowRight aria-hidden="true" strokeWidth={2.5} />
             </Link>

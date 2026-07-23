@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { projects } from '@/content/projects';
+import {
+  formatProjectPosition,
+  getNextProject,
+  getProjectPosition,
+  projects,
+} from '@/content/projects';
 import { contact, siteCopy } from '@/content/site';
 
 describe('portfolio content', () => {
@@ -22,12 +27,26 @@ describe('portfolio content', () => {
     }
   });
 
+  it('uses canonical project order for archive and next-project continuity', () => {
+    const first = projects[0];
+    const last = projects.at(-1);
+
+    expect(getProjectPosition(first.slug)).toEqual({ current: 1, total: projects.length });
+    expect(formatProjectPosition({ current: 1, total: projects.length })).toBe(
+      `01 / ${projects.length}`,
+    );
+    expect(last && getNextProject(last.slug)).toBe(first);
+    expect(getProjectPosition('missing-project')).toBeUndefined();
+  });
+
   it('keeps EN and TR public copy complete', () => {
     expect(contact.email).toBe('ogi@oguzcantoptas.com');
     expect(siteCopy.en.home.primaryCta).toBeTruthy();
     expect(siteCopy.tr.home.primaryCta).toBeTruthy();
     expect(siteCopy.en.projects.caseLabel).toBeTruthy();
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
+    expect(siteCopy.en.projects.archiveLabel).toBe('Archive');
+    expect(siteCopy.tr.projects.archiveLabel).toBe('Arşiv');
     expect(siteCopy.en.lab.launchLabel).toBeTruthy();
     expect(siteCopy.tr.lab.launchLabel).toBeTruthy();
     expect(siteCopy.en.lab.specs).toHaveLength(siteCopy.tr.lab.specs.length);

@@ -33,6 +33,11 @@ export type Project = {
   featured?: boolean;
 };
 
+export type ProjectPosition = {
+  current: number;
+  total: number;
+};
+
 export const projects: Project[] = [
   {
     id: 17,
@@ -282,4 +287,19 @@ export function getProject(slug: string) {
 export function getNextProject(slug: string) {
   const index = projects.findIndex((project) => project.slug === slug);
   return projects[(index + 1) % projects.length];
+}
+
+export function getProjectPosition(slug: string): ProjectPosition | undefined {
+  const index = projects.findIndex((project) => project.slug === slug);
+  if (index < 0) return undefined;
+
+  return {
+    current: index + 1,
+    total: projects.length,
+  };
+}
+
+export function formatProjectPosition({ current, total }: ProjectPosition) {
+  const width = String(total).length;
+  return `${String(current).padStart(width, '0')} / ${total}`;
 }

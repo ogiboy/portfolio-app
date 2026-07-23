@@ -27,6 +27,12 @@
   --ring: oklch(0.79 0.18 129);
   --shadow-hard: oklch(0.228 0.013 107.4);
   --radius: 0px;
+  --motion-signal: 140ms;
+  --motion-scan: 520ms;
+  --motion-latch: 220ms;
+  --ease-signal: steps(2, end);
+  --ease-scan: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-pressed: 3px 3px 0 var(--shadow-hard);
 }
 
 .dark {
@@ -138,6 +144,54 @@ a:focus-visible .hot-mark__flame {
   transform: translateY(-2px) skewX(-4deg);
 }
 
+.project-card {
+  transition:
+    transform var(--motion-signal) var(--ease-signal),
+    box-shadow var(--motion-signal) var(--ease-signal);
+}
+
+.project-card__image {
+  transition: transform var(--motion-signal) var(--ease-signal);
+}
+
+.project-card:focus-within {
+  box-shadow: 11px 11px 0 var(--shadow-hard);
+  transform: translate(-3px, -3px);
+}
+
+.project-card:focus-within .project-card__image {
+  filter: grayscale(0);
+  transform: scale(1.01);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover {
+    box-shadow: 11px 11px 0 var(--shadow-hard);
+    transform: translate(-3px, -3px);
+  }
+
+  .project-card:hover .project-card__image {
+    filter: grayscale(0);
+    transform: scale(1.01);
+  }
+}
+
+@keyframes project-continuity-latch {
+  from {
+    box-shadow: none;
+    transform: translate(3px, 3px);
+  }
+
+  to {
+    box-shadow: var(--shadow-pressed);
+    transform: translate(0, 0);
+  }
+}
+
+.project-continuity {
+  animation: project-continuity-latch var(--motion-latch) var(--ease-signal) both;
+}
+
 ::selection {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -160,6 +214,24 @@ a:focus-visible .hot-mark__flame {
 
   .hot-mark__flame {
     transition: none;
+  }
+
+  .project-card,
+  .project-card__image {
+    transition: none;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within,
+  .project-card:hover .project-card__image,
+  .project-card:focus-within .project-card__image {
+    transform: none;
+  }
+
+  .project-continuity {
+    animation: none;
+    box-shadow: var(--shadow-pressed);
+    transform: none;
   }
 
   a:hover .hot-mark__flame,
