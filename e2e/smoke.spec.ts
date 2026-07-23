@@ -130,6 +130,21 @@ test('renders localized public portfolio routes', async ({ page }) => {
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
+test('turns a WASM runtime asset 404 into an explicit retry state', async ({ page }) => {
+  await page.route('**/wasm/engine/main.ttf', (route) =>
+    route.fulfill({ body: 'missing', contentType: 'text/plain', status: 404 }),
+  );
+  await page.goto('/en/labs/retro-game-center');
+
+  await page.getByRole('button', { name: /boot demo/i }).click();
+
+  await expect(page.getByRole('heading', { name: /the dos machine did not boot/i })).toBeVisible({
+    timeout: 20_000,
+  });
+  await expect(page.getByRole('button', { name: /retry boot/i })).toBeVisible();
+  await expect(page.locator('iframe')).toHaveCount(0);
+});
+
 test('keeps canonical locale routes free of locale-cookie cache variance', async ({ request }) => {
   const english = await request.get('/en');
   expect(english.status()).toBe(200);
@@ -285,6 +300,8 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
     )
     .not.toBe('sticky');
   await expect(track.locator('article').first()).toBeVisible();
+  await track.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(track.locator('article').last()).toBeVisible();
   await expect
     .poll(() =>
       track.evaluate((element) => ({
@@ -337,6 +354,8 @@ test('keeps the cinematic rail static for coarse pointers and data saver', async
   await expect(coarseRail).toHaveAttribute('data-motion-mode', 'static');
   await expect.poll(() => coarseRail.evaluate((element) => element.style.height)).toBe('');
   await expect(coarseRail.locator('article').first()).toBeVisible();
+  await coarseRail.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(coarseRail.locator('article').last()).toBeVisible();
   await coarseContext.close();
 
   const saveDataContext = await browser.newContext({ viewport: { width: 1280, height: 800 } });
@@ -357,5 +376,7 @@ test('keeps the cinematic rail static for coarse pointers and data saver', async
   await expect(saveDataRail).toHaveAttribute('data-motion-mode', 'static');
   await expect.poll(() => saveDataRail.evaluate((element) => element.style.height)).toBe('');
   await expect(saveDataRail.locator('article').first()).toBeVisible();
+  await saveDataRail.locator('article').last().scrollIntoViewIfNeeded();
+  await expect(saveDataRail.locator('article').last()).toBeVisible();
   await saveDataContext.close();
 });

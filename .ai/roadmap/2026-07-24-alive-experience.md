@@ -32,6 +32,12 @@ preserving server-first rendering, static routes, and measured performance.
    capture screenshots and request traces, then remove any motion that misses its budget.
 10. `ALIVE-9`: reconcile hosted checks, review, preview, owner approval, merge, production,
     changelog, release notes, and provider evidence as separate classes.
+11. `ALIVE-10`: modernize the isolated DOS/WASM engine behind behavior-parity tests: inventory
+    the inherited API and browser matrix, replace callback/promise gaps with one explicit boot
+    boundary, remove jQuery and Rivets only after DOM/state ownership is mapped, modularize global
+    runtime state where the engine permits it, and retain pinned local assets plus a no-pre-intent
+    request boundary. Treat an upstream engine replacement as a separate ADR and migration rather
+    than an in-place dependency bump.
 
 ## Atomic Task Contract
 

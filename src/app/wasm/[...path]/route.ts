@@ -50,7 +50,7 @@ function headersFor(target: string, requestOrigin: string) {
   if (ext === '.html') {
     headers['Content-Security-Policy'] = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com",
+      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       `connect-src 'self' ${requestOrigin}`,
       "font-src 'self'",

@@ -250,7 +250,7 @@ export const siteCopy: LocalizedCopy<{
       qa: [
         'Sandboxed iframe with explicit permissions for scripts, pointer lock, downloads, fullscreen, and gamepad without same-origin escape.',
         'Shareware ROM manifest copied as static assets after size review.',
-        'External vendor scripts are contained inside the engine frame and documented for future self-hosting.',
+        'Pinned vendor scripts are served locally inside the isolated engine frame with recorded provenance.',
       ],
       back: 'Back to home',
     },
@@ -421,7 +421,7 @@ export const siteCopy: LocalizedCopy<{
       qa: [
         'Script, pointer lock, download, fullscreen ve gamepad için açık izinli, same-origin kaçışı olmayan sandbox iframe.',
         'Shareware ROM manifesti size review sonrası statik asset olarak kopyalandı.',
-        'Harici vendor scriptleri engine frame içinde sınırlı ve gelecekte self-host için dokümante edildi.',
+        'Sabitlenmiş vendor scriptleri, kaynağı kayıtlı biçimde izole engine frame içinden yerel sunuluyor.',
       ],
       back: 'Ana sayfaya dön',
     },

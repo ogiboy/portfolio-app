@@ -11,7 +11,7 @@ const immutableWasmCache = 'public, max-age=31536000, immutable';
 const mutableWasmCache = 'public, max-age=60, stale-while-revalidate=86400';
 const wasmFramePolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "connect-src 'self' http://127.0.0.1:* http://localhost:* https://oguzcantoptas.com https://www.oguzcantoptas.com https://*.vercel.app",
   "font-src 'self'",

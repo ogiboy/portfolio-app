@@ -264,7 +264,9 @@ class MyClass {
     reader.onload = function (e) {
       console.log('finished loading');
       var byteArray = new Uint8Array(this.result);
-      myClass.LoadEmulator(byteArray);
+      void myClass
+        .LoadEmulator(byteArray)
+        .catch((error) => myClass.handleEmulatorLoadError(error));
     };
     reader.readAsArrayBuffer(file);
   }
@@ -635,7 +637,9 @@ class MyClass {
     reader.onload = function (e) {
       console.log('finished loading');
       var byteArray = new Uint8Array(this.result);
-      myClass.LoadEmulator(byteArray);
+      void myClass
+        .LoadEmulator(byteArray)
+        .catch((error) => myClass.handleEmulatorLoadError(error));
     };
     reader.readAsArrayBuffer(file);
   }
@@ -699,7 +703,7 @@ class MyClass {
     //we want to avoid setting the iso bytes because they were set above
     this.noIso = true;
 
-    this.LoadEmulator(firstBytes);
+    await this.LoadEmulator(firstBytes);
   }
 
   handleMultipleFiles(files, index) {
@@ -778,7 +782,7 @@ class MyClass {
         //then we skip loading img
         this.img_loaded = true;
         this.noIso = true;
-        this.LoadEmulator();
+        return this.LoadEmulator();
       } else if (
         this.rivetsData.initialInstallation ||
         !this.rivetsData.loggedIn
@@ -790,7 +794,7 @@ class MyClass {
             //this means it is their initial windows installation
             this.img_loaded = true;
             this.rivetsData.initialInstallation = true;
-            this.LoadEmulator();
+            return this.LoadEmulator();
           }
         } else {
           //load their disk
@@ -1133,7 +1137,7 @@ class MyClass {
 
     if (noIso) {
       this.noIso = true;
-      this.LoadEmulator();
+      await this.LoadEmulator();
     } else {
       let romurl = this.readRomProp('value');
       let startupScript = this.readRomProp('startupScript');
@@ -1339,7 +1343,9 @@ class MyClass {
           }
         } else if (arrayBuffer) {
           var byteArray = new Uint8Array(arrayBuffer);
-          myClass.LoadEmulator(byteArray);
+          void myClass
+            .LoadEmulator(byteArray)
+            .catch((error) => myClass.handleEmulatorLoadError(error));
         } else {
           this.rivetsData.lblError =
             'Error downloading data. Try reloading browser.';
@@ -1360,10 +1366,15 @@ class MyClass {
   }
 
   onError(message) {
-    console.log('error triggered', event);
+    console.log('error triggered', message);
     if (!message.includes('user has exited the lock')) {
       this.rivetsData.lblError = message;
     }
+  }
+
+  handleEmulatorLoadError(error) {
+    const message = error instanceof Error ? error.message : String(error);
+    this.onError(message);
   }
 
   //prevent dropdown from popping up from keyboard events
@@ -1672,7 +1683,9 @@ class MyClass {
             Module.FS.writeFile(imgName, byteArray);
             console.log('loaded drive from db: ' + imgName);
             myClass.img_loaded = true;
-            myClass.LoadEmulator();
+            void myClass
+              .LoadEmulator()
+              .catch((error) => myClass.handleEmulatorLoadError(error));
           } else {
             //TODO - if we are logged in then this is the
             //base image so we need to apply the diff drive
@@ -1680,7 +1693,9 @@ class MyClass {
         }
         if (saveType == SaveTypes.ISO || saveType == SaveTypes.BaseImage) {
           let byteArray = rom.result; //Uint8Array
-          myClass.LoadEmulator(byteArray);
+          void myClass
+            .LoadEmulator(byteArray)
+            .catch((error) => myClass.handleEmulatorLoadError(error));
         }
       };
       rom.onerror = function (event) {
@@ -1761,7 +1776,7 @@ class MyClass {
     let byteArray = new Uint8Array(await blob.arrayBuffer());
     document.getElementById('myProgress').innerHTML = 'Finished Decompressing';
 
-    myClass.LoadEmulator(byteArray);
+    await myClass.LoadEmulator(byteArray);
   }
 
   toggleOnscreenKeyboard() {
@@ -2836,7 +2851,7 @@ window.onerror = function (message) {
 
 window.onunhandledrejection = function (error) {
   console.log('window.onunhandledrejection', error);
-  myClass.onError(error.reason.message);
+  myClass.handleEmulatorLoadError(error.reason);
 };
 
 window['Module'] = {
