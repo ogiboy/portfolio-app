@@ -109,21 +109,27 @@ test('registers the public read-only WebMCP tools on the English home page', asy
   ).resolves.toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
 });
 
-test('provides the same WebMCP tools through the legacy navigator API', async ({ page }) => {
+test('registers the same WebMCP tools through the AgentReady navigator API', async ({ page }) => {
   await page.addInitScript(() => {
-    Object.defineProperty(window, '__webMcpProvidedTools', { value: [], writable: true });
+    const registrations: Array<{ name: string; signal: AbortSignal }> = [];
     Object.defineProperty(navigator, 'modelContext', {
       configurable: true,
       value: {
-        async provideContext({ tools }: { tools: ModelContextTool[] }) {
-          window.__webMcpProvidedTools = tools.map(({ name }) => name);
+        async registerTool(tool: ModelContextTool, options: { signal: AbortSignal }) {
+          registrations.push({ name: tool.name, signal: options.signal });
         },
       },
     });
+    Object.defineProperty(window, '__webMcpRegistrations', { value: registrations });
   });
 
   await page.goto('/en');
   await expect
-    .poll(() => page.evaluate(() => window.__webMcpProvidedTools))
-    .toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
+    .poll(() =>
+      page.evaluate(() => window.__webMcpRegistrations.filter(({ signal }) => !signal.aborted)),
+    )
+    .toHaveLength(2);
+  await expect(
+    page.evaluate(() => window.__webMcpRegistrations.map(({ name }) => name)),
+  ).resolves.toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
 });

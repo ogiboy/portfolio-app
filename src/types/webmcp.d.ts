@@ -39,6 +39,5 @@ type WebMcpRegistration = {
 };
 
 interface Window {
-  __webMcpProvidedTools: string[];
   __webMcpRegistrations: WebMcpRegistration[];
 }
