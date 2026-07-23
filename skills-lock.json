@@ -2993,7 +2993,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/implementing-soar-playbook-for-phishing/SKILL.md",
-      "computedHash": "a47b90085ec10d1333017b213af83ad7ea7edfe284c81b423018ce76367d0b90"
+      "computedHash": "c4e58beaf314fea9c6ab178c7792a0615d1d5abc30ee02295eee41f009edb051"
     },
     "implementing-soar-playbook-with-palo-alto-xsoar": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3011,7 +3011,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/implementing-supply-chain-security-with-in-toto/SKILL.md",
-      "computedHash": "e925434050aa5b26cb87a100067aba0bd03b136e03bb1de939b90ef90db73504"
+      "computedHash": "ffc67652dc92ab253f80dd625cbc8a08a70ef15f9f20a315d548fab3c2146bf1"
     },
     "implementing-syslog-centralization-with-rsyslog": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3131,7 +3131,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/implementing-zero-trust-with-hashicorp-boundary/SKILL.md",
-      "computedHash": "bf0b6e5355ffbab3111623fac10cc39a84df22aa26f5cb638706afdbb4f0ac36"
+      "computedHash": "dc4696d5e9073f9547b624d2fa1f3e4acb08bf8a8db53da09c1cad0a83ef0b4c"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
@@ -3167,19 +3167,19 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/investigating-phishing-email-incident/SKILL.md",
-      "computedHash": "995f76351a261df2d2abbf75fe59218ea7a8c0619d77ef799dd8644404896889"
+      "computedHash": "886a5c1a234ab654a5e7b318229d8cb0ba26781b84c8cd0747538a2b2323779f"
     },
     "investigating-ransomware-attack-artifacts": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/investigating-ransomware-attack-artifacts/SKILL.md",
-      "computedHash": "79334dde60466299e25ac6b8e2952f7b0a63d44e238115241684bcdc8131371a"
+      "computedHash": "de82a1922ff2fa35886a521d3347310ea18734ac53497e27fccb4d88d0415b81"
     },
     "managing-cloud-identity-with-okta": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/managing-cloud-identity-with-okta/SKILL.md",
-      "computedHash": "b18ef2e10978ee1474d8866a62687a910b55d41fc504ddcbefbc060a85b2ce9d"
+      "computedHash": "35ebb4f4a3584fa91b283f29d2078fc08f49f148af2e7fd3bf43a21984499a3a"
     },
     "managing-intelligence-lifecycle": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3203,7 +3203,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/monitoring-darkweb-sources/SKILL.md",
-      "computedHash": "3ea660c999a1a331129189b24b1e7c930a4f493a75293d93e954e1c6b41fed22"
+      "computedHash": "4d179da431e53c4ac943226689c0c416b494591470ffecb39bfc8915b7f2c22f"
     },
     "monitoring-scada-modbus-traffic-anomalies": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3215,7 +3215,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-access-recertification-with-saviynt/SKILL.md",
-      "computedHash": "d79d086cb318d6153aa8e5faa2288b95c32962f4af3fc046d7fd665f752e4f66"
+      "computedHash": "7eb0e7f53f32c47ce3bd78a49f40eff3b258c79567f3436200786683ec373821"
     },
     "performing-access-review-and-certification": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3257,7 +3257,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-adversary-in-the-middle-phishing-detection/SKILL.md",
-      "computedHash": "eea30ca11e9fdc8119591e432a6180e01463db5fcecff903c30ed52db044b0a7"
+      "computedHash": "7c0c3eccaf9159fb122a3e22ad574bd0e6db27f678b51b69062463b98dc17d28"
     },
     "performing-agentless-vulnerability-scanning": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3377,7 +3377,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-brand-monitoring-for-impersonation/SKILL.md",
-      "computedHash": "82b1b1f9e08619523c8523b5271508110e78d337aeb0e8a78438f763549d1927"
+      "computedHash": "d8bc91e163b6a497e77b7fee516466c5450d33b111b036d2d8f5ea8cf98cde24"
     },
     "performing-clickjacking-attack-test": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3467,13 +3467,13 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-credential-access-with-lazagne/SKILL.md",
-      "computedHash": "99ea555ae3820c4adb2d6abbeb2031dde15cec80712431cb92982f99e083a664"
+      "computedHash": "3d109e6f1fdd641ef1fd5fdda6f06455b3cf895fbaad4221d1bb3541f636d61c"
     },
     "performing-cryptographic-audit-of-application": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-cryptographic-audit-of-application/SKILL.md",
-      "computedHash": "f46cb18e5372dffb76cc44b8a74c0b768fc5976054d01065000369a6594b7801"
+      "computedHash": "d41865e33f57ab631c9fb65d3f490155fa8627f6611429504280f898c7523e13"
     },
     "performing-csrf-attack-simulation": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3563,7 +3563,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-entitlement-review-with-sailpoint-iiq/SKILL.md",
-      "computedHash": "f8bfa766c5fd7444890573814a874fc2b4344dfc13de6f424848fe1f96b60066"
+      "computedHash": "2568376581ec01f537585ddfb54c3c2d3290a270c9a31d16924a2e037d9306f5"
     },
     "performing-external-network-penetration-test": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
@@ -3587,7 +3587,7 @@
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
       "sourceType": "github",
       "skillPath": "skills/performing-firmware-extraction-with-binwalk/SKILL.md",
-      "computedHash": "5932f56eb4a15516cb6c419f10b418d678c04229dcf76e5a35e86c24dbcd5165"
+      "computedHash": "566357efdfbe7260fb6539f50e7f908900c91c77ead9db2d735e8b498842e540"
     },
     "performing-firmware-malware-analysis": {
       "source": "mukul975/Anthropic-Cybersecurity-Skills",
