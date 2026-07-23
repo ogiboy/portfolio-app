@@ -22,6 +22,9 @@ describe('wasm asset route', () => {
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toContain('text/html');
     expect(response.headers.get('content-security-policy')).toContain('wasm-unsafe-eval');
+    expect(response.headers.get('content-security-policy')).toContain('http://localhost');
+    expect(response.headers.get('access-control-allow-origin')).toBe('*');
+    expect(response.headers.get('cross-origin-resource-policy')).toBe('cross-origin');
   });
 
   it('serves the engine wasm with an immutable application/wasm response', async () => {

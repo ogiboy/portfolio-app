@@ -99,15 +99,27 @@ test('renders localized public portfolio routes', async ({ page }) => {
     /\/en\/opengraph-image(?:\?.*)?$/,
   );
 
+  const wasmRequests: string[] = [];
+  page.on('request', (request) => {
+    const path = new URL(request.url()).pathname;
+    if (path.startsWith('/wasm/')) wasmRequests.push(path);
+  });
+
   await page.goto('/en/labs/retro-game-center');
   await expect(page.getByRole('heading', { name: /retro game center boots/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
+  expect(wasmRequests).toEqual([]);
 
   await page.getByRole('button', { name: /boot demo/i }).click();
   const gameFrame = page.locator('iframe').first();
   await expect(gameFrame).toHaveAttribute('sandbox', /allow-scripts/);
   await expect(gameFrame).not.toHaveAttribute('sandbox', /allow-same-origin/);
+  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+    timeout: 20_000,
+  });
+  expect(wasmRequests).toContain('/wasm/engine/main.wasm');
+  expect(wasmRequests).toContain('/wasm/roms/doom/DOOM1.WAD');
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/tr/labs/retro-game-center');
@@ -133,6 +145,23 @@ test('keeps canonical locale routes free of locale-cookie cache variance', async
   expect(detectedRoot.headers().vary).toContain('Accept-Language');
   expect(detectedRoot.headers()['cache-control']).toContain('private');
   expect(detectedRoot.headers()['cache-control']).toContain('no-store');
+});
+
+test('serves sandbox-compatible WASM asset headers', async ({ request }) => {
+  const manifest = await request.get('/wasm/manifest.json');
+  expect(manifest.status()).toBe(200);
+  expect(manifest.headers()['access-control-allow-origin']).toBe('*');
+  expect(manifest.headers()['cross-origin-resource-policy']).toBe('cross-origin');
+  expect(manifest.headers()['cache-control']).toContain('max-age=60');
+
+  const runtime = await request.get('/wasm/engine/main.wasm');
+  expect(runtime.status()).toBe(200);
+  expect(runtime.headers()['content-type']).toContain('application/wasm');
+  expect(runtime.headers()['cache-control']).toContain('immutable');
+
+  const frame = await request.get('/wasm/engine/index.html');
+  expect(frame.headers()['content-security-policy']).toContain('wasm-unsafe-eval');
+  expect(frame.headers()['content-security-policy']).toContain('http://127.0.0.1:*');
 });
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {

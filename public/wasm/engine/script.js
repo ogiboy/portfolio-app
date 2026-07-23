@@ -287,7 +287,12 @@ class MyClass {
   configureEmulator() {
     if (this.rivetsData.password) this.loginSilent();
 
-    let size = localStorage.getItem('doswasmx-height');
+    let size = null;
+    try {
+      size = localStorage.getItem('doswasmx-height');
+    } catch (error) {
+      console.log('localStorage not available', error);
+    }
     if (size) {
       console.log('size found');
       let sizeNum = parseInt(size);
@@ -564,9 +569,9 @@ class MyClass {
 
   //need to wait for both indexedDB and wasm runtime
   finishInitialization() {
-    if (myClass.initCount == 2) {
-      myClass.rivetsData.moduleInitializing = false;
-      myClass.rivetsData.message = '';
+    if (this.initCount == 2) {
+      this.rivetsData.moduleInitializing = false;
+      this.rivetsData.message = '';
 
       $('#githubDiv').show();
       this.loading = false;
@@ -808,28 +813,18 @@ class MyClass {
     }
 
     //write font file
-    let responseText = await $.ajax({
-      url: 'main.ttf',
-      beforeSend: function (xhr) {
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-      },
-    });
-    let responseBytes = new Uint8Array(responseText.length);
-    for (let i = 0; i < responseText.length; i++) {
-      responseBytes[i] = responseText.charCodeAt(i) & 0xff;
-    }
-    console.log('main.ttf', responseText.length);
+    let response = await fetch('main.ttf');
+    if (!response.ok) throw new Error('Failed to load main.ttf');
+    let responseBytes = new Uint8Array(await response.arrayBuffer());
+    console.log('main.ttf', responseBytes.length);
     Module.FS.writeFile('/res/arial.ttf', responseBytes);
 
     //write dosbox.conf
     var rando = Math.floor(Math.random() * Math.floor(100000));
     let file = './dosbox-x-for-web.conf?v=' + rando;
-    responseText = await $.ajax({
-      url: './' + file,
-      beforeSend: function (xhr) {
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-      },
-    });
+    response = await fetch(file);
+    if (!response.ok) throw new Error('Failed to load dosbox-x-for-web.conf');
+    let responseText = await response.text();
     console.log(file, responseText.length);
 
     let multiFileScript = '';
@@ -1452,9 +1447,13 @@ class MyClass {
   }
 
   retrieveSettings() {
-    this.readFromLocalStorage('doswasmx-ram', 'ram');
-    this.readFromLocalStorage('doswasmx-initialhd', 'initialHardDrive');
-    this.readFromLocalStorage('doswasmx-dosversion', 'dosVersion');
+    try {
+      this.readFromLocalStorage('doswasmx-ram', 'ram');
+      this.readFromLocalStorage('doswasmx-initialhd', 'initialHardDrive');
+      this.readFromLocalStorage('doswasmx-dosversion', 'dosVersion');
+    } catch (error) {
+      console.log('localStorage not available', error);
+    }
   }
 
   saveOptions() {
@@ -1470,10 +1469,20 @@ class MyClass {
   createDB() {
     if (window['indexedDB'] == undefined) {
       console.log('indexedDB not available');
+      this.initCount++;
+      this.finishInitialization();
       return;
     }
 
-    var request = indexedDB.open('DOSWASMXDB');
+    var request;
+    try {
+      request = indexedDB.open('DOSWASMXDB');
+    } catch (error) {
+      console.log('indexedDB not available', error);
+      this.initCount++;
+      this.finishInitialization();
+      return;
+    }
     request.onupgradeneeded = function (ev) {
       console.log('upgrade needed');
       let db = ev.target.result;
@@ -1519,6 +1528,11 @@ class MyClass {
         console.log('error reading keys');
         console.log(error);
       }
+    };
+    request.onerror = function () {
+      console.log('indexedDB initialization failed');
+      myClass.initCount++;
+      myClass.finishInitialization();
     };
   }
 

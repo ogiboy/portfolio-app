@@ -7,12 +7,51 @@ const withNextIntl = createNextIntlPlugin({
 });
 
 const projectRoot = dirname(fileURLToPath(import.meta.url));
+const immutableWasmCache = 'public, max-age=31536000, immutable';
+const mutableWasmCache = 'public, max-age=60, stale-while-revalidate=86400';
+const wasmFramePolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com",
+  "style-src 'self' 'unsafe-inline'",
+  "connect-src 'self' http://127.0.0.1:* http://localhost:* https://oguzcantoptas.com https://www.oguzcantoptas.com https://*.vercel.app",
+  "font-src 'self'",
+  "img-src 'self' data:",
+  "worker-src 'self' blob:",
+].join('; ');
+
+const mutableWasmFiles = [
+  '/wasm/engine/index.html',
+  '/wasm/engine/romlist.js',
+  '/wasm/engine/settings.js',
+  '/wasm/manifest.json',
+];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  async headers() {
+    return [
+      {
+        source: '/wasm/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Cache-Control', value: immutableWasmCache },
+          { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+      ...mutableWasmFiles.map((source) => ({
+        source,
+        headers: [{ key: 'Cache-Control', value: mutableWasmCache }],
+      })),
+      {
+        source: '/wasm/engine/index.html',
+        headers: [{ key: 'Content-Security-Policy', value: wasmFramePolicy }],
+      },
+    ];
+  },
   turbopack: {
     root: projectRoot,
   },

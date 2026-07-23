@@ -31,7 +31,7 @@ function resolveWasmPath(parts: string[]) {
   return insideBase ? target : null;
 }
 
-function headersFor(target: string) {
+function headersFor(target: string, requestOrigin: string) {
   const basename = path.basename(target);
   const ext = path.extname(target);
   const contentType = MIME_TYPES[ext] ?? 'application/octet-stream';
@@ -40,9 +40,10 @@ function headersFor(target: string) {
     : 'public, max-age=31536000, immutable';
 
   const headers: Record<string, string> = {
+    'Access-Control-Allow-Origin': '*',
     'Cache-Control': cacheControl,
     'Content-Type': contentType,
-    'Cross-Origin-Resource-Policy': 'same-origin',
+    'Cross-Origin-Resource-Policy': 'cross-origin',
     'X-Content-Type-Options': 'nosniff',
   };
 
@@ -51,7 +52,7 @@ function headersFor(target: string) {
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://code.jquery.com https://cdnjs.cloudflare.com",
       "style-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
+      `connect-src 'self' ${requestOrigin}`,
       "font-src 'self'",
       "img-src 'self' data:",
       "worker-src 'self' blob:",
@@ -62,7 +63,7 @@ function headersFor(target: string) {
 }
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: Readonly<{ params: Promise<{ path?: string[] }> }>,
 ) {
   const { path: routePath } = await params;
@@ -75,7 +76,7 @@ export async function GET(
   try {
     const data = await fs.readFile(target);
     return new NextResponse(data, {
-      headers: headersFor(target),
+      headers: headersFor(target, new URL(request.url).origin),
       status: 200,
     });
   } catch {

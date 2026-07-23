@@ -21,6 +21,21 @@
     bar.textContent = `${percent}%`;
   };
 
+  const params = new URLSearchParams(window.location.search);
+  const attempt = params.get('attempt') || 'unknown';
+  const reportStatus = (status, message) => {
+    window.parent.postMessage(
+      {
+        attempt,
+        channel: 'hot-wasm',
+        message,
+        status,
+        version: 1,
+      },
+      '*',
+    );
+  };
+
   const fetchManifest = async () => {
     try {
       const res = await fetch('/wasm/manifest.json', { cache: 'no-store' });
@@ -101,7 +116,7 @@
     }
 
     updateProgress(total, total);
-    app.parseMultipleFiles();
+    await app.parseMultipleFiles();
 
     const panel = document.getElementById('topPanel');
     if (panel) {
@@ -111,39 +126,43 @@
   };
 
   const run = async () => {
-    const manifest = await fetchManifest();
-    if (manifest?.games) {
-      window.ROMLIST = manifest.games;
-    } else {
-      window.ROMLIST = window.ROMLIST || [];
-    }
-    window.PORTAL_MANIFEST = manifest || null;
-
-    await loadScript(`script.js?v=${Date.now()}`);
-
-    await waitForAppReady();
-
-    const params = new URLSearchParams(window.location.search);
-    const gameId = params.get('game') || manifest?.defaultGame || null;
-    const list = manifest?.games || window.ROMLIST || [];
-    const selected = list.find((game) => game.id === gameId) || list[0];
-
-    if (!selected) {
-      console.warn('No game found in manifest.');
-      return;
-    }
-
     try {
+      const manifest = await fetchManifest();
+      if (manifest?.games) {
+        window.ROMLIST = manifest.games;
+      } else {
+        window.ROMLIST = window.ROMLIST || [];
+      }
+      window.PORTAL_MANIFEST = manifest || null;
+
+      await loadScript(`script.js?v=${Date.now()}`);
+      await waitForAppReady();
+
+      const gameId = params.get('game') || manifest?.defaultGame || null;
+      const list = manifest?.games || window.ROMLIST || [];
+      const selected = list.find((game) => game.id === gameId) || list[0];
+
+      if (!selected) {
+        throw new Error('No game found in manifest.');
+      }
+
       await bootGame(selected);
+      reportStatus('ready');
     } catch (error) {
       console.error('Game boot failed', error);
+      const message = String(error?.message || error);
       const panel = document.getElementById('topPanel');
       if (panel) {
         panel.classList.remove('hidden');
-        panel.innerHTML = `<div style=\"font-weight:600;font-size:16px\">Failed to boot game</div><div style=\"font-size:13px;opacity:.7\">${String(
-          error?.message || error,
-        )}</div>`;
+        const heading = document.createElement('div');
+        heading.style.cssText = 'font-weight:600;font-size:16px';
+        heading.textContent = 'Failed to boot game';
+        const detail = document.createElement('div');
+        detail.style.cssText = 'font-size:13px;opacity:.7';
+        detail.textContent = message;
+        panel.replaceChildren(heading, detail);
       }
+      reportStatus('error', message);
     }
   };
 

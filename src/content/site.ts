@@ -70,6 +70,14 @@ export const siteCopy: LocalizedCopy<{
     frameIntro: string;
     idleTitle: string;
     idleBody: string;
+    bootingTitle: string;
+    bootingBody: string;
+    readyLabel: string;
+    errorTitle: string;
+    errorBody: string;
+    timeoutTitle: string;
+    timeoutBody: string;
+    retryLabel: string;
     specsTitle: string;
     specsIntro: string;
     specs: Array<{ title: string; body: string }>;
@@ -195,6 +203,15 @@ export const siteCopy: LocalizedCopy<{
       idleTitle: 'DOS runtime is staged, not loaded.',
       idleBody:
         'Press boot to load the WASM engine, ROM manifest, and emulator assets inside the isolated frame.',
+      bootingTitle: 'Booting the DOS machine.',
+      bootingBody: 'Loading the engine and shareware files. This can take a moment on a slow link.',
+      readyLabel: 'DOS machine ready',
+      errorTitle: 'The DOS machine did not boot.',
+      errorBody: 'The isolated runtime reported a loading error. Retry here or open it separately.',
+      timeoutTitle: 'The boot took too long.',
+      timeoutBody:
+        'The runtime stopped waiting after 20 seconds. Retry or open it in a separate tab.',
+      retryLabel: 'Retry boot',
       specsTitle: 'Why this belongs in a portfolio',
       specsIntro:
         'This is not a toy embed. It shows how heavy browser runtimes can be scoped, cached, and presented without damaging the main site.',
@@ -205,7 +222,7 @@ export const siteCopy: LocalizedCopy<{
         },
         {
           title: 'Narrow asset server',
-          body: 'A route handler serves WASM, ROM, and engine files with explicit MIME types and cache headers.',
+          body: 'A narrow Next.js delivery policy serves WASM, ROM, and engine files with explicit MIME, cache, and sandbox-compatible headers.',
         },
         {
           title: 'No backend dependency',
@@ -342,6 +359,14 @@ export const siteCopy: LocalizedCopy<{
       idleTitle: 'DOS runtime hazır, ama henüz yüklenmedi.',
       idleBody:
         'WASM engine, ROM manifesti ve emulator assetlerini izole frame içinde yüklemek için başlat düğmesine bas.',
+      bootingTitle: 'DOS makinesi başlatılıyor.',
+      bootingBody: 'Engine ve shareware dosyaları yükleniyor. Yavaş bağlantıda biraz sürebilir.',
+      readyLabel: 'DOS makinesi hazır',
+      errorTitle: 'DOS makinesi başlatılamadı.',
+      errorBody: 'İzole runtime bir yükleme hatası bildirdi. Buradan tekrar dene veya ayrı aç.',
+      timeoutTitle: 'Başlatma çok uzun sürdü.',
+      timeoutBody: 'Runtime 20 saniye sonra beklemeyi bıraktı. Tekrar dene veya ayrı sekmede aç.',
+      retryLabel: 'Tekrar başlat',
       specsTitle: 'Bu neden portföyde yer alıyor',
       specsIntro:
         'Bu rastgele bir embed değil. Ağır browser runtime işlerinin ana siteyi bozmadan nasıl scope, cache ve sunum disiplinine alınacağını gösteriyor.',
@@ -352,7 +377,7 @@ export const siteCopy: LocalizedCopy<{
         },
         {
           title: 'Dar asset sunucusu',
-          body: 'Route handler WASM, ROM ve engine dosyalarını açık MIME tipleri ve cache headerları ile servis eder.',
+          body: 'Dar bir Next.js delivery policy, WASM, ROM ve engine dosyalarını açık MIME, cache ve sandbox uyumlu headerlarla servis eder.',
         },
         {
           title: 'Backend bağımlılığı yok',
