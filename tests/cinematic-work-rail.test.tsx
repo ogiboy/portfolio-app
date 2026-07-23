@@ -50,6 +50,18 @@ const projects = [
     url: 'https://example.com/project',
     year: '2026',
   },
+  {
+    category: 'Lab',
+    description: 'The final project remains reachable.',
+    gitUrl: 'https://github.com/example/final-project',
+    id: 2,
+    image: { blurDataURL: 'data:image/png;base64,', height: 600, src: '/final.png', width: 800 },
+    name: 'Final Project',
+    slug: 'final-project',
+    stack: ['Next.js'],
+    url: 'https://example.com/final-project',
+    year: '2026',
+  },
 ];
 
 function installMatchMedia(eligible: boolean) {
@@ -139,6 +151,8 @@ describe('CinematicWorkRail', () => {
 
     await waitFor(() => expect(window.matchMedia).toHaveBeenCalled());
     expect(container.querySelector('section')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-cinematic-track]')).toHaveClass('md:grid-cols-2');
+    expect(getComputedStyle(container.querySelectorAll('article')[1]).display).not.toBe('none');
     expect(observer).not.toHaveBeenCalled();
   });
 

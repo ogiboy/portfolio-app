@@ -6,6 +6,7 @@ import { LazyMotion, useReducedMotion, useScroll, useTransform } from 'motion/re
 import * as m from 'motion/react-m';
 import { useCinematicMotionEligibility } from '@/components/client/use-cinematic-motion-eligibility';
 import type { Project } from '@/content/projects';
+import { cn } from '@/lib/utils';
 
 const loadMotionFeatures = () => import('./motion-features').then((module) => module.default);
 const subscribeToHydration = () => () => undefined;
@@ -86,14 +87,22 @@ export function CinematicWorkRail({
             ref={track}
             data-cinematic-track
             style={{ x }}
-            className="mx-auto grid max-w-7xl gap-6 px-4 md:flex md:min-h-dvh md:max-w-none md:items-center md:px-8"
+            className={cn(
+              'mx-auto grid max-w-7xl gap-6 px-4 md:px-8',
+              canUseCinematicMotion
+                ? 'md:flex md:min-h-dvh md:max-w-none md:items-center'
+                : 'md:grid-cols-2 xl:grid-cols-3',
+            )}
           >
             <m.div
               initial={reveal}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ amount: 0.35, once: true }}
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl shrink-0 md:w-[38vw]"
+              className={cn(
+                'max-w-xl',
+                canUseCinematicMotion ? 'shrink-0 md:w-[38vw]' : 'md:col-span-2 xl:col-span-1',
+              )}
             >
               <h2 className="font-display text-4xl leading-[0.95] tracking-[-0.06em] md:text-6xl">
                 {title}
@@ -112,7 +121,10 @@ export function CinematicWorkRail({
                   duration: 0.6,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-104"
+                className={cn(
+                  'border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)]',
+                  canUseCinematicMotion && 'md:w-[34vw] md:min-w-104',
+                )}
               >
                 <div className="border-foreground bg-muted relative aspect-4/3 border-b-2">
                   <Image
