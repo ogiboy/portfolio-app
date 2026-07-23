@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/navigation';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
@@ -9,9 +9,9 @@ export default function NotFound() {
           404
         </p>
         <h1 className="font-display mt-4 text-5xl tracking-[-0.08em]">Not found.</h1>
-        <Button asChild className="mt-8">
-          <Link href="/">Return home</Link>
-        </Button>
+        <Link href="/" className={buttonVariants({ className: 'mt-8' })}>
+          Return home
+        </Link>
       </div>
     </main>
   );

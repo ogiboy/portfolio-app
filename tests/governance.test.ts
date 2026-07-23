@@ -55,6 +55,16 @@ type WorkflowConfig = {
   };
 };
 
+type DependabotUpdate = {
+  'package-ecosystem': string;
+  cooldown?: {
+    'default-days': number;
+    'semver-major-days': number;
+    'semver-minor-days': number;
+    'semver-patch-days': number;
+  };
+};
+
 describe('project governance contracts', () => {
   it('keeps exactly one mutable overhaul checkpoint with the complete handoff schema', () => {
     const checkpointFiles = readdirSync(join(root, '.ai/checkpoints'))
@@ -169,20 +179,27 @@ describe('project governance contracts', () => {
     expect(Object.values(vercelConfig).join('\n')).not.toContain('pnpm@');
   });
 
-  it('keeps pnpm version ownership and PostCSS resolution unambiguous', () => {
+  it('keeps pnpm version ownership and dependency policy unambiguous', () => {
     const packageManifest = parseJsonFile<{
       packageManager: string;
       engines: { pnpm: string };
       scripts: Record<string, string>;
+      dependencies: Record<string, string>;
       devDependencies: Record<string, string>;
     }>('package.json');
-    const workspace = parseYamlFile<{ overrides: { postcss: string; sharp: string } }>(
-      'pnpm-workspace.yaml',
-    );
+    const workspace = parseYamlFile<{
+      minimumReleaseAge: number;
+      minimumReleaseAgeExclude: string[];
+      overrides: Record<string, string>;
+    }>('pnpm-workspace.yaml');
+    const dependabot = parseYamlFile<{ updates: DependabotUpdate[] }>('.github/dependabot.yml');
+    const npmUpdates = dependabot.updates.find((update) => update['package-ecosystem'] === 'npm');
 
-    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.16\.0\+/);
+    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.17\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
     expect(packageManifest.devDependencies.postcss).toBe('^8.5.22');
+    expect(packageManifest.dependencies['lucide-react']).toBe('^1.26.0');
+    expect(packageManifest.dependencies).not.toHaveProperty('@phosphor-icons/react');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
     expect(packageManifest.devDependencies.typescript).toBe('npm:@typescript/typescript6@^6.0.2');
     expect(packageManifest.scripts['qa:typescript']).toBe(
@@ -192,6 +209,22 @@ describe('project governance contracts', () => {
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
     expect(workspace.overrides.postcss).toBe('^8.5.22');
     expect(workspace.overrides.sharp).toBe('0.35.3');
+    expect(workspace.minimumReleaseAge).toBe(1440);
+    expect(workspace.minimumReleaseAgeExclude).toEqual(
+      expect.arrayContaining([
+        '@radix-ui/react-dialog@1.1.17 || 1.1.21',
+        '@radix-ui/react-slot@1.3.0 || 1.3.1',
+        'lucide-react@1.26.0',
+        'next-intl@4.13.4',
+        'use-intl@4.13.4',
+      ]),
+    );
+    expect(npmUpdates?.cooldown).toEqual({
+      'default-days': 2,
+      'semver-major-days': 14,
+      'semver-minor-days': 2,
+      'semver-patch-days': 2,
+    });
   });
 
   it('runs both TypeScript toolchains in CircleCI', () => {

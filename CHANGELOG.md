@@ -23,6 +23,9 @@
 - Hardened CI installation by disabling package lifecycle scripts by default and rebuilding only the native dependencies approved in the pnpm policy.
 - Aligned Vercel install and build commands with the repository's Corepack-managed pnpm pin.
 - Raised the stale PostCSS workspace override and removed the duplicate CI pnpm pin that conflicted with current lockfile validation.
+- Upgraded the Corepack-managed pnpm toolchain to 11.17.0 and aligned the latest Radix Dialog and next-intl patch releases.
+- Replaced deprecated Phosphor icon aliases with tree-shakeable Lucide icons while preserving server-owned route surfaces.
+- Added a two-day Dependabot cooldown plus exact-version exceptions for audited provenance republishes so automated updates respect pnpm's explicit 24-hour supply-chain quarantine.
 
 ### Removed
 

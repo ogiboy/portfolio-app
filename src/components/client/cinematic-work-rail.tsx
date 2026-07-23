@@ -126,7 +126,7 @@ export function CinematicWorkRail({
                 }}
                 className="border-background bg-background text-foreground grid overflow-hidden border-2 shadow-[8px_8px_0_0_var(--primary)] md:w-[34vw] md:min-w-[26rem]"
               >
-                <div className="border-foreground bg-muted relative aspect-[4/3] border-b-2">
+                <div className="border-foreground bg-muted relative aspect-4/3 border-b-2">
                   <Image
                     src={project.image}
                     alt={project.name}
@@ -140,7 +140,7 @@ export function CinematicWorkRail({
                   <p className="text-muted-foreground font-mono text-xs font-bold tracking-[0.14em] uppercase">
                     {project.category}
                   </p>
-                  <h3 className="font-display mt-4 text-3xl leading-none tracking-[-0.05em]">
+                  <h3 className="font-display mt-4 text-3xl leading-none tracking-tighter">
                     {project.name}
                   </h3>
                 </div>

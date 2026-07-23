@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import { ArrowRight, EnvelopeSimple, GameController } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Gamepad2, Mail } from 'lucide-react';
 import { CinematicWorkRail } from '@/components/client/cinematic-work-rail';
 import { JsonLd } from '@/components/seo/json-ld';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { contact, siteCopy, type Locale } from '@/content/site';
@@ -32,20 +32,16 @@ export default async function HomePage({
             {copy.home.subtitle}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Button asChild size="lg">
-              <a href={`mailto:${contact.email}`}>
-                <EnvelopeSimple aria-hidden="true" weight="bold" /> {copy.home.primaryCta}
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/projects">
-                {copy.home.secondaryCta} <ArrowRight aria-hidden="true" weight="bold" />
-              </Link>
-            </Button>
+            <a href={`mailto:${contact.email}`} className={buttonVariants({ size: 'lg' })}>
+              <Mail aria-hidden="true" strokeWidth={2.5} /> {copy.home.primaryCta}
+            </a>
+            <Link href="/projects" className={buttonVariants({ size: 'lg', variant: 'secondary' })}>
+              {copy.home.secondaryCta} <ArrowRight aria-hidden="true" strokeWidth={2.5} />
+            </Link>
           </div>
         </div>
         <aside className="md:border-foreground grid content-end gap-4 md:border-l-2 md:pl-8">
-          <div className="border-foreground bg-muted relative aspect-[4/3] overflow-hidden border-2 shadow-[8px_8px_0_0_var(--shadow-hard)]">
+          <div className="border-foreground bg-muted relative aspect-4/3 overflow-hidden border-2 shadow-[8px_8px_0_0_var(--shadow-hard)]">
             <Image
               src={heroProject.image}
               alt={heroProject.name}
@@ -91,7 +87,7 @@ export default async function HomePage({
             {copy.home.services.map((service, index) => (
               <Card key={service.title} className={index === 1 ? 'bg-primary' : undefined}>
                 <CardContent>
-                  <h3 className="font-display text-3xl leading-none tracking-[-0.05em]">
+                  <h3 className="font-display text-3xl leading-none tracking-tighter">
                     {service.title}
                   </h3>
                   <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
@@ -146,12 +142,10 @@ export default async function HomePage({
               {copy.lab.intro}
             </p>
           </div>
-          <Button asChild size="lg">
-            <Link href="/labs/retro-game-center">
-              <GameController aria-hidden="true" weight="bold" />
-              {copy.lab.launchLabel}
-            </Link>
-          </Button>
+          <Link href="/labs/retro-game-center" className={buttonVariants({ size: 'lg' })}>
+            <Gamepad2 aria-hidden="true" strokeWidth={2.5} />
+            {copy.lab.launchLabel}
+          </Link>
         </div>
       </section>
 
@@ -167,7 +161,7 @@ export default async function HomePage({
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {copy.home.process.map((step) => (
             <article key={step.title} className="border-foreground border-t-2 pt-5">
-              <h3 className="font-display text-3xl tracking-[-0.05em]">{step.title}</h3>
+              <h3 className="font-display text-3xl tracking-tighter">{step.title}</h3>
               <p className="text-muted-foreground mt-4 text-sm leading-relaxed">{step.body}</p>
             </article>
           ))}
@@ -182,9 +176,12 @@ export default async function HomePage({
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed">{copy.home.contactIntro}</p>
           </div>
-          <Button asChild size="lg" variant="secondary">
-            <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          </Button>
+          <a
+            href={`mailto:${contact.email}`}
+            className={buttonVariants({ size: 'lg', variant: 'secondary' })}
+          >
+            {contact.email}
+          </a>
         </div>
       </section>
     </main>

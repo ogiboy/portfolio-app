@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { ArrowRight, ArrowSquareOut, GithubLogo } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Code2, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Project } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
@@ -19,7 +19,7 @@ export function ProjectCard({
 }>) {
   return (
     <Card className="group overflow-hidden">
-      <div className="border-foreground bg-muted relative aspect-[4/3] border-b-2">
+      <div className="border-foreground bg-muted relative aspect-4/3 border-b-2">
         <Image
           src={project.image}
           alt={project.name}
@@ -29,7 +29,7 @@ export function ProjectCard({
           placeholder="blur"
         />
       </div>
-      <CardContent className="grid min-h-[20rem] content-between gap-8">
+      <CardContent className="grid min-h-80 content-between gap-8">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge>{project.category}</Badge>
@@ -57,24 +57,28 @@ export function ProjectCard({
             ))}
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button asChild size="sm">
-              <Link href={`/projects/${project.slug}`}>
-                {caseLabel}
-                <ArrowRight aria-hidden="true" weight="bold" />
-              </Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <a href={project.url} target="_blank" rel="noreferrer">
-                {liveLabel}
-                <ArrowSquareOut aria-hidden="true" weight="bold" />
-              </a>
-            </Button>
-            <Button asChild size="sm" variant="ghost">
-              <a href={project.gitUrl} target="_blank" rel="noreferrer">
-                {codeLabel}
-                <GithubLogo aria-hidden="true" weight="bold" />
-              </a>
-            </Button>
+            <Link href={`/projects/${project.slug}`} className={buttonVariants({ size: 'sm' })}>
+              {caseLabel}
+              <ArrowRight aria-hidden="true" strokeWidth={2.5} />
+            </Link>
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+            >
+              {liveLabel}
+              <ExternalLink aria-hidden="true" strokeWidth={2.5} />
+            </a>
+            <a
+              href={project.gitUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+            >
+              {codeLabel}
+              <Code2 aria-hidden="true" strokeWidth={2.5} />
+            </a>
           </div>
         </div>
       </CardContent>

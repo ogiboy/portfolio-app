@@ -1,5 +1,5 @@
-import { GithubLogo, LinkedinLogo, ShieldCheck } from '@phosphor-icons/react/dist/ssr';
-import { Button } from '@/components/ui/button';
+import { BriefcaseBusiness, Code2, ShieldCheck } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { HotMark } from '@/components/site/hot-mark';
 import { contact, siteCopy, type Locale } from '@/content/site';
@@ -25,24 +25,28 @@ export function SiteFooter({ locale }: Readonly<{ locale: Locale }>) {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button asChild size="sm" variant="ghost">
-              <Link href="/privacy">
-                <ShieldCheck aria-hidden="true" weight="bold" />
-                {copy.footer.privacyLabel}
-              </Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <a href={contact.github} target="_blank" rel="noreferrer">
-                <GithubLogo aria-hidden="true" weight="bold" />
-                GitHub
-              </a>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <a href={contact.linkedin} target="_blank" rel="noreferrer">
-                <LinkedinLogo aria-hidden="true" weight="bold" />
-                LinkedIn
-              </a>
-            </Button>
+            <Link href="/privacy" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+              <ShieldCheck aria-hidden="true" strokeWidth={2.5} />
+              {copy.footer.privacyLabel}
+            </Link>
+            <a
+              href={contact.github}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+            >
+              <Code2 aria-hidden="true" strokeWidth={2.5} />
+              GitHub
+            </a>
+            <a
+              href={contact.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+            >
+              <BriefcaseBusiness aria-hidden="true" strokeWidth={2.5} />
+              LinkedIn
+            </a>
           </div>
         </div>
         <Separator className="my-8" />

@@ -44,7 +44,7 @@ export default async function PrivacyPage({
         {boundaries.map((boundary, index) => (
           <Card key={boundary.title} className={index === 1 ? 'bg-primary' : undefined}>
             <CardContent>
-              <h2 className="font-display text-3xl leading-none tracking-[-0.05em]">
+              <h2 className="font-display text-3xl leading-none tracking-tighter">
                 {boundary.title}
               </h2>
               <p

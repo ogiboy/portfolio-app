@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowSquareOut, GameController } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
+import { ExternalLink, Gamepad2 } from 'lucide-react';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 export function WasmGameFrame({
   title,
@@ -33,19 +33,26 @@ export function WasmGameFrame({
         </div>
         <div className="flex flex-wrap gap-3">
           <Button size="sm" variant="secondary" onClick={() => setBooted(true)}>
-            <GameController aria-hidden="true" weight="bold" />
+            <Gamepad2 aria-hidden="true" strokeWidth={2.5} />
             {launchLabel}
           </Button>
-          <Button asChild size="sm" variant="ghost" className="border-background text-background">
-            <a href={src} target="_blank" rel="noreferrer">
-              {openLabel}
-              <ArrowSquareOut aria-hidden="true" weight="bold" />
-            </a>
-          </Button>
+          <a
+            href={src}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonVariants({
+              size: 'sm',
+              variant: 'ghost',
+              className: 'border-background text-background',
+            })}
+          >
+            {openLabel}
+            <ExternalLink aria-hidden="true" strokeWidth={2.5} />
+          </a>
         </div>
       </div>
 
-      <div className="relative aspect-[4/3] bg-black md:aspect-[16/10]">
+      <div className="relative aspect-4/3 bg-black md:aspect-16/10">
         {booted ? (
           <iframe
             title={title}
@@ -59,7 +66,7 @@ export function WasmGameFrame({
         ) : (
           <div className="absolute inset-0 grid place-items-center p-6 text-center">
             <div className="max-w-md">
-              <GameController aria-hidden="true" weight="bold" className="mx-auto h-12 w-12" />
+              <Gamepad2 aria-hidden="true" strokeWidth={2.5} className="mx-auto h-12 w-12" />
               <h2 className="font-display mt-6 text-4xl leading-none tracking-[-0.06em]">
                 {idleTitle}
               </h2>
