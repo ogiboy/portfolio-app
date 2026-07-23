@@ -24,7 +24,7 @@ test('negotiates markdown only for an explicit positive markdown Accept header',
   expect(rootTurkishMarkdown.headers()['content-language']).toBe('tr');
   expect(rootTurkishMarkdown.headers()['cache-control']).toContain('no-store');
   expect(rootTurkishMarkdown.headers()['set-cookie']).toBeUndefined();
-  await expect(rootTurkishMarkdown.text()).resolves.toContain('Template grid değil');
+  await expect(rootTurkishMarkdown.text()).resolves.toContain('Arşivden öne çıkan projeler');
 
   const html = await request.get('/en/projects', { headers: { Accept: 'text/markdown;q=0' } });
   expect(html.status()).toBe(200);

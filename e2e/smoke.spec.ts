@@ -64,13 +64,13 @@ test('renders localized public portfolio routes', async ({ page }) => {
     locale: 'en',
     title: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
     description:
-      'Developer and homelab portfolio of Halil Oğuzcan Toptaş: production web software, automation, project archives, and a live WebAssembly lab.',
+      'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
   });
   await expect(
     page.getByRole('banner').getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*home/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: /public software, homelab systems/i }),
+    page.getByRole('heading', { name: /Halil Oğuzcan Toptaş.*web interfaces, homelab systems/i }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /see the archive/i })).toBeVisible();
   await page.goto('/tr');
@@ -79,7 +79,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
     locale: 'tr',
     title: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
     description:
-      'Halil Oğuzcan Toptaş geliştirme ve homelab portföyü: production web yazılımları, otomasyon, proje arşivi ve canlı WebAssembly laboratuvarı.',
+      'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
   });
   await expect(
     page
@@ -87,7 +87,9 @@ test('renders localized public portfolio routes', async ({ page }) => {
       .getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*ana sayfa/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: /public yazılımlar, homelab sistemleri/i }),
+    page.getByRole('heading', {
+      name: /Halil Oğuzcan Toptaş.*web arayüzleri, homelab sistemleri/i,
+    }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /arşivi gör/i })).toBeVisible();
 
@@ -266,7 +268,7 @@ test('offers localized recovery from missing routes', async ({ page }) => {
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
-  await expect(page.getByRole('heading', { name: /useful signals/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /what this site measures/i })).toBeVisible();
   await expect(page.getByText(/Sentry and Session Replay are not active/i)).toBeVisible();
   await expect(page.getByText(/aggregate analytics are enabled/i)).toBeVisible();
 
@@ -413,4 +415,115 @@ test('keeps the cinematic rail static for coarse pointers and data saver', async
   await saveDataRail.locator('article').last().scrollIntoViewIfNeeded();
   await expect(saveDataRail.locator('article').last()).toBeVisible();
   await saveDataContext.close();
+});
+
+test('alive interactions: preserves archive continuity through the next project route', async ({
+  page,
+}) => {
+  await page.goto('/en/projects');
+
+  const firstProject = page.locator('[data-project-card="isletmecii-idler-game"]');
+  await expect(
+    firstProject.getByRole('link', { name: 'Case: İşletmecii - Idler Game' }),
+  ).toBeVisible();
+  await expect(firstProject.locator('[data-project-position]')).toHaveText('Archive 01 / 18');
+
+  await firstProject.getByRole('link', { name: 'Case: İşletmecii - Idler Game' }).click();
+  await expect(page.getByRole('heading', { name: 'İşletmecii - Idler Game' })).toBeVisible();
+  await expect(page.locator('[data-project-continuity]')).toHaveText('Archive 01 / 18');
+  await expect(page.getByRole('heading', { name: 'Graduation Project', level: 2 })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Next project: Graduation Project' }).click();
+  await expect(page).toHaveURL(/\/en\/projects\/graduation-project$/);
+  await expect(page.getByRole('heading', { name: 'Graduation Project' })).toBeVisible();
+  await expect(page.locator('[data-project-continuity]')).toHaveText('Archive 02 / 18');
+
+  await page.getByRole('link', { name: 'Back to projects' }).click();
+  await expect(page).toHaveURL(/\/en\/projects$/);
+  await expect(
+    page.locator('[data-project-card="graduation-project"] [data-project-position]'),
+  ).toHaveText('Archive 02 / 18');
+});
+
+test('alive interactions: keeps the project archive within a 390px viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/en/projects');
+
+  await expect
+    .poll(() =>
+      page.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+      })),
+    )
+    .toEqual({ clientWidth: 390, scrollWidth: 390 });
+});
+
+test('alive interactions: keeps project-card focus feedback static with reduced motion', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/en/projects');
+
+  const card = page.locator('[data-project-card="isletmecii-idler-game"]');
+  const image = card.locator('.project-card__image');
+  const beforeFocus = await card.evaluate((element) => ({
+    boxShadow: getComputedStyle(element).boxShadow,
+    transitionDuration: getComputedStyle(element).transitionDuration,
+    transform: getComputedStyle(element).transform,
+  }));
+
+  await card.getByRole('link', { name: 'Case: İşletmecii - Idler Game' }).focus();
+  await expect(card.getByRole('link', { name: 'Case: İşletmecii - Idler Game' })).toBeFocused();
+  const focusedCard = await card.evaluate((element) => ({
+    boxShadow: getComputedStyle(element).boxShadow,
+    transitionDuration: getComputedStyle(element).transitionDuration,
+    transform: getComputedStyle(element).transform,
+  }));
+  expect(focusedCard.boxShadow).not.toBe(beforeFocus.boxShadow);
+  expect(Number.parseFloat(focusedCard.transitionDuration)).toBeLessThanOrEqual(0.01);
+  expect(focusedCard.transform).toBe('none');
+  await expect
+    .poll(() =>
+      image.evaluate((element) => Number.parseFloat(getComputedStyle(element).transitionDuration)),
+    )
+    .toBeLessThanOrEqual(0.01);
+  await expect(image).toHaveCSS('transform', 'none');
+});
+
+test('alive interactions: serves usable home, archive, and detail semantics without JavaScript', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto('/en');
+  await expect(
+    page.getByRole('heading', {
+      name: /Halil Oğuzcan Toptaş.*web interfaces, homelab systems, and browser experiments/i,
+    }),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: 'See the archive' })).toHaveAttribute(
+    'href',
+    '/en/projects',
+  );
+
+  await page.goto('/en/projects');
+  await expect(page.getByRole('heading', { name: 'Project archive' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Case: İşletmecii - Idler Game' })).toHaveAttribute(
+    'href',
+    '/en/projects/isletmecii-idler-game',
+  );
+
+  await page.goto('/en/projects/isletmecii-idler-game');
+  await expect(page.getByRole('heading', { name: 'İşletmecii - Idler Game' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to projects' })).toHaveAttribute(
+    'href',
+    '/en/projects',
+  );
+  await expect(
+    page.getByRole('link', { name: 'Next project: Graduation Project' }),
+  ).toHaveAttribute('href', '/en/projects/graduation-project');
+
+  await context.close();
 });
