@@ -25,13 +25,13 @@ export const seoCopy: Record<
   en: {
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
     homeDescription:
-      'Developer and homelab portfolio of Halil Oğuzcan Toptaş: production web software, automation, project archives, and a live WebAssembly lab.',
+      'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
     projectsDescription:
-      'Explore web products, interface experiments, utilities, and open project work by Halil Oğuzcan Toptaş.',
+      'Browse frontend projects, API interfaces, utilities, forms, and browser experiments by Halil Oğuzcan Toptaş.',
     labDescription:
       'A live WebAssembly lab running DOOM Shareware through an isolated, lazy-loaded DOSBox-X browser runtime.',
     privacyDescription:
-      'How the H.O.T. portfolio uses aggregate analytics, performance measurements, and a durable local opt-out without advertising profiles.',
+      'How the H.O.T. portfolio uses aggregate analytics and performance measurements without building advertising profiles, with a durable local opt-out.',
     role: 'Software developer and homelab hobbyist',
     ogLocale: 'en_US',
     alternateOgLocale: 'tr_TR',
@@ -39,13 +39,13 @@ export const seoCopy: Record<
   tr: {
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
     homeDescription:
-      'Halil Oğuzcan Toptaş geliştirme ve homelab portföyü: production web yazılımları, otomasyon, proje arşivi ve canlı WebAssembly laboratuvarı.',
+      'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
     projectsDescription:
-      'Halil Oğuzcan Toptaş tarafından geliştirilen web ürünlerini, arayüz deneylerini, araçları ve açık proje çalışmalarını inceleyin.',
+      'Halil Oğuzcan Toptaş’ın frontend projelerini, API arayüzlerini, yardımcı araçlarını, formlarını ve browser deneylerini inceleyin.',
     labDescription:
       'DOOM Shareware çalıştıran, izole ve yalnızca etkileşimden sonra yüklenen DOSBox-X tabanlı canlı WebAssembly laboratuvarı.',
     privacyDescription:
-      'H.O.T. portföyünün reklam profili oluşturmadan toplu analitik, performans ölçümü ve kalıcı yerel vazgeçme tercihini nasıl kullandığı.',
+      'H.O.T. portföyünün reklam profili oluşturmadan toplu analitik ve performans ölçümünü, kalıcı yerel vazgeçme tercihiyle nasıl kullandığı.',
     role: 'Yazılım geliştirici ve homelab meraklısı',
     ogLocale: 'tr_TR',
     alternateOgLocale: 'en_US',

@@ -140,22 +140,23 @@ export const siteCopy: LocalizedCopy<{
     },
     home: {
       eyebrow: 'Independent developer / homelab hobbyist / Istanbul',
-      title: 'I build public software, homelab systems, and browser experiments with a pulse.',
+      title:
+        'I’m Halil Oğuzcan Toptaş. I build web interfaces, homelab systems, and browser experiments.',
       subtitle:
-        'Production-minded Next.js, automation, homelab operations, and playful runtimes, documented with the decisions and failure modes intact.',
+        'I work with Next.js, TypeScript, automation, homelab operations, and browser runtimes. I document the decisions, constraints, and failure modes behind each build.',
       primaryCta: 'Start a project',
       secondaryCta: 'See the archive',
       stackLabel: 'Operating stack',
       stackNote:
-        'No ornamental dashboards. No anonymous template energy. One public lab for shipped work, infrastructure experiments, and honest build notes.',
+        'This portfolio brings together shipped web work, homelab infrastructure experiments, and build notes in one place.',
       proof: ['Next.js', 'TypeScript', 'Homelab', 'Automation', 'WASM', 'Delivery'],
-      servicesTitle: 'One developer lab, three operating modes',
+      servicesTitle: 'Three kinds of work',
       servicesIntro:
-        'Client work, self-hosted systems, and browser experiments share the same rule: make the boundaries visible and prove what ships.',
+        'I build client-facing interfaces, self-hosted systems, and browser experiments. Each project states its scope, constraints, and shipped result.',
       services: [
         {
           title: 'Product interfaces',
-          body: 'High-contrast public pages and reliable frontend systems that explain the offer, show proof, and make the next step obvious.',
+          body: 'Landing pages and frontend systems that explain a product, show evidence, and guide visitors to the next action.',
         },
         {
           title: 'Homelab + automation',
@@ -163,13 +164,13 @@ export const siteCopy: LocalizedCopy<{
         },
         {
           title: 'Browser experiments',
-          body: 'Motion, WebAssembly, game runtimes, and interface studies isolated so the playful work never compromises the main product.',
+          body: 'Motion, WebAssembly, game runtimes, and interface studies isolated from the main product payload.',
         },
       ],
-      selectedTitle: 'Selected work, not a template grid',
+      selectedTitle: 'Featured projects from the archive',
       selectedIntro:
-        'Every project stays in the archive, but the strongest pieces get room to explain the problem, stack, and outcome.',
-      processTitle: 'A practical build rhythm',
+        'The archive lists every project. Selected entries explain the problem, implementation, stack, and outcome in more detail.',
+      processTitle: 'How I take a build from idea to release',
       processIntro:
         'The process is built around visible decisions, tight scopes, and proof before release.',
       process: [
@@ -186,17 +187,17 @@ export const siteCopy: LocalizedCopy<{
           body: 'Commit in slices, verify with CI, review in browser, and release with notes.',
         },
       ],
-      motionTitle: 'Motion has a job',
+      motionTitle: 'Motion supports orientation',
       motionIntro:
-        'The interface should feel alive: scroll-linked movement reveals relationships and tactile states answer intent. Reduced-motion users keep the same content and direction.',
-      contactTitle: 'Have a messy idea that needs a clean launch?',
+        'Scroll-linked movement shows relationships between sections, and state changes confirm user actions. Reduced-motion users keep the same content and navigation.',
+      contactTitle: 'Have a website or interface to build?',
       contactIntro:
-        'Send the product, portfolio, or landing-page problem. I will help turn it into a buildable scope.',
+        'Send the product, portfolio, or landing-page problem. I can help turn it into a buildable scope.',
     },
     projects: {
       title: 'Project archive',
       intro:
-        'A complete archive of shipped experiments, bootcamp work, product interfaces, and playful apps. The archive stays complete; the case-study layer keeps improving.',
+        'An archive of deployed experiments, bootcamp projects, interfaces, and small applications. Open a project to review its description, stack, demo, and source.',
       archiveLabel: 'Archive',
       featuredLabel: 'Featured',
       live: 'Live',
@@ -211,7 +212,7 @@ export const siteCopy: LocalizedCopy<{
       eyebrow: 'Live lab / WASM',
       title: 'Retro Game Center boots DOOM Shareware inside the portfolio.',
       intro:
-        'A scoped live demo from home-media-portal: DOSBox-X for Web, a curated ROM manifest, and a lazy iframe shell that keeps the public homepage light.',
+        'A live demo adapted from home-media-portal: DOSBox-X for Web, a curated ROM manifest, and a lazy iframe that keeps the runtime off the homepage until requested.',
       launchLabel: 'Boot demo',
       openLabel: 'Open tab',
       frameTitle: 'DOSBox-X runtime',
@@ -229,9 +230,9 @@ export const siteCopy: LocalizedCopy<{
       timeoutBody:
         'The runtime stopped waiting after 20 seconds. Retry or open it in a separate tab.',
       retryLabel: 'Retry boot',
-      specsTitle: 'Why this belongs in a portfolio',
+      specsTitle: 'Runtime isolation details',
       specsIntro:
-        'This is not a toy embed. It shows how heavy browser runtimes can be scoped, cached, and presented without damaging the main site.',
+        'This demo shows how to load a heavy browser runtime only on demand, keep its assets isolated, and protect the main site from its payload.',
       specs: [
         {
           title: 'Isolated payload',
@@ -256,7 +257,7 @@ export const siteCopy: LocalizedCopy<{
     },
     privacy: {
       eyebrow: 'Privacy / telemetry',
-      title: 'Useful signals, not a surveillance profile.',
+      title: 'What this site measures',
       intro:
         'This portfolio uses cookieless, aggregate Vercel Web Analytics and Speed Insights to understand route interest and performance. It does not run ads or sell visitor data.',
       aggregateTitle: 'What is measured',
@@ -278,19 +279,19 @@ export const siteCopy: LocalizedCopy<{
     },
     recovery: {
       errorEyebrow: 'Runtime interrupted',
-      errorTitle: 'The signal dropped. The work is still here.',
+      errorTitle: 'This page could not finish loading.',
       errorBody:
-        'Retry this view. If the route keeps failing, return to the project archive and keep moving.',
+        'Retry the page. If it continues to fail, return to the project archive or go back home.',
       retryAction: 'Retry view',
       notFoundEyebrow: '404 / Route missing',
-      notFoundTitle: 'This path left the map.',
+      notFoundTitle: 'This page does not exist.',
       notFoundBody:
-        'This address does not match a published page. Continue through the archive or return home.',
+        'This address does not match a published page. Browse the project archive or return home.',
       homeAction: 'Return home',
       projectsAction: 'Browse projects',
     },
     footer: {
-      line: 'A personal developer and homelab portfolio built with Next.js, shadcn primitives, Motion, and a strict no-template rule.',
+      line: 'Personal developer and homelab portfolio built with Next.js, shadcn primitives, and Motion.',
       privacyLabel: 'Privacy',
     },
   },
@@ -313,22 +314,23 @@ export const siteCopy: LocalizedCopy<{
     },
     home: {
       eyebrow: 'Bağımsız geliştirici / homelab meraklısı / İstanbul',
-      title: 'Public yazılımlar, homelab sistemleri ve nabzı olan browser deneyleri kuruyorum.',
+      title:
+        'Ben Halil Oğuzcan Toptaş. Web arayüzleri, homelab sistemleri ve browser deneyleri geliştiriyorum.',
       subtitle:
-        'Production odaklı Next.js, otomasyon, homelab operasyonları ve oyunbaz runtime işleri; kararları ve hata yollarıyla birlikte belgeleniyor.',
+        'Next.js, TypeScript, otomasyon, homelab operasyonları ve browser runtime’larıyla çalışıyorum. Her yapının kararlarını, kısıtlarını ve hata yollarını belgeliyorum.',
       primaryCta: 'Proje başlat',
       secondaryCta: 'Arşivi gör',
       stackLabel: 'Çalışma stacki',
       stackNote:
-        'Süs dashboard yok. Anonim template hissi yok. Yayınlanmış işler, altyapı deneyleri ve dürüst build notları için tek bir public lab var.',
+        'Bu portföy, yayınlanmış web işlerini, homelab altyapı deneylerini ve build notlarını tek yerde toplar.',
       proof: ['Next.js', 'TypeScript', 'Homelab', 'Otomasyon', 'WASM', 'Teslim'],
-      servicesTitle: 'Tek geliştirici labı, üç çalışma modu',
+      servicesTitle: 'Üç çalışma alanı',
       servicesIntro:
-        'Müşteri işleri, self-hosted sistemler ve browser deneyleri aynı kurala bağlı: sınırları görünür yap ve yayınlanan işi kanıtla.',
+        'Müşteri arayüzleri, self-hosted sistemler ve browser deneyleri geliştiriyorum. Her proje kapsamını, kısıtlarını ve yayınlanan sonucunu açıklar.',
       services: [
         {
           title: 'Ürün arayüzleri',
-          body: 'Teklifi anlatan, kanıt gösteren ve bir sonraki adımı belirgin yapan yüksek kontrastlı public sayfalar ve güvenilir frontend sistemleri.',
+          body: 'Ürünü anlatan, kanıt gösteren ve ziyaretçiyi sonraki aksiyona yönlendiren landing page ve frontend sistemleri.',
         },
         {
           title: 'Homelab + otomasyon',
@@ -336,13 +338,13 @@ export const siteCopy: LocalizedCopy<{
         },
         {
           title: 'Browser deneyleri',
-          body: 'Oyunbaz işlerin ana ürünü tehlikeye atmaması için izole edilen motion, WebAssembly, oyun runtime ve arayüz çalışmaları.',
+          body: 'Ana ürün payload’ından izole edilen motion, WebAssembly, oyun runtime ve arayüz çalışmaları.',
         },
       ],
-      selectedTitle: 'Template grid değil, seçilmiş işler',
+      selectedTitle: 'Arşivden öne çıkan projeler',
       selectedIntro:
-        'Her proje arşivde kalır; güçlü işler problem, stack ve sonuç anlatımı için daha fazla alan kazanır.',
-      processTitle: 'Pratik bir build ritmi',
+        'Arşivdeki her proje listelenir. Seçilen işler problemi, uygulamayı, stacki ve sonucu daha ayrıntılı anlatır.',
+      processTitle: 'Fikirden yayına giden çalışma biçimi',
       processIntro: 'Süreç görünür kararlar, dar kapsamlar ve release öncesi kanıt üzerine kurulu.',
       process: [
         {
@@ -358,17 +360,17 @@ export const siteCopy: LocalizedCopy<{
           body: 'Parça parça commit at, CI ile doğrula, browser’da incele ve notlarla release et.',
         },
       ],
-      motionTitle: 'Motion süs değil, görevli',
+      motionTitle: 'Motion yön bulmayı destekler',
       motionIntro:
-        'Arayüz canlı hissettirmeli: scroll bağlantılı hareket ilişkileri gösterir, dokunsal durumlar niyete cevap verir. Hareket azaltma tercihini kullanan kullanıcılar aynı içerik ve yönü korur.',
-      contactTitle: 'Dağınık bir fikrin temiz bir lansmana mı ihtiyacı var?',
+        'Scroll bağlantılı hareket bölümler arasındaki ilişkiyi gösterir, durum değişiklikleri de kullanıcı işlemlerini doğrular. Hareket azaltma tercihini kullanan kullanıcılar aynı içeriği ve gezinmeyi korur.',
+      contactTitle: 'Geliştirilecek bir web sitesi veya arayüz mü var?',
       contactIntro:
-        'Ürün, portfolyo veya landing page problemini gönder. Bunu uygulanabilir bir kapsama çevirelim.',
+        'Ürün, portföy veya landing page problemini gönderin. Bunu uygulanabilir bir kapsama çevirmeye yardımcı olabilirim.',
     },
     projects: {
       title: 'Proje arşivi',
       intro:
-        'Yayınlanmış denemeler, bootcamp işleri, ürün arayüzleri ve oyunbaz uygulamalardan oluşan tam arşiv. Arşiv eksiksiz kalır; case-study katmanı zamanla güçlenir.',
+        'Yayınlanmış deneylerin, bootcamp projelerinin, arayüzlerin ve küçük uygulamaların arşivi. Açıklama, stack, demo ve kaynak kodu incelemek için bir proje açın.',
       archiveLabel: 'Arşiv',
       featuredLabel: 'Öne çıkan',
       live: 'Canlı',
@@ -383,7 +385,7 @@ export const siteCopy: LocalizedCopy<{
       eyebrow: 'Canlı lab / WASM',
       title: 'Retro Game Center portföy içinde DOOM Shareware başlatıyor.',
       intro:
-        'home-media-portal içinden alınmış sınırlı canlı demo: DOSBox-X for Web, seçilmiş ROM manifesti ve ana sayfayı hafif tutan lazy iframe kabuğu.',
+        'home-media-portal üzerinden uyarlanmış canlı demo: DOSBox-X for Web, seçilmiş ROM manifesti ve runtime’ı istenene kadar ana sayfadan uzak tutan lazy iframe.',
       launchLabel: 'Demoyu başlat',
       openLabel: 'Sekmede aç',
       frameTitle: 'DOSBox-X runtime',
@@ -400,9 +402,9 @@ export const siteCopy: LocalizedCopy<{
       timeoutTitle: 'Başlatma çok uzun sürdü.',
       timeoutBody: 'Runtime 20 saniye sonra beklemeyi bıraktı. Tekrar dene veya ayrı sekmede aç.',
       retryLabel: 'Tekrar başlat',
-      specsTitle: 'Bu neden portföyde yer alıyor',
+      specsTitle: 'Runtime izolasyonu',
       specsIntro:
-        'Bu rastgele bir embed değil. Ağır browser runtime işlerinin ana siteyi bozmadan nasıl scope, cache ve sunum disiplinine alınacağını gösteriyor.',
+        'Bu demo, ağır bir browser runtime’ının yalnızca gerektiğinde nasıl yükleneceğini, assetlerinin nasıl izole edileceğini ve ana sitenin payload’ının nasıl korunacağını gösterir.',
       specs: [
         {
           title: 'İzole payload',
@@ -427,7 +429,7 @@ export const siteCopy: LocalizedCopy<{
     },
     privacy: {
       eyebrow: 'Gizlilik / telemetri',
-      title: 'Gözetim profili değil, işe yarayan sinyaller.',
+      title: 'Bu site neleri ölçüyor',
       intro:
         'Bu portföy route ilgisini ve performansı anlamak için çerezsiz, toplu Vercel Web Analytics ve Speed Insights kullanır. Reklam çalıştırmaz ve ziyaretçi verisi satmaz.',
       aggregateTitle: 'Neler ölçülüyor',
@@ -449,18 +451,18 @@ export const siteCopy: LocalizedCopy<{
     },
     recovery: {
       errorEyebrow: 'Çalışma kesintisi',
-      errorTitle: 'Sinyal koptu. İçerik yerinde duruyor.',
-      errorBody: 'Bu görünümü yeniden dene. Rota yine açılmazsa proje arşivinden devam et.',
+      errorTitle: 'Bu sayfanın yüklenmesi tamamlanamadı.',
+      errorBody: 'Sayfayı yeniden deneyin. Hata sürerse proje arşivine veya ana sayfaya dönün.',
       retryAction: 'Görünümü yeniden dene',
       notFoundEyebrow: '404 / Rota bulunamadı',
-      notFoundTitle: 'Bu yol haritadan çıkmış.',
+      notFoundTitle: 'Bu sayfa mevcut değil.',
       notFoundBody:
-        'Bu adres yayınlanmış bir sayfayla eşleşmiyor. Arşivden devam et veya ana sayfaya dön.',
+        'Bu adres yayınlanmış bir sayfayla eşleşmiyor. Proje arşivine göz atın veya ana sayfaya dönün.',
       homeAction: 'Ana sayfaya dön',
       projectsAction: 'Projeleri incele',
     },
     footer: {
-      line: 'Next.js, shadcn primitives, Motion ve katı template karşıtı kuralla inşa edilmiş kişisel geliştirici ve homelab portföyü.',
+      line: 'Next.js, shadcn primitives ve Motion ile geliştirilmiş kişisel geliştirici ve homelab portföyü.',
       privacyLabel: 'Gizlilik',
     },
   },
