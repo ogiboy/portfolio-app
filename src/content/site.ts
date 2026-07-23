@@ -105,6 +105,17 @@ export const siteCopy: LocalizedCopy<{
     enableAction: string;
     disableAction: string;
   };
+  recovery: {
+    errorEyebrow: string;
+    errorTitle: string;
+    errorBody: string;
+    retryAction: string;
+    notFoundEyebrow: string;
+    notFoundTitle: string;
+    notFoundBody: string;
+    homeAction: string;
+    projectsAction: string;
+  };
   footer: {
     line: string;
     privacyLabel: string;
@@ -265,6 +276,19 @@ export const siteCopy: LocalizedCopy<{
       enableAction: 'Enable analytics',
       disableAction: 'Disable analytics',
     },
+    recovery: {
+      errorEyebrow: 'Runtime interrupted',
+      errorTitle: 'The signal dropped. The work is still here.',
+      errorBody:
+        'Retry this view. If the route keeps failing, return to the project archive and keep moving.',
+      retryAction: 'Retry view',
+      notFoundEyebrow: '404 / Route missing',
+      notFoundTitle: 'This path left the map.',
+      notFoundBody:
+        'This address does not match a published page. Continue through the archive or return home.',
+      homeAction: 'Return home',
+      projectsAction: 'Browse projects',
+    },
     footer: {
       line: 'A personal developer and homelab portfolio built with Next.js, shadcn primitives, Motion, and a strict no-template rule.',
       privacyLabel: 'Privacy',
@@ -422,6 +446,18 @@ export const siteCopy: LocalizedCopy<{
       disabledLabel: 'Bu browser içinde toplu analitik kapalı.',
       enableAction: 'Analitiği aç',
       disableAction: 'Analitiği kapat',
+    },
+    recovery: {
+      errorEyebrow: 'Çalışma kesintisi',
+      errorTitle: 'Sinyal koptu. İçerik yerinde duruyor.',
+      errorBody: 'Bu görünümü yeniden dene. Rota yine açılmazsa proje arşivinden devam et.',
+      retryAction: 'Görünümü yeniden dene',
+      notFoundEyebrow: '404 / Rota bulunamadı',
+      notFoundTitle: 'Bu yol haritadan çıkmış.',
+      notFoundBody:
+        'Bu adres yayınlanmış bir sayfayla eşleşmiyor. Arşivden devam et veya ana sayfaya dön.',
+      homeAction: 'Ana sayfaya dön',
+      projectsAction: 'Projeleri incele',
     },
     footer: {
       line: 'Next.js, shadcn primitives, Motion ve katı template karşıtı kuralla inşa edilmiş kişisel geliştirici ve homelab portföyü.',

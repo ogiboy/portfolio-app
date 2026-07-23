@@ -197,6 +197,24 @@ test('provides localized mobile navigation with focus recovery', async ({ page }
   }
 });
 
+test('offers localized recovery from missing routes', async ({ page }) => {
+  await page.goto('/en/route-that-does-not-exist');
+  await expect(page.getByRole('heading', { name: 'This path left the map.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/en');
+  await expect(page.getByRole('link', { name: 'Browse projects' })).toHaveAttribute(
+    'href',
+    '/en/projects',
+  );
+
+  await page.goto('/tr/olmayan-bir-rota');
+  await expect(page.getByRole('heading', { name: 'Bu yol haritadan çıkmış.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/tr');
+  await expect(page.getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute(
+    'href',
+    '/tr/projects',
+  );
+});
+
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
   await expect(page.getByRole('heading', { name: /useful signals/i })).toBeVisible();
