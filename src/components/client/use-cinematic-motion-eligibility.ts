@@ -1,0 +1,38 @@
+'use client';
+
+import { useSyncExternalStore } from 'react';
+
+const cinematicMediaQuery = '(min-width: 768px) and (hover: hover) and (pointer: fine)';
+
+type NetworkConnection = EventTarget & {
+  saveData?: boolean;
+};
+
+type NavigatorWithConnection = Navigator & {
+  connection?: NetworkConnection;
+};
+
+function getConnection() {
+  return (navigator as NavigatorWithConnection).connection;
+}
+
+function subscribeToEligibility(onStoreChange: () => void) {
+  const media = window.matchMedia(cinematicMediaQuery);
+  const connection = getConnection();
+
+  media.addEventListener('change', onStoreChange);
+  connection?.addEventListener('change', onStoreChange);
+
+  return () => {
+    media.removeEventListener('change', onStoreChange);
+    connection?.removeEventListener('change', onStoreChange);
+  };
+}
+
+function getEligibilitySnapshot() {
+  return window.matchMedia(cinematicMediaQuery).matches && getConnection()?.saveData !== true;
+}
+
+export function useCinematicMotionEligibility() {
+  return useSyncExternalStore(subscribeToEligibility, getEligibilitySnapshot, () => false);
+}

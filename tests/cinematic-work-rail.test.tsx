@@ -52,18 +52,29 @@ const projects = [
   },
 ];
 
-function installMatchMedia(desktop: boolean) {
+function installMatchMedia(eligible: boolean) {
   vi.stubGlobal(
     'matchMedia',
     vi.fn((query: string) => ({
       addEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-      matches: query.includes('min-width') ? desktop : false,
+      matches: query.includes('min-width') ? eligible : false,
       media: query,
       onchange: null,
       removeEventListener: vi.fn(),
     })),
   );
+}
+
+function installSaveData(saveData: boolean) {
+  Object.defineProperty(window.navigator, 'connection', {
+    configurable: true,
+    value: {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      saveData,
+    },
+  });
 }
 
 describe('CinematicWorkRail', () => {
@@ -72,6 +83,7 @@ describe('CinematicWorkRail', () => {
     motionMocks.reduceMotion = false;
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    Reflect.deleteProperty(window.navigator, 'connection');
   });
 
   it('measures a desktop scroll stage and keeps its content rendered', async () => {
@@ -126,6 +138,37 @@ describe('CinematicWorkRail', () => {
     );
 
     await waitFor(() => expect(window.matchMedia).toHaveBeenCalled());
+    expect(container.querySelector('section')).not.toHaveAttribute('style');
+    expect(observer).not.toHaveBeenCalled();
+  });
+
+  it('keeps a natural-height rail when a fine pointer is unavailable', async () => {
+    installMatchMedia(false);
+    const observer = vi.fn();
+    vi.stubGlobal('ResizeObserver', observer);
+
+    const { container } = render(
+      <CinematicWorkRail title="Work" intro="Selected work" projects={projects} />,
+    );
+
+    await waitFor(() => expect(window.matchMedia).toHaveBeenCalled());
+    expect(container.querySelector('section')).toHaveAttribute('data-motion-mode', 'static');
+    expect(container.querySelector('section')).not.toHaveAttribute('style');
+    expect(observer).not.toHaveBeenCalled();
+  });
+
+  it('keeps a natural-height rail when data saver is enabled', async () => {
+    installMatchMedia(true);
+    installSaveData(true);
+    const observer = vi.fn();
+    vi.stubGlobal('ResizeObserver', observer);
+
+    const { container } = render(
+      <CinematicWorkRail title="Work" intro="Selected work" projects={projects} />,
+    );
+
+    await waitFor(() => expect(window.matchMedia).toHaveBeenCalled());
+    expect(container.querySelector('section')).toHaveAttribute('data-motion-mode', 'static');
     expect(container.querySelector('section')).not.toHaveAttribute('style');
     expect(observer).not.toHaveBeenCalled();
   });

@@ -241,3 +241,41 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
     )
     .toEqual({ firstCardOpacity: 1, translateX: 0 });
 });
+
+test('keeps the cinematic rail static for coarse pointers and data saver', async ({ browser }) => {
+  const coarseContext = await browser.newContext({
+    hasTouch: true,
+    viewport: { width: 1280, height: 800 },
+  });
+  const coarsePage = await coarseContext.newPage();
+  await coarsePage.goto('/en');
+
+  const coarseRail = coarsePage.locator('[data-cinematic-rail]');
+  await expect
+    .poll(() => coarsePage.evaluate(() => window.matchMedia('(pointer: coarse)').matches))
+    .toBe(true);
+  await expect(coarseRail).toHaveAttribute('data-motion-mode', 'static');
+  await expect.poll(() => coarseRail.evaluate((element) => element.style.height)).toBe('');
+  await expect(coarseRail.locator('article').first()).toBeVisible();
+  await coarseContext.close();
+
+  const saveDataContext = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  await saveDataContext.addInitScript(() => {
+    Object.defineProperty(window.navigator, 'connection', {
+      configurable: true,
+      value: {
+        addEventListener() {},
+        removeEventListener() {},
+        saveData: true,
+      },
+    });
+  });
+  const saveDataPage = await saveDataContext.newPage();
+  await saveDataPage.goto('/en');
+
+  const saveDataRail = saveDataPage.locator('[data-cinematic-rail]');
+  await expect(saveDataRail).toHaveAttribute('data-motion-mode', 'static');
+  await expect.poll(() => saveDataRail.evaluate((element) => element.style.height)).toBe('');
+  await expect(saveDataRail.locator('article').first()).toBeVisible();
+  await saveDataContext.close();
+});

@@ -4,21 +4,11 @@ import Image from 'next/image';
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { LazyMotion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import * as m from 'motion/react-m';
+import { useCinematicMotionEligibility } from '@/components/client/use-cinematic-motion-eligibility';
 import type { Project } from '@/content/projects';
 
-const desktopMediaQuery = '(min-width: 768px)';
 const loadMotionFeatures = () => import('./motion-features').then((module) => module.default);
 const subscribeToHydration = () => () => undefined;
-
-function subscribeToDesktopViewport(onStoreChange: () => void) {
-  const media = window.matchMedia(desktopMediaQuery);
-  media.addEventListener('change', onStoreChange);
-  return () => media.removeEventListener('change', onStoreChange);
-}
-
-function getDesktopViewportSnapshot() {
-  return window.matchMedia(desktopMediaQuery).matches;
-}
 
 export function CinematicWorkRail({
   title,
@@ -32,19 +22,16 @@ export function CinematicWorkRail({
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const desktopViewport = useSyncExternalStore(
-    subscribeToDesktopViewport,
-    getDesktopViewportSnapshot,
-    () => false,
-  );
+  const cinematicMotionEligible = useCinematicMotionEligibility();
   const motionReady = useSyncExternalStore(
     subscribeToHydration,
     () => true,
     () => false,
   );
   const [scrollDistance, setScrollDistance] = useState(0);
-  const animateContent = motionReady && !shouldReduceMotion;
-  const horizontalMotion = desktopViewport && !shouldReduceMotion && scrollDistance > 0;
+  const canUseCinematicMotion = cinematicMotionEligible && !shouldReduceMotion;
+  const animateContent = motionReady && canUseCinematicMotion;
+  const horizontalMotion = canUseCinematicMotion && scrollDistance > 0;
   const { scrollYProgress } = useScroll({
     target: root,
     offset: ['start start', 'end end'],
@@ -52,7 +39,7 @@ export function CinematicWorkRail({
   const x = useTransform(scrollYProgress, [0, 1], [0, horizontalMotion ? -scrollDistance : 0]);
 
   useLayoutEffect(() => {
-    if (!desktopViewport || shouldReduceMotion) {
+    if (!canUseCinematicMotion) {
       return;
     }
 
@@ -76,7 +63,7 @@ export function CinematicWorkRail({
       window.removeEventListener('resize', measure);
       resizeObserver?.disconnect();
     };
-  }, [animateContent, desktopViewport, projects.length, shouldReduceMotion]);
+  }, [animateContent, canUseCinematicMotion, projects.length]);
 
   const reveal = animateContent ? { opacity: 0, y: 42 } : false;
 
@@ -84,6 +71,7 @@ export function CinematicWorkRail({
     <section
       ref={root}
       data-cinematic-rail
+      data-motion-mode={canUseCinematicMotion ? 'cinematic' : 'static'}
       style={horizontalMotion ? { height: `calc(100dvh + ${scrollDistance}px)` } : undefined}
       className="border-foreground bg-foreground text-background border-y-2"
     >
