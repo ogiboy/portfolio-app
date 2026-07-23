@@ -118,6 +118,20 @@ test('renders localized public portfolio routes', async ({ page }) => {
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
+test('keeps canonical locale routes free of locale-cookie cache variance', async ({ request }) => {
+  const english = await request.get('/en');
+  expect(english.status()).toBe(200);
+  expect(english.headers()['set-cookie']).toBeUndefined();
+
+  const detectedRoot = await request.get('/', {
+    headers: { 'Accept-Language': 'tr' },
+    maxRedirects: 0,
+  });
+  expect([307, 308]).toContain(detectedRoot.status());
+  expect(detectedRoot.headers().location).toContain('/tr');
+  expect(detectedRoot.headers()['set-cookie']).toBeUndefined();
+});
+
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
   await expect(page.getByRole('heading', { name: /useful signals/i })).toBeVisible();
@@ -133,4 +147,41 @@ test('keeps aggregate telemetry transparent and locally optional', async ({ page
 
   await page.reload();
   await expect(page.getByText(/aggregate analytics are disabled/i)).toBeVisible();
+});
+
+test('keeps cinematic motion alive without trapping reduced-motion or mobile layouts', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/en');
+
+  const rail = page.locator('[data-cinematic-rail]');
+  const track = page.locator('[data-cinematic-track]');
+  await expect(rail).toBeVisible();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toContain('calc(');
+
+  await rail.evaluate((element) => {
+    const railElement = element as HTMLElement;
+    window.scrollTo({
+      top: railElement.offsetTop + railElement.clientHeight / 3,
+      behavior: 'instant',
+    });
+  });
+  await expect
+    .poll(() => track.evaluate((element) => getComputedStyle(element).transform))
+    .not.toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toBe('');
+  await expect
+    .poll(() =>
+      rail.locator(':scope > div').evaluate((element) => getComputedStyle(element).position),
+    )
+    .not.toBe('sticky');
+
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.reload();
+  await expect.poll(() => rail.evaluate((element) => element.style.height)).toBe('');
 });

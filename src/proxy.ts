@@ -3,12 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { routing } from './i18n/routing';
 import { acceptsMarkdown, appendVary } from './lib/markdown-negotiation';
 
-const intlMiddleware = createMiddleware({
-  locales: routing.locales,
-  defaultLocale: routing.defaultLocale,
-  localePrefix: 'always',
-  localeDetection: true,
-});
+const intlMiddleware = createMiddleware(routing);
 
 export default function proxy(request: NextRequest) {
   const intlResponse = intlMiddleware(request);
