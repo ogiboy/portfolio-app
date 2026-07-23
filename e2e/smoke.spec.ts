@@ -173,6 +173,25 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
   await expect
     .poll(() => track.evaluate((element) => element.getBoundingClientRect().left))
     .toBeLessThan(initialTrackLeft - 20);
+  await expect
+    .poll(() =>
+      track.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.top >= -1 && rect.bottom <= window.innerHeight + 1;
+      }),
+    )
+    .toBe(true);
+  await expect
+    .poll(() =>
+      track.locator('article').evaluateAll((articles) =>
+        articles.some((article) => {
+          const rect = article.getBoundingClientRect();
+          const visible = rect.right > 0 && rect.left < window.innerWidth;
+          return visible && Number.parseFloat(getComputedStyle(article).opacity) > 0.9;
+        }),
+      ),
+    )
+    .toBe(true);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();

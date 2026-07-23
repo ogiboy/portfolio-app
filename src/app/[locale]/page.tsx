@@ -20,7 +20,7 @@ export default async function HomePage({
   const heroProject = featuredProjects[0];
 
   return (
-    <main className="overflow-x-hidden">
+    <main className="overflow-x-clip">
       <JsonLd data={buildHomeStructuredData(locale)} />
       <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-16 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-20">
         <div>
