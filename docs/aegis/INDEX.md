@@ -40,4 +40,9 @@
 
 - `work/2026-07-24-dependency-cooldown/90-evidence.md`: Exact-source package-policy, clean-lockfile, IDE-diagnostic, local-gate, PR #27 baseline, and Dependabot PR #28 failure evidence.
 
+## H.O.T. Alive Experience
+
+- `work/2026-07-24-alive-experience/10-intent.md`: Signal-driven interaction, architecture, accessibility, performance, and non-goal contract.
+- `work/2026-07-24-alive-experience/20-checkpoint.md`: Dated P0 baseline and stacked-delivery boundary.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.
