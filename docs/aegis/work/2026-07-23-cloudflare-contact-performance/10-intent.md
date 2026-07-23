@@ -1,6 +1,6 @@
 # Intent: Cloudflare Contact, DNS Discovery, and Alive Performance
 
-Status: Draft
+Status: Accepted
 
 Captured: 2026-07-23 Europe/Istanbul
 
@@ -8,7 +8,7 @@ Source commit: `b450567383d09ee249b3c640ff712108c8010022`
 
 Source fingerprint: clean exact source implementation commit before these governance records
 
-Accepted source commit: pending
+Accepted source commit: `71bbb0e6a0cbf9777f0f125ab255667381d505ce`
 
 Supersedes: none
 

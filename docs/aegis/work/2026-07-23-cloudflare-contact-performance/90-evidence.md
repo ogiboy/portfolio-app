@@ -1,6 +1,6 @@
 # Evidence: Cloudflare Contact, DNS Discovery, and Alive Performance
 
-Status: Draft; final exact-tip, remote, preview, review, merge, and production rows pending
+Status: Accepted locally; remote, preview, review, merge, and production rows pending
 
 Captured: 2026-07-23 Europe/Istanbul
 
@@ -8,7 +8,7 @@ Source commit: `b450567383d09ee249b3c640ff712108c8010022`
 
 Source fingerprint: clean exact source implementation commit before these governance records
 
-Accepted source commit: pending
+Accepted source commit: `71bbb0e6a0cbf9777f0f125ab255667381d505ce`
 
 Supersedes: none
 
@@ -20,6 +20,7 @@ Each row is an independent observation. A local pass does not prove provider set
 
 | Class         | Exact command, query, or URL                                                                                                                                                                                                    | Timestamp with zone                                   | Identifier / environment                                                                 | Result                  | Concrete artifact or response fact                                                                                                                      | Blocker or none                                                               |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| local         | `pnpm format:check && pnpm lint && pnpm qa:typescript && pnpm typecheck && pnpm typecheck:compat && pnpm release:check && pnpm test && pnpm test:e2e && pnpm build && pnpm audit --prod --audit-level high`                     | `2026-07-23T20:18:07+03:00` to `20:18:45+03:00`       | clean `71bbb0e6a0cbf9777f0f125ab255667381d505ce`; Node 24.16.0; pnpm 11.16.0             | passed                  | TypeScript 7.0.2/native and 6.0.3 compatibility; 14 Vitest files / 60 tests; nine Playwright tests; 61 generated pages; no known vulnerabilities        | none for accepted exact source commit                                         |
 | local         | `pnpm format:check && pnpm lint && pnpm qa:typescript && pnpm typecheck && pnpm typecheck:compat && pnpm release:check && pnpm test && pnpm test:e2e && pnpm build && pnpm audit --prod --audit-level high`                     | `2026-07-23T20:07:35+03:00` to `20:08:20+03:00`       | clean `b8812feb803598cbf925a6718d51d0fe67cdf01f`; Node 24.16.0                           | passed                  | 14 Vitest files / 60 tests; nine Playwright tests; 61 generated pages; no known vulnerabilities                                                         | later worker-only test commit requires exact-tip rerun                        |
 | browser       | `pnpm test:e2e && pnpm test:e2e` after focused Prettier, ESLint, and TypeScript                                                                                                                                                 | 2026-07-23 Europe/Istanbul, immediately before commit | tree later committed as `b450567383d09ee249b3c640ff712108c8010022`; Chromium; one worker | passed twice            | two `9/9` runs; measured desktop rail displacement; natural mobile flow; reduced-motion equivalence; EN/TR, privacy, discovery, WebMCP, and WASM passed | preview and production remain separate                                        |
 | external      | `dig @1.1.1.1 oguzcantoptas.com DS +dnssec +noall +comments +answer`                                                                                                                                                            | `2026-07-23T20:12:16+03:00`                           | Cloudflare public resolver                                                               | passed                  | `NOERROR`; `ad` flag; DS and RRSIG present                                                                                                              | point-in-time resolver evidence                                               |
@@ -36,7 +37,7 @@ Each row is an independent observation. A local pass does not prove provider set
 
 ## Pending Evidence
 
-- `local`: complete package gates on the final clean governance/seal commit.
+- `local`: rerun complete package gates on the metadata-seal tip before push.
 - `pushed`: remote branch OID containing that exact commit.
 - `hosted-check`: every current GitHub/provider check reconciled independently.
 - `preview`: deployment identifier plus cache/cookie, security.txt, discovery, EN/TR, motion, reduced-motion, mobile, and WASM observations.

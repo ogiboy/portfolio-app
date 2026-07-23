@@ -1,6 +1,6 @@
 # Dated Checkpoint: Cloudflare Contact, DNS Discovery, and Alive Performance
 
-Status: Draft; local source implementation complete, delivery pending
+Status: Accepted; local source release-gated, remote delivery pending
 
 Captured: 2026-07-23 Europe/Istanbul
 
@@ -8,7 +8,7 @@ Source commit: `b450567383d09ee249b3c640ff712108c8010022`
 
 Source fingerprint: clean exact source implementation commit before these governance records
 
-Accepted source commit: pending
+Accepted source commit: `71bbb0e6a0cbf9777f0f125ab255667381d505ce`
 
 Supersedes: none
 
@@ -20,6 +20,7 @@ This is a dated implementation snapshot, not live workstream state. Resume from 
 
 - Dependency resolution, Motion migration, static locale generation, cookie-free prefixed locale responses, CI `.next/cache`, and deterministic browser verification were committed through `b450567`.
 - The alive-interface contract was represented in code, content, architecture guidance, an accepted ADR, and browser assertions.
+- Clean governance source `71bbb0e` passed every package gate from `2026-07-23T20:18:07+03:00` to `20:18:45+03:00`.
 - Public resolver evidence showed authenticated DNSSEC and DNS-AID answers plus Cloudflare MX, SPF, and enforcement DMARC.
 - The user confirmed successful inbound forwarding through `ogi@oguzcantoptas.com`; no private destination was retained.
 - Cloudflare's API connector returned `9109 Unauthorized`; public DNS/HTTP evidence does not substitute for account-setting evidence.
