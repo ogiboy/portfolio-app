@@ -159,17 +159,20 @@ test('keeps cinematic motion alive without trapping reduced-motion or mobile lay
   const track = page.locator('[data-cinematic-track]');
   await expect(rail).toBeVisible();
   await expect.poll(() => rail.evaluate((element) => element.style.height)).toContain('calc(');
+  const initialTrackLeft = await track.evaluate((element) => element.getBoundingClientRect().left);
 
   await rail.evaluate((element) => {
     const railElement = element as HTMLElement;
+    const railTop = railElement.getBoundingClientRect().top + window.scrollY;
+    const travel = Math.max(railElement.scrollHeight - window.innerHeight, 0);
     window.scrollTo({
-      top: railElement.offsetTop + railElement.clientHeight / 3,
+      top: railTop + travel / 2,
       behavior: 'instant',
     });
   });
   await expect
-    .poll(() => track.evaluate((element) => getComputedStyle(element).transform))
-    .not.toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+    .poll(() => track.evaluate((element) => element.getBoundingClientRect().left))
+    .toBeLessThan(initialTrackLeft - 20);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
