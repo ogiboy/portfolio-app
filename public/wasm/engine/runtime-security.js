@@ -7,7 +7,7 @@
     'Login',
     'SendStaveState',
   ]);
-  const uint32Range = 0x1_0000_0000;
+  const uint32Range = 2 ** 32;
 
   /**
    * Generates a cryptographically secure random integer below an approved exclusive upper bound.
