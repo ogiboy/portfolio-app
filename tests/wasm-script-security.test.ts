@@ -161,6 +161,29 @@ describe('DosWasmX authored wrapper security', () => {
     expect(runtime).not.toContain("console.log('getSaveStates result: ', result)");
   });
 
+  it('keeps cloud-save passwords ephemeral across login flows', () => {
+    const loginFlowStart = runtime.indexOf('  setupLogin() {');
+    const loginFlowEnd = runtime.indexOf('  postLoginProcess() {', loginFlowStart);
+    const loginFlow = runtime.slice(loginFlowStart, loginFlowEnd);
+
+    expect(runtime).not.toContain('doswasmx-password');
+    expect(loginFlow).not.toContain('localStorage');
+    expect(loginFlow).toContain("this.state.password = '';");
+    expect(loginFlow).toContain('async loginSilent()');
+    expect(loginFlow).toContain('logout()');
+  });
+
+  it('uses the selected base key when looking up local savestates', () => {
+    const methodStart = runtime.indexOf('findSavestateInDatabase()');
+    const methodEnd = runtime.indexOf('/**', methodStart);
+    const findSavestateMethod = runtime.slice(methodStart, methodEnd);
+
+    expect(findSavestateMethod).toContain('let imgKey = myClass.base_name;');
+    expect(findSavestateMethod).toContain("if (!myClass.state.loggedIn) imgKey = 'win95';");
+    expect(findSavestateMethod).toContain("imgKey += '.savestate';");
+    expect(findSavestateMethod).not.toContain("imgKey += +'.savestate';");
+  });
+
   it('keeps the sleep handshake inside the originating frame', () => {
     const { dispatched, frameWindow, helpers } = loadSecurityHarness();
     const data = { name: 'ws-sync-sleep', props: { sessionId: '123' } };

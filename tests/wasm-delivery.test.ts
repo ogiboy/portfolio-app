@@ -17,13 +17,6 @@ const digest = (path: string) =>
     .digest('hex');
 
 const routeHandlerPattern = /^route\.(?:[cm]?[jt]sx?)$/;
-const authoredWrapperPaths = [
-  'public/wasm/engine/runtime-security.js',
-  'public/wasm/engine/script.js',
-  'public/wasm/engine/settings.js',
-  'public/wasm/engine/input_controller.js',
-];
-
 function findRouteHandlers(directory: string): string[] {
   if (!existsSync(directory)) return [];
 
@@ -31,6 +24,14 @@ function findRouteHandlers(directory: string): string[] {
     const entryPath = resolve(directory, entry.name);
     if (entry.isDirectory()) return findRouteHandlers(entryPath);
     return routeHandlerPattern.test(entry.name) ? [entryPath] : [];
+  });
+}
+
+function findAuthoredJavaScriptWrappers(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = resolve(directory, entry.name);
+    if (entry.isDirectory()) return findAuthoredJavaScriptWrappers(entryPath);
+    return entry.name.endsWith('.js') && entry.name !== 'main.js' ? [entryPath] : [];
   });
 }
 
@@ -93,7 +94,9 @@ describe('WASM static delivery', () => {
   it('uses a stable runtime revision without the unused eval formatters', () => {
     const settings = read('public/wasm/engine/settings.js');
     const runtime = read('public/wasm/engine/script.js');
-    const authoredWrappers = authoredWrapperPaths.map(read).join('\n');
+    const authoredWrappers = findAuthoredJavaScriptWrappers(
+      resolve(root, 'public/wasm/engine'),
+    ).map(read);
     const unstableCacheBuster =
       /(?:[?&][^"'`\r\n]{0,80}|(?:cache|revision|version)[^"'`\r\n]{0,80})\b(?:Date\.now|Math\.random)\s*\(/i;
 
@@ -101,9 +104,11 @@ describe('WASM static delivery', () => {
     expect(settings.indexOf('runtime-security.js?v=')).toBeLessThan(
       settings.indexOf('script.js?v='),
     );
-    expect(authoredWrappers).not.toMatch(/\beval\s*\(/);
-    expect(authoredWrappers).not.toMatch(/\b(?:jquery|rivets|toastr)\b/i);
-    expect(authoredWrappers).not.toMatch(unstableCacheBuster);
+    expect(authoredWrappers).not.toContainEqual(expect.stringMatching(/\beval\s*\(/));
+    expect(authoredWrappers).not.toContainEqual(
+      expect.stringMatching(/\b(?:jquery|rivets|toastr)\b/i),
+    );
+    expect(authoredWrappers).not.toContainEqual(expect.stringMatching(unstableCacheBuster));
     expect(runtime.match(/rivetsData/g)).toHaveLength(1);
     expect(runtime).toContain('this.rivetsData = this.state;');
     expect(runtime).not.toContain('doswasmx-password');
