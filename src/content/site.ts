@@ -25,6 +25,8 @@ export const siteCopy: LocalizedCopy<{
     process: string;
     contact: string;
     language: string;
+    useDarkTheme: string;
+    useLightTheme: string;
     openMenu: string;
     closeMenu: string;
     menuDescription: string;
@@ -160,6 +162,8 @@ export const siteCopy: LocalizedCopy<{
       process: 'Process',
       contact: 'Contact',
       language: 'TR',
+      useDarkTheme: 'Use dark theme',
+      useLightTheme: 'Use light theme',
       openMenu: 'Open navigation',
       closeMenu: 'Close navigation',
       menuDescription: 'Move between selected work, the full archive, the lab, and contact.',
@@ -375,6 +379,8 @@ export const siteCopy: LocalizedCopy<{
       process: 'Süreç',
       contact: 'İletişim',
       language: 'EN',
+      useDarkTheme: 'Koyu temayı kullan',
+      useLightTheme: 'Açık temayı kullan',
       openMenu: 'Navigasyonu aç',
       closeMenu: 'Navigasyonu kapat',
       menuDescription: 'Seçili işler, tam arşiv, laboratuvar ve iletişim arasında ilerle.',

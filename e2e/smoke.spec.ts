@@ -228,6 +228,43 @@ test('renders localized public portfolio routes', async ({ page }) => {
   expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
 });
 
+test('restores a persistent localized color theme', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/en');
+
+  const root = page.locator('html');
+  const useLightTheme = page.getByRole('button', { name: 'Use light theme' });
+  await expect(root).toHaveClass(/dark/);
+  await expect(root).toHaveAttribute('data-theme', 'dark');
+  await expect(useLightTheme).toHaveAttribute('aria-pressed', 'true');
+
+  await useLightTheme.click();
+  await expect(root).not.toHaveClass(/dark/);
+  await expect(root).toHaveAttribute('data-theme', 'light');
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem('hot:theme')))
+    .toBe('light');
+
+  await page.goto('/en/about');
+  await expect(root).toHaveAttribute('data-theme', 'light');
+  await expect(page.getByRole('button', { name: 'Use dark theme' })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+
+  await page.reload();
+  await expect(root).toHaveAttribute('data-theme', 'light');
+
+  await page.evaluate(() => window.localStorage.removeItem('hot:theme'));
+  await page.goto('/tr');
+  await expect(root).toHaveClass(/dark/);
+  await expect(root).toHaveAttribute('data-theme', 'dark');
+  await expect(page.getByRole('button', { name: 'Açık temayı kullan' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+});
+
 test('keeps the hero Signal arrival finite and removes it for reduced motion', async ({ page }) => {
   await page.goto('/en');
 

@@ -45,7 +45,7 @@ export function MobileNavigation({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button className="md:hidden" size="icon" variant="ghost" aria-label={openLabel}>
+        <Button className="lg:hidden" size="icon" variant="ghost" aria-label={openLabel}>
           <Menu data-icon="inline-start" aria-hidden="true" strokeWidth={2.5} />
         </Button>
       </SheetTrigger>

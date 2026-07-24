@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/client/locale-switcher';
 import { MobileNavigation } from '@/components/client/mobile-navigation';
 import { NavigationLink } from '@/components/client/navigation-link';
+import { ThemeToggle } from '@/components/client/theme-toggle';
 import { HotMark } from '@/components/site/hot-mark';
 import { buttonVariants } from '@/components/ui/button';
 import { contact, siteCopy, type Locale } from '@/content/site';
@@ -21,7 +22,7 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
           <HotMark />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label={copy.nav.label}>
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={copy.nav.label}>
           <NavigationLink href="/" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
             {copy.nav.home}
           </NavigationLink>
@@ -65,10 +66,11 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
             contactLabel={copy.nav.contact}
             contactHref={`mailto:${contact.email}`}
           />
+          <ThemeToggle darkLabel={copy.nav.useDarkTheme} lightLabel={copy.nav.useLightTheme} />
           <LocaleSwitcher label={copy.nav.language} />
           <a
             href={`mailto:${contact.email}`}
-            className={buttonVariants({ size: 'sm', className: 'hidden sm:inline-flex' })}
+            className={buttonVariants({ size: 'sm', className: 'hidden xl:inline-flex' })}
           >
             {copy.nav.contact}
             <ExternalLink aria-hidden="true" strokeWidth={2.5} />

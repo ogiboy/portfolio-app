@@ -6,12 +6,14 @@ import type { Metadata } from 'next';
 import { hasLocale } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import Providers from '@/components/Providers';
 import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
 import { routing } from '@/i18n/routing';
 import type { Locale } from '@/content/site';
 import { createRootMetadata } from '@/lib/seo';
+import { themeBootstrapScript } from '@/lib/theme';
 
 export async function generateMetadata({
   params,
@@ -54,6 +56,9 @@ export default async function RootLayout({
           {children}
           <SiteFooter locale={locale as Locale} />
         </Providers>
+        <Script id="hot-theme" strategy="beforeInteractive">
+          {themeBootstrapScript}
+        </Script>
       </body>
     </html>
   );

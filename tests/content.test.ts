@@ -69,6 +69,8 @@ describe('portfolio content', () => {
     expect(siteCopy.tr.home.primaryCta).toBeTruthy();
     expect(siteCopy.en.nav.about).toBe('About');
     expect(siteCopy.tr.nav.about).toBe('Hakkında');
+    expect(siteCopy.en.nav.useDarkTheme).toBe('Use dark theme');
+    expect(siteCopy.tr.nav.useLightTheme).toBe('Açık temayı kullan');
     expect(siteCopy.en.projects.caseLabel).toBeTruthy();
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
     expect(siteCopy.en.projects.archiveLabel).toBe('Archive');

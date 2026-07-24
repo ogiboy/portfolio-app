@@ -68,7 +68,10 @@ export default async function AboutPage({
             const href = getAboutPathHref(path.target);
 
             return (
-              <Card key={path.title} className={index === 1 ? 'bg-primary' : undefined}>
+              <Card
+                key={path.title}
+                className={index === 1 ? 'bg-primary text-primary-foreground' : undefined}
+              >
                 <CardHeader>
                   <CardTitle>{path.title}</CardTitle>
                   <CardDescription
