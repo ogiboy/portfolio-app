@@ -54,8 +54,9 @@ immutable for one year, and timestamp/random query values prevented useful brows
 
 ## Verification requirements
 
-The Accepted status records the architectural decision, not completion of its release checks. The
-following items are acceptance requirements and do not assert that a dated verification run passed:
+The Accepted status records the architectural decision, not completion of its release checks. A
+release implementing this decision is acceptable only when all of the following requirements are
+met; this list does not assert that a dated verification run passed:
 
 - Unit tests must parse the effective Next.js header configuration and verify artifact digests.
 - Browser tests must verify no pre-intent `/wasm/*` requests, successful boot, explicit failure
@@ -64,11 +65,19 @@ following items are acceptance requirements and do not assert that a dated verif
 
 ## Executed evidence
 
-This ADR does not claim dated execution evidence. Actual results must be recorded chronologically in
-the active checkpoint, daily log, or Aegis evidence record with the timestamp, exact commit,
-environment, command, result, and artifact before release.
+The pinned runtime hardening baseline was exercised on 2026-07-24 and recorded in
+[`../../daily/2026-07-24.md`](../daily/2026-07-24.md) and
+[`../../docs/aegis/work/2026-07-24-quality-and-sonar/90-evidence.md`](../../docs/aegis/work/2026-07-24-quality-and-sonar/90-evidence.md).
+Those records identify the exact historical commits, commands, environments, results, unchanged
+generated-artifact boundary, and remaining hosted-check limitation. They are baseline evidence only;
+they do not prove a future source-shell migration or release.
+
+Any later release evidence must be recorded chronologically in the active checkpoint, daily log, or
+Aegis evidence record with its timestamp, exact commit, environment, command, result, and artifact.
 
 ## Rollback
 
-Revert this decision's implementation commit to restore the Route Handler and previous vendor
-bundle. Do not partially revert the matched manifest, loader revisions, and runtime delivery rules.
+Revert this decision's implementation as one coherent change to the last known-good static engine
+tree, manifest revision, and header policy. Do not restore the retired Node Route Handler or a
+vendor bundle, and do not partially revert the matched manifest, loader revisions, or runtime
+delivery rules.
