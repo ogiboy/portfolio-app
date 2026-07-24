@@ -54,7 +54,7 @@ describe('localized recovery pages', () => {
     localeState.current = 'tr';
     const { getByRole } = render(await NotFound());
 
-    expect(getByRole('heading', { name: 'Bu yol haritadan çıkmış.' })).toBeInTheDocument();
+    expect(getByRole('heading', { name: 'Bu sayfa mevcut değil.' })).toBeInTheDocument();
     expect(getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/');
     expect(getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute('href', '/projects');
   });
