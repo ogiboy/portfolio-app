@@ -12,6 +12,12 @@ import { buildLabStructuredData } from '@/lib/structured-data';
 
 const labSignalIcons = [HardDrive, Cpu, ShieldCheck];
 
+/**
+ * Builds localized metadata for the Retro Game Center route.
+ *
+ * @param params - Resolves to the locale used for the page metadata.
+ * @returns Metadata for the Retro Game Center route
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {

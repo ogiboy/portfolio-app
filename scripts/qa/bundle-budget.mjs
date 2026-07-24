@@ -35,10 +35,21 @@ const cinematicRailModule = 'src/components/client/cinematic-work-rail.tsx';
 const cinematicRailMarker = 'data-cinematic-rail';
 const motionFeatureLoadableKey = 'components/client/cinematic-work-rail.tsx -> ./motion-features';
 
+/**
+ * Abort the bundle budget gate with a descriptive error.
+ * @param {string} message - The reason the gate failed.
+ * @throws {Error} An error containing the bundle budget failure message.
+ */
 function fail(message) {
   throw new Error(`Bundle budget gate failed: ${message}`);
 }
 
+/**
+ * Loads and parses a required JSON file.
+ * @param {string} path - The file path to read.
+ * @param {string} description - A human-readable description of the file.
+ * @return {unknown} The parsed JSON value.
+ */
 function readJson(path, description) {
   if (!existsSync(path)) {
     fail(
@@ -53,10 +64,20 @@ function readJson(path, description) {
   }
 }
 
+/**
+ * Formats a byte count with its byte and kibibyte values.
+ * @param {number} bytes - The number of bytes.
+ * @returns {string} The formatted byte count.
+ */
 function formatBytes(bytes) {
   return `${bytes.toLocaleString('en-US')} B (${(bytes / 1024).toFixed(2)} KiB)`;
 }
 
+/**
+ * Finds the most recently modified file among the configured production build inputs.
+ * @returns {{path: string, mtimeMs: number}} The path and modification time of the newest build input.
+ * @throws {Error} If a required build input is missing or no files are found.
+ */
 function newestBuildInput() {
   let newest;
 
@@ -86,6 +107,10 @@ function newestBuildInput() {
   return newest;
 }
 
+/**
+ * Verifies that the production build exists and was created after the latest build input changed.
+ * @throws {Error} If the build completion marker is missing or the production build is stale.
+ */
 function assertBuildIsFresh() {
   if (!existsSync(buildCompletionMarker)) {
     fail(
@@ -101,6 +126,12 @@ function assertBuildIsFresh() {
   }
 }
 
+/**
+ * Resolves a static asset reference to an existing file within the Next.js static output directory.
+ * @param {string} relativePath - The encoded asset path relative to the Next.js output directory.
+ * @param {string} description - A description used in failure messages.
+ * @returns {{relativePath: string, resolvedAssetPath: string}} The decoded asset path and its resolved filesystem path.
+ */
 function resolveStaticAsset(relativePath, description) {
   let decodedRelativePath;
   try {
@@ -122,6 +153,12 @@ function resolveStaticAsset(relativePath, description) {
   return { relativePath: decodedRelativePath, resolvedAssetPath };
 }
 
+/**
+ * Resolves an attributable Next.js static JavaScript asset URL.
+ * @param {string} url - The asset URL to resolve.
+ * @param {string} artifactPath - The artifact path associated with the URL.
+ * @returns {{relativePath: string, resolvedAssetPath: string}|undefined} The resolved asset information, or `undefined` for non-static JavaScript URLs.
+ */
 function assetPathFromUrl(url, artifactPath) {
   const pathname = new URL(url, 'https://bundle-budget.invalid').pathname;
   if (!pathname.startsWith('/_next/static/') || !pathname.endsWith('.js')) return undefined;
@@ -132,6 +169,12 @@ function assetPathFromUrl(url, artifactPath) {
   );
 }
 
+/**
+ * Extracts script source URLs from an HTML document.
+ * @param {string} html - The HTML content to inspect.
+ * @param {string} artifactPath - The artifact path used in parsing error messages.
+ * @returns {string[]} The extracted script source URLs.
+ */
 function scriptSourceUrls(html, artifactPath) {
   const urls = [];
   let cursor = 0;
@@ -162,6 +205,13 @@ function scriptSourceUrls(html, artifactPath) {
   return urls;
 }
 
+/**
+ * Reads a route artifact and resolves its initial JavaScript assets.
+ * @param {Object} options - Route artifact options.
+ * @param {string} options.route - Route represented by the artifact.
+ * @param {string} options.artifact - Path to the route artifact relative to `.next`.
+ * @returns {{route: string, artifactPath: string, scripts: Map<string, string>}} The route, resolved artifact path, and map of asset paths to resolved files.
+ */
 function readInitialScripts({ route, artifact }) {
   const artifactPath = resolve(nextDirectory, artifact);
   if (!existsSync(artifactPath)) {
@@ -185,6 +235,11 @@ function readInitialScripts({ route, artifact }) {
   return { route, artifactPath, scripts };
 }
 
+/**
+ * Calculates the combined gzip size of JavaScript assets.
+ * @param {Map<string, string>} scriptAssets - Asset paths keyed by their relative paths.
+ * @returns {number} The total compressed size in bytes.
+ */
 function gzipBytes(scriptAssets) {
   return [...scriptAssets.values()].reduce(
     (total, assetPath) => total + gzipSync(readFileSync(assetPath)).byteLength,
@@ -192,6 +247,10 @@ function gzipBytes(scriptAssets) {
   );
 }
 
+/**
+ * Reads and parses the home route's client-reference manifest.
+ * @returns {object} The manifest containing the `clientModules` entry.
+ */
 function readHomeClientManifest() {
   const manifestPath = resolve(
     nextDirectory,
@@ -228,6 +287,12 @@ function readHomeClientManifest() {
   return manifest;
 }
 
+/**
+ * Verifies that cinematic rail chunks are present on the home route and isolated from excluded routes.
+ * @param {Object} home - Home route data containing its initial script assets.
+ * @param {Object[]} excludedRoutes - Route data that must not include cinematic rail chunks.
+ * @returns {string[]} Relative paths of the cinematic rail chunks attributed to the home route.
+ */
 function assertCinematicRailIsolated(home, excludedRoutes) {
   const manifest = readHomeClientManifest();
   const moduleEntry = Object.entries(manifest.clientModules).find(([modulePath]) =>
@@ -270,6 +335,10 @@ function assertCinematicRailIsolated(home, excludedRoutes) {
   return railChunks.map(([relativePath]) => relativePath);
 }
 
+/**
+ * Measures the gzip size of JavaScript chunks attributed to the Motion feature dynamic import.
+ * @returns {{chunks: string[], gzipSize: number}} The attributed chunk paths and their combined gzip size in bytes.
+ */
 function measureMotionFeatureChunks() {
   const manifest = readJson(
     resolve(nextDirectory, 'react-loadable-manifest.json'),

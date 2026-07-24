@@ -12,6 +12,7 @@ SONAR_READY_TIMEOUT_SECONDS="${SONAR_READY_TIMEOUT_SECONDS:-90}"
 SONAR_TOKEN_KEYCHAIN_SERVICE="${SONAR_TOKEN_KEYCHAIN_SERVICE:-codex-sonarqube-token}"
 SONAR_TOKEN_KEYCHAIN_ACCOUNT="${SONAR_TOKEN_KEYCHAIN_ACCOUNT:-${USER:-}}"
 
+# require_command verifies that a required command is available in the PATH for the specified purpose.
 require_command() {
   local command_name="$1"
   local purpose="$2"
@@ -22,6 +23,7 @@ require_command() {
   fi
 }
 
+# resolve_token ensures SONAR_TOKEN is available from the environment or macOS Keychain and exports it for downstream commands.
 resolve_token() {
   if [[ -z "${SONAR_TOKEN:-}" ]] && command -v security >/dev/null 2>&1 && [[ -n "${SONAR_TOKEN_KEYCHAIN_ACCOUNT}" ]]; then
     SONAR_TOKEN="$(
@@ -40,6 +42,7 @@ resolve_token() {
   export SONAR_TOKEN
 }
 
+# wait_for_sonarqube waits until the local SonarQube instance reports an UP status or exits after the configured timeout.
 wait_for_sonarqube() {
   local deadline=$((SECONDS + SONAR_READY_TIMEOUT_SECONDS))
 
@@ -56,6 +59,7 @@ wait_for_sonarqube() {
   exit 1
 }
 
+# redacted_runner runs a command, replaces the SonarQube token in its output with `<redacted>`, and writes the result to the scan log.
 redacted_runner() {
   local -a command=("$@")
 

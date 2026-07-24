@@ -11,7 +11,13 @@ type UseWasmFrameOptions = {
   iframeRef: RefObject<HTMLIFrameElement | null>;
 };
 
-/** Coordinates iframe boot attempts and validates game-frame status transitions. */
+/**
+ * Manages iframe boot attempts and tracks the game frame's lifecycle state.
+ *
+ * @param enginePath - The base URL used to construct the iframe source.
+ * @param iframeRef - Reference to the game iframe.
+ * @returns The current attempt number, frame state, iframe source URL, and a function to start a boot attempt.
+ */
 export function useWasmFrame({ enginePath, iframeRef }: UseWasmFrameOptions) {
   const [attempt, setAttempt] = useState(0);
   const [frameState, setFrameState] = useState<FrameState>('idle');

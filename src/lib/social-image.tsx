@@ -11,7 +11,12 @@ export const socialImageSize = {
 /** MIME type served for generated portfolio social preview images. */
 export const socialImageContentType = 'image/png';
 
-/** Renders a locale-aware PNG social card for portfolio sharing. */
+/**
+ * Creates a locale-aware social sharing card for the portfolio.
+ *
+ * @param locale - The locale used to select localized card text
+ * @returns A PNG image response containing the portfolio social card
+ */
 export function createSocialImage(locale: Locale) {
   const copy = seoCopy[locale];
   const gridLines = Array.from({ length: 9 }, (_, index) => (index + 1) * 10);

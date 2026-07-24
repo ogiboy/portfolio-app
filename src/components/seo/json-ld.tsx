@@ -2,7 +2,11 @@ import type { JsonLdValue } from '@/lib/structured-data';
 
 const escapedLessThan = String.raw`\u003c`;
 
-/** Serializes structured data while escaping unsafe HTML tag delimiters. */
+/**
+ * Serializes structured data for embedding as JSON-LD.
+ *
+ * @returns The serialized JSON-LD string with literal `<` characters escaped.
+ */
 export function serializeJsonLd(data: JsonLdValue) {
   return JSON.stringify(data).replaceAll('<', escapedLessThan);
 }

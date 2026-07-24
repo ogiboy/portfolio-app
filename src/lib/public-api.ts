@@ -19,7 +19,11 @@ const publicIdentity = {
   sameAs: [contact.github, contact.linkedin],
 };
 
-/** Returns the canonical public portfolio data payload without private fields. */
+/**
+ * Builds the canonical payload for the public portfolio API.
+ *
+ * @returns The public portfolio metadata, identity, contact details, and project information.
+ */
 export function getPortfolioApiPayload() {
   return {
     name: `${identity.brand} - ${identity.fullName} Portfolio`,

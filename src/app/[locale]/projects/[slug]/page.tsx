@@ -27,6 +27,12 @@ export function generateStaticParams() {
   ]);
 }
 
+/**
+ * Generates localized metadata for a project detail page.
+ *
+ * @param params - Route parameters containing the locale and project slug.
+ * @returns Metadata for the project page, or no-index metadata when the project is not found.
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: string; slug: string }> }>): Promise<Metadata> {
@@ -52,6 +58,11 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Renders the localized detail page for a project.
+ *
+ * @param params - The locale and project slug used to load the page content.
+ */
 export default async function ProjectDetailPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale; slug: string }> }>) {

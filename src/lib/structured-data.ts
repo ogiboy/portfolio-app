@@ -119,7 +119,13 @@ export function buildProjectsStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
-/** Builds Schema.org project and breadcrumb data for one project page. */
+/**
+ * Builds localized Schema.org project and breadcrumb data for a project page.
+ *
+ * @param locale - The locale used for page URLs, labels, and project descriptions
+ * @param project - The project represented by the structured data
+ * @returns JSON-LD data for the project and its breadcrumb trail
+ */
 export function buildProjectStructuredData(locale: Locale, project: Project): JsonLdValue {
   const copy = siteCopy[locale].projects;
   const url = siteUrl(`/${locale}/projects/${project.slug}`);
@@ -169,7 +175,12 @@ export function buildProjectStructuredData(locale: Locale, project: Project): Js
   };
 }
 
-/** Builds Schema.org creative-work data for the interactive lab route. */
+/**
+ * Creates Schema.org structured data for the localized interactive lab page.
+ *
+ * @param locale - The locale used for localized page content and URL generation
+ * @returns JSON-LD describing the lab as a freely accessible creative work
+ */
 export function buildLabStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].lab;
   const url = siteUrl(`/${locale}/labs/retro-game-center`);
@@ -189,7 +200,12 @@ export function buildLabStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
-/** Builds Schema.org metadata for the localized privacy information page. */
+/**
+ * Builds localized Schema.org metadata for the privacy information page.
+ *
+ * @param locale - The locale used for the page content and URL.
+ * @returns JSON-LD metadata describing the privacy page.
+ */
 export function buildPrivacyStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].privacy;
   const url = siteUrl(`/${locale}/privacy`);

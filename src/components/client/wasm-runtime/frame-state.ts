@@ -13,7 +13,13 @@ type FrameCopy = {
   timeoutTitle: string;
 };
 
-/** Selects localized status copy matching the game frame lifecycle state. */
+/**
+ * Selects localized status copy for the specified game frame lifecycle state.
+ *
+ * @param frameState - The current lifecycle state of the game frame
+ * @param copy - Localized text for each lifecycle state
+ * @returns An object containing the corresponding `title` and `body`; ready state uses an empty body
+ */
 export function copyForState(frameState: FrameState, copy: FrameCopy) {
   switch (frameState) {
     case 'booting':

@@ -8,6 +8,11 @@
     'SendStaveState',
   ]);
 
+  /**
+   * Generates a cryptographically secure random integer below an approved exclusive upper bound.
+   * @param {number} maxExclusive - The exclusive upper bound, from 1 through 0x100000000.
+   * @return {number} A uniformly distributed integer from 0 through maxExclusive - 1.
+   */
   function secureRandomInteger(maxExclusive) {
     if (!Number.isSafeInteger(maxExclusive) || maxExclusive <= 0 || maxExclusive > 0x100000000) {
       throw new RangeError('Random integer bound is not approved.');
@@ -21,6 +26,11 @@
     return values[0] % maxExclusive;
   }
 
+  /**
+   * Resolves a URL for an approved runtime asset under the `/wasm/` path.
+   * @param {string} path - The asset path or URL to validate.
+   * @return {URL} The approved runtime asset URL.
+   */
   function resolveApprovedAssetUrl(path) {
     const approvedRoot = new URL('/wasm/', global.location.href);
     const candidate = new URL(path, global.location.href);
@@ -34,6 +44,14 @@
     return candidate;
   }
 
+  /**
+   * Resolves an approved cloud route into a URL with the specified query parameters.
+   * @param {string} baseUrl - The HTTPS base URL, or an HTTP loopback URL.
+   * @param {string} route - An approved cloud route.
+   * @param {Object} [params={}] - Query parameters to include in the resulting URL.
+   * @returns {URL} The resolved cloud route URL.
+   * @throws {Error} If the route or base URL is not approved.
+   */
   function resolveApprovedCloudUrl(baseUrl, route, params = {}) {
     if (!approvedCloudRoutes.has(route)) {
       throw new Error('Cloud route is not approved.');
@@ -62,6 +80,11 @@
     return target;
   }
 
+  /**
+   * Schedules a response to a valid local sleep-sync message.
+   * @param {MessageEvent} event - The message event to validate.
+   * @return {boolean} `true` if a response was scheduled, `false` otherwise.
+   */
   function replyToLocalSleepMessage(event) {
     const data = event.data;
     if (

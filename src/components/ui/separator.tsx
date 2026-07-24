@@ -6,7 +6,13 @@ type SeparatorProps = HTMLAttributes<HTMLDivElement> & {
   orientation?: 'horizontal' | 'vertical';
 };
 
-/** Renders decorative or semantic separators with the appropriate ARIA role. */
+/**
+ * Renders a horizontal or vertical separator as decorative or semantic content.
+ *
+ * @param className - Additional CSS class names
+ * @param orientation - The separator's orientation
+ * @param decorative - Whether the separator is decorative rather than semantic
+ */
 export function Separator({
   className,
   orientation = 'horizontal',

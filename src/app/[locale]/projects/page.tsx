@@ -24,6 +24,12 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Renders the localized projects archive page.
+ *
+ * @param params - Route parameters containing the active locale.
+ * @returns The projects page markup for the active locale.
+ */
 export default async function ProjectsPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {

@@ -12,6 +12,7 @@ if [[ "${SONAR_HOST_URL}" != "http://localhost:9000" ]]; then
   exit 1
 fi
 
+# require_command verifies that an executable is available in PATH and exits with an error if it is missing.
 require_command() {
   local command_name="$1"
   local purpose="$2"

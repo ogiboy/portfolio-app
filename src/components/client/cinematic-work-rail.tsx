@@ -18,7 +18,13 @@ export type CinematicProject = {
   slug: string;
 };
 
-/** Renders project highlights with motion only when the device is eligible. */
+/**
+ * Displays a project highlights rail with cinematic scrolling when motion is supported and permitted.
+ *
+ * @param title - The rail heading
+ * @param intro - The introductory text displayed beneath the heading
+ * @param projects - The projects displayed in the rail
+ */
 export function CinematicWorkRail({
   title,
   intro,

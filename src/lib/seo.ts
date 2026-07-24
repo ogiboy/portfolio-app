@@ -65,6 +65,13 @@ export const seoCopy: Record<
   },
 };
 
+/**
+ * Builds a localized route path.
+ *
+ * @param locale - The locale prefix for the route
+ * @param path - The route path appended to the locale
+ * @returns The localized route path
+ */
 function routePath(locale: Locale, path = '') {
   return `/${locale}${path}`;
 }
@@ -78,6 +85,15 @@ export function localizedLanguageUrls(path = '') {
   };
 }
 
+/**
+ * Builds shared SEO metadata for a localized route.
+ *
+ * @param locale - The locale used for localized metadata and social images
+ * @param path - The route path relative to the locale prefix
+ * @param title - The page title
+ * @param description - The page description
+ * @returns Metadata containing canonical, alternate-language, social sharing, and indexing information
+ */
 function sharedMetadata(
   locale: Locale,
   path: string,
@@ -161,7 +177,15 @@ export function createRootMetadata(locale: Locale): Metadata {
   };
 }
 
-/** Builds route metadata with canonical, alternate, and social fields. */
+/**
+ * Creates metadata for a localized route.
+ *
+ * @param locale - The route's locale
+ * @param path - The route path used for canonical and alternate URLs
+ * @param title - The page title
+ * @param description - The page description
+ * @returns Metadata containing localized canonical, alternate, and social fields
+ */
 export function createRouteMetadata({
   locale,
   path,

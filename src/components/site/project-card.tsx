@@ -6,7 +6,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { formatProjectPosition, type Project, type ProjectPosition } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 
-/** Summarizes a project and labels its case study, live, and code destinations. */
+/**
+ * Displays a project summary with metadata, stack tags, and links to its case study, live site, and code repository.
+ *
+ * @param project - The project data used to populate the card.
+ * @param category - The project category displayed in the card.
+ * @param description - The project description displayed in the card.
+ * @param liveLabel - The label for the live-site link.
+ * @param codeLabel - The label for the code-repository link.
+ * @param caseLabel - The label for the case-study link.
+ * @param archiveLabel - The label displayed before the project position.
+ * @param position - The optional project position displayed with the archive label.
+ */
 export function ProjectCard({
   project,
   category,

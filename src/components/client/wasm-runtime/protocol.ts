@@ -6,7 +6,12 @@ export type WasmStatusMessage = {
   version: 1;
 };
 
-/** Narrows unknown window messages to the supported WASM status protocol. */
+/**
+ * Determines whether an unknown value is a valid WASM status message.
+ *
+ * @param value - The value to validate.
+ * @returns `true` if the value matches the WASM status message protocol, `false` otherwise.
+ */
 export function isWasmStatusMessage(value: unknown): value is WasmStatusMessage {
   if (!value || typeof value !== 'object') return false;
 
