@@ -19,7 +19,6 @@
   "debtCeilings": {
     "public/wasm/engine/input_controller.js": 1010,
     "public/wasm/engine/script.js": 2873,
-    "src/components/client/wasm-game-frame.tsx": 256,
     "src/content/projects.ts": 359,
     "src/content/site.ts": 583
   },

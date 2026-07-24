@@ -1,20 +1,12 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { ExternalLink, Gamepad2, LoaderCircle, RotateCcw, TriangleAlert } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { copyForState, type FrameState } from './wasm-runtime/frame-state';
+import { useWasmFrame } from './wasm-runtime/use-wasm-frame';
 
-const bootTimeoutMs = 20_000;
 const enginePath = '/wasm/engine/index.html?game=doom-shareware';
-
-type FrameState = 'idle' | 'booting' | 'ready' | 'error' | 'timeout';
-
-type WasmStatusMessage = {
-  attempt: string;
-  channel: 'hot-wasm';
-  status: 'ready' | 'error';
-  version: 1;
-};
 
 type WasmGameFrameProps = {
   title: string;
@@ -32,32 +24,6 @@ type WasmGameFrameProps = {
   timeoutBody: string;
   retryLabel: string;
 };
-
-function isWasmStatusMessage(value: unknown): value is WasmStatusMessage {
-  if (!value || typeof value !== 'object') return false;
-  const candidate = value as Partial<WasmStatusMessage>;
-  return (
-    candidate.channel === 'hot-wasm' &&
-    candidate.version === 1 &&
-    (candidate.status === 'ready' || candidate.status === 'error') &&
-    typeof candidate.attempt === 'string'
-  );
-}
-
-function copyForState(frameState: FrameState, copy: WasmGameFrameProps) {
-  switch (frameState) {
-    case 'booting':
-      return { body: copy.bootingBody, title: copy.bootingTitle };
-    case 'ready':
-      return { body: '', title: copy.readyLabel };
-    case 'error':
-      return { body: copy.errorBody, title: copy.errorTitle };
-    case 'timeout':
-      return { body: copy.timeoutBody, title: copy.timeoutTitle };
-    default:
-      return { body: copy.idleBody, title: copy.idleTitle };
-  }
-}
 
 function BootActionIcon({
   frameState,
@@ -117,13 +83,9 @@ export function WasmGameFrame({
   retryLabel,
 }: Readonly<WasmGameFrameProps>) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [attempt, setAttempt] = useState(0);
-  const [frameState, setFrameState] = useState<FrameState>('idle');
-  const activeAttemptRef = useRef(attempt);
-  const frameStateRef = useRef(frameState);
+  const { attempt, frameState, src, startBoot } = useWasmFrame({ enginePath, iframeRef });
   const running = frameState === 'booting' || frameState === 'ready';
   const recoverable = frameState === 'error' || frameState === 'timeout';
-  const src = `${enginePath}&attempt=${attempt}`;
   const stateCopy = copyForState(frameState, {
     bootingBody,
     bootingTitle,
@@ -131,51 +93,10 @@ export function WasmGameFrame({
     errorTitle,
     idleBody,
     idleTitle,
-    intro,
-    launchLabel,
-    openLabel,
     readyLabel,
-    retryLabel,
     timeoutBody,
     timeoutTitle,
-    title,
   });
-
-  useLayoutEffect(() => {
-    activeAttemptRef.current = attempt;
-    frameStateRef.current = frameState;
-  }, [attempt, frameState]);
-
-  useEffect(() => {
-    if (frameState !== 'booting') return;
-
-    const timeout = window.setTimeout(() => setFrameState('timeout'), bootTimeoutMs);
-    return () => window.clearTimeout(timeout);
-  }, [attempt, frameState]);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent<unknown>) => {
-      if (event.source !== iframeRef.current?.contentWindow || !isWasmStatusMessage(event.data)) {
-        return;
-      }
-      if (
-        event.data.attempt !== String(activeAttemptRef.current) ||
-        frameStateRef.current !== 'booting'
-      ) {
-        return;
-      }
-
-      setFrameState(event.data.status);
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
-
-  const startBoot = () => {
-    setAttempt((current) => current + 1);
-    setFrameState('booting');
-  };
 
   return (
     <div className="border-foreground bg-foreground text-background border-2 shadow-[10px_10px_0_0_var(--primary)]">
