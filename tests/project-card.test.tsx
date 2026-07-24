@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
+import type { AnchorHTMLAttributes } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { ProjectCard } from '@/components/site/project-card';
 import { projects } from '@/content/projects';
 
 vi.mock('@/i18n/navigation', () => ({
-  Link: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  Link: ({ children, href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a href={String(href)} {...props}>
       {children}
     </a>

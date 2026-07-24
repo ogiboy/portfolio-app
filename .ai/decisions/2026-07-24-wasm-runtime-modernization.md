@@ -52,12 +52,21 @@ immutable for one year, and timestamp/random query values prevented useful brows
 - A future DOSBox-X rebuild or js-dos migration requires a separate ADR, reproducible build, paired
   engine/wrapper replacement, license review, and cross-browser performance baseline.
 
-## Verification
+## Verification requirements
 
-- Unit tests parse the effective Next.js header configuration and verify artifact digests.
-- Browser tests verify no pre-intent `/wasm/*` requests, successful boot, explicit failure recovery,
-  `application/wasm`, sandbox headers, and non-immutable cache behavior.
+The Accepted status records the architectural decision, not completion of its release checks. The
+following items are acceptance requirements and do not assert that a dated verification run passed:
+
+- Unit tests must parse the effective Next.js header configuration and verify artifact digests.
+- Browser tests must verify no pre-intent `/wasm/*` requests, successful boot, explicit failure
+  recovery, `application/wasm`, sandbox headers, and non-immutable cache behavior.
 - A production build/start smoke must prove static delivery before the change is released.
+
+## Executed evidence
+
+This ADR does not claim dated execution evidence. Actual results must be recorded chronologically in
+the active checkpoint, daily log, or Aegis evidence record with the timestamp, exact commit,
+environment, command, result, and artifact before release.
 
 ## Rollback
 

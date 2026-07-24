@@ -31,6 +31,12 @@ Do not replace, regenerate, optimize, or hand-edit `main.js` or `main.wasm` in t
 The glue JavaScript and WASM binary are a matched build pair. Any digest change requires a
 separate reviewed artifact update, manifest revision, license review, and browser baseline.
 
+Compatibility decision: `/wasm/engine/index.html` remains the stable sandbox and open-separately
+entrypoint. After cutover it must be a deterministic generated compatibility artifact emitted from
+the React-owned runtime source, not a hand-maintained shell, redirect, or second implementation. It
+may contain only the document root and bootstrap wiring needed to mount that source-owned runtime;
+state, protocol, asset selection, and recovery behavior remain owned by typed source modules.
+
 ## Non-goals
 
 - No DOSBox-X, DosWasmX, js-dos, Emscripten, or Binaryen upgrade.
@@ -45,18 +51,19 @@ separate reviewed artifact update, manifest revision, license review, and browse
 
 ## Source/public ownership map
 
-| Responsibility                                                         | Canonical owner after migration                                                    | Public artifact rule                                                               |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Lab route, localized copy, SEO                                         | `src/app/[locale]/labs/retro-game-center/page.tsx` and existing content/SEO owners | Server-rendered route; no runtime boot on initial render                           |
-| Parent boot lifecycle (`idle`, `booting`, `ready`, `error`, `timeout`) | `src/components/client/wasm-runtime/` and `wasm-game-frame.tsx`                    | Client leaf owns state and cleanup; explicit boot remains required                 |
-| Parent/engine message protocol                                         | Typed modules in `src/components/client/wasm-runtime/`                             | Versioned `hot-wasm` protocol; reject unknown source, attempt, channel, or version |
-| Runtime shell DOM and engine mount                                     | React-owned client leaf in `src/components/client/wasm-runtime/`                   | No authored runtime shell HTML/JS remains under `public/wasm/engine`               |
-| Asset URLs, manifest validation, revision, and game selection          | Server-safe `src/lib/wasm/` plus typed source data                                 | Public manifest may be emitted/copied as a generated delivery artifact             |
-| Static headers and `/wasm/*` delivery                                  | `next.config.mjs`                                                                  | One effective header owner; no serverless passthrough route                        |
-| Emscripten glue and compiled emulator                                  | `public/wasm/engine/main.js` and `main.wasm`                                       | Generated, immutable as source inputs, served as a matched pair                    |
-| Runtime font and other engine-generated support assets                 | `public/wasm/engine/`                                                              | Keep as generated public artifacts unless an ownership decision proves otherwise   |
-| DOS/game payloads                                                      | `public/wasm/roms/**`                                                              | Generated/copied public artifacts; preserve notices and exact file names           |
-| Artifact inventory and digests                                         | Checked-in provenance/manifest records                                             | Update only with paired artifact evidence and revision bump                        |
+| Responsibility                                                         | Canonical owner after migration                                                                            | Public artifact rule                                                                                         |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Lab route, localized copy, SEO                                         | `src/app/[locale]/labs/retro-game-center/page.tsx` and existing content/SEO owners                         | Server-rendered route; no runtime boot on initial render                                                     |
+| Parent boot lifecycle (`idle`, `booting`, `ready`, `error`, `timeout`) | `src/components/client/wasm-runtime/` and `wasm-game-frame.tsx`                                            | Client leaf owns state and cleanup; explicit boot remains required                                           |
+| Parent/engine message protocol                                         | Typed modules in `src/components/client/wasm-runtime/`                                                     | Versioned `hot-wasm` protocol; reject unknown source, attempt, channel, or version                           |
+| Runtime shell DOM and engine mount                                     | React-owned client leaf in `src/components/client/wasm-runtime/`                                           | No hand-authored runtime shell HTML/JS remains under `public/wasm/engine`                                    |
+| Compatibility frame entrypoint                                         | Runtime entry source in `src/components/client/wasm-runtime/` and deterministic emitter in `scripts/wasm/` | `/wasm/engine/index.html` remains a generated bootstrap artifact with no independent state or protocol owner |
+| Asset URLs, manifest validation, revision, and game selection          | Server-safe `src/lib/wasm/` plus typed source data                                                         | Public manifest may be emitted/copied as a generated delivery artifact                                       |
+| Static headers and `/wasm/*` delivery                                  | `next.config.mjs`                                                                                          | One effective header owner; no serverless passthrough route                                                  |
+| Emscripten glue and compiled emulator                                  | `public/wasm/engine/main.js` and `main.wasm`                                                               | Generated, immutable as source inputs, served as a matched pair                                              |
+| Runtime font and other engine-generated support assets                 | `public/wasm/engine/`                                                                                      | Keep as generated public artifacts unless an ownership decision proves otherwise                             |
+| DOS/game payloads                                                      | `public/wasm/roms/**`                                                                                      | Generated/copied public artifacts; preserve notices and exact file names                                     |
+| Artifact inventory and digests                                         | Checked-in provenance/manifest records                                                                     | Update only with paired artifact evidence and revision bump                                                  |
 
 The migration must not make React import the binary, bundle the ROMs, or depend on Node filesystem
 access at runtime. React source may construct public URLs and mount the generated engine; it may
@@ -88,18 +95,22 @@ Gates:
    `pnpm qa:bundle-budget`, and `pnpm audit --prod --audit-level high` green before a pushed
    migration tip. These are the repository's current delivery commands; an unavailable gate is
    a blocker, not a pass.
-4. The generated public tree must contain no authored runtime shell implementation after the
-   cutover. A static inventory test must allow the named generated artifacts and reject stale
-   wrapper files, duplicate protocol implementations, and legacy vendor dependencies.
+4. The generated public tree must contain no hand-authored runtime shell implementation after the
+   cutover. A static inventory test must require `/wasm/engine/index.html` as the generated
+   compatibility bootstrap, allow the other named generated artifacts, and reject stale wrapper
+   files, duplicate protocol implementations, and legacy vendor dependencies.
 
 ## Delivery phases
 
 ### WASM-0 — Baseline and inventory
 
 - Record the current dirty-worktree state before edits; do not overwrite concurrent work.
-- Inventory every public shell responsibility in `index.html`, `input_controller.js`,
+- Inventory every current public shell responsibility in `index.html`, `input_controller.js`,
   `script.js`, `settings.js`, and `romlist.js`, including DOM nodes, event listeners, globals,
   IndexedDB reads, canvas setup, engine callbacks, notices, asset URLs, and `postMessage` paths.
+- Classify `index.html` separately as the compatibility URL to retain: inventory its current shell
+  behavior for migration, then reduce it to the generated document-root/bootstrap contract rather
+  than deleting or redirecting it.
 - Freeze the current manifest revision and both artifact digests above. Record a browser request
   trace for no-pre-intent, successful boot, 404 recovery, timeout, retry, and open-separately.
 - Add characterization tests before moving behavior. The baseline must pass the existing
@@ -122,6 +133,9 @@ Gates:
 
 - Replace the authored public shell with a React-owned client leaf that renders the runtime
   surface and owns listeners, status notices, focus, cleanup, and explicit boot.
+- Add a deterministic emitter for `/wasm/engine/index.html`; its input must be the same React-owned
+  runtime entry and its output must contain no independent lifecycle, protocol, asset-selection, or
+  recovery implementation.
 - Load generated `main.js` and `main.wasm` only from their stable `/wasm/engine/*` URLs. Keep the
   game payload list and startup configuration externally addressed under `/wasm/roms/*` and the
   manifest revision.
@@ -133,8 +147,9 @@ Gates:
 
 ### WASM-3 — Cutover and artifact guard
 
-- Remove only the now-unused authored shell files from `public/wasm/engine`; retain generated
-  `main.js`, `main.wasm`, support artifacts, manifest/delivery records, and all game payloads.
+- Remove only the now-unused authored shell files from `public/wasm/engine`; retain the generated
+  compatibility `index.html`, `main.js`, `main.wasm`, support artifacts, manifest/delivery records,
+  and all game payloads.
 - Add the static inventory and provenance assertions. Ensure a production build copies/serves
   the same generated public artifact paths without bundling them into the route's initial JS.
 - Run the focused unit/component tests, then the WASM browser journeys, then the complete package
@@ -156,16 +171,17 @@ migration.
 The migration is accepted only when these existing suites are extended and pass:
 
 - `tests/wasm-delivery.test.ts`: static ownership, no route handler/vendor tree, exact manifest
-  revision, `main.wasm` digest, security/cache/MIME headers, no legacy wrapper dependencies, and
-  generated-artifact inventory.
+  revision, `main.wasm` digest, security/cache/MIME headers, no legacy wrapper dependencies,
+  required generated compatibility `index.html`, and generated-artifact inventory.
 - `tests/wasm-game-frame.test.tsx`: explicit boot, state transitions, stale-message rejection,
   timeout, retry, unmount cleanup, keyboard/focus behavior, and no duplicate listeners.
 - `tests/wasm-runtime-source.test.ts`: source ownership, typed protocol validation, reducer and
   asset-boundary behavior, modularity budgets, and absence of authored shell code in public.
 - WASM cases in `e2e/smoke.spec.ts`: zero `/wasm/*` requests before intent; successful boot loads
-  `main.wasm` and `DOOM1.WAD`; `application/wasm`, CSP, sandbox, timeout/404 recovery, retry,
-  IndexedDB-unavailable boot, localized EN/TR routes, mobile no-overflow, and no page/console
-  errors.
+  `main.wasm` and `DOOM1.WAD`; direct `/wasm/engine/index.html` access remains the generated
+  open-separately entrypoint without redirecting; `application/wasm`, CSP, sandbox, timeout/404
+  recovery, retry, IndexedDB-unavailable boot, localized EN/TR routes, mobile no-overflow, and no
+  page/console errors.
 - Production smoke: after `pnpm build`, serve the production output with `pnpm start` and repeat
   the same public asset requests and browser journey. Do not infer this from unit tests.
 
@@ -176,8 +192,8 @@ artifact is intentionally changed; an unexpected digest change fails the migrati
 
 ## Compatibility and rollback rules
 
-- Preserve `/en/labs/retro-game-center`, `/tr/labs/retro-game-center`, `/wasm/engine/index.html`
-  open-separately behavior if it remains a supported compatibility entrypoint, and every
+- Preserve `/en/labs/retro-game-center`, `/tr/labs/retro-game-center`, the generated
+  `/wasm/engine/index.html` sandbox/open-separately entrypoint without redirect, and every
   `/wasm/roms/**` payload URL.
 - Preserve the `hot-wasm` version-1 message shape, attempt correlation, ready/error statuses,
   timeout/retry semantics, opaque-origin sandbox, and no-pre-intent request boundary.
@@ -195,6 +211,8 @@ artifact is intentionally changed; an unexpected digest change fails the migrati
 
 - First-party DOS shell behavior is owned by small, typed Next/React modules with no duplicate
   public implementation.
+- `/wasm/engine/index.html` remains a deterministic generated compatibility bootstrap whose
+  inventory and direct-open browser checks prove it has no independent state or protocol owner.
 - `public/wasm/engine/main.js` and `main.wasm` remain the unchanged, matched DosWasmX v0.3
   generated artifacts unless a separately approved artifact change is recorded.
 - Game payloads remain static public artifacts with unchanged names, notices, and manifest

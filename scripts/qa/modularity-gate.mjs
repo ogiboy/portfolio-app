@@ -48,7 +48,10 @@ function lineCount(path) {
 
 function moduleLimit(relativePath, extension) {
   const matchingPath = Object.keys(baseline.pathLimits ?? {})
-    .filter((path) => relativePath === path || relativePath.startsWith(path))
+    .filter(
+      (path) =>
+        relativePath === path || relativePath.startsWith(path.endsWith('/') ? path : `${path}/`),
+    )
     .sort((left, right) => right.length - left.length)[0];
   return matchingPath ? baseline.pathLimits[matchingPath] : baseline.limits[extension];
 }

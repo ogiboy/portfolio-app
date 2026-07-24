@@ -1,11 +1,15 @@
 import { cleanup, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { AnchorHTMLAttributes } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LocaleSwitcher } from '@/components/client/locale-switcher';
 import { NavigationLink } from '@/components/client/navigation-link';
 
 const navigationState = vi.hoisted(() => ({ pathname: '/projects' }));
-const localeState = vi.hoisted(() => ({ current: 'en' }));
+const localeState = vi.hoisted(() => ({
+  current: 'en',
+  scroll: undefined as boolean | undefined,
+}));
 
 vi.mock('next-intl', () => ({
   useLocale: () => localeState.current,
@@ -17,20 +21,25 @@ vi.mock('@/i18n/navigation', () => ({
     href,
     locale,
     onClick,
+    scroll,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { locale?: string }) => (
-    <a
-      href={String(href)}
-      data-locale={locale}
-      onClick={(event) => {
-        onClick?.(event);
-        event.preventDefault();
-      }}
-      {...props}
-    >
-      {children}
-    </a>
-  ),
+  }: AnchorHTMLAttributes<HTMLAnchorElement> & { locale?: string; scroll?: boolean }) => {
+    localeState.scroll = scroll;
+
+    return (
+      <a
+        href={String(href)}
+        data-locale={locale}
+        onClick={(event) => {
+          onClick?.(event);
+          event.preventDefault();
+        }}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
   usePathname: () => navigationState.pathname,
 }));
 
@@ -39,6 +48,7 @@ describe('navigation feedback', () => {
     cleanup();
     navigationState.pathname = '/projects';
     localeState.current = 'en';
+    localeState.scroll = undefined;
     window.history.replaceState(null, '', '/');
   });
 
@@ -88,6 +98,7 @@ describe('navigation feedback', () => {
 
     expect(switcher).toHaveAttribute('href', '/projects');
     expect(switcher).toHaveAttribute('data-locale', 'tr');
+    expect(localeState.scroll).toBe(false);
     await user.click(switcher);
 
     expect(switcher).toHaveAttribute('aria-busy', 'true');

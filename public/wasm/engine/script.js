@@ -1555,7 +1555,7 @@ class MyClass {
   findSavestateInDatabase() {
     let imgKey = myClass.base_name;
     if (!myClass.state.loggedIn) imgKey = 'win95';
-    imgKey += +'.savestate';
+    imgKey += '.savestate';
 
     myClass.dblistSavestates.forEach((save) => {
       if (save == imgKey) {
@@ -2467,11 +2467,6 @@ class MyClass {
     });
 
     this.state.password = '';
-    try {
-      localStorage.removeItem('doswasmx-password');
-    } catch (error) {
-      console.log('localStorage not available', error);
-    }
   }
 
   loginModal() {

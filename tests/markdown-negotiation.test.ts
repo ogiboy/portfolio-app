@@ -56,6 +56,8 @@ describe('markdown negotiation', () => {
       'H.O.T., adımın baş harflerinden geliyor',
     );
     expect(getAgentMarkdown('/en/about')?.body).toContain('(/en/labs/retro-game-center)');
+    expect(getAgentMarkdown('/en/about')?.body).toContain('[Browse projects](/en/projects)');
+    expect(getAgentMarkdown('/tr/about')?.body).toContain('[Projeleri incele](/tr/projects)');
     expect(getAgentMarkdown('/tr/projects')).toMatchObject({ locale: 'tr' });
     expect(getAgentMarkdown('/en/projects/graduation-project')?.body).toContain(
       'Graduation Project',

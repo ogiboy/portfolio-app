@@ -2,6 +2,7 @@ import { getProjectCategory, getProjectDescription, projects } from '@/content/p
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { identity } from '@/lib/seo';
 
+/** Cache policy that prevents agent markdown responses from being stored. */
 export const agentMarkdownCacheControl = 'private, no-store';
 
 type MarkdownDocument = {
@@ -17,14 +18,14 @@ function markdownList(items: readonly string[]) {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
-function aboutPathHref(target: 'email' | 'linkedin' | 'projects') {
+function aboutPathHref(locale: Locale, target: 'email' | 'linkedin' | 'projects') {
   switch (target) {
     case 'email':
       return `mailto:${contact.email}`;
     case 'linkedin':
       return contact.linkedin;
     case 'projects':
-      return '/projects';
+      return `/${locale}/projects`;
   }
 }
 
@@ -55,7 +56,7 @@ function aboutMarkdown(locale: Locale): MarkdownDocument {
     body: `# ${copy.title}\n\n${copy.intro}\n\n## ${copy.identityTitle}\n\n${copy.identityBody}\n\n## ${copy.pathsTitle}\n\n${copy.pathsIntro}\n\n${copy.paths
       .map(
         (path) =>
-          `### ${path.title}\n\n${path.body}\n\n[${path.action}](${aboutPathHref(path.target)})`,
+          `### ${path.title}\n\n${path.body}\n\n[${path.action}](${aboutPathHref(locale, path.target)})`,
       )
       .join(
         '\n\n',
@@ -102,6 +103,7 @@ function labMarkdown(locale: Locale): MarkdownDocument {
   };
 }
 
+/** Returns localized markdown for a supported public portfolio route. */
 export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined {
   if (pathname === '/') {
     return homeMarkdown('en');
@@ -136,6 +138,7 @@ export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined
   return undefined;
 }
 
+/** Builds a negotiated Markdown HTTP response for a public pathname. */
 export function markdownResponse(
   pathname: string,
   options?: { includeBody: boolean; status?: number; varyLocale?: boolean },

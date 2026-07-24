@@ -18,7 +18,7 @@
   },
   "debtCeilings": {
     "public/wasm/engine/input_controller.js": 1010,
-    "public/wasm/engine/script.js": 2869,
+    "public/wasm/engine/script.js": 2864,
     "src/content/projects.ts": 359,
     "src/content/site.ts": 583
   },

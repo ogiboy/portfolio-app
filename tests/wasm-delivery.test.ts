@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import nextConfig from '../next.config.mjs';
@@ -16,6 +16,23 @@ const digest = (path: string) =>
     .update(readFileSync(resolve(root, path)))
     .digest('hex');
 
+const routeHandlerPattern = /^route\.(?:[cm]?[jt]sx?)$/;
+const authoredWrapperPaths = [
+  'public/wasm/engine/script.js',
+  'public/wasm/engine/settings.js',
+  'public/wasm/engine/input_controller.js',
+];
+
+function findRouteHandlers(directory: string): string[] {
+  if (!existsSync(directory)) return [];
+
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = resolve(directory, entry.name);
+    if (entry.isDirectory()) return findRouteHandlers(entryPath);
+    return routeHandlerPattern.test(entry.name) ? [entryPath] : [];
+  });
+}
+
 function headerValue(rule: HeaderRule, key: string) {
   return rule.headers.find((header) => header.key === key)?.value;
 }
@@ -27,7 +44,7 @@ async function wasmHeaderRules() {
 
 describe('WASM static delivery', () => {
   it('serves public assets without a serverless passthrough route', () => {
-    expect(existsSync(resolve(root, 'src/app/wasm/[...path]/route.ts'))).toBe(false);
+    expect(findRouteHandlers(resolve(root, 'src/app/wasm'))).toEqual([]);
     expect(existsSync(resolve(root, 'public/wasm/engine/main.wasm'))).toBe(true);
     expect(existsSync(resolve(root, 'public/wasm/engine/vendor'))).toBe(false);
   });
@@ -75,16 +92,19 @@ describe('WASM static delivery', () => {
   it('uses a stable runtime revision without the unused eval formatters', () => {
     const settings = read('public/wasm/engine/settings.js');
     const runtime = read('public/wasm/engine/script.js');
+    const authoredWrappers = authoredWrapperPaths.map(read).join('\n');
+    const unstableCacheBuster =
+      /(?:[?&][^"'`\r\n]{0,80}|(?:cache|revision|version)[^"'`\r\n]{0,80})\b(?:Date\.now|Math\.random)\s*\(/i;
 
     expect(settings).toContain('PORTAL_RUNTIME_REVISION');
-    expect(settings).not.toContain('script.js?v=${Date.now()}');
-    expect(runtime).not.toMatch(/\beval\s*\(/);
-    expect(runtime).not.toMatch(/\b(?:jQuery|rivets|toastr)\b/);
+    expect(authoredWrappers).not.toMatch(/\beval\s*\(/);
+    expect(authoredWrappers).not.toMatch(/\b(?:jquery|rivets|toastr)\b/i);
+    expect(authoredWrappers).not.toMatch(unstableCacheBuster);
     expect(runtime.match(/rivetsData/g)).toHaveLength(1);
     expect(runtime).toContain('this.rivetsData = this.state;');
-    expect(runtime).toContain("localStorage.removeItem('doswasmx-password')");
-    expect(runtime).not.toContain("localStorage.getItem('doswasmx-password')");
-    expect(runtime).not.toContain("localStorage.setItem('doswasmx-password'");
+    expect(runtime).not.toContain('doswasmx-password');
+    expect(runtime).toContain("imgKey += '.savestate';");
+    expect(runtime).not.toContain("imgKey += +'.savestate';");
     expect(read('public/wasm/engine/main.js')).toContain(
       'myApp.rivetsData.inputController.updateDosControls()',
     );
