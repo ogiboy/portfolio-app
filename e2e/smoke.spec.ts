@@ -411,7 +411,7 @@ test('provides localized mobile navigation with focus recovery', async ({ page }
 
 test('offers localized recovery from missing routes', async ({ page }) => {
   await page.goto('/en/route-that-does-not-exist');
-  await expect(page.getByRole('heading', { name: 'This path left the map.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'This page does not exist.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/en');
   await expect(page.getByRole('link', { name: 'Browse projects' })).toHaveAttribute(
     'href',
@@ -419,7 +419,7 @@ test('offers localized recovery from missing routes', async ({ page }) => {
   );
 
   await page.goto('/tr/olmayan-bir-rota');
-  await expect(page.getByRole('heading', { name: 'Bu yol haritadan çıkmış.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Bu sayfa mevcut değil.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/tr');
   await expect(page.getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute(
     'href',
