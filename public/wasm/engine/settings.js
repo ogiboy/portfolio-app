@@ -62,11 +62,11 @@
     const start = Date.now();
     return new Promise((resolve, reject) => {
       const tick = () => {
-        if (window.myApp && window.myApp.state) {
-          if (!window.myApp.state.moduleInitializing) {
-            resolve(window.myApp);
-            return;
-          }
+        const app = window.myApp;
+        const appState = app?.state;
+        if (appState && !appState.moduleInitializing) {
+          resolve(app);
+          return;
         }
         if (Date.now() - start > 20000) {
           reject(new Error('WASM engine did not initialize in time.'));
@@ -138,7 +138,7 @@
     app.Run();
 
     if (game.startupScript) {
-      const normalized = game.startupScript.replace(/;/g, '\n').trim();
+      const normalized = game.startupScript.replaceAll(';', '\n').trim();
       app.configuration.startupScript = normalized.endsWith('\n')
         ? normalized
         : `${normalized}\n`;

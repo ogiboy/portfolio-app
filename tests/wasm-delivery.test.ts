@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { runInNewContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import nextConfig from '../next.config.mjs';
 
@@ -118,5 +119,19 @@ describe('WASM static delivery', () => {
       'myApp.rivetsData.inputController.updateDosControls()',
     );
     expect(runtime).toContain("window['indexedDB'] == undefined");
+  });
+
+  it('keeps the legacy ROMLIST global available without var declarations', () => {
+    const source = read('public/wasm/engine/romlist.js');
+    const existingGames = [{ id: 'doom' }];
+    const windowStub: { ROMLIST?: typeof existingGames } = { ROMLIST: existingGames };
+    const emptyWindowStub: { ROMLIST?: unknown[] } = {};
+
+    runInNewContext(source, { window: windowStub });
+    runInNewContext(source, { window: emptyWindowStub });
+
+    expect(source).not.toMatch(/\bvar\s+ROMLIST\b/);
+    expect(windowStub.ROMLIST).toBe(existingGames);
+    expect(emptyWindowStub.ROMLIST).toEqual([]);
   });
 });

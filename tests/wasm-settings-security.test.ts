@@ -12,6 +12,7 @@ type GameManifest = {
   games: Array<{
     files: string[];
     id: string;
+    startupScript?: string;
   }>;
 };
 
@@ -22,10 +23,10 @@ function classListStub() {
   };
 }
 
-async function executeSettings(files: string[]) {
+async function executeSettings(files: string[], startupScript?: string) {
   const manifest: GameManifest = {
     defaultGame: 'security-test',
-    games: [{ files, id: 'security-test' }],
+    games: [{ files, id: 'security-test', startupScript }],
   };
   const postMessage = vi.fn();
   const parseMultipleFiles = vi.fn().mockResolvedValue(undefined);
@@ -110,10 +111,16 @@ async function executeSettings(files: string[]) {
 
   await vi.waitFor(() => expect(postMessage).toHaveBeenCalled(), { timeout: 1_000 });
 
-  return { fetch, postMessage };
+  return { app, fetch, postMessage };
 }
 
 describe('WASM frame security boundaries', () => {
+  it('waits for the app state through an optional-chain guard', () => {
+    expect(settingsSource).toContain('const app = window.myApp;');
+    expect(settingsSource).toContain('const appState = app?.state;');
+    expect(settingsSource).toContain('if (appState && !appState.moduleInitializing)');
+  });
+
   it('targets the frame origin instead of broadcasting status messages', async () => {
     const { postMessage } = await executeSettings([]);
 
@@ -141,6 +148,13 @@ describe('WASM frame security boundaries', () => {
       expect.objectContaining({ status: 'ready' }),
       'https://portfolio.test',
     );
+  });
+
+  it('normalizes every startup-script semicolon before the runtime receives it', async () => {
+    const { app } = await executeSettings([], 'mount;cd doom;doom.exe');
+
+    expect(app.configuration.startupScript).toBe('mount\ncd doom\ndoom.exe\n');
+    expect(settingsSource).toContain("replaceAll(';', '\\n')");
   });
 
   it.each([

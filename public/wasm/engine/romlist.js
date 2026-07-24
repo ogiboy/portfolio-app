@@ -1,1 +1,1 @@
-var ROMLIST = window.ROMLIST || [];
+const ROMLIST = (window.ROMLIST ||= []);
