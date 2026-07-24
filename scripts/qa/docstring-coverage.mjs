@@ -187,6 +187,44 @@ function exportedDeclarations(sourceFile, checker) {
 }
 
 /**
+ * Builds findings for missing, invalid, and duplicate JSDoc descriptions.
+ * @param {Array<{path: string, line: number, name: string, description?: string, reason?: string}>} declarations - The documented export declarations to evaluate.
+ * @returns {Array<{path: string, line: number, name: string, reason: string}>} Findings ordered by declaration position.
+ */
+function collectDocumentationFindings(declarations) {
+  const duplicateDescriptions = new Set();
+  const descriptions = new Map();
+  for (const declaration of declarations) {
+    if (!declaration.description) continue;
+    const normalized = declaration.description.replace(/\s+/g, ' ').trim().toLocaleLowerCase('en');
+    const matches = descriptions.get(normalized) ?? [];
+    matches.push(declaration);
+    descriptions.set(normalized, matches);
+  }
+  for (const matches of descriptions.values()) {
+    if (matches.length > 1)
+      matches.forEach((declaration) => duplicateDescriptions.add(declaration));
+  }
+
+  const findings = [];
+  for (const declaration of declarations) {
+    const reason = duplicateDescriptions.has(declaration)
+      ? 'duplicate JSDoc description'
+      : declaration.reason;
+    if (reason) {
+      findings.push({
+        path: declaration.path,
+        line: declaration.line,
+        name: declaration.name,
+        reason,
+      });
+    }
+  }
+
+  return findings;
+}
+
+/**
  * Computes JSDoc coverage metrics for supported declarations exported from configured source files.
  * @param {{root?: string, config?: object}} [options] - The scan root and optional coverage configuration.
  * @returns {{minimumCoverage: number, minimumExports: number, coverage: number, documentedExports: number, totalExports: number, scannedFiles: string[], findings: Array<{path: string, line: number, name: string, reason: string}>}} The coverage report and documentation findings.
@@ -219,34 +257,7 @@ export function collectDocstringCoverage({ root = process.cwd(), config: supplie
     }
   }
 
-  const duplicateDescriptions = new Set();
-  const descriptions = new Map();
-  for (const declaration of declarations) {
-    if (!declaration.description) continue;
-    const normalized = declaration.description.replace(/\s+/g, ' ').trim().toLocaleLowerCase('en');
-    const matches = descriptions.get(normalized) ?? [];
-    matches.push(declaration);
-    descriptions.set(normalized, matches);
-  }
-  for (const matches of descriptions.values()) {
-    if (matches.length > 1)
-      matches.forEach((declaration) => duplicateDescriptions.add(declaration));
-  }
-
-  const findings = [];
-  for (const declaration of declarations) {
-    const reason = duplicateDescriptions.has(declaration)
-      ? 'duplicate JSDoc description'
-      : declaration.reason;
-    if (reason) {
-      findings.push({
-        path: declaration.path,
-        line: declaration.line,
-        name: declaration.name,
-        reason,
-      });
-    }
-  }
+  const findings = collectDocumentationFindings(declarations);
   const documentedExports = declarations.length - findings.length;
   const coverage =
     declarations.length === 0 ? 100 : (documentedExports / declarations.length) * 100;
