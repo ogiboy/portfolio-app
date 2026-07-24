@@ -104,11 +104,15 @@
             if (request.response) {
               this.applyHardDriveDiffs(new Uint8Array(request.response), resolve);
             } else {
-              reject();
+              reject(new Error('Cloud hard-drive diff response was empty.'));
             }
           } catch (error) {
             console.log(error);
-            reject();
+            reject(
+              error instanceof Error
+                ? error
+                : new Error('Failed to apply cloud hard-drive diffs.'),
+            );
           }
         };
 

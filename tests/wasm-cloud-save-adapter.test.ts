@@ -43,6 +43,17 @@ describe('WASM cloud save adapter', () => {
     expect(runtime).toContain("this.state.password = '';");
   });
 
+  it('rejects unavailable cloud drive diffs with meaningful errors', () => {
+    expect(adapter).toContain("reject(new Error('Cloud hard-drive diff response was empty.'));");
+    expect(adapter).toContain("new Error('Failed to apply cloud hard-drive diffs.')");
+    expect(adapter).not.toMatch(/reject\(\);/);
+  });
+
+  it('formats saved diff sizes with the standard US thousands separator', () => {
+    expect(diffAdapter).toContain("finalArray.length.toLocaleString('en-US')");
+    expect(diffAdapter).not.toContain('replace(/\\B(?=(\\d{3})+(?!\\d))/g');
+  });
+
   it('loads the adapter statically and leaves it Sonar-analyzed', () => {
     const html = read('public/wasm/engine/index.html');
     const localSonar = read('sonar-project.properties');

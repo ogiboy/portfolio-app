@@ -79,7 +79,7 @@
       app.state.message = 'Sending to server...';
     }
 
-    const saveMessage = 'Saved: ' + finalArray.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const saveMessage = 'Saved: ' + finalArray.length.toLocaleString('en-US');
     const xhr = new XMLHttpRequest();
     xhr.open(
       'POST',
