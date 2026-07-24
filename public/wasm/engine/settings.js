@@ -23,7 +23,18 @@
 
   const params = new URLSearchParams(window.location.search);
   const attempt = params.get('attempt') || 'unknown';
+  const frameUrl = (() => {
+    try {
+      const candidate = new URL(window.location.href);
+      return candidate.protocol === 'https:' || candidate.protocol === 'http:' ? candidate : null;
+    } catch {
+      return null;
+    }
+  })();
+
   const reportStatus = (status, message) => {
+    if (!frameUrl || window.parent === window) return;
+
     window.parent.postMessage(
       {
         attempt,
@@ -32,7 +43,7 @@
         status,
         version: 1,
       },
-      '*',
+      frameUrl.origin,
     );
   };
 
@@ -67,10 +78,35 @@
     });
   };
 
-  const normalizePath = (path) =>
-    path.startsWith('/') ? path.slice(1) : path;
+  const safeAssetSegment = /^[A-Za-z0-9][A-Za-z0-9._ -]*$/;
 
-  const basename = (path) => path.split('/').pop() || path;
+  const resolveGameAsset = (filePath) => {
+    if (!frameUrl || typeof filePath !== 'string' || filePath.length > 256) {
+      throw new Error('Invalid game asset path.');
+    }
+
+    const segments = filePath.split('/');
+    if (
+      segments.length < 2 ||
+      segments[0] !== 'roms' ||
+      segments.some((segment) => !safeAssetSegment.test(segment))
+    ) {
+      throw new Error('Game assets must use an approved WASM ROM path.');
+    }
+
+    const target = new URL(
+      `/wasm/${segments.map((segment) => encodeURIComponent(segment)).join('/')}`,
+      frameUrl,
+    );
+    if (target.origin !== frameUrl.origin || !target.pathname.startsWith('/wasm/roms/')) {
+      throw new Error('Game asset resolved outside the approved WASM origin.');
+    }
+
+    return {
+      name: segments.at(-1),
+      url: target.href,
+    };
+  };
 
   const runtimeRevision = (manifest) => {
     const revision = manifest?.runtime?.revision;
@@ -105,14 +141,17 @@
 
     app.multiFiles = await Promise.all(
       files.map(async (filePath) => {
-        const target = `/wasm/${normalizePath(filePath)}`;
-        const response = await fetch(target);
+        const asset = resolveGameAsset(filePath);
+        const response = await fetch(asset.url, {
+          credentials: 'same-origin',
+          redirect: 'error',
+        });
         if (!response.ok) {
-          throw new Error(`Failed to load ${target}`);
+          throw new Error(`Failed to load ${asset.url}`);
         }
         const buffer = await response.arrayBuffer();
         const file = {
-          name: basename(filePath),
+          name: asset.name,
           data: new Uint8Array(buffer),
         };
         loaded += 1;
@@ -142,7 +181,9 @@
       window.PORTAL_MANIFEST = manifest || null;
       window.PORTAL_RUNTIME_REVISION = runtimeRevision(manifest);
 
-      await loadScript(`script.js?v=${encodeURIComponent(window.PORTAL_RUNTIME_REVISION)}`);
+      const revision = encodeURIComponent(window.PORTAL_RUNTIME_REVISION);
+      await loadScript(`runtime-security.js?v=${revision}`);
+      await loadScript(`script.js?v=${revision}`);
       await waitForAppReady();
 
       const gameId = params.get('game') || manifest?.defaultGame || null;

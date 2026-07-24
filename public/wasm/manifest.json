@@ -3,7 +3,7 @@
   "runtime": {
     "id": "doswasmx",
     "version": "0.3",
-    "revision": "doswasmx-v0.3-hot.1"
+    "revision": "doswasmx-v0.3-hot.2"
   },
   "defaultGame": "doom-shareware",
   "games": [

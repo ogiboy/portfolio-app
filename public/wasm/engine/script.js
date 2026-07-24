@@ -7,6 +7,10 @@ const SaveTypes = {
   BaseImage: 'baseimage',
 };
 
+// The engine shell loads the security namespace before this authored wrapper.
+const security = window.HotWasmSecurity;
+if (!security) throw new Error('runtime-security.js must load before script.js.');
+
 const runtimeRevision = encodeURIComponent(
   window.PORTAL_RUNTIME_REVISION || 'doswasmx-v0.3',
 );
@@ -81,7 +85,6 @@ class MyClass {
     this.fpscounter = 0;
     this.currentfps = 0;
     this.fpsInterval = 1000 / 60;
-    this.then = Date.now();
     this.hardDiskFallbackFromFloppy = false;
     this.ranWindowsSetup = false;
     this.win95InstallationFix = false;
@@ -1097,7 +1100,7 @@ class MyClass {
     } else if (name.length < 3) {
       // as long as its atleast 3 long we leave it
       //fill in the gaps with random numbers
-      var rando = Math.floor(Math.random() * Math.floor(100000));
+      const rando = security.secureRandomInteger(100000);
       name += rando;
       if (name.length > 6) name = name.substr(0, 6);
     }
@@ -1278,13 +1281,15 @@ class MyClass {
   }
 
   async load_file(path) {
-    console.log('loading ' + path);
     myClass.load_url_request(path);
   }
 
   load_url_request(path) {
+    const approvedAssetUrl = security.resolveApprovedAssetUrl(path);
+    console.log('loading approved runtime asset');
+
     //check cache
-    let cleanPath = path.substr(path.lastIndexOf('/') + 1);
+    let cleanPath = approvedAssetUrl.pathname.split('/').pop();
     if (cleanPath.endsWith('.img')) {
       let baseImageName = cleanPath.replace('.img', '.baseimage');
       if (myClass.dblistBaseImages.includes(baseImageName)) {
@@ -1307,9 +1312,9 @@ class MyClass {
     this.state.showProgress = true;
 
     var req = new XMLHttpRequest();
-    req.open('GET', path);
+    req.open('GET', approvedAssetUrl.href);
     req.overrideMimeType('text/plain; charset=x-user-defined');
-    req.onerror = () => console.log(`Error loading ${path}: ${req.statusText}`);
+    req.onerror = () => console.log('Error loading approved runtime asset');
     req.responseType = 'arraybuffer';
 
     req.onprogress = function (event) {
@@ -1687,7 +1692,7 @@ class MyClass {
             let byteArray = rom.result; //Uint8Array
             let imgName = '/' + myClass.base_name + '.img';
             Module.FS.writeFile(imgName, byteArray);
-            console.log('loaded drive from db: ' + imgName);
+            console.log('loaded drive from database');
             myClass.img_loaded = true;
             void myClass
               .LoadEmulator()
@@ -1871,18 +1876,17 @@ class MyClass {
 
     var saveMessage = 'Cloud State Saved';
 
-    var xhr = new XMLHttpRequest();
-    xhr.open(
-      'POST',
-      this.state.settings.CLOUDSAVEURL +
-        '/SendStaveState?name=' +
-        this.base_name +
-        '.savestate.doswasmx' +
-        '&password=' +
-        this.state.password +
-        '&emulator=doswasmx',
-      true
+    const cloudUrl = security.resolveApprovedCloudUrl(
+      this.state.settings.CLOUDSAVEURL,
+      'SendStaveState',
+      {
+        emulator: 'doswasmx',
+        name: this.base_name + '.savestate.doswasmx',
+        password: this.state.password,
+      }
     );
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', cloudUrl.href, true);
     xhr.send(compressed);
 
     xhr.onreadystatechange = function () {
@@ -1925,17 +1929,14 @@ class MyClass {
 
       showRuntimeNotice('Found Diff Drive');
 
-      var oReq = new XMLHttpRequest();
-      oReq.open(
-        'GET',
-        myClass.state.settings.CLOUDSAVEURL +
-          '/LoadStaveState?name=' +
-          myClass.base_name +
-          '.doswasmx' +
-          '&password=' +
-          myClass.state.password,
-        true
+      const cloudUrl = security.resolveApprovedCloudUrl(
+        myClass.state.settings.CLOUDSAVEURL,
+        'LoadStaveState',
+        { name: myClass.base_name + '.doswasmx', password: myClass.state.password }
       );
+
+      const oReq = new XMLHttpRequest();
+      oReq.open('GET', cloudUrl.href, true);
       oReq.responseType = 'arraybuffer';
 
       oReq.onload = function (oEvent) {
@@ -2114,18 +2115,17 @@ class MyClass {
       'Saved: ' +
       finalArray.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-    var xhr = new XMLHttpRequest();
-    xhr.open(
-      'POST',
-      this.state.settings.CLOUDSAVEURL +
-        '/SendStaveState?name=' +
-        this.base_name +
-        '.doswasmx' +
-        '&password=' +
-        this.state.password +
-        '&emulator=doswasmx',
-      true
+    const cloudUrl = security.resolveApprovedCloudUrl(
+      this.state.settings.CLOUDSAVEURL,
+      'SendStaveState',
+      {
+        emulator: 'doswasmx',
+        name: this.base_name + '.doswasmx',
+        password: this.state.password,
+      }
     );
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', cloudUrl.href, true);
     xhr.send(finalArray);
 
     xhr.onreadystatechange = function () {
@@ -2230,7 +2230,7 @@ class MyClass {
     console.log('import files');
 
     if (!myClass.state.noCopyImport) {
-      var rando = Math.floor(Math.random() * Math.floor(1000));
+      const rando = security.secureRandomInteger(1000);
       myClass.importFolderName = 'Imp' + rando;
       Module.FS.mkdir('/' + myClass.importFolderName);
     }
@@ -2424,17 +2424,16 @@ class MyClass {
   }
 
   loadCloud() {
-    var oReq = new XMLHttpRequest();
-    oReq.open(
-      'GET',
-      this.state.settings.CLOUDSAVEURL +
-        '/LoadStaveState?name=' +
-        this.base_name +
-        '.savestate.doswasmx' +
-        '&password=' +
-        this.state.password,
-      true
+    const cloudUrl = security.resolveApprovedCloudUrl(
+      this.state.settings.CLOUDSAVEURL,
+      'LoadStaveState',
+      {
+        name: this.base_name + '.savestate.doswasmx',
+        password: this.state.password,
+      }
     );
+    const oReq = new XMLHttpRequest();
+    oReq.open('GET', cloudUrl.href, true);
     oReq.responseType = 'arraybuffer';
 
     oReq.onload = function (oEvent) {
@@ -2541,24 +2540,28 @@ class MyClass {
   }
 
   async loginToServer() {
-    const url = new URL('Login', `${this.state.settings.CLOUDSAVEURL}/`);
-    url.searchParams.set('password', this.state.password);
+    const url = security.resolveApprovedCloudUrl(this.state.settings.CLOUDSAVEURL, 'Login', {
+      password: this.state.password,
+    });
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Login request failed: ${response.status}`);
     const result = await response.text();
-    console.log('login result: ' + result);
+    console.log('login request completed');
     return result;
   }
 
   async getSaveStates() {
     if (!this.state.loggedIn) return;
 
-    const url = new URL('GetSaveStates', `${this.state.settings.CLOUDSAVEURL}/`);
-    url.searchParams.set('password', this.state.password);
+    const url = security.resolveApprovedCloudUrl(
+      this.state.settings.CLOUDSAVEURL,
+      'GetSaveStates',
+      { password: this.state.password }
+    );
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Save-state request failed: ${response.status}`);
     const result = await response.json();
-    console.log('getSaveStates result: ', result);
+    console.log('save-state list loaded');
     this.allSaveStates = result;
     result.forEach((element) => {
       if (element.Name == this.base_name + '.savestate.doswasmx')
@@ -2763,10 +2766,7 @@ class MyClass {
   }
 
   sleepHandler(e) {
-    const data = e.data;
-    if (data?.name === 'ws-sync-sleep' && data.props.sessionId === '123') {
-      postMessage({ name: 'wc-sync-sleep', props: data.props }, '*');
-    }
+    security.replyToLocalSleepMessage(e);
   }
 
   async UploadFiles() {

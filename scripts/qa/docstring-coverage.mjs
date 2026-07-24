@@ -116,7 +116,7 @@ function exportedDeclarations(sourceFile, checker) {
   const byDeclaration = new Map();
   for (const exportedSymbol of exports) {
     const symbol =
-      exportedSymbol.flags & ts.SymbolFlags.Alias
+      (exportedSymbol.flags & ts.SymbolFlags.Alias) !== 0 // NOSONAR: TypeScript flags are bitmasks.
         ? checker.getAliasedSymbol(exportedSymbol)
         : exportedSymbol;
 

@@ -18,6 +18,7 @@ const digest = (path: string) =>
 
 const routeHandlerPattern = /^route\.(?:[cm]?[jt]sx?)$/;
 const authoredWrapperPaths = [
+  'public/wasm/engine/runtime-security.js',
   'public/wasm/engine/script.js',
   'public/wasm/engine/settings.js',
   'public/wasm/engine/input_controller.js',
@@ -74,7 +75,7 @@ describe('WASM static delivery', () => {
 
     expect(manifest.runtime).toEqual({
       id: 'doswasmx',
-      revision: 'doswasmx-v0.3-hot.1',
+      revision: 'doswasmx-v0.3-hot.2',
       version: '0.3',
     });
     expect(digest('public/wasm/engine/main.wasm')).toBe(
@@ -97,6 +98,9 @@ describe('WASM static delivery', () => {
       /(?:[?&][^"'`\r\n]{0,80}|(?:cache|revision|version)[^"'`\r\n]{0,80})\b(?:Date\.now|Math\.random)\s*\(/i;
 
     expect(settings).toContain('PORTAL_RUNTIME_REVISION');
+    expect(settings.indexOf('runtime-security.js?v=')).toBeLessThan(
+      settings.indexOf('script.js?v='),
+    );
     expect(authoredWrappers).not.toMatch(/\beval\s*\(/);
     expect(authoredWrappers).not.toMatch(/\b(?:jquery|rivets|toastr)\b/i);
     expect(authoredWrappers).not.toMatch(unstableCacheBuster);
