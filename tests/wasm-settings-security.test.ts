@@ -132,7 +132,7 @@ describe('WASM frame security boundaries', () => {
     const { fetch, postMessage } = await executeSettings(['roms/doom/DOOM1.WAD']);
     const requests = fetch.mock.calls.map(([input]) => String(input));
 
-    expect(requests).toContain('https://portfolio.test/wasm/roms/doom/DOOM1.WAD');
+    expect(requests).toContain('/wasm/roms/doom/DOOM1.WAD');
     expect(fetch.mock.calls[1]?.[1]).toMatchObject({
       credentials: 'same-origin',
       redirect: 'error',
@@ -148,6 +148,7 @@ describe('WASM frame security boundaries', () => {
     '/wasm/engine/main.js',
     'roms/doom/../../engine/main.js',
     'roms\\doom\\DOOM1.WAD',
+    'roms/doom/UNKNOWN.WAD',
     'https://attacker.test/payload.bin',
     '//attacker.test/payload.bin',
   ])('rejects an unapproved manifest asset before fetch: %s', async (filePath) => {

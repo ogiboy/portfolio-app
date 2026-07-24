@@ -78,34 +78,52 @@
     });
   };
 
-  const safeAssetSegment = /^[A-Za-z0-9][A-Za-z0-9._ -]*$/;
+  const approvedGameAssets = Object.freeze(
+    [
+      'SETUP.EXE',
+      'DWANGO.EXE',
+      'DWANGO.STR',
+      'DMFAQ66C.TXT',
+      'DMFAQ66B.TXT',
+      'DMFAQ66A.TXT',
+      'SERSETUP.EXE',
+      'MODEM.CFG',
+      'DMFAQ66D.TXT',
+      'MODEM.NUM',
+      'DWANGO.DOC',
+      'HELPME.TXT',
+      'README.TXT',
+      'DM.DOC',
+      'DOOM.EXE',
+      'ORDER.FRM',
+      'DM.EXE',
+      'IPXSETUP.EXE',
+      'DEFAULT.CFG',
+      'MODEM.STR',
+      'DOOM1.WAD',
+      'DOOMS_19.DAT',
+    ].map((name) =>
+      Object.freeze({
+        manifestPath: `roms/doom/${name}`,
+        name,
+        url: `/wasm/roms/doom/${name}`,
+      }),
+    ),
+  );
 
   const resolveGameAsset = (filePath) => {
-    if (!frameUrl || typeof filePath !== 'string' || filePath.length > 256) {
+    if (typeof filePath !== 'string') {
       throw new Error('Invalid game asset path.');
     }
 
-    const segments = filePath.split('/');
-    if (
-      segments.length < 2 ||
-      segments[0] !== 'roms' ||
-      segments.some((segment) => !safeAssetSegment.test(segment))
-    ) {
+    const approvedAsset = approvedGameAssets.find(
+      (asset) => asset.manifestPath === filePath,
+    );
+    if (!approvedAsset) {
       throw new Error('Game assets must use an approved WASM ROM path.');
     }
 
-    const target = new URL(
-      `/wasm/${segments.map((segment) => encodeURIComponent(segment)).join('/')}`,
-      frameUrl,
-    );
-    if (target.origin !== frameUrl.origin || !target.pathname.startsWith('/wasm/roms/')) {
-      throw new Error('Game asset resolved outside the approved WASM origin.');
-    }
-
-    return {
-      name: segments.at(-1),
-      url: target.href,
-    };
+    return approvedAsset;
   };
 
   const runtimeRevision = (manifest) => {
