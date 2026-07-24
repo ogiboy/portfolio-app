@@ -14,7 +14,12 @@ type SecurityHelpers = {
 
 function loadSecurityHarness(randomValues: number[]) {
   let randomCalls = 0;
-  const frameWindow = {
+  const frameWindow: {
+    crypto: {
+      getRandomValues: (values: Uint32Array) => Uint32Array;
+    };
+    HotWasmSecurity?: SecurityHelpers;
+  } = {
     crypto: {
       getRandomValues(values: Uint32Array) {
         values[0] = randomValues[Math.min(randomCalls, randomValues.length - 1)];
@@ -29,8 +34,12 @@ function loadSecurityHarness(randomValues: number[]) {
     window: frameWindow,
   });
 
+  if (!frameWindow.HotWasmSecurity) {
+    throw new Error('Runtime security helpers were not registered.');
+  }
+
   return {
-    helpers: (frameWindow as { HotWasmSecurity: SecurityHelpers }).HotWasmSecurity,
+    helpers: frameWindow.HotWasmSecurity,
     randomCalls: () => randomCalls,
   };
 }
