@@ -134,7 +134,9 @@ describe('project governance contracts', () => {
       'sonar.sources':
         'src,scripts,.github/workflows,next.config.mjs,eslint.config.mjs,postcss.config.js,playwright.config.ts,vitest.config.ts',
       'sonar.tests': 'tests,e2e',
+      'sonar.cpd.exclusions': 'src/content/site.ts',
       'sonar.sourceEncoding': 'UTF-8',
+      'sonar.qualitygate.wait': 'true',
     });
   });
 

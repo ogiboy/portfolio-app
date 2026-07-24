@@ -2456,7 +2456,7 @@ class MyClass {
     oReq.send(null);
   }
 
-  async setupLogin() {
+  setupLogin() {
     //prevent submit on enter
     document.getElementById('txtPassword')?.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
@@ -2466,12 +2466,11 @@ class MyClass {
       }
     });
 
-    let pw = localStorage.getItem('doswasmx-password');
-    if (pw == null) this.state.password = '';
-    else this.state.password = pw;
-
-    if (this.state.password) {
-      await this.loginSilent();
+    this.state.password = '';
+    try {
+      localStorage.removeItem('doswasmx-password');
+    } catch (error) {
+      console.log('localStorage not available', error);
     }
   }
 
@@ -2487,7 +2486,6 @@ class MyClass {
   logout() {
     this.state.loggedIn = false;
     this.state.password = '';
-    localStorage.setItem('doswasmx-password', this.state.password);
   }
 
   async loginSubmit() {
@@ -2496,13 +2494,11 @@ class MyClass {
     let result = await this.loginToServer();
     if (result == 'Success') {
       showRuntimeNotice('Logged In');
-      localStorage.setItem('doswasmx-password', this.state.password);
       await this.getSaveStates();
       this.postLoginProcess();
     } else {
       showRuntimeNotice('Login Failed');
       this.state.password = '';
-      localStorage.setItem('doswasmx-password', '');
     }
   }
 

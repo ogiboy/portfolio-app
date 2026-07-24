@@ -66,6 +66,8 @@ export default async function AboutPage({
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {copy.paths.map((path, index) => {
             const href = getAboutPathHref(path.target);
+            const externalLinkProps =
+              path.target === 'linkedin' ? { target: '_blank', rel: 'noreferrer' } : {};
 
             return (
               <Card
@@ -92,9 +94,7 @@ export default async function AboutPage({
                     <a
                       href={href}
                       className={buttonVariants({ variant: 'secondary', size: 'sm' })}
-                      {...(path.target === 'linkedin'
-                        ? { target: '_blank', rel: 'noreferrer' }
-                        : undefined)}
+                      {...externalLinkProps}
                     >
                       {path.action}
                     </a>

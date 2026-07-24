@@ -13,6 +13,17 @@ type NavigationLinkProps = {
   onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
+function isNavigationActive(
+  pathname: string,
+  href: NavigationHref,
+  section: string | null,
+  hash: string,
+) {
+  if (section) return pathname === '/' && hash === section;
+  if (href === '/') return pathname === href;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function NavigationLink({
   children,
   className,
@@ -35,16 +46,14 @@ export function NavigationLink({
     return () => window.removeEventListener('hashchange', syncHash);
   }, [section]);
 
-  const isActive = section
-    ? pathname === '/' && hash === section
-    : href === '/'
-      ? pathname === href
-      : pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = isNavigationActive(pathname, href, section, hash);
+  let ariaCurrent: 'location' | 'page' | undefined;
+  if (isActive) ariaCurrent = section ? 'location' : 'page';
 
   return (
     <Link
       href={href}
-      aria-current={isActive ? (section ? 'location' : 'page') : undefined}
+      aria-current={ariaCurrent}
       className={cn(
         className,
         'data-[active=true]:border-foreground data-[active=true]:bg-muted motion-reduce:transition-none',

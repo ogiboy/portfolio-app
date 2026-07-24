@@ -22,6 +22,18 @@ type AnalyticsPreferenceLatch = AnalyticsPreferenceSaveResult | 'idle';
 
 const latchDuration = 220;
 
+function getStatusMessage(
+  latch: AnalyticsPreferenceLatch,
+  preferenceLabel: string,
+  preferenceSentence: string,
+  savedLabel: string,
+  errorLabel: string,
+) {
+  if (latch === 'saved') return `${preferenceSentence} ${savedLabel}`;
+  if (latch === 'error') return errorLabel;
+  return preferenceLabel;
+}
+
 export function AnalyticsPreference({
   enabledLabel,
   disabledLabel,
@@ -54,21 +66,22 @@ export function AnalyticsPreference({
   const preferenceSentence = /[.!?]$/.test(preferenceLabel)
     ? preferenceLabel
     : `${preferenceLabel}.`;
-  const statusMessage =
-    latch === 'saved'
-      ? `${preferenceSentence} ${savedLabel}`
-      : latch === 'error'
-        ? errorLabel
-        : preferenceLabel;
+  const statusMessage = getStatusMessage(
+    latch,
+    preferenceLabel,
+    preferenceSentence,
+    savedLabel,
+    errorLabel,
+  );
 
   return (
     <div
       className="border-foreground bg-card data-[latch=error]:border-destructive data-[latch=saved]:border-primary flex flex-col gap-4 border-2 p-5 shadow-[6px_6px_0_0_var(--shadow-hard)] transition-[border-color,box-shadow] duration-200 data-[latch=saved]:shadow-[3px_3px_0_0_var(--shadow-hard)] motion-reduce:transition-none sm:flex-row sm:items-center sm:justify-between"
       data-latch={latch}
     >
-      <p className="font-mono text-sm font-bold" role="status" aria-atomic="true">
+      <output className="font-mono text-sm font-bold" aria-live="polite" aria-atomic="true">
         {statusMessage}
-      </p>
+      </output>
       <Button
         type="button"
         variant={enabled ? 'secondary' : 'default'}

@@ -82,6 +82,9 @@ describe('WASM static delivery', () => {
     expect(runtime).not.toMatch(/\b(?:jQuery|rivets|toastr)\b/);
     expect(runtime.match(/rivetsData/g)).toHaveLength(1);
     expect(runtime).toContain('this.rivetsData = this.state;');
+    expect(runtime).toContain("localStorage.removeItem('doswasmx-password')");
+    expect(runtime).not.toContain("localStorage.getItem('doswasmx-password')");
+    expect(runtime).not.toContain("localStorage.setItem('doswasmx-password'");
     expect(read('public/wasm/engine/main.js')).toContain(
       'myApp.rivetsData.inputController.updateDosControls()',
     );

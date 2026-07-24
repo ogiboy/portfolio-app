@@ -8,7 +8,8 @@ export function isTheme(value: string | null): value is Theme {
 }
 
 export function resolveTheme(storedTheme: string | null, prefersDark: boolean): Theme {
-  return isTheme(storedTheme) ? storedTheme : prefersDark ? 'dark' : 'light';
+  if (isTheme(storedTheme)) return storedTheme;
+  return prefersDark ? 'dark' : 'light';
 }
 
 type ThemeRoot = Pick<HTMLElement, 'classList' | 'dataset' | 'style'>;
@@ -26,9 +27,10 @@ export const themeBootstrapScript = `(() => {
     storedTheme = window.localStorage.getItem('${themeStorageKey}');
   } catch {}
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = storedTheme === 'dark' || storedTheme === 'light'
-    ? storedTheme
-    : prefersDark ? 'dark' : 'light';
+  let theme = storedTheme;
+  if (theme !== 'dark' && theme !== 'light') {
+    theme = prefersDark ? 'dark' : 'light';
+  }
   root.classList.toggle('dark', theme === 'dark');
   root.dataset.theme = theme;
   root.style.colorScheme = theme;

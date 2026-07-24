@@ -1,7 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { relative, resolve, sep } from 'node:path';
 import { gzipSync } from 'node:zlib';
-import vm from 'node:vm';
 
 const root = process.cwd();
 const nextDirectory = resolve(root, '.next');
@@ -81,6 +80,9 @@ function newestBuildInput() {
   }
 
   for (const path of buildInputPaths) visit(path);
+  if (!newest) {
+    throw new Error('Bundle budget gate failed: no production build inputs were found.');
+  }
   return newest;
 }
 
@@ -130,6 +132,36 @@ function assetPathFromUrl(url, artifactPath) {
   );
 }
 
+function scriptSourceUrls(html, artifactPath) {
+  const urls = [];
+  let cursor = 0;
+
+  while (cursor < html.length) {
+    const tagStart = html.indexOf('<script', cursor);
+    if (tagStart === -1) break;
+
+    const tagEnd = html.indexOf('>', tagStart);
+    if (tagEnd === -1) fail(`${artifactPath} contains an unterminated script tag.`);
+
+    const tag = html.slice(tagStart, tagEnd + 1);
+    const srcAttribute = tag.indexOf('src=');
+    if (srcAttribute !== -1) {
+      const quote = tag[srcAttribute + 'src='.length];
+      if (quote !== '"' && quote !== "'") {
+        fail(`${artifactPath} contains an unsupported unquoted script source.`);
+      }
+      const valueStart = srcAttribute + 'src='.length + 1;
+      const valueEnd = tag.indexOf(quote, valueStart);
+      if (valueEnd === -1) fail(`${artifactPath} contains an unterminated script source.`);
+      urls.push(tag.slice(valueStart, valueEnd));
+    }
+
+    cursor = tagEnd + 1;
+  }
+
+  return urls;
+}
+
 function readInitialScripts({ route, artifact }) {
   const artifactPath = resolve(nextDirectory, artifact);
   if (!existsSync(artifactPath)) {
@@ -140,8 +172,8 @@ function readInitialScripts({ route, artifact }) {
 
   const html = readFileSync(artifactPath, 'utf8');
   const scripts = new Map();
-  for (const match of html.matchAll(/<script\b[^>]*\bsrc=(['"])(.*?)\1[^>]*>/g)) {
-    const asset = assetPathFromUrl(match[2], artifactPath);
+  for (const url of scriptSourceUrls(html, artifactPath)) {
+    const asset = assetPathFromUrl(url, artifactPath);
     if (asset) scripts.set(asset.relativePath, asset.resolvedAssetPath);
   }
   if (scripts.size === 0) {
@@ -171,17 +203,23 @@ function readHomeClientManifest() {
     );
   }
 
-  const context = {};
-  context.globalThis = context;
+  const source = readFileSync(manifestPath, 'utf8');
+  const assignment = 'globalThis.__RSC_MANIFEST["/[locale]/page"]=';
+  const jsonStart = source.indexOf(assignment) + assignment.length;
+  const jsonEnd = source.lastIndexOf(';');
+  if (jsonStart < assignment.length || jsonEnd <= jsonStart) {
+    fail(`home client-reference manifest at ${manifestPath} has an unsupported assignment format.`);
+  }
+
+  let manifest;
   try {
-    vm.runInNewContext(readFileSync(manifestPath, 'utf8'), context, { filename: manifestPath });
+    manifest = JSON.parse(source.slice(jsonStart, jsonEnd));
   } catch (error) {
     fail(
-      `home client-reference manifest at ${manifestPath} could not be evaluated: ${error.message}`,
+      `home client-reference manifest at ${manifestPath} could not be parsed as JSON: ${error.message}`,
     );
   }
 
-  const manifest = context.__RSC_MANIFEST?.['/[locale]/page'];
   if (!manifest?.clientModules) {
     fail(
       `home client-reference manifest at ${manifestPath} has no clientModules entry. Its build output is unsupported or stale.`,
