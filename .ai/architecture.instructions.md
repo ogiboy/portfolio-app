@@ -14,6 +14,12 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - `public/wasm`, `next.config.mjs`, and the isolated lab route: pinned WASM assets, static delivery
   headers, and the explicit-intent browser boundary.
 - `.github/workflows/ci.yml` and `package.json`: CI and local delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
+- `DESIGN.md` plus `.ai/design-system.instructions.md`: Canonical design contract and its
+  implementation routing. The root contract wins on visual or interaction drift.
+- `.ai/development-preferences.instructions.md` and `.ai/versioning.instructions.md`: Local
+  toolchain/code preferences and the manual release contract beneath accepted decisions.
+- `.codex/agents`, `.codex/prompts`, `.codex/skills`, and `skills-lock.json`: Reviewed
+  development-time capability inputs. They are not imported by application source.
 - `.ai/workflows/release-pr-workflow.instructions.md`: PR/release state-reconciliation owner; it separates local, pushed, hosted-check, preview, browser, review, merge, and production evidence.
 - `.ai/checkpoints/portfolio-overhaul.md`: Sole mutable, resumable state owner for the active overhaul workstream. It cannot override source, Git, or hosted state.
 - `docs/aegis/`: Dated initiative intent, plans, baseline snapshots, and evidence. These records are immutable after acceptance and are not live status dashboards.
@@ -38,3 +44,8 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - Treat `main.js` and `main.wasm` as a digest-pinned generated pair, not hand-maintained modules.
   First-party runtime wrappers remain under a no-growth modularity ratchet until their behavior is
   moved behind typed Next-owned source boundaries.
+- OMX, Ruflo, Claude-flow, AgentDB, RuVector, and other orchestration systems are development tools,
+  not application services. Their databases, daemon state, hooks with machine paths, logs, metrics,
+  and sessions cannot own product state, source truth, or release evidence.
+- Application commands follow `.nvmrc`, `.node-version`, and `package.json`. A separately installed
+  development tool may use another Node runtime without changing the application engine contract.

@@ -46,6 +46,7 @@ my-project.zip
 .claude/
 .claude-flow/
 .omx/
+.swarm/
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
@@ -65,3 +66,12 @@ ruvector.db
 # Commit the encrypted vault payload; decryption keys remain local environment secrets.
 .env.vault
 !.env.vault
+# Keep machine-specific OMX config/hooks local; commit only reviewed capability bodies.
+.codex/*
+!.codex/agents/
+!.codex/agents/**
+!.codex/skills/
+!.codex/skills/**
+.codex/skills/.system/**
+!.codex/prompts/
+!.codex/prompts/**

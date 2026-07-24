@@ -11,7 +11,8 @@ pnpm dev
 
 [cleanup]
 script = '''
-rm -rf /node_modules
-rm -rf /.next
-rm -rf /.vercel
+test -n "${CODEX_WORKTREE_PATH:-}"
+test -d "$CODEX_WORKTREE_PATH"
+cd "$CODEX_WORKTREE_PATH"
+rm -rf -- node_modules .next .vercel
 '''

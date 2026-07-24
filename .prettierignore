@@ -5,6 +5,7 @@
 .claude/
 .claude-flow/
 .omx/
+.swarm/
 node_modules/
 coverage/
 playwright-report/

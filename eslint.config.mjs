@@ -21,6 +21,7 @@ const eslintConfig = defineConfig([
     '.claude/**',
     '.claude-flow/**',
     '.omx/**',
+    '.swarm/**',
     '.vercel/**',
     '.pnpm-store/**',
     '.wrangler/**',
