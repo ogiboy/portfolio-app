@@ -42,7 +42,7 @@ describe('modularity gate', () => {
         scanRoots: ['src'],
         limits: { '.ts': 100 },
         pathLimits: {
-          'src/lib/wasm/': 5,
+          'src/lib/wasm///': 5,
           'src/lib/wasm/exact.ts': 3,
           'src/lib/wasm/runtime/': 3,
         },

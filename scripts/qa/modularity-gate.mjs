@@ -74,7 +74,11 @@ function lineCount(path) {
  */
 function moduleLimit(relativePath, extension) {
   const matchingPath = Object.keys(baseline.pathLimits ?? {})
-    .map((path) => ({ path, normalizedPath: path.replace(/\/+$/, '') }))
+    .map((path) => {
+      let normalizedPath = path;
+      while (normalizedPath.endsWith('/')) normalizedPath = normalizedPath.slice(0, -1);
+      return { path, normalizedPath };
+    })
     .filter(
       ({ normalizedPath }) =>
         relativePath === normalizedPath || relativePath.startsWith(`${normalizedPath}/`),
