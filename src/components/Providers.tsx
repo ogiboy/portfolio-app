@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { SiteTelemetry } from '@/components/client/site-telemetry';
 import { WebMcpTools } from '@/components/client/webmcp-tools';
 
+/** Provides locale context and optional client integrations for the application tree. */
 export default function Providers({
   children,
   messages,

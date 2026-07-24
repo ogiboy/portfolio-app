@@ -21,6 +21,7 @@ function subscribe(onStoreChange: () => void) {
   };
 }
 
+/** Subscribes to the persisted analytics preference across local browser events. */
 export function useAnalyticsPreference() {
   return useSyncExternalStore(subscribe, readPreference, () => false);
 }

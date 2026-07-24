@@ -56,6 +56,7 @@ function git(cwd: string, args: string[], optional = false) {
   }
 }
 
+/** Parses a Conventional Commit subject into its release-relevant structured fields. */
 export function parseConventionalSubject(subject: string): ConventionalSubject | undefined {
   const match = conventionalSubjectPattern.exec(subject);
   if (!match) return undefined;
@@ -68,6 +69,7 @@ export function parseConventionalSubject(subject: string): ConventionalSubject |
   };
 }
 
+/** Calculates the next semantic version implied by releasable commits since baseline. */
 export function nextVersion(baseVersion: string, commits: ReleaseCommit[]) {
   const match = semverPattern.exec(baseVersion);
   if (!match) throw new Error(`Invalid semantic version: ${baseVersion}`);
@@ -92,6 +94,7 @@ export function nextVersion(baseVersion: string, commits: ReleaseCommit[]) {
   return `${major}.${minor}.${patch}`;
 }
 
+/** Verifies package, changelog, and HEAD state against the planned release version. */
 export function validateReleaseVersionState({
   baseVersion,
   headSubject,
@@ -166,6 +169,7 @@ function latestStableTag(cwd: string) {
   return tags.split('\n').find((tag) => stableTagPattern.test(tag)) ?? '';
 }
 
+/** Collects repository release evidence and validation errors for release tooling. */
 export function collectReleaseState(cwd = process.cwd()) {
   const packageManifest = JSON.parse(
     readFileSync(resolve(cwd, 'package.json'), 'utf8'),

@@ -55,6 +55,7 @@ function subscribeToTheme(onStoreChange: () => void) {
   };
 }
 
+/** Toggles the site color theme with a labeled pressed-state control. */
 export function ThemeToggle({
   darkLabel,
   lightLabel,

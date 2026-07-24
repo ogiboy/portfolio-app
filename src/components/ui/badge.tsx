@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
+/** Displays compact inline metadata while forwarding standard span attributes. */
 export function Badge({ className, ...props }: Readonly<React.ComponentProps<'span'>>) {
   return (
     <span

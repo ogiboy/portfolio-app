@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 const loadMotionFeatures = () => import('./motion-features').then((module) => module.default);
 const subscribeToHydration = () => () => undefined;
 
+/** Defines the project data rendered by the cinematic work rail. */
 export type CinematicProject = {
   category: string;
   image: StaticImageData;
@@ -17,6 +18,7 @@ export type CinematicProject = {
   slug: string;
 };
 
+/** Renders project highlights with motion only when the device is eligible. */
 export function CinematicWorkRail({
   title,
   intro,

@@ -6,6 +6,7 @@ type SeparatorProps = HTMLAttributes<HTMLDivElement> & {
   orientation?: 'horizontal' | 'vertical';
 };
 
+/** Renders decorative or semantic separators with the appropriate ARIA role. */
 export function Separator({
   className,
   orientation = 'horizontal',

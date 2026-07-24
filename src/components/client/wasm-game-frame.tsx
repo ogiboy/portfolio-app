@@ -66,6 +66,7 @@ function FrameStateIcon({
   return <Gamepad2 aria-hidden="true" strokeWidth={2.5} className="mx-auto size-12" />;
 }
 
+/** Hosts the sandboxed game frame with observable loading and recovery states. */
 export function WasmGameFrame({
   title,
   intro,

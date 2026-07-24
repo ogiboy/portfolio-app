@@ -1,0 +1,21 @@
+{
+  "minimumCoverage": 80,
+  "minimumExports": 100,
+  "scanRoots": ["src/lib", "src/components", "src/content"],
+  "scanFiles": ["scripts/release/release-state.ts"],
+  "extensions": [".ts", ".tsx"],
+  "excludedPathSegments": [
+    ".next",
+    "build",
+    "config",
+    "coverage",
+    "dist",
+    "e2e",
+    "generated",
+    "node_modules",
+    "public",
+    "tests",
+    "wasm"
+  ],
+  "excludedPaths": ["proxy.ts", "scripts/qa", "src/app", "src/i18n"]
+}

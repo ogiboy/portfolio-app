@@ -141,6 +141,7 @@ function reportRegistrationFailure(error: unknown, signal: AbortSignal) {
   }
 }
 
+/** Registers read-only portfolio tools when a browser model context is available. */
 export function WebMcpTools() {
   useEffect(() => {
     const modelContext = document.modelContext ?? navigator.modelContext;

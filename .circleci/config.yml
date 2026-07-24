@@ -54,6 +54,10 @@ jobs:
           command: pnpm qa:typescript
 
       - run:
+          name: Documentation coverage
+          command: pnpm qa:docstrings
+
+      - run:
           name: Modularity gate
           command: pnpm qa:modularity
 
@@ -66,8 +70,8 @@ jobs:
           command: pnpm typecheck:compat
 
       - run:
-          name: Unit tests
-          command: pnpm test
+          name: Unit tests and coverage
+          command: pnpm test:coverage
 
       - run:
           name: Build

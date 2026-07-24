@@ -4,6 +4,7 @@ import { contact, siteCopy, type Locale } from '@/content/site';
 import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
+/** Recursive JSON-LD value accepted by the portfolio structured-data builders. */
 export type JsonLdValue =
   string | number | boolean | null | JsonLdValue[] | { [key: string]: JsonLdValue };
 
@@ -28,6 +29,7 @@ const person = {
   ],
 } satisfies JsonLdValue;
 
+/** Builds Schema.org data describing the localized portfolio home page. */
 export function buildHomeStructuredData(locale: Locale): JsonLdValue {
   const copy = seoCopy[locale];
   const url = siteUrl(`/${locale}`);
@@ -58,6 +60,7 @@ export function buildHomeStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
+/** Builds Schema.org profile data for the localized about page. */
 export function buildAboutStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].about;
   const url = siteUrl(`/${locale}/about`);
@@ -88,6 +91,7 @@ export function buildAboutStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
+/** Builds Schema.org collection data for the localized project archive. */
 export function buildProjectsStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].projects;
   const url = siteUrl(`/${locale}/projects`);
@@ -115,6 +119,7 @@ export function buildProjectsStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
+/** Builds Schema.org project and breadcrumb data for one project page. */
 export function buildProjectStructuredData(locale: Locale, project: Project): JsonLdValue {
   const copy = siteCopy[locale].projects;
   const url = siteUrl(`/${locale}/projects/${project.slug}`);
@@ -164,6 +169,7 @@ export function buildProjectStructuredData(locale: Locale, project: Project): Js
   };
 }
 
+/** Builds Schema.org creative-work data for the interactive lab route. */
 export function buildLabStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].lab;
   const url = siteUrl(`/${locale}/labs/retro-game-center`);
@@ -183,6 +189,7 @@ export function buildLabStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
+/** Builds Schema.org metadata for the localized privacy information page. */
 export function buildPrivacyStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].privacy;
   const url = siteUrl(`/${locale}/privacy`);

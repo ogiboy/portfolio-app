@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { formatProjectPosition, type Project, type ProjectPosition } from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 
+/** Summarizes a project and labels its case study, live, and code destinations. */
 export function ProjectCard({
   project,
   category,

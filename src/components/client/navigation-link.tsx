@@ -24,6 +24,7 @@ function isNavigationActive(
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+/** Links portfolio routes and exposes the active page or section to assistive technology. */
 export function NavigationLink({
   children,
   className,

@@ -29,6 +29,38 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 - `pnpm release:plan`: Read-only JSON release plan from the exact Git range.
 - `pnpm release:check`: Validate package/changelog alignment and Conventional Commits without publishing.
 
+## SonarQube
+
+The local workflow uses the shared Docker containers `sonarqube` and `sonarqube-db` at
+`http://localhost:9000` with the local project key `portfolio-app`.
+
+```bash
+scripts/sonarqube/start-local.sh
+scripts/sonarqube/status-local.sh
+pnpm sonar:local
+scripts/sonarqube/stop-local.sh
+```
+
+`pnpm sonar:local` runs `pnpm test:coverage`, requires `coverage/lcov.info`, waits for the local
+server, and writes a token-redacted scan log to `.ai/qa/artifacts/sonar/sonar-npm.log`. To reuse an
+existing coverage file, run `SONAR_SKIP_COVERAGE=1 pnpm sonar:local`; it still fails if that LCOV
+file is absent.
+
+The script invokes the project-local `sonar-scanner-npm` binary from `@sonar/scan`. Do not replace
+it with a shell command named `sonar`: current SonarQube CLI installations use that name for the
+separate agent/MCP command surface and do not accept scanner `-D` properties.
+
+For the first local scan, create a local SonarQube user token in the web UI and either export it for
+that shell (`SONAR_TOKEN`) or store it in the macOS Keychain under service `codex-sonarqube-token`
+and your macOS username. Do not put tokens in repository files. The stop command removes only the
+shared containers and network; it retains the named SonarQube and PostgreSQL volumes.
+
+SonarQube Cloud uses CI-based analysis from `.github/workflows/sonar.yml`, the project key
+`ogiboy_portfolio-app`, and the repository `SONAR_TOKEN` secret. The workflow generates LCOV before
+the scan and loads `.sonarcloud.properties`; SonarQube Cloud Automatic Analysis must remain disabled
+to avoid duplicate analyses. Local and cloud settings intentionally keep separate project identities
+while tests enforce the same source, exclusion, coverage, duplication, and quality-gate scope.
+
 ## Architecture
 
 - Routes and layouts live in `src/app`.

@@ -1,9 +1,11 @@
 import { siteUrl } from '@/lib/site-url';
 import { identity } from '@/lib/seo';
 
+/** Human-readable summary for the public portfolio navigation skill. */
 export const portfolioNavigationDescription =
   'Read-only navigation and public data discovery for this portfolio.';
 
+/** Agent skill document describing the portfolio's read-only public routes. */
 export const portfolioNavigationSkill = `---
 name: portfolio-navigation
 description: ${portfolioNavigationDescription}
@@ -27,9 +29,11 @@ Use this read-only skill to discover ${identity.brand} - ${identity.fullName}'s 
 Use GET /api/portfolio for the canonical public project and contact data. The API and all listed routes are read-only. Do not infer write operations, authentication, private dashboards, credentials, or private data.
 `;
 
+/** Shared cache policy for public agent-skills discovery resources. */
 export const agentSkillsCacheControl =
   'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400';
 
+/** Produces a prefixed SHA-256 integrity digest for supplied text. */
 export async function sha256Digest(value: string) {
   const bytes = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest('SHA-256', bytes);
@@ -39,6 +43,7 @@ export async function sha256Digest(value: string) {
   return `sha256:${hex}`;
 }
 
+/** Creates the standards-compatible discovery index for published agent skills. */
 export async function getAgentSkillsIndex() {
   return {
     $schema: 'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
@@ -54,6 +59,7 @@ export async function getAgentSkillsIndex() {
   };
 }
 
+/** Returns common CORS and caching headers for agent skill resources. */
 export function agentSkillsHeaders(contentType: string) {
   return {
     'Access-Control-Allow-Origin': '*',

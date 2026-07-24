@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { Locale } from '@/content/site';
 import { siteOrigin, siteUrl } from '@/lib/site-url';
 
+/** Canonical brand and author identity used throughout public metadata. */
 export const identity = {
   brand: 'H.O.T.',
   fullName: 'Halil Oğuzcan Toptaş',
@@ -9,6 +10,7 @@ export const identity = {
   siteName: 'H.O.T. Developer Lab',
 } as const;
 
+/** Locale-specific copy used to build search and social metadata. */
 export const seoCopy: Record<
   Locale,
   {
@@ -67,6 +69,7 @@ function routePath(locale: Locale, path = '') {
   return `/${locale}${path}`;
 }
 
+/** Returns absolute alternate-language URLs for a localized route suffix. */
 export function localizedLanguageUrls(path = '') {
   return {
     en: siteUrl(routePath('en', path)),
@@ -140,6 +143,7 @@ function sharedMetadata(
   };
 }
 
+/** Builds root layout metadata for the requested public locale. */
 export function createRootMetadata(locale: Locale): Metadata {
   const copy = seoCopy[locale];
   const metadata = sharedMetadata(locale, '', copy.homeTitle, copy.homeDescription);
@@ -157,6 +161,7 @@ export function createRootMetadata(locale: Locale): Metadata {
   };
 }
 
+/** Builds route metadata with canonical, alternate, and social fields. */
 export function createRouteMetadata({
   locale,
   path,

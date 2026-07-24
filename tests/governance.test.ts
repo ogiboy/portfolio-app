@@ -127,17 +127,24 @@ describe('project governance contracts', () => {
     }
   });
 
-  it('scopes SonarQube Cloud automatic analysis without pretending to publish coverage', () => {
-    const sonarConfig = parsePropertiesText(readProjectFile('.sonarcloud.properties'));
+  it('configures LCOV-backed SonarQube Cloud CI analysis with automatic analysis disabled', () => {
+    const source = readProjectFile('.sonarcloud.properties');
+    const sonarConfig = parsePropertiesText(source);
 
-    expect(sonarConfig).toEqual({
-      'sonar.sources':
-        'src,scripts,.github/workflows,next.config.mjs,eslint.config.mjs,postcss.config.js,playwright.config.ts,vitest.config.ts',
+    expect(sonarConfig).toMatchObject({
+      'sonar.projectKey': 'ogiboy_portfolio-app',
+      'sonar.organization': 'ogiboy',
+      'sonar.projectName': 'portfolio-app',
       'sonar.tests': 'tests,e2e',
-      'sonar.cpd.exclusions': 'src/content/site.ts',
+      'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+      'sonar.typescript.tsconfigPaths': 'tsconfig.json',
       'sonar.sourceEncoding': 'UTF-8',
       'sonar.qualitygate.wait': 'true',
+      'sonar.qualitygate.timeout': '300',
     });
+    expect(sonarConfig['sonar.sources']).toContain('public/wasm/engine');
+    expect(sonarConfig['sonar.cpd.exclusions']).toContain('src/content/site.ts');
+    expect(source).toContain('Automatic Analysis must remain disabled');
   });
 
   it('keeps CI lifecycle scripts disabled by default and rebuilds only approved packages', () => {

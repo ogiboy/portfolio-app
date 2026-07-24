@@ -1,3 +1,4 @@
+/** Describes trusted status messages emitted by the embedded WASM game. */
 export type WasmStatusMessage = {
   attempt: string;
   channel: 'hot-wasm';
@@ -5,6 +6,7 @@ export type WasmStatusMessage = {
   version: 1;
 };
 
+/** Narrows unknown window messages to the supported WASM status protocol. */
 export function isWasmStatusMessage(value: unknown): value is WasmStatusMessage {
   if (!value || typeof value !== 'object') return false;
 

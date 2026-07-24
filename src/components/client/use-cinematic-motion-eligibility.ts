@@ -33,6 +33,7 @@ function getEligibilitySnapshot() {
   return window.matchMedia(cinematicMediaQuery).matches && getConnection()?.saveData !== true;
 }
 
+/** Reports whether cinematic motion suits the current device and data preference. */
 export function useCinematicMotionEligibility() {
   return useSyncExternalStore(subscribeToEligibility, getEligibilitySnapshot, () => false);
 }

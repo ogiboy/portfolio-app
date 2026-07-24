@@ -1,0 +1,80 @@
+name: SonarQube Cloud
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonar-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Block analysis without trusted PR credentials
+        if: >-
+          github.event_name == 'pull_request' &&
+          (github.actor == 'dependabot[bot]' ||
+          github.event.pull_request.head.repo.full_name != github.repository)
+        run: |
+          echo "::error title=SonarQube Cloud analysis blocked::This PR cannot access the repository SONAR_TOKEN. A maintainer must reproduce the change on a trusted branch before merge."
+          exit 1
+
+      - name: Require SonarQube Cloud token
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ -z "${SONAR_TOKEN}" ]; then
+            echo "::error title=Missing SONAR_TOKEN::Configure the SonarQube Cloud token before merging."
+            exit 1
+          fi
+
+      - name: Checkout full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build approved native dependencies
+        run: pnpm rebuild @parcel/watcher @swc/core bufferutil sharp unrs-resolver
+
+      - name: Generate LCOV coverage
+        run: pnpm test:coverage
+
+      - name: Analyze with SonarQube Cloud
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
+        with:
+          args: -Dproject.settings=.sonarcloud.properties
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

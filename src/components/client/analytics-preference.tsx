@@ -34,6 +34,7 @@ function getStatusMessage(
   return preferenceLabel;
 }
 
+/** Presents a persisted analytics consent control with polite status feedback. */
 export function AnalyticsPreference({
   enabledLabel,
   disabledLabel,

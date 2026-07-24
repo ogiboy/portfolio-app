@@ -1,3 +1,4 @@
+/** Represents each visible lifecycle state for the embedded game frame. */
 export type FrameState = 'idle' | 'booting' | 'ready' | 'error' | 'timeout';
 
 type FrameCopy = {
@@ -12,6 +13,7 @@ type FrameCopy = {
   timeoutTitle: string;
 };
 
+/** Selects localized status copy matching the game frame lifecycle state. */
 export function copyForState(frameState: FrameState, copy: FrameCopy) {
   switch (frameState) {
     case 'booting':

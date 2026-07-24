@@ -8,6 +8,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 
+/** Renders localized primary navigation with responsive accessible controls. */
 export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
   const copy = siteCopy[locale];
 

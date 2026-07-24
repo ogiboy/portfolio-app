@@ -5,6 +5,7 @@ import { useLocale } from 'next-intl';
 import { buttonVariants } from '@/components/ui/button';
 import { Link, usePathname } from '@/i18n/navigation';
 
+/** Switches the current route locale while preserving the visitor's location. */
 export function LocaleSwitcher({ label }: Readonly<{ label: string }>) {
   const pathname = usePathname();
   const locale = useLocale();

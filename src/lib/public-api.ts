@@ -4,8 +4,10 @@ import { routing } from '@/i18n/routing';
 import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
+/** Semantic version exposed by the public read-only portfolio API. */
 export const publicApiVersion = '0.2.0';
 
+/** Cache directive shared by public API discovery documents. */
 export const discoveryCacheControl =
   'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400';
 
@@ -17,6 +19,7 @@ const publicIdentity = {
   sameAs: [contact.github, contact.linkedin],
 };
 
+/** Returns the canonical public portfolio data payload without private fields. */
 export function getPortfolioApiPayload() {
   return {
     name: `${identity.brand} - ${identity.fullName} Portfolio`,
@@ -41,6 +44,7 @@ export function getPortfolioApiPayload() {
   };
 }
 
+/** Generates the OpenAPI 3.1 document for public service endpoints. */
 export function getOpenApiDocument() {
   return {
     openapi: '3.1.0',
@@ -158,6 +162,7 @@ export function getOpenApiDocument() {
   };
 }
 
+/** Creates the RFC 9727 link-set catalog for API discovery. */
 export function getApiCatalog() {
   return {
     linkset: [
@@ -176,6 +181,7 @@ export function getApiCatalog() {
   };
 }
 
+/** Provides Markdown documentation for the portfolio's public API contract. */
 export function getApiDocumentation() {
   return `# Portfolio API
 

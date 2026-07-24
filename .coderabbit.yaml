@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: en-US
-tone_instructions: 'Be concise, direct, security-aware, and actionable. Prioritize correctness, accessibility, runtime safety, and evidence over style-only comments.'
+tone_instructions: 'Be concise, direct, security-aware, and actionable. Prioritize correctness, accessibility, privacy, runtime safety, and evidence over style-only comments.'
 early_access: false
 enable_free_tier: true
 inheritance: true
@@ -9,7 +9,7 @@ reviews:
   profile: assertive
   request_changes_workflow: false
   high_level_summary: true
-  high_level_summary_instructions: 'Summarize the change, its user or delivery impact, and the highest-risk review points without listing every file.'
+  high_level_summary_instructions: 'Summarize the change, user or delivery impact, and highest-risk review points without listing every file. Call out browser, SEO, accessibility, privacy, and deployment evidence when relevant.'
   auto_title_placeholder: '@coderabbitai'
   auto_title_instructions: 'Generate a Conventional Commit title using feat, fix, perf, docs, build, ci, chore, refactor, test, or style; optional scope; imperative summary.'
   review_status: true
@@ -19,10 +19,41 @@ reviews:
   collapse_walkthrough: true
   changed_files_summary: true
   enable_prompt_for_ai_agents: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  suggested_labels: true
+  auto_apply_labels: true
+  suggested_reviewers: true
+  auto_assign_reviewers: true
+  suggested_reviewers_instructions:
+    - reviewers:
+        - handle: 'ogiboy'
+          type: user
+      instructions: 'Assign ogiboy for all PRs.'
+  labeling_instructions:
+    - label: feature
+      instructions: 'Apply when the PR adds a user-visible portfolio, navigation, interaction, lab, or discovery capability.'
+    - label: security
+      instructions: 'Apply when security boundaries, privacy controls, telemetry behavior, WASM isolation, or evidence semantics change.'
+    - label: webgui
+      instructions: 'Apply when routes, styling, components, responsive behavior, or frontend build configuration changes.'
+    - label: docs
+      instructions: 'Apply when README, .ai guidance, Aegis records, prompts, runbooks, or project documentation changes.'
+    - label: tests
+      instructions: 'Apply when tests, QA scripts, fixtures, browser checks, or evidence reports change.'
+    - label: dependencies
+      instructions: 'Apply when package versions, pnpm-lock.yaml, build metadata, or dependency security posture changes.'
+    - label: enhancement
+      instructions: 'Apply when portfolio, social-image, icon, font, WASM, or other public assets change.'
 
   path_filters:
     # Exclude generated runtime output and low-signal vendor artifacts.
     - '!**/.DS_Store'
+    - '!**/.agents/**'
+    - '!**/.claude/**'
+    - '!**/.claude-flow/**'
+    - '!**/.omx/**'
+    - '!**/.swarm/**'
     - '!**/node_modules/**'
     - '!**/.next/**'
     - '!**/out/**'
@@ -42,7 +73,7 @@ reviews:
     - '!**/*.webm'
     - '!**/*.woff'
     - '!**/*.woff2'
-    # Force-review canonical surfaces that CodeRabbit defaults may skip.
+    # Force-review canonical portfolio and delivery surfaces.
     - 'src/**'
     - 'tests/**'
     - 'e2e/**'
@@ -56,36 +87,44 @@ reviews:
     - 'tsconfig.json'
     - 'public/wasm/**'
     - '.github/**'
+    - '.codex/**'
     - '.ai/**'
     - 'docs/aegis/**'
     - '.coderabbit.yaml'
     - 'AGENTS.md'
     - 'README.md'
+    - 'CHANGELOG.md'
     - 'SECURITY.md'
 
   path_instructions:
     - path: 'src/app/**'
-      instructions: 'Check server-first route ownership, thin read-only Next.js Route Handlers, input handling, metadata correctness, and no accidental separate or stateful backend, auth, or database surface in public v1.'
+      instructions: 'Check server-first Next.js 16 App Router ownership, thin read-only route handlers, EN/TR parity, metadata, truthful SEO, and no separate or stateful backend, auth, database, or dashboard surface in public v1.'
     - path: 'src/content/**'
-      instructions: 'Check that the EN/TR route shell and siteCopy remain localized. Project records are currently shared source-language content; never claim complete project-content parity until the data model is localized and browser-verified.'
+      instructions: 'Check the localized EN/TR route shell and siteCopy. Project records remain shared source-language content; do not claim complete project-content parity until the data model is localized and browser-verified.'
     - path: 'src/components/client/**'
-      instructions: 'Check browser-only boundaries, accessible interaction, and prefers-reduced-motion behavior.'
+      instructions: 'Check browser-only boundaries, accessible interaction, hydration safety, Motion isolation, and prefers-reduced-motion and save-data behavior.'
     - path: 'src/components/ui/**'
-      instructions: 'Check accessible primitive usage, keyboard behavior, labels, focus treatment, and semantic HTML.'
+      instructions: 'Check accessible primitive usage, keyboard behavior, labels, focus treatment, semantic HTML, and visible failure states.'
     - path: 'src/lib/**'
-      instructions: 'Check agent-discovery payloads for truthful source data, provenance, freshness, and no fabricated claims.'
+      instructions: 'Check SEO, JSON-LD, API, and agent-discovery output for truthful visible-source data, provenance, freshness, stable contracts, and no fabricated credentials or outcomes.'
     - path: 'tests/**'
-      instructions: 'Check meaningful regression coverage, failure paths, and whether assertions prove the stated contract instead of implementation detail.'
+      instructions: 'Check meaningful regression coverage, failure paths, and assertions that prove behavior. Preserve the 80% Vitest coverage threshold and avoid tests that only mirror implementation details.'
     - path: 'e2e/**'
-      instructions: 'Check real rendered journeys, header behavior, locale/mobile coverage, reduced motion, and deterministic browser assertions.'
-    - path: 'scripts/release/**'
-      instructions: 'Check read-only release planning, exact Git ranges, SemVer and Conventional Commit parsing, no implicit version/tag/publish mutation, and useful failure output.'
+      instructions: 'Check real rendered EN/TR journeys, responsive and mobile behavior, keyboard access, reduced motion, privacy opt-out, SEO/discovery surfaces, and the isolated WASM lab.'
+    - path: 'scripts/qa/**'
+      instructions: 'Check deterministic QA scripts, useful failure output, and enforcement of the 80% meaningful JSDoc/TSDoc gate without requiring docs for obvious private helpers.'
     - path: 'public/wasm/**'
-      instructions: 'Check vendor asset provenance and ensure changes do not weaken isolated WASM sandboxing or widen its route surface.'
+      instructions: 'Check pinned asset provenance and ensure changes do not weaken the isolated lazy WASM lab, sandboxing, or route boundaries.'
     - path: '.github/workflows/**'
-      instructions: 'Check pinned actions, least-privilege permissions, required format/lint/type/test/build/audit gates, and secret exposure.'
+      instructions: 'Check pinned actions, least-privilege permissions, required format/lint/type/test/build/audit gates, Node 24 and pnpm compatibility, and secret exposure.'
     - path: '.ai/**'
-      instructions: 'Check authority order, current versus historical status, and that evidence does not claim unrun checks passed.'
+      instructions: 'Check authority order, current versus historical status, Aegis evidence, and that evidence does not claim unrun local, browser, hosted, or Vercel checks passed.'
+    - path: 'package.json'
+      instructions: 'Check Node 24 and pnpm ownership, exact CI quality gates, dependency changes, and scripts that must remain read-only unless explicitly authorized.'
+    - path: 'pnpm-lock.yaml'
+      instructions: 'Review lockfile changes for intentional dependency resolution, reproducibility, and security impact. Keep this file reviewable; do not ignore it.'
+    - path: 'next.config.mjs'
+      instructions: 'Check Vercel-compatible headers, static delivery, metadata and WASM isolation. Do not introduce a backend, auth, database, or hidden external-write behavior.'
 
   auto_review:
     enabled: true
@@ -103,12 +142,89 @@ reviews:
       - mode: error
         name: 'No secrets or tokens'
         instructions: 'Fail if changed code, docs, workflows, fixtures, or logs include API keys, auth tokens, private keys, session cookies, or realistic secret-looking placeholders.'
+      - mode: error
+        name: 'Portfolio architecture and truth'
+        instructions: 'Fail if public v1 adds a separate or stateful backend, auth, database, dashboard, fictional capability, misleading SEO or agent-discovery claim, or incorrect client boundary. Project records remain shared source-language content until localized and browser-verified.'
       - mode: warning
-        name: 'Portfolio boundary and parity'
-        instructions: 'Warn if public v1 adds a separate or stateful backend, auth, database, dashboard, incorrect client boundaries, regressions in localized EN/TR route shell or siteCopy, inaccessible interaction, or motion without reduced-motion handling. Project records remain shared source-language content until the data model is localized and browser-verified.'
+        name: 'Interaction and WASM safety'
+        instructions: 'Warn if Motion lacks reduced-motion handling, browser-only behavior leaks into server-first routes, accessibility regresses, or WASM isolation, lazy loading, sandboxing, vendor provenance, or asset boundaries weaken.'
       - mode: warning
-        name: 'Agent and WASM truth'
-        instructions: 'Warn if agent-discovery metadata lacks truthful source attribution or if WASM isolation, sandboxing, vendor provenance, or asset boundaries weaken.'
+        name: 'Privacy and telemetry'
+        instructions: 'Warn if telemetry becomes non-aggregate, adds custom tracking or advertising profiling, bypasses the browser-local opt-out, or omits truthful EN/TR privacy disclosure.'
       - mode: warning
-        name: 'CI and release evidence'
-        instructions: 'Warn if changes bypass required CI/release checks or claim local, remote, browser, or Vercel evidence that was not gathered.'
+        name: 'CI and deployment evidence'
+        instructions: 'Warn if changes bypass required CI gates or claim local, remote, browser, or Vercel evidence that was not gathered.'
+      - mode: error
+        name: 'Quality thresholds'
+        instructions: 'Fail if meaningful unit coverage can fall below 80% or if the project JSDoc/TSDoc quality gate is weakened below 80% without an explicit accepted Aegis record.'
+
+  finishing_touches:
+    docstrings:
+      enabled: true
+
+  tools:
+    eslint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    shellcheck:
+      enabled: true
+    actionlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    trufflehog:
+      enabled: true
+    dotenvLint:
+      enabled: true
+    semgrep:
+      enabled: true
+    osvScanner:
+      enabled: true
+
+chat:
+  art: false
+  allow_non_org_members: false
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - '.ai/**/*.md'
+      - 'README.md'
+      - 'DESIGN.md'
+      - '.coderabbit.yaml'
+  learnings:
+    scope: auto
+    approval_delay: 0
+
+code_generation:
+  unit_tests:
+    path_instructions:
+      - path: 'src/**/*.ts'
+        instructions: 'Prefer deterministic Vitest tests with no live network calls by default and explicit assertions for server-first boundaries, truthful discovery/SEO, privacy opt-out, reduced-motion behavior, WASM isolation, and failure paths.'
+      - path: 'src/**/*.tsx'
+        instructions: 'Prefer accessible component tests that prove keyboard, locale, reduced-motion, and browser-only behavior without coupling assertions to presentation details.'
+  docstrings:
+    language: en-US
+    path_instructions:
+      - path: 'src/**/*.ts'
+        instructions: 'Use TSDoc for exported or non-obvious TypeScript contracts. Document source truth, provenance, freshness, failure behavior, side effects, privacy boundaries, and operator-visible outcomes. Add @param, @returns, or @throws only when applicable; add @example only when it materially clarifies a public API. Skip simple private helpers.'
+      - path: 'src/**/*.tsx'
+        instructions: 'Document only complex interaction, accessibility, server/client, reduced-motion, or exported contract behavior that is not evident from types. Skip simple React components and presentation helpers.'
+      - path: 'tests/**/*.ts'
+        instructions: 'Do not add docstrings to individual describe or it blocks. Document only shared fixtures, reusable test helpers, or non-obvious regression harness behavior.'
+      - path: 'scripts/**/*.ts'
+        instructions: 'Document exported or non-obvious script entry points with CLI arguments, filesystem or network side effects, cleanup behavior, and exit/failure semantics.'
+      - path: 'scripts/**/*.js'
+        instructions: 'Document non-obvious script entry points with CLI arguments, side effects, cleanup, and exit/failure semantics; skip obvious local helpers.'
+      - path: 'scripts/**/*.mjs'
+        instructions: 'Document non-obvious script entry points with CLI arguments, side effects, cleanup, and exit/failure semantics; skip obvious local helpers.'
+      - path: 'scripts/**/*.cjs'
+        instructions: 'Document non-obvious script entry points with CLI arguments, side effects, cleanup, and exit/failure semantics; skip obvious local helpers.'

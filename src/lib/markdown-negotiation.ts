@@ -15,6 +15,7 @@ function qualityForMediaRange(mediaRange: string) {
   return Number.isFinite(quality) && quality > 0 && quality <= 1 ? quality : 0;
 }
 
+/** Checks whether an Accept header permits a positive Markdown media range. */
 export function acceptsMarkdown(acceptHeader: string | null) {
   if (!acceptHeader) {
     return false;
@@ -23,6 +24,7 @@ export function acceptsMarkdown(acceptHeader: string | null) {
   return acceptHeader.split(',').some((mediaRange) => qualityForMediaRange(mediaRange) > 0);
 }
 
+/** Adds a response Vary token once while preserving existing tokens. */
 export function appendVary(headers: Headers, value: string) {
   const existingValues =
     headers

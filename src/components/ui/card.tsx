@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
+/** Provides the bordered card container and forwards standard div attributes. */
 export function Card({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
@@ -14,6 +15,7 @@ export function Card({ className, ...props }: Readonly<React.ComponentProps<'div
   );
 }
 
+/** Groups card heading content and reserves space for an optional action. */
 export function CardHeader({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
@@ -27,16 +29,19 @@ export function CardHeader({ className, ...props }: Readonly<React.ComponentProp
   );
 }
 
+/** Provides padded card body content with standard div attribute forwarding. */
 export function CardContent({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return <div data-slot="card-content" className={cn('p-5', className)} {...props} />;
 }
 
+/** Styles a card title while leaving semantic element choice to consumers. */
 export function CardTitle({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div data-slot="card-title" className={cn('font-display text-xl', className)} {...props} />
   );
 }
 
+/** Styles supporting card text while forwarding standard div attributes. */
 export function CardDescription({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
@@ -47,6 +52,7 @@ export function CardDescription({ className, ...props }: Readonly<React.Componen
   );
 }
 
+/** Positions a supplementary card action beside the header content. */
 export function CardAction({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
@@ -57,6 +63,7 @@ export function CardAction({ className, ...props }: Readonly<React.ComponentProp
   );
 }
 
+/** Provides a bordered footer row for card controls or metadata. */
 export function CardFooter({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div

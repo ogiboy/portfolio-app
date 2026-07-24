@@ -14,8 +14,10 @@ function resolveSiteOrigin() {
   return url.origin;
 }
 
+/** Validated canonical origin used to construct absolute public URLs. */
 export const siteOrigin = resolveSiteOrigin();
 
+/** Resolves a path against the validated canonical site origin. */
 export function siteUrl(path = '/') {
   return new URL(path, `${siteOrigin}/`).toString();
 }
