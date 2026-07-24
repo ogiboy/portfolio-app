@@ -70,7 +70,7 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
           <LocaleSwitcher label={copy.nav.language} />
           <a
             href={`mailto:${contact.email}`}
-            className={buttonVariants({ size: 'sm', className: 'hidden xl:inline-flex' })}
+            className={buttonVariants({ size: 'sm', className: 'max-xl:hidden' })}
           >
             {copy.nav.contact}
             <ExternalLink aria-hidden="true" strokeWidth={2.5} />
