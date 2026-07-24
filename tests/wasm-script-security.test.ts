@@ -5,6 +5,10 @@ import { describe, expect, it } from 'vitest';
 
 const root = process.cwd();
 const runtime = readFileSync(resolve(root, 'public/wasm/engine/script.js'), 'utf8');
+const cloudSaveAdapter = readFileSync(
+  resolve(root, 'public/wasm/engine/cloud-save-adapter.js'),
+  'utf8',
+);
 const runtimeSecurity = readFileSync(
   resolve(root, 'public/wasm/engine/runtime-security.js'),
   'utf8',
@@ -148,7 +152,7 @@ describe('DosWasmX authored wrapper security', () => {
       helpers.resolveApprovedCloudUrl('https://saves.example/api', 'UnapprovedRoute'),
     ).toThrow('Cloud route is not approved.');
 
-    expect(runtime).toContain("oReq.open('GET', cloudUrl.href, true)");
+    expect(cloudSaveAdapter).toContain("this.cloudUrl('LoadStaveState'");
     expect(runtimeSecurity).toContain('target.searchParams.set(key, String(value))');
     expect(runtime).not.toMatch(/CLOUDSAVEURL\s*\+/);
     expect(runtime).not.toMatch(/new URL\([^\n]*CLOUDSAVEURL/);

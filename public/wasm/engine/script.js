@@ -136,6 +136,10 @@ class MyClass {
       loadFloppy: false,
       noCopyImport: false,
     };
+    if (!window.HotWasmCloudSaveAdapter) {
+      throw new Error('cloud-save-adapter.js must load before script.js.');
+    }
+    this.cloudSave = new window.HotWasmCloudSaveAdapter(this);
     // The pinned Emscripten glue still reads this legacy property once.
     this.rivetsData = this.state;
 
@@ -1875,289 +1879,19 @@ class MyClass {
 
   //when it returns from emscripten
   SaveStateEvent() {
-    console.log('js savestate event');
-    let compressed = Module.FS.readFile('/save/1.sav'); //this is a Uint8Array
-
-    if (!myClass.state.loggedIn) {
-      myClass.saveToDatabase(compressed, SaveTypes.Savestate);
-      return;
-    }
-
-    var saveMessage = 'Cloud State Saved';
-
-    const cloudUrl = security.resolveApprovedCloudUrl(
-      this.state.settings.CLOUDSAVEURL,
-      'SendStaveState',
-      {
-        emulator: 'doswasmx',
-        name: this.base_name + '.savestate.doswasmx',
-        password: this.state.password,
-      }
-    );
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', cloudUrl.href, true);
-    xhr.send(compressed);
-
-    xhr.onreadystatechange = function () {
-      try {
-        if (xhr.readyState === 4) {
-          let result = xhr.response;
-          if (result == '"Success"') {
-            myClass.noCloudSave = false;
-            showRuntimeNotice(saveMessage);
-          } else {
-            showRuntimeNotice('Error Saving Cloud Save');
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        showRuntimeNotice('Error Loading Cloud Save');
-      }
-    };
+    this.cloudSave.saveStateEvent();
   }
 
   async loadHardDriveDiffs(byteArray) {
-    await myClass.getSaveStates();
-
-    let promise = new Promise(function (resolve, reject) {
-      let foundCloudDrive = false;
-
-      for (let i = 0; i < myClass.allSaveStates.length; i++) {
-        let element = myClass.allSaveStates[i];
-        if (element.Name == myClass.base_name + '.doswasmx') {
-          foundCloudDrive = true;
-          console.log('foundCloudDrive');
-        }
-      }
-
-      // we didnt find a cloud drive
-      if (!foundCloudDrive) {
-        resolve(byteArray);
-        return;
-      }
-
-      showRuntimeNotice('Found Diff Drive');
-
-      const cloudUrl = security.resolveApprovedCloudUrl(
-        myClass.state.settings.CLOUDSAVEURL,
-        'LoadStaveState',
-        { name: myClass.base_name + '.doswasmx', password: myClass.state.password }
-      );
-
-      const oReq = new XMLHttpRequest();
-      oReq.open('GET', cloudUrl.href, true);
-      oReq.responseType = 'arraybuffer';
-
-      oReq.onload = function (oEvent) {
-        var arrayBuffer = oReq.response; // Note: not oReq.responseText
-        try {
-          if (arrayBuffer) {
-            var byteArray = new Uint8Array(arrayBuffer);
-            myClass.applyHardDriveDiffs(byteArray, resolve);
-          } else {
-            reject();
-          }
-        } catch (error) {
-          console.log(error);
-          reject();
-        }
-      };
-
-      oReq.send(null);
-    });
-
-    return promise;
+    return this.cloudSave.loadHardDriveDiffs(byteArray);
   }
 
   async applyHardDriveDiffs(byteArrayDiffs, resolve) {
-    console.log('applyHardDriveDiffs');
-
-    let pointer = 0;
-
-    byteArrayDiffs = await this.decompressArrayBuffer(byteArrayDiffs.buffer);
-
-    //start with a copy of the hold hard drive
-    let newHardDrive = new Uint8Array(this.baseHardDrive);
-
-    while (pointer < byteArrayDiffs.length) {
-      let index =
-        byteArrayDiffs[pointer] +
-        byteArrayDiffs[pointer + 1] * 256 +
-        byteArrayDiffs[pointer + 2] * 256 * 256 +
-        byteArrayDiffs[pointer + 3] * 256 * 256 * 256;
-      pointer += 4;
-
-      let length =
-        byteArrayDiffs[pointer] +
-        byteArrayDiffs[pointer + 1] * 256 +
-        byteArrayDiffs[pointer + 2] * 256 * 256 +
-        byteArrayDiffs[pointer + 3] * 256 * 256 * 256;
-      pointer += 4;
-
-      //apply the diffs
-      for (let i = 0; i < length; i++) {
-        newHardDrive[index] = byteArrayDiffs[pointer];
-        pointer++;
-        index++;
-      }
-    }
-
-    resolve(newHardDrive);
+    return this.cloudSave.applyHardDriveDiffs(byteArrayDiffs, resolve);
   }
 
   async saveHardDriveDiffs() {
-    if (!this.state.loggedIn || this.state.initialInstallation) {
-      this.showToast('Save Hard Drive Diffs Not Supported');
-      return;
-    }
-
-    //pause dosbox
-    Module._neil_toggle_pause();
-
-    this.state.message += 'Calculating Diffs...';
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
-
-    let compareHardDrive = new Uint8Array();
-    compareHardDrive = Module.FS.readFile('/' + this.base_name + '.img'); //this is a Uint8Array
-
-    let chunkSize = 10000;
-    let arrayChunks = []; //array of Uint8SubArrays each of size chunk
-
-    this.diffCount = 0;
-    let progressCounter = 5000000; //we update progress every 5 million
-    for (let i = 0; i < this.baseHardDrive.length; i++) {
-      if (this.baseHardDrive[i] != compareHardDrive[i]) {
-        let end = i + chunkSize;
-        if (end >= this.baseHardDrive.length) {
-          end = this.baseHardDrive.length - 1;
-        }
-
-        let subArray = compareHardDrive.subarray(i, end);
-        arrayChunks.push({
-          index: i,
-          data: subArray,
-        });
-
-        i += chunkSize - 1;
-        this.diffCount++;
-      }
-
-      if (i > progressCounter) {
-        let percent = Math.floor((i / this.baseHardDrive.length) * 100);
-
-        this.state.message =
-          'Diffs: ' + this.diffCount + ', <b>' + percent + '%</b>';
-
-        await new Promise((resolve) => {
-          setTimeout(resolve, 20);
-        });
-
-        progressCounter += 5000000;
-      }
-    }
-
-    this.arrayChunks = arrayChunks;
-    console.log(arrayChunks);
-
-    let finalsize = 0;
-
-    for (let i = 0; i < arrayChunks.length; i++) {
-      //8 bytes for the two ints representing index and length
-      finalsize += 8;
-
-      let chunk = arrayChunks[i];
-      finalsize += chunk.data.length;
-    }
-
-    this.state.message = 'Generating Final Array...';
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
-
-    let finalArray = new Uint8Array(finalsize);
-    let pointer = 0;
-    for (let i = 0; i < arrayChunks.length; i++) {
-      let chunk = arrayChunks[i];
-      let index = chunk.index;
-
-      // index (little endian)
-      finalArray[pointer] = index & 0xff;
-      finalArray[pointer + 1] = (index >> 8) & 0xff;
-      finalArray[pointer + 2] = (index >> 16) & 0xff;
-      finalArray[pointer + 3] = (index >> 24) & 0xff;
-
-      pointer += 4;
-
-      let length = chunk.data.length;
-
-      // length (little endian)
-      finalArray[pointer] = length & 0xff;
-      finalArray[pointer + 1] = (length >> 8) & 0xff;
-      finalArray[pointer + 2] = (length >> 16) & 0xff;
-      finalArray[pointer + 3] = (length >> 24) & 0xff;
-
-      pointer += 4;
-
-      for (let j = 0; j < chunk.data.length; j++) {
-        finalArray[pointer] = chunk.data[j];
-        pointer++;
-      }
-    }
-
-    //compress drive
-    finalArray = await this.compressArrayBuffer(finalArray.buffer);
-
-    console.log(
-      'diffSize: ' + finalsize + ' compressedSize: ' + finalArray.length
-    );
-
-    if (this.doIntegrityCheck) {
-      this.state.message = 'Doing Integrity Check...';
-    } else {
-      Module._neil_toggle_pause();
-      this.state.message = 'Sending to server...';
-    }
-
-    var saveMessage =
-      'Saved: ' +
-      finalArray.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    const cloudUrl = security.resolveApprovedCloudUrl(
-      this.state.settings.CLOUDSAVEURL,
-      'SendStaveState',
-      {
-        emulator: 'doswasmx',
-        name: this.base_name + '.doswasmx',
-        password: this.state.password,
-      }
-    );
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', cloudUrl.href, true);
-    xhr.send(finalArray);
-
-    xhr.onreadystatechange = function () {
-      try {
-        if (xhr.readyState === 4) {
-          let result = xhr.response;
-          if (result == '"Success"') {
-            showRuntimeNotice(saveMessage);
-
-            if (myClass.doIntegrityCheck) {
-              myClass.integrityCheck(compareHardDrive);
-            } else {
-              myClass.state.message = '';
-            }
-          } else {
-            showRuntimeNotice('Error Saving Cloud Save');
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        showRuntimeNotice('Error Loading Cloud Save');
-      }
-    };
+    return this.cloudSave.saveHardDriveDiffs();
   }
 
   async compressArrayBuffer(input) {
@@ -2433,35 +2167,7 @@ class MyClass {
   }
 
   loadCloud() {
-    const cloudUrl = security.resolveApprovedCloudUrl(
-      this.state.settings.CLOUDSAVEURL,
-      'LoadStaveState',
-      {
-        name: this.base_name + '.savestate.doswasmx',
-        password: this.state.password,
-      }
-    );
-    const oReq = new XMLHttpRequest();
-    oReq.open('GET', cloudUrl.href, true);
-    oReq.responseType = 'arraybuffer';
-
-    oReq.onload = function (oEvent) {
-      var arrayBuffer = oReq.response; // Note: not oReq.responseText
-      try {
-        if (arrayBuffer) {
-          var byteArray = new Uint8Array(arrayBuffer);
-          Module.FS.writeFile('/save/1.sav', byteArray);
-          Module._neil_unserialize();
-        } else {
-          showRuntimeNotice('Error Loading Cloud Save');
-        }
-      } catch (error) {
-        console.log(error);
-        showRuntimeNotice('Error Loading Cloud Save');
-      }
-    };
-
-    oReq.send(null);
+    this.cloudSave.loadCloud();
   }
 
   setupLogin() {
@@ -2549,33 +2255,11 @@ class MyClass {
   }
 
   async loginToServer() {
-    const url = security.resolveApprovedCloudUrl(this.state.settings.CLOUDSAVEURL, 'Login', {
-      password: this.state.password,
-    });
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Login request failed: ${response.status}`);
-    const result = await response.text();
-    console.log('login request completed');
-    return result;
+    return this.cloudSave.loginToServer();
   }
 
   async getSaveStates() {
-    if (!this.state.loggedIn) return;
-
-    const url = security.resolveApprovedCloudUrl(
-      this.state.settings.CLOUDSAVEURL,
-      'GetSaveStates',
-      { password: this.state.password }
-    );
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Save-state request failed: ${response.status}`);
-    const result = await response.json();
-    console.log('save-state list loaded');
-    this.allSaveStates = result;
-    result.forEach((element) => {
-      if (element.Name == this.base_name + '.savestate.doswasmx')
-        this.noCloudSave = false;
-    });
+    return this.cloudSave.getSaveStates();
   }
 
   //USE THIS FOR DOING AN INTEGRITY CHECK ON DIFFED HARD DRIVE -
