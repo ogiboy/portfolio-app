@@ -2,13 +2,21 @@ import { ImageResponse } from 'next/og';
 import type { Locale } from '@/content/site';
 import { identity, seoCopy } from '@/lib/seo';
 
+/** Fixed dimensions required by generated social preview images. */
 export const socialImageSize = {
   width: 1200,
   height: 630,
 };
 
+/** MIME type served for generated portfolio social preview images. */
 export const socialImageContentType = 'image/png';
 
+/**
+ * Creates a locale-aware social sharing card for the portfolio.
+ *
+ * @param locale - The locale used to select localized card text
+ * @returns A PNG image response containing the portfolio social card
+ */
 export function createSocialImage(locale: Locale) {
   const copy = seoCopy[locale];
   const gridLines = Array.from({ length: 9 }, (_, index) => (index + 1) * 10);

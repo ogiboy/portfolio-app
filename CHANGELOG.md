@@ -18,6 +18,11 @@
 
 ### Changed
 
+- Hardened the pinned DosWasmX runtime with static CDN delivery, revalidating caches, explicit
+  provenance, native DOM/fetch owners, stable revisioned loaders, and corrected IndexedDB
+  fallbacks; removed inherited jQuery, Rivets, and undeclared toastr coupling.
+- Split the WASM parent protocol, state copy, attempt identity, timeout, retry, and message
+  lifecycle into small typed client modules behind the existing explicit-boot UI.
 - Corrected the canonical site origin used by sitemap, API catalog, OpenAPI, and agent discovery.
 - Hardened CI, dependency update, CodeRabbit, security, browser QA, and release governance around evidence-backed states.
 - Repositioned the site as Halil Oğuzcan Toptaş's developer and homelab portfolio under the H.O.T. identity.

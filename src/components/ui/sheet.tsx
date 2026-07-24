@@ -23,10 +23,16 @@ const sheetVariants = cva(
   },
 );
 
+/**
+ * Provides the root container for a sheet dialog.
+ *
+ * @returns The rendered sheet dialog root.
+ */
 function Sheet(props: Readonly<React.ComponentProps<typeof SheetPrimitive.Root>>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
+/** Exposes the accessible trigger that opens the associated sheet dialog. */
 function SheetTrigger(props: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
@@ -35,6 +41,11 @@ function SheetPortal(props: Readonly<React.ComponentProps<typeof SheetPrimitive.
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
+/**
+ * Renders the dimmed backdrop displayed behind sheet content.
+ *
+ * @param className - Additional CSS classes to apply to the overlay
+ */
 function SheetOverlay({
   className,
   ...props
@@ -51,6 +62,12 @@ function SheetOverlay({
   );
 }
 
+/**
+ * Renders sheet content with a labeled close control.
+ *
+ * @param closeLabel - Accessible label for the close control
+ * @param side - Side of the viewport where the sheet appears
+ */
 function SheetContent({
   children,
   className,
@@ -82,12 +99,14 @@ function SheetContent({
   );
 }
 
+/** Groups sheet title and description content near the dialog start. */
 function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div data-slot="sheet-header" className={cn('flex flex-col gap-4', className)} {...props} />
   );
 }
 
+/** Supplies the dialog title announced by assistive technologies. */
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
   return (
     <SheetPrimitive.Title
@@ -98,6 +117,7 @@ function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPr
   );
 }
 
+/** Supplies the dialog description associated with the sheet content. */
 function SheetDescription({
   className,
   ...props

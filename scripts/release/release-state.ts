@@ -43,6 +43,15 @@ type ReleaseVersionState = {
   plannedVersion: string | null;
 };
 
+/**
+ * Executes a Git command in the specified directory.
+ *
+ * @param cwd - The directory in which to run Git
+ * @param args - The arguments passed to Git
+ * @param optional - Whether to return an empty string when the command fails
+ * @returns The trimmed standard output, or an empty string when an optional command fails
+ * @throws The original command error when the command fails and `optional` is `false`
+ */
 function git(cwd: string, args: string[], optional = false) {
   try {
     return execFileSync(gitExecutable, args, {
@@ -56,6 +65,7 @@ function git(cwd: string, args: string[], optional = false) {
   }
 }
 
+/** Parses a Conventional Commit subject into its release-relevant structured fields. */
 export function parseConventionalSubject(subject: string): ConventionalSubject | undefined {
   const match = conventionalSubjectPattern.exec(subject);
   if (!match) return undefined;
@@ -68,6 +78,14 @@ export function parseConventionalSubject(subject: string): ConventionalSubject |
   };
 }
 
+/**
+ * Calculates the next semantic version implied by releasable commits since the baseline.
+ *
+ * @param baseVersion - The current semantic version used as the starting point.
+ * @param commits - The commits considered for release versioning.
+ * @returns The incremented semantic version, or `null` when no release is needed.
+ * @throws Error if `baseVersion` is not a valid semantic version.
+ */
 export function nextVersion(baseVersion: string, commits: ReleaseCommit[]) {
   const match = semverPattern.exec(baseVersion);
   if (!match) throw new Error(`Invalid semantic version: ${baseVersion}`);
@@ -92,6 +110,16 @@ export function nextVersion(baseVersion: string, commits: ReleaseCommit[]) {
   return `${major}.${minor}.${patch}`;
 }
 
+/**
+ * Determines whether the package, changelog, and HEAD represent a valid development or pre-tag release state.
+ *
+ * @param baseVersion - The latest released or configured baseline version
+ * @param headSubject - The subject of the current HEAD commit
+ * @param latestReleasedVersion - The version recorded in the latest changelog release header
+ * @param packageVersion - The version declared in `package.json`
+ * @param plannedVersion - The next version calculated from releasable commits, if applicable
+ * @returns The validation errors and state mode: `development`, `release-commit-awaiting-tag`, or `invalid`
+ */
 export function validateReleaseVersionState({
   baseVersion,
   headSubject,
@@ -157,6 +185,12 @@ function releaseCommits(cwd: string, range: string): ReleaseCommit[] {
     .filter((commit) => commit.parents.length < 2);
 }
 
+/**
+ * Finds the highest stable version tag reachable from `HEAD`.
+ *
+ * @param cwd - The working directory in which to search for Git tags
+ * @returns The matching `vX.Y.Z` tag, or an empty string when none exists
+ */
 function latestStableTag(cwd: string) {
   const tags = git(
     cwd,
@@ -166,6 +200,12 @@ function latestStableTag(cwd: string) {
   return tags.split('\n').find((tag) => stableTagPattern.test(tag)) ?? '';
 }
 
+/**
+ * Collects repository release evidence and validates the current release state.
+ *
+ * @param cwd - Repository directory to inspect
+ * @returns Release metadata, validation errors, commit details, and the determined release mode
+ */
 export function collectReleaseState(cwd = process.cwd()) {
   const packageManifest = JSON.parse(
     readFileSync(resolve(cwd, 'package.json'), 'utf8'),

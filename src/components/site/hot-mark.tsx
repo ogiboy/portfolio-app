@@ -1,3 +1,4 @@
+/** Renders the decorative brand mark without adding duplicate spoken content. */
 export function HotMark({ className = '' }: Readonly<{ className?: string }>) {
   return (
     <span className={`hot-mark ${className}`.trim()} aria-hidden="true">

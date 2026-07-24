@@ -1,11 +1,19 @@
 import type { Metadata } from 'next';
 import { AnalyticsPreference } from '@/components/client/analytics-preference';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
+import { buildPrivacyStructuredData } from '@/lib/structured-data';
 
+/**
+ * Creates localized SEO metadata for the privacy page.
+ *
+ * @param params - Route parameters containing the page locale
+ * @returns Metadata configured for the privacy page
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {
@@ -18,6 +26,11 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Renders the localized privacy information page with privacy structured data and analytics preferences.
+ *
+ * @param params - A promise resolving to the page locale.
+ */
 export default async function PrivacyPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {
@@ -32,6 +45,7 @@ export default async function PrivacyPage({
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-8 md:py-24">
+      <JsonLd data={buildPrivacyStructuredData(locale)} />
       <Badge>{copy.eyebrow}</Badge>
       <h1 className="font-display mt-8 max-w-4xl text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
         {copy.title}
@@ -70,6 +84,8 @@ export default async function PrivacyPage({
             disabledLabel={copy.disabledLabel}
             enableAction={copy.enableAction}
             disableAction={copy.disableAction}
+            savedLabel={copy.savedLabel}
+            errorLabel={copy.errorLabel}
           />
         </div>
       </section>

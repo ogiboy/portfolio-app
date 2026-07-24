@@ -5,12 +5,14 @@
 .claude/
 .claude-flow/
 .omx/
+.swarm/
 node_modules/
 coverage/
 playwright-report/
 test-results/
 pnpm-lock.yaml
 public/wasm/
+public/ads.txt
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db

@@ -1,8 +1,14 @@
+# CLAUDE.md
+
 # Ruflo — Claude Code Configuration
 
 > Project authority: follow `AGENTS.md`, `.ai/architecture.instructions.md`, accepted decisions,
 > and the active checkpoint before this generated capability reference. Use pnpm for repository
 > commands; Ruflo/Claude tooling does not override product, safety, or external-write boundaries.
+> Generic examples below are advisory and must be reconciled with current installed commands. Do not
+> rerun init/setup/fix, start daemons, or persist agent memory as an application side effect. The
+> portfolio app follows its Node 24/pnpm contract even when this tooling runs under a separate host
+> Node version.
 
 ## Rules
 
@@ -182,8 +188,6 @@ npx ruflo@latest doctor --fix
 > by default; `--ttl 0` to disable, `daemon status --all` to audit running daemons).
 
 **Agent tool** handles execution (agents, files, code, git). **MCP tools** handle coordination (swarm, memory, hooks). **CLI** is the same via Bash.
-
-# CLAUDE.md
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 

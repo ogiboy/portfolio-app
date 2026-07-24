@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MobileNavigation } from '@/components/client/mobile-navigation';
 
 vi.mock('@/i18n/navigation', () => ({
+  usePathname: () => '/',
   Link: ({ children, href, onClick, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a
       href={String(href)}
@@ -43,6 +44,7 @@ describe('MobileNavigation', () => {
     const dialog = getByRole('dialog', { name: props.label });
     expect(dialog).toBeInTheDocument();
     expect(getByRole('link', { name: props.homeLabel })).toHaveAttribute('href', '/');
+    expect(getByRole('link', { name: props.homeLabel })).toHaveAttribute('aria-current', 'page');
     expect(getByRole('link', { name: props.projectsLabel })).toHaveAttribute('href', '/projects');
     expect(getByRole('link', { name: props.labLabel })).toHaveAttribute(
       'href',

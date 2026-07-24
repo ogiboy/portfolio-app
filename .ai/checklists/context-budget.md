@@ -1,7 +1,40 @@
 # Context Budget Checklist
 
-- Read the authority order and current owner map first.
-- Load one to three relevant capability/skill bodies; add more only for a documented blocker.
-- Prefer source, current checkpoint, and evidence references over broad historical replay.
-- State unknown or unavailable context; do not fill it with inferred tool output.
-- Before handoff, leave branch/commit, dirty state, owner, evidence, blockers, and next action in the checkpoint.
+Use before a broad task, after each major phase, and before spawning more agents.
+
+## Start
+
+- [ ] Authoritative repository/worktree path is explicit.
+- [ ] Live Git status and existing dirty changes are recorded.
+- [ ] The task is classified through `.ai/capabilities/routing.instructions.md`.
+- [ ] No more than three narrowly relevant skill bodies are loaded per agent initially.
+- [ ] At most one specialist plugin/MCP family is assigned to each worker.
+- [ ] One browser-control surface is selected, if needed.
+
+## Multi-Agent
+
+- [ ] The task has at least two genuinely independent questions or disjoint write scopes.
+- [ ] Coordinator plus workers total no more than six agents; fewer are preferred.
+- [ ] Every worker has one question or exclusive file ownership.
+- [ ] Worker brief is bounded and does not include raw capability catalogs or old chat transcripts.
+- [ ] Heavy test/build/browser processes are not running redundantly.
+- [ ] Only one execution lane owns the task; advisory Ruflo, OMX, and native agents are not competing
+      swarms over the same files.
+
+## Continuation
+
+- [ ] Full objective and completion criteria exist in `.ai/checkpoints/<workstream>.md`.
+- [ ] Completed slices, commits, verification, and external changes are current.
+- [ ] Raw research/tool output has been reduced to decisions and evidence.
+- [ ] Local orchestration databases, daemon state, and generated logs have not become project truth.
+- [ ] No new agents are spawned after context pressure becomes material.
+- [ ] A fresh non-forked thread is preferred at a stable milestone.
+
+## Stop And Rotate
+
+Checkpoint and rotate when:
+
+- the agent is repeatedly rereading old history;
+- tool schemas or logs dominate the working context;
+- compaction is imminent or has failed;
+- a coherent slice is complete and the next slice is independently resumable.

@@ -12,6 +12,7 @@ type SitemapPage = {
 
 const staticPages: SitemapPage[] = [
   { path: '', changeFrequency: 'monthly', priority: 1 },
+  { path: '/about', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/projects', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/labs/retro-game-center', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.3 },

@@ -1,11 +1,14 @@
 import { ExternalLink } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/client/locale-switcher';
 import { MobileNavigation } from '@/components/client/mobile-navigation';
+import { NavigationLink } from '@/components/client/navigation-link';
+import { ThemeToggle } from '@/components/client/theme-toggle';
 import { HotMark } from '@/components/site/hot-mark';
 import { buttonVariants } from '@/components/ui/button';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 
+/** Renders localized primary navigation with responsive accessible controls. */
 export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
   const copy = siteCopy[locale];
 
@@ -20,22 +23,34 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
           <HotMark />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label={copy.nav.label}>
-          <Link href="/" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={copy.nav.label}>
+          <NavigationLink href="/" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
             {copy.nav.home}
-          </Link>
-          <Link href="/projects" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+          </NavigationLink>
+          <NavigationLink
+            href="/about"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
+            {copy.nav.about}
+          </NavigationLink>
+          <NavigationLink
+            href="/projects"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
             {copy.nav.projects}
-          </Link>
-          <Link
+          </NavigationLink>
+          <NavigationLink
             href="/labs/retro-game-center"
             className={buttonVariants({ size: 'sm', variant: 'ghost' })}
           >
             {copy.nav.lab}
-          </Link>
-          <Link href="/#process" className={buttonVariants({ size: 'sm', variant: 'ghost' })}>
+          </NavigationLink>
+          <NavigationLink
+            href="/#process"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
             {copy.nav.process}
-          </Link>
+          </NavigationLink>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -45,16 +60,18 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
             openLabel={copy.nav.openMenu}
             closeLabel={copy.nav.closeMenu}
             homeLabel={copy.nav.home}
+            aboutLabel={copy.nav.about}
             projectsLabel={copy.nav.projects}
             labLabel={copy.nav.lab}
             processLabel={copy.nav.process}
             contactLabel={copy.nav.contact}
             contactHref={`mailto:${contact.email}`}
           />
+          <ThemeToggle darkLabel={copy.nav.useDarkTheme} lightLabel={copy.nav.useLightTheme} />
           <LocaleSwitcher label={copy.nav.language} />
           <a
             href={`mailto:${contact.email}`}
-            className={buttonVariants({ size: 'sm', className: 'hidden sm:inline-flex' })}
+            className={buttonVariants({ size: 'sm', className: 'max-xl:hidden' })}
           >
             {copy.nav.contact}
             <ExternalLink aria-hidden="true" strokeWidth={2.5} />

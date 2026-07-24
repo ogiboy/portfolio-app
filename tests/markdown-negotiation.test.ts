@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { describe, expect, it, vi } from 'vitest';
 import { GET as getMarkdown } from '@/app/api/agent/markdown/route';
+import { contact, siteCopy } from '@/content/site';
 import { getAgentMarkdown, markdownResponse } from '@/lib/agent-markdown';
 import { acceptsMarkdown, appendVary } from '@/lib/markdown-negotiation';
 import proxy from '@/proxy';
@@ -50,10 +51,32 @@ describe('markdown negotiation', () => {
   });
 
   it('renders only the supported localized portfolio paths', async () => {
+    const turkishLinkedInPath = siteCopy.tr.about.paths.find((path) => path.target === 'linkedin');
+
     expect(getAgentMarkdown('/en')?.locale).toBe('en');
+    expect(getAgentMarkdown('/en/about')?.body).toContain('H.O.T. comes from my initials');
+    expect(getAgentMarkdown('/tr/about')?.body).toContain(
+      'H.O.T., adımın baş harflerinden geliyor',
+    );
+    expect(getAgentMarkdown('/en/about')?.body).toContain('(/en/labs/retro-game-center)');
+    expect(getAgentMarkdown('/en/about')?.body).toContain('[Browse projects](/en/projects)');
+    expect(getAgentMarkdown('/tr/about')?.body).toContain('[Projeleri incele](/tr/projects)');
+    expect(getAgentMarkdown('/en/about')?.body).toContain(
+      `[Email H.O.T.](mailto:${contact.email})`,
+    );
+    expect(turkishLinkedInPath).toBeDefined();
+    expect(getAgentMarkdown('/tr/about')?.body).toContain(
+      `[${turkishLinkedInPath!.action}](${contact.linkedin})`,
+    );
     expect(getAgentMarkdown('/tr/projects')).toMatchObject({ locale: 'tr' });
     expect(getAgentMarkdown('/en/projects/graduation-project')?.body).toContain(
       'Graduation Project',
+    );
+    expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
+      'BilgeAdam front-end development bootcamp mezunlarını',
+    );
+    expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
+      '- Kategori: Platform',
     );
     expect(getAgentMarkdown('/en/dashboard')).toBeUndefined();
     expect(getAgentMarkdown('/fr/projects')).toBeUndefined();

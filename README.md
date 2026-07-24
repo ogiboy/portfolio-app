@@ -16,16 +16,54 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 
 - `pnpm format:check`: Prettier plus Tailwind class sorting.
 - `pnpm lint`: ESLint with Next.js and Prettier compatibility.
+- `pnpm qa:docstrings`: Enforce at least 80% JSDoc coverage across the configured public export
+  surface.
+- `pnpm qa:modularity`: Reject new oversized modules, ratchet known debt downward, and verify the
+  pinned generated WASM artefacts by digest.
 - `pnpm qa:typescript`: Verify the pinned TypeScript 7/native and TypeScript 6 compatibility toolchains.
 - `pnpm typecheck`: TypeScript 7/native verification.
 - `pnpm typecheck:compat`: TypeScript 6 compatibility verification.
 - `pnpm test`: Vitest content and unit checks.
+- `pnpm test:coverage`: Vitest with 80% statement, branch, function, and line thresholds.
 - `pnpm test:e2e`: Playwright public-route smoke checks.
 - `pnpm build`: Next.js production build through Webpack.
 - `pnpm build:turbopack`: Explicit follow-up check for the Turbopack production build path.
 - `pnpm audit --prod --audit-level high`: Production dependency audit at high severity.
 - `pnpm release:plan`: Read-only JSON release plan from the exact Git range.
 - `pnpm release:check`: Validate package/changelog alignment and Conventional Commits without publishing.
+
+## SonarQube
+
+The local workflow uses the shared Docker containers `sonarqube` and `sonarqube-db` at
+`http://localhost:9000` with the local project key `portfolio-app`.
+
+```bash
+scripts/sonarqube/start-local.sh
+scripts/sonarqube/status-local.sh
+pnpm sonar
+scripts/sonarqube/stop-local.sh
+```
+
+`pnpm sonar` is the short alias for `pnpm sonar:local`. It runs `pnpm test:coverage`, requires
+`coverage/lcov.info`, waits for the local server, and writes a token-redacted scan log to
+`.ai/qa/artifacts/sonar/sonar-npm.log`. To reuse an existing coverage file, run
+`SONAR_SKIP_COVERAGE=1 pnpm sonar`; it still fails if that LCOV file is absent.
+
+The script invokes the project-local `sonar-scanner-npm` binary from `@sonar/scan` v5. Global v5
+installations expose the same binary name. Do not replace it with the Homebrew `sonar` command:
+`sonarqube-cli` owns that name for its separate agent/MCP surface and does not accept scanner `-D`
+properties.
+
+For the first local scan, create a local SonarQube user token in the web UI and either export it for
+that shell (`SONAR_TOKEN`) or store it in the macOS Keychain under service `codex-sonarqube-token`
+and your macOS username. Do not put tokens in repository files. The stop command removes only the
+shared containers and network; it retains the named SonarQube and PostgreSQL volumes.
+
+SonarQube Cloud uses CI-based analysis from `.github/workflows/sonar.yml`, the project key
+`ogiboy_portfolio-app`, and the repository `SONAR_TOKEN` secret. The workflow generates LCOV before
+the scan and loads `.sonarcloud.properties`; SonarQube Cloud Automatic Analysis must remain disabled
+to avoid duplicate analyses. Local and cloud settings intentionally keep separate project identities
+while tests enforce the same source, exclusion, coverage, duplication, and quality-gate scope.
 
 ## Architecture
 
@@ -42,7 +80,7 @@ Start governance work from the [operating guide](AGENTS.md), [owner map](.ai/arc
 
 ## WASM Game Center
 
-The live WASM game center is available at `/en/labs/retro-game-center` and `/tr/labs/retro-game-center`. It has no separate or stateful backend: it uses static assets, lazy iframe boot, and a thin, read-only `/wasm/*` Next.js Route Handler for MIME and cache headers. Django, Docker, and Kubernetes remain deferred unless durable scores, authenticated saves, ROM administration, or a broader operations showcase becomes a real product requirement.
+The live WASM game center is available at `/en/labs/retro-game-center` and `/tr/labs/retro-game-center`. It has no separate or stateful backend: it uses versioned static assets, lazy iframe boot, and a scoped `next.config.mjs` header policy for MIME, cache, and sandbox support. The pinned DosWasmX engine and third-party notices live beside the runtime. Django, Docker, and Kubernetes remain deferred unless durable scores, authenticated saves, ROM administration, or a broader operations showcase becomes a real product requirement.
 
 ## Agent Discovery
 
@@ -76,12 +114,15 @@ Before a push or release, run:
 pnpm format:check
 pnpm lint
 pnpm qa:typescript
+pnpm qa:docstrings
+pnpm qa:modularity
 pnpm typecheck
 pnpm typecheck:compat
 pnpm release:check
-pnpm test
+pnpm test:coverage
 pnpm test:e2e
 pnpm build
+pnpm qa:bundle-budget
 pnpm audit --prod --audit-level high
 ```
 

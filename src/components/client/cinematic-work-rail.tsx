@@ -1,16 +1,30 @@
 'use client';
 
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { LazyMotion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useCinematicMotionEligibility } from '@/components/client/use-cinematic-motion-eligibility';
-import type { Project } from '@/content/projects';
 import { cn } from '@/lib/utils';
 
 const loadMotionFeatures = () => import('./motion-features').then((module) => module.default);
 const subscribeToHydration = () => () => undefined;
 
+/** Defines the project data rendered by the cinematic work rail. */
+export type CinematicProject = {
+  category: string;
+  image: StaticImageData;
+  name: string;
+  slug: string;
+};
+
+/**
+ * Displays a project highlights rail with cinematic scrolling when motion is supported and permitted.
+ *
+ * @param title - The rail heading
+ * @param intro - The introductory text displayed beneath the heading
+ * @param projects - The projects displayed in the rail
+ */
 export function CinematicWorkRail({
   title,
   intro,
@@ -18,7 +32,7 @@ export function CinematicWorkRail({
 }: Readonly<{
   title: string;
   intro: string;
-  projects: Project[];
+  projects: CinematicProject[];
 }>) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);

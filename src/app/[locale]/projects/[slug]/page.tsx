@@ -6,7 +6,15 @@ import { JsonLd } from '@/components/seo/json-ld';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getNextProject, getProject, projects } from '@/content/projects';
+import {
+  formatProjectPosition,
+  getNextProject,
+  getProject,
+  getProjectCategory,
+  getProjectDescription,
+  getProjectPosition,
+  projects,
+} from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 import { createRouteMetadata } from '@/lib/seo';
@@ -19,6 +27,12 @@ export function generateStaticParams() {
   ]);
 }
 
+/**
+ * Generates localized metadata for a project detail page.
+ *
+ * @param params - Route parameters containing the locale and project slug.
+ * @returns Metadata for the project page, or no-index metadata when the project is not found.
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: string; slug: string }> }>): Promise<Metadata> {
@@ -32,7 +46,7 @@ export async function generateMetadata({
     locale: locale === 'tr' ? 'tr' : 'en',
     path: `/projects/${project.slug}`,
     title: project.name,
-    description: project.description,
+    description: getProjectDescription(project, locale === 'tr' ? 'tr' : 'en'),
   });
 
   return {
@@ -44,6 +58,11 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Renders the localized detail page for a project.
+ *
+ * @param params - The locale and project slug used to load the page content.
+ */
 export default async function ProjectDetailPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale; slug: string }> }>) {
@@ -52,7 +71,10 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   const copy = siteCopy[locale].projects;
+  const category = getProjectCategory(project, locale);
+  const description = getProjectDescription(project, locale);
   const nextProject = getNextProject(project.slug);
+  const position = getProjectPosition(project.slug);
 
   return (
     <main>
@@ -63,12 +85,19 @@ export default async function ProjectDetailPage({
         </Link>
         <div className="mt-8 grid gap-10 md:grid-cols-[1fr_0.8fr] md:items-end">
           <div>
-            <Badge>{project.category}</Badge>
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge>{category}</Badge>
+              {position && (
+                <Badge className="project-continuity bg-primary" data-project-continuity>
+                  {copy.archiveLabel} {formatProjectPosition(position)}
+                </Badge>
+              )}
+            </div>
             <h1 className="font-display mt-6 text-5xl leading-[0.9] tracking-[-0.08em] md:text-8xl">
               {project.name}
             </h1>
           </div>
-          <p className="text-muted-foreground text-xl leading-relaxed">{project.description}</p>
+          <p className="text-muted-foreground text-xl leading-relaxed">{description}</p>
         </div>
         <div className="border-foreground bg-muted relative mt-12 aspect-16/10 overflow-hidden border-2 shadow-[10px_10px_0_0_var(--shadow-hard)]">
           <Image
@@ -126,7 +155,11 @@ export default async function ProjectDetailPage({
             </p>
             <h2 className="font-display mt-3 text-4xl tracking-[-0.06em]">{nextProject.name}</h2>
           </div>
-          <Link href={`/projects/${nextProject.slug}`} className={buttonVariants({ size: 'lg' })}>
+          <Link
+            href={`/projects/${nextProject.slug}`}
+            className={buttonVariants({ size: 'lg' })}
+            aria-label={`${copy.nextProject}: ${nextProject.name}`}
+          >
             <ArrowRight aria-hidden="true" strokeWidth={2.5} /> {copy.nextProject}
           </Link>
         </div>

@@ -5,6 +5,11 @@ import { HotMark } from '@/components/site/hot-mark';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { Link } from '@/i18n/navigation';
 
+/**
+ * Renders localized footer navigation and external professional profile links.
+ *
+ * @param locale - The locale used to select localized footer content.
+ */
 export function SiteFooter({ locale }: Readonly<{ locale: Locale }>) {
   const copy = siteCopy[locale];
 

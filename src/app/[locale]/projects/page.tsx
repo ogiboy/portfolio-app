@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/json-ld';
 import { ProjectCard } from '@/components/site/project-card';
 import { Badge } from '@/components/ui/badge';
-import { projects } from '@/content/projects';
+import {
+  getProjectCategory,
+  getProjectDescription,
+  getProjectPosition,
+  projects,
+} from '@/content/projects';
 import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildProjectsStructuredData } from '@/lib/structured-data';
@@ -19,6 +24,12 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Renders the localized projects archive page.
+ *
+ * @param params - Route parameters containing the active locale.
+ * @returns The projects page markup for the active locale.
+ */
 export default async function ProjectsPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {
@@ -40,9 +51,13 @@ export default async function ProjectsPage({
           <ProjectCard
             key={project.slug}
             project={project}
+            category={getProjectCategory(project, locale)}
+            description={getProjectDescription(project, locale)}
             liveLabel={copy.live}
             codeLabel={copy.code}
             caseLabel={copy.caseLabel}
+            archiveLabel={copy.archiveLabel}
+            position={getProjectPosition(project.slug)}
           />
         ))}
       </div>

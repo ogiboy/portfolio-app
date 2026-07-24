@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { Locale } from '@/content/site';
 import { siteOrigin, siteUrl } from '@/lib/site-url';
 
+/** Canonical brand and author identity used throughout public metadata. */
 export const identity = {
   brand: 'H.O.T.',
   fullName: 'Halil Oğuzcan Toptaş',
@@ -9,12 +10,16 @@ export const identity = {
   siteName: 'H.O.T. Developer Lab',
 } as const;
 
+/** Locale-specific copy used to build search and social metadata. */
 export const seoCopy: Record<
   Locale,
   {
     homeTitle: string;
     homeDescription: string;
+    aboutTitle: string;
+    aboutDescription: string;
     projectsDescription: string;
+    labTitle: string;
     labDescription: string;
     privacyDescription: string;
     role: string;
@@ -25,13 +30,17 @@ export const seoCopy: Record<
   en: {
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
     homeDescription:
-      'Developer and homelab portfolio of Halil Oğuzcan Toptaş: production web software, automation, project archives, and a live WebAssembly lab.',
+      'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
+    aboutTitle: 'About Halil Oğuzcan Toptaş',
+    aboutDescription:
+      'Meet Halil Oğuzcan Toptaş, an Istanbul-based software developer and homelab hobbyist building web interfaces, automation systems, and browser experiments.',
     projectsDescription:
-      'Explore web products, interface experiments, utilities, and open project work by Halil Oğuzcan Toptaş.',
+      'Browse frontend projects, API interfaces, utilities, forms, and browser experiments by Halil Oğuzcan Toptaş.',
+    labTitle: 'Retro Game Center: DOOM in WebAssembly',
     labDescription:
       'A live WebAssembly lab running DOOM Shareware through an isolated, lazy-loaded DOSBox-X browser runtime.',
     privacyDescription:
-      'How the H.O.T. portfolio uses aggregate analytics, performance measurements, and a durable local opt-out without advertising profiles.',
+      'How the H.O.T. portfolio uses aggregate analytics and performance measurements without building advertising profiles, with a durable local opt-out.',
     role: 'Software developer and homelab hobbyist',
     ogLocale: 'en_US',
     alternateOgLocale: 'tr_TR',
@@ -39,23 +48,35 @@ export const seoCopy: Record<
   tr: {
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
     homeDescription:
-      'Halil Oğuzcan Toptaş geliştirme ve homelab portföyü: production web yazılımları, otomasyon, proje arşivi ve canlı WebAssembly laboratuvarı.',
+      'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
+    aboutTitle: 'Halil Oğuzcan Toptaş hakkında',
+    aboutDescription:
+      'Halil Oğuzcan Toptaş, İstanbul’da web arayüzleri, otomasyon sistemleri ve browser deneyleri geliştiren bir yazılım geliştirici ve homelab meraklısıdır.',
     projectsDescription:
-      'Halil Oğuzcan Toptaş tarafından geliştirilen web ürünlerini, arayüz deneylerini, araçları ve açık proje çalışmalarını inceleyin.',
+      'Halil Oğuzcan Toptaş’ın frontend projelerini, API arayüzlerini, yardımcı araçlarını, formlarını ve browser deneylerini inceleyin.',
+    labTitle: 'Retro Game Center: WebAssembly ile DOOM',
     labDescription:
       'DOOM Shareware çalıştıran, izole ve yalnızca etkileşimden sonra yüklenen DOSBox-X tabanlı canlı WebAssembly laboratuvarı.',
     privacyDescription:
-      'H.O.T. portföyünün reklam profili oluşturmadan toplu analitik, performans ölçümü ve kalıcı yerel vazgeçme tercihini nasıl kullandığı.',
+      'H.O.T. portföyünün reklam profili oluşturmadan toplu analitik ve performans ölçümünü, kalıcı yerel vazgeçme tercihiyle nasıl kullandığı.',
     role: 'Yazılım geliştirici ve homelab meraklısı',
     ogLocale: 'tr_TR',
     alternateOgLocale: 'en_US',
   },
 };
 
+/**
+ * Builds a localized route path.
+ *
+ * @param locale - The locale prefix for the route
+ * @param path - The route path appended to the locale
+ * @returns The localized route path
+ */
 function routePath(locale: Locale, path = '') {
   return `/${locale}${path}`;
 }
 
+/** Returns absolute alternate-language URLs for a localized route suffix. */
 export function localizedLanguageUrls(path = '') {
   return {
     en: siteUrl(routePath('en', path)),
@@ -64,6 +85,15 @@ export function localizedLanguageUrls(path = '') {
   };
 }
 
+/**
+ * Builds shared SEO metadata for a localized route.
+ *
+ * @param locale - The locale used for localized metadata and social images
+ * @param path - The route path relative to the locale prefix
+ * @param title - The page title
+ * @param description - The page description
+ * @returns Metadata containing canonical, alternate-language, social sharing, and indexing information
+ */
 function sharedMetadata(
   locale: Locale,
   path: string,
@@ -129,6 +159,7 @@ function sharedMetadata(
   };
 }
 
+/** Builds root layout metadata for the requested public locale. */
 export function createRootMetadata(locale: Locale): Metadata {
   const copy = seoCopy[locale];
   const metadata = sharedMetadata(locale, '', copy.homeTitle, copy.homeDescription);
@@ -146,6 +177,15 @@ export function createRootMetadata(locale: Locale): Metadata {
   };
 }
 
+/**
+ * Creates metadata for a localized route.
+ *
+ * @param locale - The route's locale
+ * @param path - The route path used for canonical and alternate URLs
+ * @param title - The page title
+ * @param description - The page description
+ * @returns Metadata containing localized canonical, alternate, and social fields
+ */
 export function createRouteMetadata({
   locale,
   path,

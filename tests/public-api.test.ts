@@ -5,6 +5,8 @@ import { GET as getHealth } from '@/app/api/health/route';
 import { GET as getPortfolio } from '@/app/api/portfolio/route';
 import { GET as getOpenApi } from '@/app/openapi.json/route';
 import { projects } from '@/content/projects';
+import { contact } from '@/content/site';
+import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
 describe('public portfolio API discovery', () => {
@@ -16,6 +18,13 @@ describe('public portfolio API discovery', () => {
     expect(portfolioResponse.headers.get('content-type')).toContain('application/json');
     expect(portfolio.projects).toHaveLength(projects.length);
     expect(portfolio.projects[0]).not.toHaveProperty('image');
+    expect(portfolio.identity).toEqual({
+      fullName: identity.fullName,
+      knownNames: [identity.knownAs, identity.brand],
+      homeLocation: 'Istanbul',
+      jobTitles: { en: seoCopy.en.role, tr: seoCopy.tr.role },
+      sameAs: [contact.github, contact.linkedin],
+    });
     await expect(healthResponse.json()).resolves.toMatchObject({
       status: 'ok',
       service: 'portfolio-api',
@@ -44,6 +53,11 @@ describe('public portfolio API discovery', () => {
     );
     expect(openApi.openapi).toBe('3.1.0');
     expect(openApi.paths).toHaveProperty('/api/portfolio');
+    expect(openApi.components.schemas.Portfolio.required).toContain('identity');
+    expect(openApi.components.schemas.Portfolio.properties.identity).toMatchObject({
+      type: 'object',
+      required: ['fullName', 'knownNames', 'homeLocation', 'jobTitles', 'sameAs'],
+    });
     expect(docsResponse.headers.get('content-type')).toBe('text/markdown; charset=utf-8');
     await expect(docsResponse.text()).resolves.toContain('# Portfolio API');
   });

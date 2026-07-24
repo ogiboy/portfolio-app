@@ -8,10 +8,20 @@ import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { contact, siteCopy, type Locale } from '@/content/site';
-import { featuredProjects, projects } from '@/content/projects';
+import {
+  cinematicProjects,
+  featuredProjects,
+  getProjectCategory,
+  getProjectDescription,
+} from '@/content/projects';
 import { Link } from '@/i18n/navigation';
 import { buildHomeStructuredData } from '@/lib/structured-data';
 
+/**
+ * Renders the localized homepage with hero content, services, projects, process information, and contact calls to action.
+ *
+ * @param params - A promise containing the requested locale.
+ */
 export default async function HomePage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {
@@ -22,16 +32,21 @@ export default async function HomePage({
   return (
     <main className="overflow-x-clip">
       <JsonLd data={buildHomeStructuredData(locale)} />
-      <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-16 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-20">
+      <section
+        data-hero-signal
+        className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl content-center gap-10 px-4 py-16 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-20"
+      >
         <div>
-          <Badge>{copy.home.eyebrow}</Badge>
-          <h1 className="font-display mt-8 max-w-5xl text-5xl leading-[0.9] tracking-[-0.08em] md:text-7xl lg:text-8xl">
-            {copy.home.title}
-          </h1>
-          <p className="text-muted-foreground mt-8 max-w-2xl text-xl leading-relaxed">
-            {copy.home.subtitle}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="hero-signal__copy">
+            <Badge>{copy.home.eyebrow}</Badge>
+            <h1 className="font-display mt-8 max-w-5xl text-5xl leading-[0.9] tracking-[-0.08em] md:text-7xl lg:text-8xl">
+              {copy.home.title}
+            </h1>
+            <p className="text-muted-foreground mt-8 max-w-2xl text-xl leading-relaxed">
+              {copy.home.subtitle}
+            </p>
+          </div>
+          <div className="hero-signal__actions mt-8 flex flex-wrap gap-4">
             <a href={`mailto:${contact.email}`} className={buttonVariants({ size: 'lg' })}>
               <Mail aria-hidden="true" strokeWidth={2.5} /> {copy.home.primaryCta}
             </a>
@@ -40,7 +55,7 @@ export default async function HomePage({
             </Link>
           </div>
         </div>
-        <aside className="md:border-foreground grid content-end gap-4 md:border-l-2 md:pl-8">
+        <aside className="hero-signal__proof md:border-foreground grid content-end gap-4 md:border-l-2 md:pl-8">
           <div className="border-foreground bg-muted relative aspect-4/3 overflow-hidden border-2 shadow-[8px_8px_0_0_var(--shadow-hard)]">
             <Image
               src={heroProject.image}
@@ -117,6 +132,8 @@ export default async function HomePage({
             <ProjectCard
               key={project.slug}
               project={project}
+              category={getProjectCategory(project, locale)}
+              description={getProjectDescription(project, locale)}
               liveLabel={copy.projects.live}
               codeLabel={copy.projects.code}
               caseLabel={copy.projects.caseLabel}
@@ -128,7 +145,12 @@ export default async function HomePage({
       <CinematicWorkRail
         title={copy.home.motionTitle}
         intro={copy.home.motionIntro}
-        projects={projects.slice(0, 6)}
+        projects={cinematicProjects.map((project) => ({
+          category: getProjectCategory(project, locale),
+          image: project.image,
+          name: project.name,
+          slug: project.slug,
+        }))}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">

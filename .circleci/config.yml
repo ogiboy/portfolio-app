@@ -54,6 +54,14 @@ jobs:
           command: pnpm qa:typescript
 
       - run:
+          name: Documentation coverage
+          command: pnpm qa:docstrings
+
+      - run:
+          name: Modularity gate
+          command: pnpm qa:modularity
+
+      - run:
           name: Typecheck
           command: pnpm typecheck
 
@@ -62,12 +70,16 @@ jobs:
           command: pnpm typecheck:compat
 
       - run:
-          name: Unit tests
-          command: pnpm test
+          name: Unit tests and coverage
+          command: pnpm test:coverage
 
       - run:
           name: Build
           command: pnpm build
+
+      - run:
+          name: Bundle budget
+          command: pnpm qa:bundle-budget
 
       - save_cache:
           key: pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}

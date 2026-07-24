@@ -1,19 +1,35 @@
 import { projects } from '@/content/projects';
 import { contact } from '@/content/site';
 import { routing } from '@/i18n/routing';
-import { identity } from '@/lib/seo';
+import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
+/** Semantic version exposed by the public read-only portfolio API. */
 export const publicApiVersion = '0.2.0';
 
+/** Cache directive shared by public API discovery documents. */
 export const discoveryCacheControl =
   'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400';
 
+const publicIdentity = {
+  fullName: identity.fullName,
+  knownNames: [identity.knownAs, identity.brand],
+  homeLocation: 'Istanbul',
+  jobTitles: Object.fromEntries(routing.locales.map((locale) => [locale, seoCopy[locale].role])),
+  sameAs: [contact.github, contact.linkedin],
+};
+
+/**
+ * Builds the canonical payload for the public portfolio API.
+ *
+ * @returns The public portfolio metadata, identity, contact details, and project information.
+ */
 export function getPortfolioApiPayload() {
   return {
     name: `${identity.brand} - ${identity.fullName} Portfolio`,
     version: publicApiVersion,
     locales: [...routing.locales],
+    identity: publicIdentity,
     contact,
     projects: projects.map(
       ({ id, slug, name, year, category, url, gitUrl, description, stack, featured }) => ({
@@ -32,6 +48,7 @@ export function getPortfolioApiPayload() {
   };
 }
 
+/** Generates the OpenAPI 3.1 document for public service endpoints. */
 export function getOpenApiDocument() {
   return {
     openapi: '3.1.0',
@@ -79,11 +96,28 @@ export function getOpenApiDocument() {
       schemas: {
         Portfolio: {
           type: 'object',
-          required: ['name', 'version', 'locales', 'contact', 'projects'],
+          required: ['name', 'version', 'locales', 'identity', 'contact', 'projects'],
           properties: {
             name: { type: 'string' },
             version: { type: 'string' },
             locales: { type: 'array', items: { type: 'string', enum: [...routing.locales] } },
+            identity: {
+              type: 'object',
+              required: ['fullName', 'knownNames', 'homeLocation', 'jobTitles', 'sameAs'],
+              properties: {
+                fullName: { type: 'string' },
+                knownNames: { type: 'array', items: { type: 'string' } },
+                homeLocation: { type: 'string', const: 'Istanbul' },
+                jobTitles: {
+                  type: 'object',
+                  required: [...routing.locales],
+                  properties: Object.fromEntries(
+                    routing.locales.map((locale) => [locale, { type: 'string' }]),
+                  ),
+                },
+                sameAs: { type: 'array', items: { type: 'string', format: 'uri' } },
+              },
+            },
             contact: {
               type: 'object',
               additionalProperties: { type: 'string' },
@@ -132,6 +166,7 @@ export function getOpenApiDocument() {
   };
 }
 
+/** Creates the RFC 9727 link-set catalog for API discovery. */
 export function getApiCatalog() {
   return {
     linkset: [
@@ -150,6 +185,7 @@ export function getApiCatalog() {
   };
 }
 
+/** Provides Markdown documentation for the portfolio's public API contract. */
 export function getApiDocumentation() {
   return `# Portfolio API
 

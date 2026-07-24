@@ -1,9 +1,10 @@
 import type { Project } from '@/content/projects';
-import { projects } from '@/content/projects';
+import { getProjectDescription, projects } from '@/content/projects';
 import { contact, siteCopy, type Locale } from '@/content/site';
 import { identity, seoCopy } from '@/lib/seo';
 import { siteUrl } from '@/lib/site-url';
 
+/** Recursive JSON-LD value accepted by the portfolio structured-data builders. */
 export type JsonLdValue =
   string | number | boolean | null | JsonLdValue[] | { [key: string]: JsonLdValue };
 
@@ -15,7 +16,7 @@ const person = {
   '@id': personId,
   name: identity.fullName,
   alternateName: [identity.knownAs, identity.brand],
-  url: siteUrl('/en'),
+  url: siteUrl('/en/about'),
   sameAs: [contact.github, contact.linkedin],
   knowsAbout: [
     'Web development',
@@ -28,12 +29,10 @@ const person = {
   ],
 } satisfies JsonLdValue;
 
-function profileUrl(locale: Locale) {
-  return siteUrl(`/${locale}`);
-}
-
+/** Builds Schema.org data describing the localized portfolio home page. */
 export function buildHomeStructuredData(locale: Locale): JsonLdValue {
   const copy = seoCopy[locale];
+  const url = siteUrl(`/${locale}`);
 
   return {
     '@context': 'https://schema.org',
@@ -48,23 +47,51 @@ export function buildHomeStructuredData(locale: Locale): JsonLdValue {
         author: { '@id': personId },
       },
       {
-        '@type': 'ProfilePage',
-        '@id': `${profileUrl(locale)}#profile`,
-        url: profileUrl(locale),
+        '@type': 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
         name: copy.homeTitle,
         description: copy.homeDescription,
         inLanguage: locale,
         isPartOf: { '@id': websiteId },
+        author: { '@id': personId },
+      },
+    ],
+  };
+}
+
+/** Builds Schema.org profile data for the localized about page. */
+export function buildAboutStructuredData(locale: Locale): JsonLdValue {
+  const copy = siteCopy[locale].about;
+  const url = siteUrl(`/${locale}/about`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ProfilePage',
+        '@id': `${url}#profile`,
+        url,
+        name: seoCopy[locale].aboutTitle,
+        description: seoCopy[locale].aboutDescription,
+        inLanguage: locale,
+        isPartOf: { '@id': websiteId },
         mainEntity: {
           ...person,
-          jobTitle: copy.role,
-          description: siteCopy[locale].home.subtitle,
+          jobTitle: seoCopy[locale].role,
+          description: copy.identityBody,
+          disambiguatingDescription: copy.intro,
+          homeLocation: {
+            '@type': 'City',
+            name: 'Istanbul, Türkiye',
+          },
         },
       },
     ],
   };
 }
 
+/** Builds Schema.org collection data for the localized project archive. */
 export function buildProjectsStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].projects;
   const url = siteUrl(`/${locale}/projects`);
@@ -92,6 +119,13 @@ export function buildProjectsStructuredData(locale: Locale): JsonLdValue {
   };
 }
 
+/**
+ * Builds localized Schema.org project and breadcrumb data for a project page.
+ *
+ * @param locale - The locale used for page URLs, labels, and project descriptions
+ * @param project - The project represented by the structured data
+ * @returns JSON-LD data for the project and its breadcrumb trail
+ */
 export function buildProjectStructuredData(locale: Locale, project: Project): JsonLdValue {
   const copy = siteCopy[locale].projects;
   const url = siteUrl(`/${locale}/projects/${project.slug}`);
@@ -104,7 +138,8 @@ export function buildProjectStructuredData(locale: Locale, project: Project): Js
         '@id': `${url}#project`,
         url,
         name: project.name,
-        description: project.description,
+        description: getProjectDescription(project, locale),
+        inLanguage: locale,
         codeRepository: project.gitUrl,
         runtimePlatform: 'Web',
         keywords: project.stack.join(', '),
@@ -140,6 +175,12 @@ export function buildProjectStructuredData(locale: Locale, project: Project): Js
   };
 }
 
+/**
+ * Creates Schema.org structured data for the localized interactive lab page.
+ *
+ * @param locale - The locale used for localized page content and URL generation
+ * @returns JSON-LD describing the lab as a freely accessible creative work
+ */
 export function buildLabStructuredData(locale: Locale): JsonLdValue {
   const copy = siteCopy[locale].lab;
   const url = siteUrl(`/${locale}/labs/retro-game-center`);
@@ -156,5 +197,28 @@ export function buildLabStructuredData(locale: Locale): JsonLdValue {
     keywords: ['WebAssembly', 'DOSBox-X', 'DOOM Shareware', 'Browser runtime'],
     author: { '@id': personId },
     isPartOf: { '@id': websiteId },
+  };
+}
+
+/**
+ * Builds localized Schema.org metadata for the privacy information page.
+ *
+ * @param locale - The locale used for the page content and URL.
+ * @returns JSON-LD metadata describing the privacy page.
+ */
+export function buildPrivacyStructuredData(locale: Locale): JsonLdValue {
+  const copy = siteCopy[locale].privacy;
+  const url = siteUrl(`/${locale}/privacy`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#privacy`,
+    url,
+    name: copy.title,
+    description: seoCopy[locale].privacyDescription,
+    inLanguage: locale,
+    isPartOf: { '@id': websiteId },
+    author: { '@id': personId },
   };
 }

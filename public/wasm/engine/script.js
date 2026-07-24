@@ -7,6 +7,41 @@ const SaveTypes = {
   BaseImage: 'baseimage',
 };
 
+// The engine shell loads the security namespace before this authored wrapper.
+const security = window.HotWasmSecurity;
+if (!security) throw new Error('runtime-security.js must load before script.js.');
+
+const runtimeRevision = encodeURIComponent(
+  window.PORTAL_RUNTIME_REVISION || 'doswasmx-v0.3',
+);
+
+/**
+ * Shows or hides an element by its ID.
+ * @param {string} id - The element ID.
+ * @param {boolean} visible - Whether the element should be visible.
+ */
+function setElementVisible(id, visible) {
+  const element = document.getElementById(id);
+  if (element) element.style.display = visible ? '' : 'none';
+}
+
+/**
+ * Displays a runtime notice through the application toast UI or console.
+ * @param {*} message - The value to display as a notice.
+ */
+function showRuntimeNotice(message) {
+  const text = String(message);
+  if (typeof window.myApp?.showToast === 'function') {
+    try {
+      window.myApp.showToast(text);
+      return;
+    } catch (error) {
+      console.warn('Runtime notice fallback', error);
+    }
+  }
+  console.info(`[DosWasmX] ${text}`);
+}
+
 class MyClass {
   constructor() {
     this.canvas = document.getElementById('canvas');
@@ -59,7 +94,6 @@ class MyClass {
     this.fpscounter = 0;
     this.currentfps = 0;
     this.fpsInterval = 1000 / 60;
-    this.then = Date.now();
     this.hardDiskFallbackFromFloppy = false;
     this.ranWindowsSetup = false;
     this.win95InstallationFix = false;
@@ -74,7 +108,7 @@ class MyClass {
       .getElementById('file-import')
       .addEventListener('change', this.importFiles.bind(this));
 
-    this.rivetsData = {
+    this.state = {
       mobileMode: false,
       darkMode: false,
       inputController: null,
@@ -102,58 +136,36 @@ class MyClass {
       loadFloppy: false,
       noCopyImport: false,
     };
+    if (!window.HotWasmCloudSaveAdapter) {
+      throw new Error('cloud-save-adapter.js must load before script.js.');
+    }
+    this.cloudSave = new window.HotWasmCloudSaveAdapter(this);
+    // The pinned Emscripten glue still reads this legacy property once.
+    this.rivetsData = this.state;
 
     this.configuration = {
       startupScript: '',
     };
 
     //comes from settings.js
-    this.rivetsData.settings = window['DOSWASMSETTINGS'];
+    this.state.settings = window['DOSWASMSETTINGS'];
 
-    if (this.rivetsData.settings.CLOUDSAVEURL) {
-      this.rivetsData.hasCloud = true;
+    if (this.state.settings.CLOUDSAVEURL) {
+      this.state.hasCloud = true;
     }
 
     if (window['ROMLIST'].length > 0) {
       window['ROMLIST'].forEach((rom) => {
-        this.rivetsData.romList.push(rom);
+        this.state.romList.push(rom);
       });
     }
-
-    rivets.formatters.ev = function (value, arg) {
-      return eval(value + arg);
-    };
-    rivets.formatters.ev_string = function (value, arg) {
-      let eval_string = "'" + value + "'" + arg;
-      return eval(eval_string);
-    };
-
-    rivets.bind(document.getElementById('maindiv'), { data: this.rivetsData });
-    rivets.bind(document.getElementById('importModal'), {
-      data: this.rivetsData,
-    });
-    rivets.bind(document.getElementById('loginModal'), {
-      data: this.rivetsData,
-    });
-    rivets.bind(document.getElementById('settingsModal'), {
-      data: this.rivetsData,
-    });
-    rivets.bind(document.getElementById('divInstructions'), {
-      data: this.rivetsData,
-    });
-    rivets.bind(document.getElementById('mobileDiv'), {
-      data: this.rivetsData,
-    });
-    rivets.bind(document.getElementById('mobileButtons'), {
-      data: this.rivetsData,
-    });
 
     this.detectBrowser();
     this.setupDragDropRom();
     this.createDB();
     this.retrieveSettings();
 
-    if (this.rivetsData.hasCloud) {
+    if (this.state.hasCloud) {
       this.setupLogin();
       let hours = new Date().getHours();
       if (hours < 7 || hours > 20) {
@@ -161,17 +173,17 @@ class MyClass {
       }
     }
 
-    $('#topPanel').show();
-    $('#errorOuter').show();
+    setElementVisible('topPanel', true);
+    setElementVisible('errorOuter', true);
   }
 
   btnDarkMode() {
-    this.rivetsData.darkMode = !this.rivetsData.darkMode;
+    this.state.darkMode = !this.state.darkMode;
 
-    if (this.rivetsData.darkMode) {
-      $('body').addClass('darkMode');
+    if (this.state.darkMode) {
+      document.body.classList.add('darkMode');
     } else {
-      $('body').removeClass('darkMode');
+      document.body.classList.remove('darkMode');
     }
   }
 
@@ -188,8 +200,8 @@ class MyClass {
       } catch (err) {}
     }
     if (window.innerWidth < 600 || this.iosMode)
-      this.rivetsData.mobileMode = true;
-    else this.rivetsData.mobileMode = false;
+      this.state.mobileMode = true;
+    else this.state.mobileMode = false;
 
     // firefox only supports 250 megs??
     if (navigator.userAgent.toLocaleLowerCase().includes('firefox')) {
@@ -200,7 +212,7 @@ class MyClass {
       this.initialHardDrive = 'hd -size 25';
     }
 
-    if (this.rivetsData.mobileMode) {
+    if (this.state.mobileMode) {
       this.canvasHeight = window.innerWidth / 2;
       console.log('detected mobile mode - canvasheight: ' + this.canvasHeight);
     }
@@ -229,18 +241,18 @@ class MyClass {
   }
 
   dragDropHighlight(e) {
-    $('#dropArea').css({ 'background-color': 'lightblue' });
+    document.getElementById('dropArea').style.backgroundColor = 'lightblue';
   }
 
   dragDropUnHighlight(e) {
-    $('#dropArea').css({ 'background-color': 'inherit' });
+    document.getElementById('dropArea').style.backgroundColor = 'inherit';
   }
 
   handleDrop(e) {
     myClass.checkIfImgMakeNeeded(e.dataTransfer.files);
 
     myClass.Run();
-    myClass.rivetsData.showProgress = true;
+    myClass.state.showProgress = true;
 
     let dt = e.dataTransfer;
     let files = dt.files;
@@ -287,7 +299,7 @@ class MyClass {
   }
 
   configureEmulator() {
-    if (this.rivetsData.password) this.loginSilent();
+    if (this.state.password) this.loginSilent();
 
     let size = null;
     try {
@@ -301,20 +313,20 @@ class MyClass {
       this.canvasHeight = sizeNum;
     }
 
-    if (this.rivetsData.mobileMode) {
+    if (this.state.mobileMode) {
       this.setupMobileMode();
-      $('#githubDiv').hide();
-      $('#errorMobile').show();
+      setElementVisible('githubDiv', false);
+      setElementVisible('errorMobile', true);
     } else {
-      $('#divInstructions').show();
+      setElementVisible('divInstructions', true);
     }
 
     this.resizeCanvas();
 
-    $('#canvasDiv').show();
+    setElementVisible('canvasDiv', true);
 
-    this.rivetsData.inputController.setupMouseMode();
-    this.rivetsData.inputController.setupGamePad();
+    this.state.inputController.setupMouseMode();
+    this.state.inputController.setupGamePad();
 
     //start raf loop
     this.onAnimationFrame();
@@ -323,8 +335,8 @@ class MyClass {
   onAnimationFrame() {
     window.requestAnimationFrame(myClass.onAnimationFrame);
 
-    myClass.rivetsData.inputController.processGamepad();
-    myClass.rivetsData.inputController.updateControls();
+    myClass.state.inputController.processGamepad();
+    myClass.state.inputController.updateControls();
   }
 
   processPrintStatement(text) {
@@ -344,8 +356,7 @@ class MyClass {
       let newText = 'Mouse Sensitivity ' + percent + '%';
 
       //showToast doesn't work with weird characters
-      toastr.success(newText);
-      myClass.showToast(percent + ' percent');
+      showRuntimeNotice(newText);
     }
 
     if (text.includes('Emulation speed')) {
@@ -354,19 +365,18 @@ class MyClass {
       percent = percent.substr(0, percent.indexOf('%'));
 
       //showToast doesn't work with weird characters
-      toastr.success(percent + ' percent');
-      myClass.showToast(percent + ' percent');
+      showRuntimeNotice(percent + ' percent');
     }
 
     //they tried to load an .img file that turned out to be a floppy disk
     if (text.includes('detected floppy disk')) {
       if (
-        this.rivetsData.dblistDisks.length == 0 &&
-        !this.rivetsData.settings.DEFAULTIMG
+        this.state.dblistDisks.length == 0 &&
+        !this.state.settings.DEFAULTIMG
       ) {
         //this means they don't have a hard disk
         myClass.base_name = 'mydisk';
-        myClass.rivetsData.initialInstallation = true;
+        myClass.state.initialInstallation = true;
       } else {
         //fall back to using their hard drive
         myClass.base_name = 'mydisk';
@@ -378,7 +388,7 @@ class MyClass {
     if (text.includes('floppy disk mounted')) {
       setTimeout(
         () => {
-          if (myClass.rivetsData.initialInstallation) {
+          if (myClass.state.initialInstallation) {
             myClass.sendDosCommands(
               'imgmake "' +
                 this.base_name +
@@ -391,14 +401,14 @@ class MyClass {
             );
           } else if (myClass.hardDiskFallbackFromFloppy) {
             //if they already have a hard disk we load it
-            //currently does not support this.rivetsData.settings.DEFAULTIMG + dragging .img floppy
-            if (this.rivetsData.dblistDisks.length > 0) {
+            //currently does not support this.state.settings.DEFAULTIMG + dragging .img floppy
+            if (this.state.dblistDisks.length > 0) {
               this.loadFromDatabase(SaveTypes.Disk);
             }
           } else {
             myClass.sendDosCommands('a:\n');
           }
-          myClass.rivetsData.floppyMounted = true;
+          myClass.state.floppyMounted = true;
         },
 
         //TODO this is a hack
@@ -417,7 +427,7 @@ class MyClass {
       if (!myClass.ranWindowsSetup) {
         myClass.ranWindowsSetup = true;
         setTimeout(() => {
-          myClass.rivetsData.initialInstallation = true;
+          myClass.state.initialInstallation = true;
           myClass.sendDosCommands('d:setup.exe\n');
         }, 50);
 
@@ -456,7 +466,7 @@ class MyClass {
     if (text.includes('Parsing command line: d:setup.exe')) {
       //a bunch of hacks to get it to dismiss the install
       //warnings for win95rtm, win95osr2, and win98se
-      if (myClass.rivetsData.initialInstallation) {
+      if (myClass.state.initialInstallation) {
         setTimeout(() => {
           myClass.sendKey(52); //enter
         }, 1000);
@@ -473,7 +483,7 @@ class MyClass {
       //this is hack during windows 95 installation
       //where it doesnt detect one of the restarts
       if (
-        myClass.rivetsData.initialInstallation &&
+        myClass.state.initialInstallation &&
         !myClass.win95InstallationFix
       ) {
         console.log('windows95 fix');
@@ -492,7 +502,7 @@ class MyClass {
     if (text.includes('x ==')) {
       if (text.includes('x == 2')) {
         //this means we are booting into windows
-        myClass.rivetsData.isDosMode = false;
+        myClass.state.isDosMode = false;
       } else {
         if (text.includes('x == 0')) {
           //this means we explicitly selected shutdown so go to DOS
@@ -505,22 +515,22 @@ class MyClass {
         }
 
         //save the hard disk every time we restart/shutdown
-        if (!myClass.rivetsData.loggedIn) {
+        if (!myClass.state.loggedIn) {
           setTimeout(() => {
             myClass.saveDrive();
           }, 100);
         }
 
         //we are back to the dos shell
-        myClass.rivetsData.isoMounted = false;
-        myClass.rivetsData.floppyMounted = false;
-        myClass.rivetsData.isDosMode = true;
+        myClass.state.isoMounted = false;
+        myClass.state.floppyMounted = false;
+        myClass.state.isDosMode = true;
       }
     }
 
     if (text.includes('iso drive mounted')) {
       //we mounted a cd
-      myClass.rivetsData.isoMounted = true;
+      myClass.state.isoMounted = true;
     }
 
     //emulator has started event
@@ -531,7 +541,7 @@ class MyClass {
       console.log('detected windows started');
       myClass.loadSavestateAfterBoot = false;
 
-      if (myClass.rivetsData.loggedIn && !myClass.noCloudSave) {
+      if (myClass.state.loggedIn && !myClass.noCloudSave) {
         //we give it a 5 second delay because we
         //want to wait for the windows startup sound
         setTimeout(() => {
@@ -572,10 +582,10 @@ class MyClass {
   //need to wait for both indexedDB and wasm runtime
   finishInitialization() {
     if (this.initCount == 2) {
-      this.rivetsData.moduleInitializing = false;
-      this.rivetsData.message = '';
+      this.state.moduleInitializing = false;
+      this.state.message = '';
 
-      $('#githubDiv').show();
+      setElementVisible('githubDiv', true);
       this.loading = false;
     }
   }
@@ -607,8 +617,8 @@ class MyClass {
       }
     }
 
-    if (!hasImgFile && !myClass.rivetsData.settings.DEFAULTIMG) {
-      myClass.rivetsData.initialInstallation = true;
+    if (!hasImgFile && !myClass.state.settings.DEFAULTIMG) {
+      myClass.state.initialInstallation = true;
     }
   }
 
@@ -616,7 +626,7 @@ class MyClass {
     myClass.checkIfImgMakeNeeded(event.currentTarget.files);
 
     myClass.Run();
-    myClass.rivetsData.showProgress = true;
+    myClass.state.showProgress = true;
 
     if (event.currentTarget.files.length == 1) {
       myClass.detectSingleFileUpload(event.currentTarget.files[0].name);
@@ -784,16 +794,16 @@ class MyClass {
         this.noIso = true;
         return this.LoadEmulator();
       } else if (
-        this.rivetsData.initialInstallation ||
-        !this.rivetsData.loggedIn
+        this.state.initialInstallation ||
+        !this.state.loggedIn
       ) {
-        if (this.rivetsData.dblistDisks.length == 0) {
-          if (this.rivetsData.settings.DEFAULTIMG) {
-            this.load_file(this.rivetsData.settings.DEFAULTIMG);
+        if (this.state.dblistDisks.length == 0) {
+          if (this.state.settings.DEFAULTIMG) {
+            this.load_file(this.state.settings.DEFAULTIMG);
           } else {
             //this means it is their initial windows installation
             this.img_loaded = true;
-            this.rivetsData.initialInstallation = true;
+            this.state.initialInstallation = true;
             return this.LoadEmulator();
           }
         } else {
@@ -817,15 +827,14 @@ class MyClass {
     }
 
     //write font file
-    let response = await fetch('main.ttf');
+    let response = await fetch('main.ttf?v=' + runtimeRevision);
     if (!response.ok) throw new Error('Failed to load main.ttf');
     let responseBytes = new Uint8Array(await response.arrayBuffer());
     console.log('main.ttf', responseBytes.length);
     Module.FS.writeFile('/res/arial.ttf', responseBytes);
 
     //write dosbox.conf
-    var rando = Math.floor(Math.random() * Math.floor(100000));
-    let file = './dosbox-x-for-web.conf?v=' + rando;
+    let file = './dosbox-x-for-web.conf?v=' + runtimeRevision;
     response = await fetch(file);
     if (!response.ok) throw new Error('Failed to load dosbox-x-for-web.conf');
     let responseText = await response.text();
@@ -846,7 +855,7 @@ class MyClass {
       multiFileScript += this.configuration.startupScript.replace(/;/g, '\r\n');
     }
 
-    if (this.rivetsData.initialInstallation) {
+    if (this.state.initialInstallation) {
       if (this.rom_name.toLocaleLowerCase().endsWith('.iso')) {
         responseText = responseText.replace(
           '[autoexec]',
@@ -1009,7 +1018,7 @@ class MyClass {
     //cpu override
     responseText = responseText.replace(
       'cycles=auto',
-      'cycles=' + this.rivetsData.cpu
+      'cycles=' + this.state.cpu
     );
 
     // console.log(responseText);
@@ -1050,30 +1059,32 @@ class MyClass {
     Module.callMain();
     this.configureEmulator();
     this.findSavestateInDatabase();
-    this.rivetsData.beforeEmulatorStarted = false;
+    this.state.beforeEmulatorStarted = false;
   }
 
   hideMobileMenu() {
-    if (this.rivetsData.mobileMode) {
-      $('#mobileButtons').hide();
-      $('#menuDiv').show();
+    if (this.state.mobileMode) {
+      setElementVisible('mobileButtons', false);
+      setElementVisible('menuDiv', true);
     }
   }
 
   setupMobileMode() {
     this.canvasWidth = window.outerWidth;
 
-    $('#btnHideMenu').show();
+    setElementVisible('btnHideMenu', true);
     let halfWidth = window.outerWidth / 2 - 35;
 
     document.getElementById('menuDiv').style.left = halfWidth + 'px';
     document.getElementById('canvasDiv').classList = [];
 
-    this.rivetsData.inputController.setupMobileControls('divTouchSurface');
+    this.state.inputController.setupMobileControls('divTouchSurface');
 
-    $('#mobileDiv').show();
-    $('#maindiv').hide();
-    $('#canvasDiv').appendTo('#mobileCanvas');
+    setElementVisible('mobileDiv', true);
+    setElementVisible('maindiv', false);
+    const mobileCanvas = document.getElementById('mobileCanvas');
+    const canvasDiv = document.getElementById('canvasDiv');
+    if (mobileCanvas && canvasDiv) mobileCanvas.appendChild(canvasDiv);
 
     document.getElementById('maindiv').classList.remove('container');
 
@@ -1102,7 +1113,7 @@ class MyClass {
     } else if (name.length < 3) {
       // as long as its atleast 3 long we leave it
       //fill in the gaps with random numbers
-      var rando = Math.floor(Math.random() * Math.floor(100000));
+      const rando = security.secureRandomInteger(100000);
       name += rando;
       if (name.length > 6) name = name.substr(0, 6);
     }
@@ -1146,7 +1157,7 @@ class MyClass {
       let harddrive = this.readRomProp('harddrive');
 
       if (startupScript) this.configuration.startupScript = startupScript;
-      if (cpu) this.rivetsData.cpu = cpu;
+      if (cpu) this.state.cpu = cpu;
       if (ram) this.ram = ram;
       if (harddrive) this.initialHardDrive = harddrive;
 
@@ -1283,13 +1294,15 @@ class MyClass {
   }
 
   async load_file(path) {
-    console.log('loading ' + path);
     myClass.load_url_request(path);
   }
 
   load_url_request(path) {
+    const approvedAssetUrl = security.resolveApprovedAssetUrl(path);
+    console.log('loading approved runtime asset');
+
     //check cache
-    let cleanPath = path.substr(path.lastIndexOf('/') + 1);
+    let cleanPath = approvedAssetUrl.pathname.split('/').pop();
     if (cleanPath.endsWith('.img')) {
       let baseImageName = cleanPath.replace('.img', '.baseimage');
       if (myClass.dblistBaseImages.includes(baseImageName)) {
@@ -1304,17 +1317,17 @@ class MyClass {
       }
     }
     if (cleanPath.endsWith('.zip')) {
-      if (!myClass.rivetsData.settings.DEFAULTIMG) {
-        myClass.rivetsData.initialInstallation = true;
+      if (!myClass.state.settings.DEFAULTIMG) {
+        myClass.state.initialInstallation = true;
       }
     }
 
-    this.rivetsData.showProgress = true;
+    this.state.showProgress = true;
 
     var req = new XMLHttpRequest();
-    req.open('GET', path);
+    req.open('GET', approvedAssetUrl.href);
     req.overrideMimeType('text/plain; charset=x-user-defined');
-    req.onerror = () => console.log(`Error loading ${path}: ${req.statusText}`);
+    req.onerror = () => console.log('Error loading approved runtime asset');
     req.responseType = 'arraybuffer';
 
     req.onprogress = function (event) {
@@ -1338,8 +1351,8 @@ class MyClass {
           console.log('request returned 404');
 
           // TODO - this code might not work anymore
-          if (myClass.rivetsData.loggedIn) {
-            myClass.load_file(myClass.rivetsData.settings.DEFAULTIMG);
+          if (myClass.state.loggedIn) {
+            myClass.load_file(myClass.state.settings.DEFAULTIMG);
           }
         } else if (arrayBuffer) {
           var byteArray = new Uint8Array(arrayBuffer);
@@ -1347,14 +1360,14 @@ class MyClass {
             .LoadEmulator(byteArray)
             .catch((error) => myClass.handleEmulatorLoadError(error));
         } else {
-          this.rivetsData.lblError =
+          this.state.lblError =
             'Error downloading data. Try reloading browser.';
           console.log('error downloading');
           console.log(req);
         }
       } catch (error) {
         console.log(error);
-        toastr.error('Error Loading Save');
+        showRuntimeNotice('Error Loading Save');
       }
     };
 
@@ -1368,7 +1381,7 @@ class MyClass {
   onError(message) {
     console.log('error triggered', message);
     if (!message.includes('user has exited the lock')) {
-      this.rivetsData.lblError = message;
+      this.state.lblError = message;
     }
   }
 
@@ -1426,7 +1439,7 @@ class MyClass {
   resizeCanvas() {
     let ratio = this.frameHeight / this.frameWidth;
 
-    if (this.rivetsData.mobileMode)
+    if (this.state.mobileMode)
       document.getElementById('canvasDiv').style.height =
         this.canvasWidth * ratio + 'px';
     else
@@ -1468,9 +1481,9 @@ class MyClass {
   }
 
   saveOptions() {
-    this.ram = this.rivetsData.ramTemp;
-    this.initialHardDrive = this.rivetsData.initialHardDriveTemp;
-    this.dosVersion = this.rivetsData.dosVersionTemp;
+    this.ram = this.state.ramTemp;
+    this.initialHardDrive = this.state.initialHardDriveTemp;
+    this.dosVersion = this.state.dosVersionTemp;
 
     this.writeToLocalStorage('doswasmx-ram', 'ram');
     this.writeToLocalStorage('doswasmx-initialhd', 'initialHardDrive');
@@ -1528,7 +1541,7 @@ class MyClass {
               myClass.dblistSavestates.push(rom);
             }
             if (rom.endsWith('.disk')) {
-              myClass.rivetsData.dblistDisks.push(rom);
+              myClass.state.dblistDisks.push(rom);
             }
             if (rom.endsWith('.iso')) {
               myClass.dblistIsos.push(rom);
@@ -1559,13 +1572,13 @@ class MyClass {
 
   findSavestateInDatabase() {
     let imgKey = myClass.base_name;
-    if (!myClass.rivetsData.loggedIn) imgKey = 'win95';
-    imgKey += +'.savestate';
+    if (!myClass.state.loggedIn) imgKey = 'win95';
+    imgKey += '.savestate';
 
     myClass.dblistSavestates.forEach((save) => {
       if (save == imgKey) {
         console.log('found savestate in indexedDB');
-        myClass.rivetsData.noLocalSave = false;
+        myClass.state.noLocalSave = false;
       }
     });
   }
@@ -1577,7 +1590,7 @@ class MyClass {
    * @returns {any}
    */
   saveToDatabase(data, saveType) {
-    if (!window['indexedDB'] == undefined) {
+    if (window['indexedDB'] == undefined) {
       console.log('indexedDB not available');
       return;
     }
@@ -1590,7 +1603,7 @@ class MyClass {
       var transaction = db.transaction('DOSWASMXSTATES', 'readwrite');
       var romStore = transaction.objectStore('DOSWASMXSTATES');
       let imgKey = myClass.base_name;
-      if (!myClass.rivetsData.loggedIn) imgKey = 'win95';
+      if (!myClass.state.loggedIn) imgKey = 'win95';
 
       if (saveType == SaveTypes.Savestate) {
         imgKey = imgKey + '.savestate';
@@ -1610,33 +1623,29 @@ class MyClass {
         console.log('data onsuccess');
         //these take a long time so we want to let the user know
         if (saveType != SaveTypes.Savestate) {
-          toastr.info('Please Wait...');
+          showRuntimeNotice('Please Wait...');
         }
       };
       addRequest.onerror = function (event) {
-        toastr.error('Error Saving Data');
+        showRuntimeNotice('Error Saving Data');
         console.log('error adding data');
         console.log(event);
       };
       transaction.oncomplete = function (event) {
         console.log('transaction completed');
         if (saveType == SaveTypes.Savestate) {
-          myClass.showToast('State Saved');
-          toastr.info('State Saved');
+          showRuntimeNotice('State Saved');
         }
         if (saveType == SaveTypes.Disk) {
-          myClass.showToast('Hard Drive Saved');
-          toastr.info('Hard Drive Saved');
+          showRuntimeNotice('Hard Drive Saved');
         }
         if (saveType == SaveTypes.BaseImage) {
-          myClass.showToast('Base Image Saved');
-          toastr.info('Base Image Saved');
+          showRuntimeNotice('Base Image Saved');
           myClass.baseImageSaved = true;
           myClass.cacheIsoAndBaseImage();
         }
         if (saveType == SaveTypes.ISO) {
-          myClass.showToast('ISO Saved');
-          toastr.info('ISO Saved');
+          showRuntimeNotice('ISO Saved');
           myClass.isoSaved = true;
           myClass.cacheIsoAndBaseImage();
         }
@@ -1650,6 +1659,11 @@ class MyClass {
    * @returns {any}
    */
   loadFromDatabase(saveType) {
+    if (window['indexedDB'] == undefined) {
+      console.log('indexedDB not available');
+      return;
+    }
+
     var request = indexedDB.open('DOSWASMXDB');
     request.onsuccess = function (ev) {
       var db = ev.target.result;
@@ -1657,7 +1671,7 @@ class MyClass {
         .transaction('DOSWASMXSTATES', 'readwrite')
         .objectStore('DOSWASMXSTATES');
       let imgKey = myClass.base_name;
-      if (!myClass.rivetsData.loggedIn) imgKey = 'win95';
+      if (!myClass.state.loggedIn) imgKey = 'win95';
 
       if (saveType == SaveTypes.Savestate) {
         imgKey = imgKey + '.savestate';
@@ -1687,11 +1701,11 @@ class MyClass {
             myClass.sendDosCommands(
               'imgmount c "' + myClass.base_name + '.img\na:\n'
             );
-          } else if (!myClass.rivetsData.loggedIn) {
+          } else if (!myClass.state.loggedIn) {
             let byteArray = rom.result; //Uint8Array
             let imgName = '/' + myClass.base_name + '.img';
             Module.FS.writeFile(imgName, byteArray);
-            console.log('loaded drive from db: ' + imgName);
+            console.log('loaded drive from database');
             myClass.img_loaded = true;
             void myClass
               .LoadEmulator()
@@ -1709,18 +1723,18 @@ class MyClass {
         }
       };
       rom.onerror = function (event) {
-        toastr.error('error getting rom from store');
+        showRuntimeNotice('error getting rom from store');
       };
     };
     request.onerror = function (ev) {
-      toastr.error('error loading from db');
+      showRuntimeNotice('error loading from db');
     };
   }
 
   clearHardDrive() {
     let romToDelete = 'win95.disk';
 
-    if (!window['indexedDB'] == undefined) {
+    if (window['indexedDB'] == undefined) {
       console.log('indexedDB not available');
       return;
     }
@@ -1736,12 +1750,12 @@ class MyClass {
       try {
         // report that the data item has been deleted
         transaction.oncomplete = function () {
-          toastr.success('Hard Drive Deleted');
-          $('#settingsModal').modal('hide');
-          myClass.rivetsData.dblistDisks = [];
+          showRuntimeNotice('Hard Drive Deleted');
+          setElementVisible('settingsModal', false);
+          myClass.state.dblistDisks = [];
         };
       } catch (error) {
-        toastr.error('Error Deleting Disk');
+        showRuntimeNotice('Error Deleting Disk');
         console.log(error);
       }
     };
@@ -1756,21 +1770,26 @@ class MyClass {
     configString += '0\r\n'; // currently not used in c++
     configString += '0\r\n'; // currently not used in c++
     configString += '0\r\n'; // currently not used in c++
-    configString += this.rivetsData.mobileMode ? '1\r\n' : '0\r\n';
+    configString += this.state.mobileMode ? '1\r\n' : '0\r\n';
 
     FS.writeFile('config.txt', configString);
   }
 
   clearDatabase() {
+    if (window['indexedDB'] == undefined) {
+      console.log('indexedDB not available');
+      return;
+    }
+
     var request = indexedDB.deleteDatabase('DOSWASMXDB');
     request.onerror = function (event) {
       console.log('Error deleting database.');
-      toastr.error('Error deleting database');
+      showRuntimeNotice('Error deleting database');
     };
 
     request.onsuccess = function (event) {
       console.log('Database deleted successfully');
-      toastr.error('Database deleted successfully');
+      showRuntimeNotice('Database deleted successfully');
     };
   }
 
@@ -1798,58 +1817,58 @@ class MyClass {
   }
 
   exportModal() {
-    $('#exportModal').modal();
+    setElementVisible('exportModal', true);
   }
 
   settingsModal() {
-    this.rivetsData.ramTemp = this.ram;
-    this.rivetsData.initialHardDriveTemp = this.initialHardDrive;
-    this.rivetsData.dosVersionTemp = this.dosVersion;
+    this.state.ramTemp = this.ram;
+    this.state.initialHardDriveTemp = this.initialHardDrive;
+    this.state.dosVersionTemp = this.dosVersion;
 
-    $('#settingsModal').modal();
+    setElementVisible('settingsModal', true);
   }
 
   settingsSubmit() {
     this.saveOptions();
-    $('#settingsModal').modal('hide');
-    toastr.info('Settings Saved');
+    setElementVisible('settingsModal', false);
+    showRuntimeNotice('Settings Saved');
   }
 
   importModal(importType) {
-    myClass.rivetsData.noCopyImport = false;
-    myClass.rivetsData.changeCD = false;
-    myClass.rivetsData.loadCD = false;
-    myClass.rivetsData.changeFloppy = false;
-    myClass.rivetsData.loadFloppy = false;
+    myClass.state.noCopyImport = false;
+    myClass.state.changeCD = false;
+    myClass.state.loadCD = false;
+    myClass.state.changeFloppy = false;
+    myClass.state.loadFloppy = false;
     if (importType == 'noCopy') {
-      myClass.rivetsData.noCopyImport = true;
+      myClass.state.noCopyImport = true;
     }
     if (importType == 'changeCD') {
-      myClass.rivetsData.changeCD = true;
+      myClass.state.changeCD = true;
     }
     if (importType == 'changeFloppy') {
-      myClass.rivetsData.changeFloppy = true;
+      myClass.state.changeFloppy = true;
     }
     if (importType == 'loadFloppy') {
-      myClass.rivetsData.loadFloppy = true;
+      myClass.state.loadFloppy = true;
     }
     if (importType == 'loadCD') {
-      myClass.rivetsData.loadCD = true;
+      myClass.state.loadCD = true;
     }
-    myClass.rivetsData.importStatus = '';
-    $('#importModal').modal();
+    myClass.state.importStatus = '';
+    setElementVisible('importModal', true);
   }
 
   exportFiles() {
     console.log('exportFiles');
-    $('#exportModal').modal('hide');
+    setElementVisible('exportModal', false);
     this.exportFilesRequested = true;
     Module._neil_export_files();
   }
 
   saveStateLocal() {
     console.log('saveStateLocal');
-    this.rivetsData.noLocalSave = false;
+    this.state.noLocalSave = false;
     Module._neil_serialize();
   }
 
@@ -1860,296 +1879,19 @@ class MyClass {
 
   //when it returns from emscripten
   SaveStateEvent() {
-    console.log('js savestate event');
-    let compressed = Module.FS.readFile('/save/1.sav'); //this is a Uint8Array
-
-    if (!myClass.rivetsData.loggedIn) {
-      myClass.saveToDatabase(compressed, SaveTypes.Savestate);
-      return;
-    }
-
-    var saveMessage = 'Cloud State Saved';
-
-    var xhr = new XMLHttpRequest();
-    xhr.open(
-      'POST',
-      this.rivetsData.settings.CLOUDSAVEURL +
-        '/SendStaveState?name=' +
-        this.base_name +
-        '.savestate.doswasmx' +
-        '&password=' +
-        this.rivetsData.password +
-        '&emulator=doswasmx',
-      true
-    );
-    xhr.send(compressed);
-
-    xhr.onreadystatechange = function () {
-      try {
-        if (xhr.readyState === 4) {
-          let result = xhr.response;
-          if (result == '"Success"') {
-            myClass.noCloudSave = false;
-            toastr.info(saveMessage);
-            myClass.showToast(saveMessage);
-          } else {
-            toastr.error('Error Saving Cloud Save');
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        toastr.error('Error Loading Cloud Save');
-      }
-    };
+    this.cloudSave.saveStateEvent();
   }
 
   async loadHardDriveDiffs(byteArray) {
-    await myClass.getSaveStates();
-
-    let promise = new Promise(function (resolve, reject) {
-      let foundCloudDrive = false;
-
-      for (let i = 0; i < myClass.allSaveStates.length; i++) {
-        let element = myClass.allSaveStates[i];
-        if (element.Name == myClass.base_name + '.doswasmx') {
-          foundCloudDrive = true;
-          console.log('foundCloudDrive');
-        }
-      }
-
-      // we didnt find a cloud drive
-      if (!foundCloudDrive) {
-        resolve(byteArray);
-        return;
-      }
-
-      toastr.info('Found Diff Drive');
-
-      var oReq = new XMLHttpRequest();
-      oReq.open(
-        'GET',
-        myClass.rivetsData.settings.CLOUDSAVEURL +
-          '/LoadStaveState?name=' +
-          myClass.base_name +
-          '.doswasmx' +
-          '&password=' +
-          myClass.rivetsData.password,
-        true
-      );
-      oReq.responseType = 'arraybuffer';
-
-      oReq.onload = function (oEvent) {
-        var arrayBuffer = oReq.response; // Note: not oReq.responseText
-        try {
-          if (arrayBuffer) {
-            var byteArray = new Uint8Array(arrayBuffer);
-            myClass.applyHardDriveDiffs(byteArray, resolve);
-          } else {
-            reject();
-          }
-        } catch (error) {
-          console.log(error);
-          reject();
-        }
-      };
-
-      oReq.send(null);
-    });
-
-    return promise;
+    return this.cloudSave.loadHardDriveDiffs(byteArray);
   }
 
   async applyHardDriveDiffs(byteArrayDiffs, resolve) {
-    console.log('applyHardDriveDiffs');
-
-    let pointer = 0;
-
-    byteArrayDiffs = await this.decompressArrayBuffer(byteArrayDiffs.buffer);
-
-    //start with a copy of the hold hard drive
-    let newHardDrive = new Uint8Array(this.baseHardDrive);
-
-    while (pointer < byteArrayDiffs.length) {
-      let index =
-        byteArrayDiffs[pointer] +
-        byteArrayDiffs[pointer + 1] * 256 +
-        byteArrayDiffs[pointer + 2] * 256 * 256 +
-        byteArrayDiffs[pointer + 3] * 256 * 256 * 256;
-      pointer += 4;
-
-      let length =
-        byteArrayDiffs[pointer] +
-        byteArrayDiffs[pointer + 1] * 256 +
-        byteArrayDiffs[pointer + 2] * 256 * 256 +
-        byteArrayDiffs[pointer + 3] * 256 * 256 * 256;
-      pointer += 4;
-
-      //apply the diffs
-      for (let i = 0; i < length; i++) {
-        newHardDrive[index] = byteArrayDiffs[pointer];
-        pointer++;
-        index++;
-      }
-    }
-
-    resolve(newHardDrive);
+    return this.cloudSave.applyHardDriveDiffs(byteArrayDiffs, resolve);
   }
 
   async saveHardDriveDiffs() {
-    if (!this.rivetsData.loggedIn || this.rivetsData.initialInstallation) {
-      this.showToast('Save Hard Drive Diffs Not Supported');
-      return;
-    }
-
-    //pause dosbox
-    Module._neil_toggle_pause();
-
-    this.rivetsData.message += 'Calculating Diffs...';
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
-
-    let compareHardDrive = new Uint8Array();
-    compareHardDrive = Module.FS.readFile('/' + this.base_name + '.img'); //this is a Uint8Array
-
-    let chunkSize = 10000;
-    let arrayChunks = []; //array of Uint8SubArrays each of size chunk
-
-    this.diffCount = 0;
-    let progressCounter = 5000000; //we update progress every 5 million
-    for (let i = 0; i < this.baseHardDrive.length; i++) {
-      if (this.baseHardDrive[i] != compareHardDrive[i]) {
-        let end = i + chunkSize;
-        if (end >= this.baseHardDrive.length) {
-          end = this.baseHardDrive.length - 1;
-        }
-
-        let subArray = compareHardDrive.subarray(i, end);
-        arrayChunks.push({
-          index: i,
-          data: subArray,
-        });
-
-        i += chunkSize - 1;
-        this.diffCount++;
-      }
-
-      if (i > progressCounter) {
-        let percent = Math.floor((i / this.baseHardDrive.length) * 100);
-
-        this.rivetsData.message =
-          'Diffs: ' + this.diffCount + ', <b>' + percent + '%</b>';
-
-        await new Promise((resolve) => {
-          setTimeout(resolve, 20);
-        });
-
-        progressCounter += 5000000;
-      }
-    }
-
-    this.arrayChunks = arrayChunks;
-    console.log(arrayChunks);
-
-    let finalsize = 0;
-
-    for (let i = 0; i < arrayChunks.length; i++) {
-      //8 bytes for the two ints representing index and length
-      finalsize += 8;
-
-      let chunk = arrayChunks[i];
-      finalsize += chunk.data.length;
-    }
-
-    this.rivetsData.message = 'Generating Final Array...';
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
-
-    let finalArray = new Uint8Array(finalsize);
-    let pointer = 0;
-    for (let i = 0; i < arrayChunks.length; i++) {
-      let chunk = arrayChunks[i];
-      let index = chunk.index;
-
-      // index (little endian)
-      finalArray[pointer] = index & 0xff;
-      finalArray[pointer + 1] = (index >> 8) & 0xff;
-      finalArray[pointer + 2] = (index >> 16) & 0xff;
-      finalArray[pointer + 3] = (index >> 24) & 0xff;
-
-      pointer += 4;
-
-      let length = chunk.data.length;
-
-      // length (little endian)
-      finalArray[pointer] = length & 0xff;
-      finalArray[pointer + 1] = (length >> 8) & 0xff;
-      finalArray[pointer + 2] = (length >> 16) & 0xff;
-      finalArray[pointer + 3] = (length >> 24) & 0xff;
-
-      pointer += 4;
-
-      for (let j = 0; j < chunk.data.length; j++) {
-        finalArray[pointer] = chunk.data[j];
-        pointer++;
-      }
-    }
-
-    //compress drive
-    finalArray = await this.compressArrayBuffer(finalArray.buffer);
-
-    console.log(
-      'diffSize: ' + finalsize + ' compressedSize: ' + finalArray.length
-    );
-
-    if (this.doIntegrityCheck) {
-      this.rivetsData.message = 'Doing Integrity Check...';
-    } else {
-      Module._neil_toggle_pause();
-      this.rivetsData.message = 'Sending to server...';
-    }
-
-    var saveMessage =
-      'Saved: ' +
-      finalArray.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    var xhr = new XMLHttpRequest();
-    xhr.open(
-      'POST',
-      this.rivetsData.settings.CLOUDSAVEURL +
-        '/SendStaveState?name=' +
-        this.base_name +
-        '.doswasmx' +
-        '&password=' +
-        this.rivetsData.password +
-        '&emulator=doswasmx',
-      true
-    );
-    xhr.send(finalArray);
-
-    xhr.onreadystatechange = function () {
-      try {
-        if (xhr.readyState === 4) {
-          let result = xhr.response;
-          if (result == '"Success"') {
-            toastr.info(saveMessage);
-            myClass.showToast('Diffs Saved');
-
-            if (myClass.doIntegrityCheck) {
-              myClass.integrityCheck(compareHardDrive);
-            } else {
-              myClass.rivetsData.message = '';
-            }
-          } else {
-            toastr.error('Error Saving Cloud Save');
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        toastr.error('Error Loading Cloud Save');
-      }
-    };
+    return this.cloudSave.saveHardDriveDiffs();
   }
 
   async compressArrayBuffer(input) {
@@ -2217,7 +1959,7 @@ class MyClass {
   exportHardDrive() {
     let imgName = this.base_name + '.img';
     let exportName = imgName;
-    if (!this.rivetsData.loggedIn) {
+    if (!this.state.loggedIn) {
       exportName = 'hdd.img';
     }
     let filearray = Module.FS.readFile('/' + imgName);
@@ -2230,8 +1972,8 @@ class MyClass {
   importFiles(event) {
     console.log('import files');
 
-    if (!myClass.rivetsData.noCopyImport) {
-      var rando = Math.floor(Math.random() * Math.floor(1000));
+    if (!myClass.state.noCopyImport) {
+      const rando = security.secureRandomInteger(1000);
       myClass.importFolderName = 'Imp' + rando;
       Module.FS.mkdir('/' + myClass.importFolderName);
     }
@@ -2267,7 +2009,7 @@ class MyClass {
       total = Math.ceil(total / 1000000);
 
       // console.log('loaded: ' + event.loaded);
-      myClass.rivetsData.importStatus =
+      myClass.state.importStatus =
         '(' +
         (index + 1) +
         ' of ' +
@@ -2284,10 +2026,10 @@ class MyClass {
       var byteArray = new Uint8Array(this.result);
 
       if (
-        myClass.rivetsData.noCopyImport ||
+        myClass.state.noCopyImport ||
         myClass.isSpecialHandler ||
-        myClass.rivetsData.changeFloppy ||
-        myClass.rivetsData.loadFloppy
+        myClass.state.changeFloppy ||
+        myClass.state.loadFloppy
       ) {
         Module.FS.writeFile('/' + file.name, byteArray);
       } else {
@@ -2300,25 +2042,25 @@ class MyClass {
       if (index + 1 < files.length) {
         myClass.processImportFiles(files, index + 1);
       } else {
-        $('#importModal').modal('hide');
-        if (myClass.rivetsData.noCopyImport) {
+        setElementVisible('importModal', false);
+        if (myClass.state.noCopyImport) {
           Module._neil_exit_to_dos();
-        } else if (myClass.rivetsData.changeFloppy) {
+        } else if (myClass.state.changeFloppy) {
           let filename = myClass.importedFileNames[0];
-          toastr.info('changing floppy ' + filename);
+          showRuntimeNotice('changing floppy ' + filename);
           myClass.changeFloppyDisk(filename);
-        } else if (myClass.rivetsData.loadFloppy) {
+        } else if (myClass.state.loadFloppy) {
           let filename = myClass.importedFileNames[0];
-          toastr.info('loading floppy ' + filename);
+          showRuntimeNotice('loading floppy ' + filename);
           myClass.loadFloppyDisk(filename);
-        } else if (myClass.rivetsData.changeCD) {
+        } else if (myClass.state.changeCD) {
           for (let i = 0; i < myClass.importedFileNames.length; i++) {
             let filename = myClass.importedFileNames[i];
             if (
               filename.toLocaleLowerCase().endsWith('.iso') ||
               filename.toLocaleLowerCase().endsWith('.cue')
             ) {
-              toastr.info('changing to ' + filename);
+              showRuntimeNotice('changing to ' + filename);
               myClass.changeIso(filename);
             }
           }
@@ -2425,90 +2167,52 @@ class MyClass {
   }
 
   loadCloud() {
-    var oReq = new XMLHttpRequest();
-    oReq.open(
-      'GET',
-      this.rivetsData.settings.CLOUDSAVEURL +
-        '/LoadStaveState?name=' +
-        this.base_name +
-        '.savestate.doswasmx' +
-        '&password=' +
-        this.rivetsData.password,
-      true
-    );
-    oReq.responseType = 'arraybuffer';
-
-    oReq.onload = function (oEvent) {
-      var arrayBuffer = oReq.response; // Note: not oReq.responseText
-      try {
-        if (arrayBuffer) {
-          var byteArray = new Uint8Array(arrayBuffer);
-          Module.FS.writeFile('/save/1.sav', byteArray);
-          Module._neil_unserialize();
-        } else {
-          toastr.error('Error Loading Cloud Save');
-        }
-      } catch (error) {
-        console.log(error);
-        toastr.error('Error Loading Cloud Save');
-      }
-    };
-
-    oReq.send(null);
+    this.cloudSave.loadCloud();
   }
 
-  async setupLogin() {
+  setupLogin() {
     //prevent submit on enter
-    $('#txtPassword').bind('keypress', function (e) {
-      if (e.keyCode == 13) {
+    document.getElementById('txtPassword')?.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
         e.preventDefault();
         myClass.loginSubmit();
         return false;
       }
     });
 
-    let pw = localStorage.getItem('doswasmx-password');
-    if (pw == null) this.rivetsData.password = '';
-    else this.rivetsData.password = pw;
-
-    if (this.rivetsData.password) {
-      await this.loginSilent();
-    }
+    this.state.password = '';
   }
 
   loginModal() {
-    $('#loginModal').modal();
+    setElementVisible('loginModal', true);
     this.loginModalOpened = true;
     setTimeout(() => {
       //focus on textbox
-      $('#txtPassword').focus();
+      document.getElementById('txtPassword')?.focus();
     }, 500);
   }
 
   logout() {
-    this.rivetsData.loggedIn = false;
-    this.rivetsData.password = '';
-    localStorage.setItem('doswasmx-password', this.rivetsData.password);
+    this.state.loggedIn = false;
+    this.state.password = '';
   }
 
   async loginSubmit() {
-    $('#loginModal').modal('hide');
+    setElementVisible('loginModal', false);
     this.loginModalOpened = false;
     let result = await this.loginToServer();
     if (result == 'Success') {
-      toastr.success('Logged In');
-      localStorage.setItem('doswasmx-password', this.rivetsData.password);
+      showRuntimeNotice('Logged In');
       await this.getSaveStates();
       this.postLoginProcess();
     } else {
-      toastr.error('Login Failed');
-      this.rivetsData.password = '';
-      localStorage.setItem('doswasmx-password', '');
+      showRuntimeNotice('Login Failed');
+      this.state.password = '';
     }
   }
 
   async loginSilent() {
-    if (!this.rivetsData.hasCloud) return;
+    if (!this.state.hasCloud) return;
 
     let result = await this.loginToServer();
     if (result == 'Success') {
@@ -2528,7 +2232,7 @@ class MyClass {
     this.dosSaveStates.sort((a, b) => {
       return b.Date.getTime() - a.Date.getTime();
     });
-    this.rivetsData.loggedIn = true;
+    this.state.loggedIn = true;
   }
 
   convertCSharpDateTime(initialDate) {
@@ -2551,29 +2255,11 @@ class MyClass {
   }
 
   async loginToServer() {
-    let result = await $.get(
-      this.rivetsData.settings.CLOUDSAVEURL +
-        '/Login?password=' +
-        this.rivetsData.password
-    );
-    console.log('login result: ' + result);
-    return result;
+    return this.cloudSave.loginToServer();
   }
 
   async getSaveStates() {
-    if (!this.rivetsData.loggedIn) return;
-
-    let result = await $.get(
-      this.rivetsData.settings.CLOUDSAVEURL +
-        '/GetSaveStates?password=' +
-        this.rivetsData.password
-    );
-    console.log('getSaveStates result: ', result);
-    this.allSaveStates = result;
-    result.forEach((element) => {
-      if (element.Name == this.base_name + '.savestate.doswasmx')
-        this.noCloudSave = false;
-    });
+    return this.cloudSave.getSaveStates();
   }
 
   //USE THIS FOR DOING AN INTEGRITY CHECK ON DIFFED HARD DRIVE -
@@ -2582,7 +2268,7 @@ class MyClass {
 
     //compare bytes
 
-    this.rivetsData.message += 'Calculating Diffs...';
+    this.state.message += 'Calculating Diffs...';
     await new Promise((resolve) => {
       setTimeout(resolve, 20);
     });
@@ -2614,7 +2300,7 @@ class MyClass {
       if (i > progressCounter) {
         let percent = Math.floor((i / newHardDriveBytes.length) * 100);
 
-        this.rivetsData.message =
+        this.state.message =
           'Diffs: ' + this.diffCount + ', <b>' + percent + '%</b>';
 
         await new Promise((resolve) => {
@@ -2637,11 +2323,11 @@ class MyClass {
       finalsize += chunk.data.length;
     }
 
-    this.rivetsData.message =
+    this.state.message =
       'Generating Final Array Size: ' +
       finalsize.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-    this.rivetsData.message =
+    this.state.message =
       'Diffs: ' +
       this.diffCount +
       ' Final Array Size: ' +
@@ -2651,13 +2337,13 @@ class MyClass {
     console.log('integrity check results', arrayChunks, this.diffCount);
 
     if (arrayChunks.length > 0) {
-      toastr.error('Failed integrity check');
+      showRuntimeNotice('Failed integrity check');
     } else {
-      toastr.success('Passed integrity check');
+      showRuntimeNotice('Passed integrity check');
     }
 
     setTimeout(() => {
-      myClass.rivetsData.message = '';
+      myClass.state.message = '';
     }, 2000);
 
     Module._neil_toggle_pause();
@@ -2668,7 +2354,7 @@ class MyClass {
   }
 
   updateCPU(value) {
-    this.rivetsData.cpu = value;
+    this.state.cpu = value;
     if (value == 'auto') {
       this.updateCpuNeil('cycles=auto');
     } else if (value == 'max') {
@@ -2695,9 +2381,9 @@ class MyClass {
 
     if (this.autoKeyboard) {
       this.autoKeyboardTimer = this.autoKeyboardInterval;
-      toastr.info('Auto Keyboard Enabled');
+      showRuntimeNotice('Auto Keyboard Enabled');
     } else {
-      toastr.info('Auto Keyboard Disabled');
+      showRuntimeNotice('Auto Keyboard Disabled');
     }
   }
 
@@ -2738,7 +2424,7 @@ class MyClass {
       this.canvas.width = this.frameWidth;
       this.canvas.height = this.frameHeight;
 
-      if (this.rivetsData.mobileMode) {
+      if (this.state.mobileMode) {
         this.resizeCanvas();
       }
       return;
@@ -2765,7 +2451,7 @@ class MyClass {
     this.initAudio();
 
     //canvas capture event
-    if (!this.rivetsData.mobileMode) {
+    if (!this.state.mobileMode) {
       document
         .getElementById('canvas')
         .addEventListener('click', this.canvasClick.bind(this));
@@ -2773,16 +2459,13 @@ class MyClass {
   }
 
   sleepHandler(e) {
-    const data = e.data;
-    if (data?.name === 'ws-sync-sleep' && data.props.sessionId === '123') {
-      postMessage({ name: 'wc-sync-sleep', props: data.props }, '*');
-    }
+    security.replyToLocalSleepMessage(e);
   }
 
   async UploadFiles() {
     // this.resizeCanvas();
     // document.getElementById('canvasDiv').style.display = 'block';
-    // this.rivetsData.emulatorStarted = true;
+    // this.state.emulatorStarted = true;
     setTimeout(() => {
       Module.messageHandler({
         data: { name: 'wc-run', props: { sessionId: '123' } },
@@ -2835,7 +2518,7 @@ class MyClass {
   }
 
   setupInputController() {
-    this.rivetsData.inputController = new InputController();
+    this.state.inputController = new InputController();
   }
 }
 
@@ -2849,9 +2532,8 @@ window['myApp'] = myClass; //so that I can reference from EM_ASM
 //     // printErr: (text) => myClass.print(text)
 // }
 
-let rando2 = Math.floor(Math.random() * 100000);
 let script2 = document.createElement('script');
-script2.src = 'input_controller.js?v=' + rando2;
+script2.src = 'input_controller.js?v=' + runtimeRevision;
 document.getElementsByTagName('head')[0].appendChild(script2);
 
 window.onerror = function (message) {
@@ -2865,6 +2547,7 @@ window.onunhandledrejection = function (error) {
 };
 
 window['Module'] = {
+  locateFile: (path, prefix) => prefix + path + '?v=' + runtimeRevision,
   onRuntimeInitialized: myClass.initModule,
   print: (text) => myClass.processPrintStatement(text),
 };

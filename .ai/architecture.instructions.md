@@ -11,8 +11,18 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - `src/components/ui`: Shared accessible UI primitives.
 - `src/components/client`: Browser-only interaction leaves, including reduced-motion-safe Motion behavior.
 - `src/lib`: Agent-discovery payload builders and shared server-safe helpers.
-- `public/wasm` and the isolated lab route: WASM vendor assets and their narrow delivery surface.
-- `.github/workflows/ci.yml` and `package.json`: CI and local delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
+- `public/wasm`, `next.config.mjs`, and the isolated lab route: pinned WASM assets, static delivery
+  headers, and the explicit-intent browser boundary.
+- `.github/workflows/ci.yml`, `.github/workflows/sonar.yml`, and `package.json`: CI and local
+  delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
+- `sonar-project.properties`, `.sonarcloud.properties`, and `scripts/sonarqube`: Separate local
+  SonarQube and hosted SonarQube Cloud identities with a shared authored-source and LCOV boundary.
+- `DESIGN.md` plus `.ai/design-system.instructions.md`: Canonical design contract and its
+  implementation routing. The root contract wins on visual or interaction drift.
+- `.ai/development-preferences.instructions.md` and `.ai/versioning.instructions.md`: Local
+  toolchain/code preferences and the manual release contract beneath accepted decisions.
+- `.codex/agents`, `.codex/prompts`, `.codex/skills`, and `skills-lock.json`: Reviewed
+  development-time capability inputs. They are not imported by application source.
 - `.ai/workflows/release-pr-workflow.instructions.md`: PR/release state-reconciliation owner; it separates local, pushed, hosted-check, preview, browser, review, merge, and production evidence.
 - `.ai/checkpoints/portfolio-overhaul.md`: Sole mutable, resumable state owner for the active overhaul workstream. It cannot override source, Git, or hosted state.
 - `docs/aegis/`: Dated initiative intent, plans, baseline snapshots, and evidence. These records are immutable after acceptance and are not live status dashboards.
@@ -32,3 +42,18 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - Respect `prefers-reduced-motion` for motion and preserve accessible primitive behavior.
 - Treat an alive interface as a UX contract: movement must reveal hierarchy, continuity, or causality; it must stay out of the critical render path and degrade to equivalent static content.
 - Do not add a separate or stateful backend, authentication, database, dashboard, or private guestbook features to public v1 without an accepted decision and real prerequisites.
+- WASM assets are delivered statically; `next.config.mjs` is the sole cache, MIME, CORS, CORP, and
+  frame-CSP header owner for `/wasm/*`.
+- Treat `main.js` and `main.wasm` as a digest-pinned generated pair, not hand-maintained modules.
+  First-party runtime wrappers remain under a no-growth modularity ratchet until their behavior is
+  moved behind typed Next-owned source boundaries.
+- Sonar excludes the pinned legacy `script.js` and `input_controller.js` wrappers only. Authored
+  WASM adapters and every extracted module remain analyzed; syntax, security-pattern, browser,
+  static-delivery, and modularity gates continue to cover the excluded compatibility surface.
+- OMX, Ruflo, Claude-flow, AgentDB, RuVector, and other orchestration systems are development tools,
+  not application services. Their databases, daemon state, hooks with machine paths, logs, metrics,
+  and sessions cannot own product state, source truth, or release evidence.
+- Application commands follow `.nvmrc`, `.node-version`, and `package.json`. A separately installed
+  development tool may use another Node runtime without changing the application engine contract.
+- The project-local `sonar-scanner-npm` binary owns source analysis. A host command named `sonar`
+  belongs to the separate SonarQube CLI/MCP surface and must not be substituted for the scanner.
