@@ -42,7 +42,7 @@ ruflo doctor
 git status --ignored --short
 git diff --check
 pnpm format:check
-pnpm test -- tests/governance.test.ts
+pnpm exec vitest run tests/governance.test.ts
 ```
 
 Record tool versions and warnings. A doctor warning is not automatically an application defect; an
