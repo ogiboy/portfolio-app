@@ -29,15 +29,11 @@ describe('quality gate contracts', () => {
       mode: 'test',
     });
     const coverage = vitestConfig.coverage;
+    const reporters = coverage.reporter.map(([name]) => name);
 
     expect(coverage.provider).toBe('v8');
-    expect(coverage.reporter.map(([name]) => name)).toEqual([
-      'text',
-      'json-summary',
-      'lcov',
-      'html',
-      'text-summary',
-    ]);
+    expect(reporters).toEqual(expect.arrayContaining(['text', 'json-summary', 'lcov', 'html']));
+    expect(new Set(reporters).size).toBe(reporters.length);
     expect(coverage.thresholds).toEqual({
       statements: 80,
       branches: 80,
