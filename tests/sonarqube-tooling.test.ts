@@ -164,7 +164,20 @@ describe('local SonarQube tooling', () => {
     });
     expect(sonar['sonar.sources']).toContain('src,scripts,.github/workflows');
     expect(sonar['sonar.sources']).toContain('public/wasm/engine');
-    expect(sonar['sonar.exclusions']).toContain('public/wasm/engine/main.js');
+    const sonarExclusions = sonar['sonar.exclusions'].split(',');
+    expect(sonarExclusions).toEqual(
+      expect.arrayContaining([
+        'public/wasm/engine/main.js',
+        'public/wasm/engine/input_controller.js',
+        'public/wasm/engine/script.js',
+      ]),
+    );
+    expect(sonarExclusions).not.toEqual(
+      expect.arrayContaining([
+        'public/wasm/engine/runtime-security.js',
+        'public/wasm/engine/settings.js',
+      ]),
+    );
     expect(sonar['sonar.exclusions']).toContain('**/*.png');
     expect(sonar['sonar.exclusions']).toContain('public/wasm/roms/**');
     expect(sonar['sonar.coverage.exclusions']).toContain('src/app/**');

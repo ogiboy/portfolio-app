@@ -113,7 +113,7 @@
 
   const resolveGameAsset = (filePath) => {
     if (typeof filePath !== 'string') {
-      throw new Error('Invalid game asset path.');
+      throw new TypeError('Invalid game asset path.');
     }
 
     const approvedAsset = approvedGameAssets.find(
