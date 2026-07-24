@@ -48,12 +48,13 @@ function lineCount(path) {
 
 function moduleLimit(relativePath, extension) {
   const matchingPath = Object.keys(baseline.pathLimits ?? {})
+    .map((path) => ({ path, normalizedPath: path.replace(/\/+$/, '') }))
     .filter(
-      (path) =>
-        relativePath === path || relativePath.startsWith(path.endsWith('/') ? path : `${path}/`),
+      ({ normalizedPath }) =>
+        relativePath === normalizedPath || relativePath.startsWith(`${normalizedPath}/`),
     )
-    .sort((left, right) => right.length - left.length)[0];
-  return matchingPath ? baseline.pathLimits[matchingPath] : baseline.limits[extension];
+    .sort((left, right) => right.normalizedPath.length - left.normalizedPath.length)[0];
+  return matchingPath ? baseline.pathLimits[matchingPath.path] : baseline.limits[extension];
 }
 
 function sha256(path) {
