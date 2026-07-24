@@ -8,6 +8,12 @@ import { siteCopy, type Locale } from '@/content/site';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildPrivacyStructuredData } from '@/lib/structured-data';
 
+/**
+ * Creates localized SEO metadata for the privacy page.
+ *
+ * @param params - Route parameters containing the page locale
+ * @returns Metadata configured for the privacy page
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {
@@ -20,6 +26,11 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Renders the localized privacy information page with privacy structured data and analytics preferences.
+ *
+ * @param params - A promise resolving to the page locale.
+ */
 export default async function PrivacyPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {

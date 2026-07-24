@@ -135,6 +135,12 @@ function clearProvidedTools(modelContext: ModelContext) {
   }
 }
 
+/**
+ * Reports a WebMCP tool registration failure unless the operation was aborted.
+ *
+ * @param error - The registration error to report
+ * @param signal - The signal indicating whether registration was aborted
+ */
 function reportRegistrationFailure(error: unknown, signal: AbortSignal) {
   if (!signal.aborted) {
     console.error('WebMCP tool registration failed.', error);

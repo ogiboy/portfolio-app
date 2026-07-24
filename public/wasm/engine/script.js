@@ -15,11 +15,20 @@ const runtimeRevision = encodeURIComponent(
   window.PORTAL_RUNTIME_REVISION || 'doswasmx-v0.3',
 );
 
+/**
+ * Shows or hides an element by its ID.
+ * @param {string} id - The element ID.
+ * @param {boolean} visible - Whether the element should be visible.
+ */
 function setElementVisible(id, visible) {
   const element = document.getElementById(id);
   if (element) element.style.display = visible ? '' : 'none';
 }
 
+/**
+ * Displays a runtime notice through the application toast UI or console.
+ * @param {*} message - The value to display as a notice.
+ */
 function showRuntimeNotice(message) {
   const text = String(message);
   if (typeof window.myApp?.showToast === 'function') {

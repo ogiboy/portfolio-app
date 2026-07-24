@@ -15,6 +15,12 @@ import type { Locale } from '@/content/site';
 import { createRootMetadata } from '@/lib/seo';
 import { themeBootstrapScript } from '@/lib/theme';
 
+/**
+ * Builds page metadata for the requested locale.
+ *
+ * @param params - Route parameters containing the requested locale.
+ * @returns Metadata for the requested locale, or the default locale when the locale is invalid.
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: string }> }>): Promise<Metadata> {
@@ -27,6 +33,11 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+/**
+ * Provides the localized application shell with navigation, content, footer, and theme initialization.
+ *
+ * @param params - Route parameters containing the requested locale
+ */
 export default async function RootLayout({
   children,
   params,

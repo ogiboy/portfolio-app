@@ -17,6 +17,11 @@ import {
 import { Link } from '@/i18n/navigation';
 import { buildHomeStructuredData } from '@/lib/structured-data';
 
+/**
+ * Renders the localized homepage with hero content, services, projects, process information, and contact calls to action.
+ *
+ * @param params - A promise containing the requested locale.
+ */
 export default async function HomePage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {

@@ -23,7 +23,11 @@ const sheetVariants = cva(
   },
 );
 
-/** Creates the controlled dialog root used by the sheet primitive. */
+/**
+ * Provides the root container for a sheet dialog.
+ *
+ * @returns The rendered sheet dialog root.
+ */
 function Sheet(props: Readonly<React.ComponentProps<typeof SheetPrimitive.Root>>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
@@ -37,6 +41,11 @@ function SheetPortal(props: Readonly<React.ComponentProps<typeof SheetPrimitive.
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
+/**
+ * Renders the dimmed backdrop displayed behind sheet content.
+ *
+ * @param className - Additional CSS classes to apply to the overlay
+ */
 function SheetOverlay({
   className,
   ...props
@@ -53,7 +62,12 @@ function SheetOverlay({
   );
 }
 
-/** Renders modal sheet content with a visible, labeled close control. */
+/**
+ * Renders sheet content with a labeled close control.
+ *
+ * @param closeLabel - Accessible label for the close control
+ * @param side - Side of the viewport where the sheet appears
+ */
 function SheetContent({
   children,
   className,

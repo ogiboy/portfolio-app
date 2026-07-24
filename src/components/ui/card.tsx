@@ -34,14 +34,22 @@ export function CardContent({ className, ...props }: Readonly<React.ComponentPro
   return <div data-slot="card-content" className={cn('p-5', className)} {...props} />;
 }
 
-/** Styles a card title while leaving semantic element choice to consumers. */
+/**
+ * Renders a styled container for a card title.
+ *
+ * @returns A styled card title container.
+ */
 export function CardTitle({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div data-slot="card-title" className={cn('font-display text-xl', className)} {...props} />
   );
 }
 
-/** Styles supporting card text while forwarding standard div attributes. */
+/**
+ * Renders secondary text within a card.
+ *
+ * @returns A styled card description element.
+ */
 export function CardDescription({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
@@ -52,7 +60,7 @@ export function CardDescription({ className, ...props }: Readonly<React.Componen
   );
 }
 
-/** Positions a supplementary card action beside the header content. */
+/** Positions a supplementary action within the card header layout. */
 export function CardAction({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div

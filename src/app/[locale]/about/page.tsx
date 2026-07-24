@@ -9,6 +9,12 @@ import { Link } from '@/i18n/navigation';
 import { createRouteMetadata, seoCopy } from '@/lib/seo';
 import { buildAboutStructuredData } from '@/lib/structured-data';
 
+/**
+ * Resolves an About page path target to its corresponding URL.
+ *
+ * @param target - The destination type to resolve
+ * @returns The URL for the selected destination
+ */
 function getAboutPathHref(target: 'email' | 'linkedin' | 'projects') {
   switch (target) {
     case 'email':
@@ -20,6 +26,12 @@ function getAboutPathHref(target: 'email' | 'linkedin' | 'projects') {
   }
 }
 
+/**
+ * Generates localized metadata for the About page.
+ *
+ * @param params - Route parameters containing the requested locale.
+ * @returns Metadata configured for the localized About page.
+ */
 export async function generateMetadata({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>): Promise<Metadata> {
@@ -32,6 +44,11 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Renders the localized About page with identity information, navigation paths, contact links, and structured data.
+ *
+ * @param params - Route parameters containing the page locale
+ */
 export default async function AboutPage({
   params,
 }: Readonly<{ params: Promise<{ locale: Locale }> }>) {

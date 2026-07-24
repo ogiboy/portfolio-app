@@ -33,7 +33,12 @@ Use GET /api/portfolio for the canonical public project and contact data. The AP
 export const agentSkillsCacheControl =
   'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400';
 
-/** Produces a prefixed SHA-256 integrity digest for supplied text. */
+/**
+ * Creates a SHA-256 integrity digest for text.
+ *
+ * @param value - The text to digest
+ * @returns The lowercase hexadecimal digest prefixed with `sha256:`
+ */
 export async function sha256Digest(value: string) {
   const bytes = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest('SHA-256', bytes);
@@ -43,7 +48,11 @@ export async function sha256Digest(value: string) {
   return `sha256:${hex}`;
 }
 
-/** Creates the standards-compatible discovery index for published agent skills. */
+/**
+ * Creates the standards-compatible discovery index for published agent skills.
+ *
+ * @returns The discovery index containing the published portfolio navigation skill and its content digest.
+ */
 export async function getAgentSkillsIndex() {
   return {
     $schema: 'https://schemas.agentskills.io/discovery/0.2.0/schema.json',

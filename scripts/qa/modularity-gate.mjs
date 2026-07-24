@@ -9,6 +9,11 @@ const baselinePath = resolve(root, 'scripts/qa/modularity-baseline.json');
 const failOnFindings = process.argv.includes('--fail-on-findings');
 const ignoredSegments = new Set(['.next', 'build', 'coverage', 'dist', 'node_modules']);
 
+/**
+ * Loads and parses the modularity baseline configuration.
+ * @returns {Object} The parsed baseline configuration.
+ * @throws {Error} If the baseline file cannot be read or parsed.
+ */
 function readBaseline() {
   try {
     return JSON.parse(readFileSync(baselinePath, 'utf8'));
@@ -17,10 +22,20 @@ function readBaseline() {
   }
 }
 
+/**
+ * Converts an absolute path to a path relative to the repository root.
+ * @param {string} path - The absolute path to convert.
+ * @return {string} The root-relative path with forward slash separators.
+ */
 function toRelative(path) {
   return relative(root, path).split(sep).join('/');
 }
 
+/**
+ * Determines whether a path contains a directory segment excluded from scanning.
+ * @param {string} path - The path to evaluate.
+ * @return {boolean} `true` if any path segment is ignored, `false` otherwise.
+ */
 function shouldSkip(path) {
   return toRelative(path)
     .split('/')
@@ -42,10 +57,21 @@ function* walk(entry, extensions) {
   if (stats.isFile() && extensions.has(extname(absolute))) yield absolute;
 }
 
+/**
+ * Counts the lines in a UTF-8 text file.
+ * @param {string} path - The file path.
+ * @return {number} The number of lines in the file.
+ */
 function lineCount(path) {
   return readFileSync(path, 'utf8').split(/\r?\n/).length;
 }
 
+/**
+ * Determines the line limit for a module based on its most specific path match.
+ * @param {string} relativePath - The module path relative to the repository root.
+ * @param {string} extension - The module's file extension.
+ * @return {number} The matching path-specific limit, or the default limit for the extension.
+ */
 function moduleLimit(relativePath, extension) {
   const matchingPath = Object.keys(baseline.pathLimits ?? {})
     .filter(
@@ -56,6 +82,11 @@ function moduleLimit(relativePath, extension) {
   return matchingPath ? baseline.pathLimits[matchingPath] : baseline.limits[extension];
 }
 
+/**
+ * Computes the SHA-256 digest of a file.
+ * @param {string} path - The path to the file.
+ * @return {string} The file's SHA-256 digest in hexadecimal format.
+ */
 function sha256(path) {
   return createHash('sha256').update(readFileSync(path)).digest('hex');
 }

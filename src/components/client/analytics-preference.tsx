@@ -22,6 +22,16 @@ type AnalyticsPreferenceLatch = AnalyticsPreferenceSaveResult | 'idle';
 
 const latchDuration = 220;
 
+/**
+ * Builds the status text for the current analytics preference state.
+ *
+ * @param latch - The current save outcome.
+ * @param preferenceLabel - The label describing the current preference.
+ * @param preferenceSentence - The preference label formatted as a sentence.
+ * @param savedLabel - The message shown after a successful save.
+ * @param errorLabel - The message shown after a failed save.
+ * @returns The status message corresponding to the save outcome.
+ */
 function getStatusMessage(
   latch: AnalyticsPreferenceLatch,
   preferenceLabel: string,
@@ -34,7 +44,16 @@ function getStatusMessage(
   return preferenceLabel;
 }
 
-/** Presents a persisted analytics consent control with polite status feedback. */
+/**
+ * Presents a persisted analytics consent control with polite status feedback.
+ *
+ * @param enabledLabel - Label describing the enabled analytics state
+ * @param disabledLabel - Label describing the disabled analytics state
+ * @param enableAction - Action label for enabling analytics
+ * @param disableAction - Action label for disabling analytics
+ * @param savedLabel - Feedback label shown after a successful save
+ * @param errorLabel - Feedback label shown after a failed save
+ */
 export function AnalyticsPreference({
   enabledLabel,
   disabledLabel,
@@ -51,6 +70,11 @@ export function AnalyticsPreference({
     return () => window.clearTimeout(latchTimeout.current);
   }, []);
 
+  /**
+   * Saves the analytics preference and updates the transient save status.
+   *
+   * @param nextEnabled - Whether analytics should be enabled.
+   */
   function updatePreference(nextEnabled: boolean) {
     const result = saveAnalyticsPreference(window.localStorage, nextEnabled);
 

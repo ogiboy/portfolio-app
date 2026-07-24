@@ -14,10 +14,23 @@ function asLocale(value: string): Locale | undefined {
   return value === 'en' || value === 'tr' ? value : undefined;
 }
 
+/**
+ * Formats strings as a newline-separated Markdown bullet list.
+ *
+ * @param items - The strings to format as list items
+ * @returns A Markdown bullet list
+ */
 function markdownList(items: readonly string[]) {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
+/**
+ * Builds the link for an About page action.
+ *
+ * @param locale - The locale used for the localized Projects path.
+ * @param target - The destination type.
+ * @returns The corresponding email, LinkedIn, or Projects link.
+ */
 function aboutPathHref(locale: Locale, target: 'email' | 'linkedin' | 'projects') {
   switch (target) {
     case 'email':
@@ -29,6 +42,12 @@ function aboutPathHref(locale: Locale, target: 'email' | 'linkedin' | 'projects'
   }
 }
 
+/**
+ * Builds the localized Markdown document for the portfolio home page.
+ *
+ * @param locale - The locale used for page content and localized links
+ * @returns The localized home page Markdown document
+ */
 function homeMarkdown(locale: Locale): MarkdownDocument {
   const copy = siteCopy[locale];
 
@@ -48,6 +67,12 @@ function homeMarkdown(locale: Locale): MarkdownDocument {
   };
 }
 
+/**
+ * Builds the localized About page as a Markdown document.
+ *
+ * @param locale - The locale used for page content and links.
+ * @returns The localized About page document.
+ */
 function aboutMarkdown(locale: Locale): MarkdownDocument {
   const copy = siteCopy[locale].about;
 
@@ -64,6 +89,12 @@ function aboutMarkdown(locale: Locale): MarkdownDocument {
   };
 }
 
+/**
+ * Builds the localized Markdown project archive.
+ *
+ * @param locale - The locale used for labels, descriptions, categories, and links
+ * @returns The generated project archive document
+ */
 function projectArchiveMarkdown(locale: Locale): MarkdownDocument {
   const copy = siteCopy[locale].projects;
 
@@ -78,6 +109,13 @@ function projectArchiveMarkdown(locale: Locale): MarkdownDocument {
   };
 }
 
+/**
+ * Generates a localized Markdown page for a project identified by its slug.
+ *
+ * @param locale - The locale used for localized project labels and descriptions
+ * @param slug - The project's URL slug
+ * @returns The project's Markdown document, or `undefined` when no project matches the slug
+ */
 function projectMarkdown(locale: Locale, slug: string): MarkdownDocument | undefined {
   const project = projects.find((item) => item.slug === slug);
   if (!project) {
@@ -91,6 +129,12 @@ function projectMarkdown(locale: Locale, slug: string): MarkdownDocument | undef
   };
 }
 
+/**
+ * Builds the localized Markdown document for the retro game center lab page.
+ *
+ * @param locale - The locale used for page content and links.
+ * @returns The localized lab page document.
+ */
 function labMarkdown(locale: Locale): MarkdownDocument {
   const copy = siteCopy[locale].lab;
   return {
@@ -103,7 +147,12 @@ function labMarkdown(locale: Locale): MarkdownDocument {
   };
 }
 
-/** Returns localized markdown for a supported public portfolio route. */
+/**
+ * Resolves a supported public portfolio route to localized Markdown content.
+ *
+ * @param pathname - The URL pathname to resolve
+ * @returns The localized Markdown document, or `undefined` for unsupported routes
+ */
 export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined {
   if (pathname === '/') {
     return homeMarkdown('en');
@@ -138,7 +187,13 @@ export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined
   return undefined;
 }
 
-/** Builds a negotiated Markdown HTTP response for a public pathname. */
+/**
+ * Creates an HTTP response containing Markdown for a supported public pathname.
+ *
+ * @param pathname - The public pathname to resolve.
+ * @param options - Controls body inclusion, status override, and locale-related caching headers.
+ * @returns An HTTP response containing the resolved Markdown document or a not-found response.
+ */
 export function markdownResponse(
   pathname: string,
   options?: { includeBody: boolean; status?: number; varyLocale?: boolean },

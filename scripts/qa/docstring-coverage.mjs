@@ -6,10 +6,22 @@ import ts from 'typescript';
 
 const defaultConfigPath = 'scripts/qa/docstring-coverage.config.json';
 
+/**
+ * Converts a path to POSIX-style separators.
+ * @param {string} path - The path to convert.
+ * @return {string} The path with forward-slash separators.
+ */
 function toPosix(path) {
   return path.split(sep).join('/');
 }
 
+/**
+ * Loads and parses the docstring coverage configuration file.
+ * @param {string} root - The directory used to resolve the configuration path.
+ * @param {string} [configPath=defaultConfigPath] - The configuration file path.
+ * @returns {object} The parsed configuration.
+ * @throws {Error} If the file cannot be read or its contents are invalid JSON.
+ */
 function readConfig(root, configPath = defaultConfigPath) {
   const path = resolve(root, configPath);
   try {
@@ -19,6 +31,12 @@ function readConfig(root, configPath = defaultConfigPath) {
   }
 }
 
+/**
+ * Determines whether a relative path matches configured exclusion rules.
+ * @param {string} relativePath - The path to evaluate.
+ * @param {object} config - Configuration containing excluded path segments and paths.
+ * @returns {boolean} `true` if the path is excluded, `false` otherwise.
+ */
 function isExcluded(relativePath, config) {
   const normalizedPath = toPosix(relativePath);
   const segments = normalizedPath.split('/').map((segment) => segment.toLowerCase());
@@ -45,6 +63,12 @@ function* walk(root, entry, config) {
   if (stats.isFile() && config.extensions.includes(extname(absolute))) yield absolute;
 }
 
+/**
+ * Discovers configured source files while applying exclusions and removing duplicates.
+ * @param {string} root - The directory used to resolve scan roots and explicit file paths.
+ * @param {object} config - File discovery settings, including scan roots, scan files, and exclusions.
+ * @returns {string[]} Sorted absolute paths of discovered source files.
+ */
 function findSourceFiles(root, config) {
   const paths = new Set();
   for (const scanRoot of config.scanRoots) {
@@ -59,6 +83,11 @@ function findSourceFiles(root, config) {
   return [...paths].sort((left, right) => left.localeCompare(right));
 }
 
+/**
+ * Determines whether a TypeScript declaration is supported for documentation coverage.
+ * @param {import('typescript').Declaration} declaration - The declaration to classify.
+ * @returns {boolean} `true` for supported class, enum, function, interface, module, type alias, or variable declarations, `false` otherwise.
+ */
 function isSupportedDeclaration(declaration) {
   return (
     ts.isClassDeclaration(declaration) ||
@@ -71,6 +100,11 @@ function isSupportedDeclaration(declaration) {
   );
 }
 
+/**
+ * Gets the declaration node used to associate JSDoc with a declaration.
+ * @param {import('typescript').Declaration} declaration - The declaration to anchor.
+ * @return {import('typescript').Node} The enclosing variable statement for variable declarations, or the original declaration.
+ */
 function jsDocAnchor(declaration) {
   if (!ts.isVariableDeclaration(declaration)) return declaration;
 
@@ -81,12 +115,23 @@ function jsDocAnchor(declaration) {
     : declaration;
 }
 
+/**
+ * Extracts text from a JSDoc comment representation.
+ * @param {string|Array<string|{text?: string}>|null|undefined} comment - The comment content to normalize.
+ * @return {string} The concatenated comment text.
+ */
 function commentText(comment) {
   if (typeof comment === 'string') return comment;
   if (!comment) return '';
   return comment.map((part) => (typeof part === 'string' ? part : (part.text ?? ''))).join('');
 }
 
+/**
+ * Assesses whether a declaration has valid, immediately associated JSDoc prose.
+ * @param {ts.Node} declaration - The declaration to assess.
+ * @param {ts.SourceFile} sourceFile - The source file containing the declaration.
+ * @returns {{description?: string, reason?: string}} The normalized description when documentation is valid, or a reason describing why it is invalid.
+ */
 function assessDocumentation(declaration, sourceFile) {
   const anchor = jsDocAnchor(declaration);
   const docs = ts.getJSDocCommentsAndTags(anchor).filter(ts.isJSDoc);
@@ -108,6 +153,12 @@ function assessDocumentation(declaration, sourceFile) {
   return { description: prose, reason: undefined };
 }
 
+/**
+ * Collects supported declarations exported by a source file.
+ * @param {ts.SourceFile} sourceFile - The source file whose exports are inspected.
+ * @param {ts.TypeChecker} checker - The TypeScript checker used to resolve exported symbols.
+ * @return {{ declaration: ts.Declaration, names: Set<string> }[]} Exported declaration records ordered by source position.
+ */
 function exportedDeclarations(sourceFile, checker) {
   const moduleSymbol = checker.getSymbolAtLocation(sourceFile);
   if (!moduleSymbol) return [];
@@ -136,21 +187,9 @@ function exportedDeclarations(sourceFile, checker) {
 }
 
 /**
- * Collects deterministic JSDoc coverage for declarations exported from the public source roots.
- * The compiler symbol table resolves local export aliases before declarations are counted.
- *
- * @param {{
- *   root?: string;
- *   config?: {
- *     minimumCoverage: number;
- *     minimumExports?: number;
- *     scanRoots: string[];
- *     scanFiles: string[];
- *     extensions: string[];
- *     excludedPathSegments: string[];
- *     excludedPaths: string[];
- *   };
- * }} options
+ * Computes JSDoc coverage metrics for supported declarations exported from configured source files.
+ * @param {{root?: string, config?: object}} [options] - The scan root and optional coverage configuration.
+ * @returns {{minimumCoverage: number, minimumExports: number, coverage: number, documentedExports: number, totalExports: number, scannedFiles: string[], findings: Array<{path: string, line: number, name: string, reason: string}>}} The coverage report and documentation findings.
  */
 export function collectDocstringCoverage({ root = process.cwd(), config: suppliedConfig } = {}) {
   const config = suppliedConfig ?? readConfig(root);
@@ -223,6 +262,9 @@ export function collectDocstringCoverage({ root = process.cwd(), config: supplie
   };
 }
 
+/**
+ * Generates and prints the documentation coverage report, optionally enforcing configured thresholds.
+ */
 function main() {
   const report = collectDocstringCoverage();
   console.log(JSON.stringify(report, null, 2));

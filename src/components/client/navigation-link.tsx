@@ -13,6 +13,13 @@ type NavigationLinkProps = {
   onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
+/**
+ * Determines whether a navigation link matches the current location.
+ *
+ * @param section - The hash fragment associated with the link, or `null` for path-based links.
+ * @param hash - The current URL hash fragment.
+ * @returns `true` if the link matches the current path or section, `false` otherwise.
+ */
 function isNavigationActive(
   pathname: string,
   href: NavigationHref,
@@ -24,7 +31,14 @@ function isNavigationActive(
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Links portfolio routes and exposes the active page or section to assistive technology. */
+/**
+ * Renders a portfolio navigation link with active-state styling and accessibility metadata.
+ *
+ * @param children - The link content
+ * @param className - Additional classes applied to the link
+ * @param href - The portfolio route or section referenced by the link
+ * @param onClick - Optional click handler for the link
+ */
 export function NavigationLink({
   children,
   className,

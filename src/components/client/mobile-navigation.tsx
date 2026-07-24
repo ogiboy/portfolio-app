@@ -27,7 +27,12 @@ type MobileNavigationProps = {
   contactHref: string;
 };
 
-/** Provides an accessible mobile navigation sheet with localized route labels. */
+/**
+ * Renders an accessible mobile navigation sheet with localized route labels.
+ *
+ * @param aboutLabel - Optional label for the About route.
+ * @param contactHref - Destination URL for the contact link.
+ */
 export function MobileNavigation({
   label,
   description,
