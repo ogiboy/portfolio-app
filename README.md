@@ -40,18 +40,19 @@ The local workflow uses the shared Docker containers `sonarqube` and `sonarqube-
 ```bash
 scripts/sonarqube/start-local.sh
 scripts/sonarqube/status-local.sh
-pnpm sonar:local
+pnpm sonar
 scripts/sonarqube/stop-local.sh
 ```
 
-`pnpm sonar:local` runs `pnpm test:coverage`, requires `coverage/lcov.info`, waits for the local
-server, and writes a token-redacted scan log to `.ai/qa/artifacts/sonar/sonar-npm.log`. To reuse an
-existing coverage file, run `SONAR_SKIP_COVERAGE=1 pnpm sonar:local`; it still fails if that LCOV
-file is absent.
+`pnpm sonar` is the short alias for `pnpm sonar:local`. It runs `pnpm test:coverage`, requires
+`coverage/lcov.info`, waits for the local server, and writes a token-redacted scan log to
+`.ai/qa/artifacts/sonar/sonar-npm.log`. To reuse an existing coverage file, run
+`SONAR_SKIP_COVERAGE=1 pnpm sonar`; it still fails if that LCOV file is absent.
 
-The script invokes the project-local `sonar-scanner-npm` binary from `@sonar/scan`. Do not replace
-it with a shell command named `sonar`: current SonarQube CLI installations use that name for the
-separate agent/MCP command surface and do not accept scanner `-D` properties.
+The script invokes the project-local `sonar-scanner-npm` binary from `@sonar/scan` v5. Global v5
+installations expose the same binary name. Do not replace it with the Homebrew `sonar` command:
+`sonarqube-cli` owns that name for its separate agent/MCP surface and does not accept scanner `-D`
+properties.
 
 For the first local scan, create a local SonarQube user token in the web UI and either export it for
 that shell (`SONAR_TOKEN`) or store it in the macOS Keychain under service `codex-sonarqube-token`
