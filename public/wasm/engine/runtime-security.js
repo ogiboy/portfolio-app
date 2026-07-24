@@ -7,6 +7,7 @@
     'Login',
     'SendStaveState',
   ]);
+  const uint32Range = 0x1_0000_0000;
 
   /**
    * Generates a cryptographically secure random integer below an approved exclusive upper bound.
@@ -14,12 +15,12 @@
    * @return {number} A uniformly distributed integer from 0 through maxExclusive - 1.
    */
   function secureRandomInteger(maxExclusive) {
-    if (!Number.isSafeInteger(maxExclusive) || maxExclusive <= 0 || maxExclusive > 0x100000000) {
+    if (!Number.isSafeInteger(maxExclusive) || maxExclusive <= 0 || maxExclusive > uint32Range) {
       throw new RangeError('Random integer bound is not approved.');
     }
 
     const values = new Uint32Array(1);
-    const unbiasedLimit = Math.floor(0x100000000 / maxExclusive) * maxExclusive;
+    const unbiasedLimit = Math.floor(uint32Range / maxExclusive) * maxExclusive;
     do {
       global.crypto.getRandomValues(values);
     } while (values[0] >= unbiasedLimit);
