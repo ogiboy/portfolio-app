@@ -110,6 +110,56 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expect(page.getByRole('link', { name: /arşivi gör/i })).toBeVisible();
   await expectUniqueHeadingText(page);
 
+  await page.goto('/en/about');
+  await expect(page).toHaveTitle('About Halil Oğuzcan Toptaş | H.O.T.');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    'Meet Halil Oğuzcan Toptaş, an Istanbul-based software developer and homelab hobbyist building web interfaces, automation systems, and browser experiments.',
+  );
+  await expect(page.getByRole('heading', { name: 'Halil Oğuzcan Toptaş' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'About' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('link', { name: 'Open LinkedIn' })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/hoguzcantoptas/',
+  );
+  expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
+    '"@type":"ProfilePage"',
+  );
+  expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
+    '"homeLocation":{"@type":"City","name":"Istanbul, Türkiye"}',
+  );
+
+  await page.goto('/tr/about');
+  await expect(page).toHaveTitle('Halil Oğuzcan Toptaş hakkında | H.O.T.');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    'Halil Oğuzcan Toptaş, İstanbul’da web arayüzleri, otomasyon sistemleri ve browser deneyleri geliştiren bir yazılım geliştirici ve homelab meraklısıdır.',
+  );
+  await expect(page.getByRole('heading', { name: 'Halil Oğuzcan Toptaş' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Hakkında' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('link', { name: 'Labı aç' })).toHaveAttribute(
+    'href',
+    '/tr/labs/retro-game-center',
+  );
+  expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
+    '"jobTitle":"Yazılım geliştirici ve homelab meraklısı"',
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: 'Navigasyonu aç' }).click();
+  await expect(page.getByRole('dialog', { name: 'Ana gezinme' })).toBeVisible();
+  await expect(page.getByRole('dialog').getByRole('link', { name: 'Hakkında' })).toHaveAttribute(
+    'href',
+    '/tr/about',
+  );
+  await page.keyboard.press('Escape');
+  await page.setViewportSize({ width: 1280, height: 720 });
+
   await page.goto('/en/projects');
   await expect(page.getByRole('heading', { name: /project archive/i })).toBeVisible();
   await expect(page.getByRole('link', { name: /case/i }).first()).toBeVisible();

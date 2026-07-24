@@ -4,7 +4,7 @@ import { useEffect, useState, type MouseEventHandler, type ReactNode } from 'rea
 import { cn } from '@/lib/utils';
 import { Link, usePathname } from '@/i18n/navigation';
 
-type NavigationHref = '/' | '/projects' | '/labs/retro-game-center' | '/#process';
+type NavigationHref = '/' | '/about' | '/projects' | '/labs/retro-game-center' | '/#process';
 
 type NavigationLinkProps = {
   children: ReactNode;

@@ -14,6 +14,8 @@ export const seoCopy: Record<
   {
     homeTitle: string;
     homeDescription: string;
+    aboutTitle: string;
+    aboutDescription: string;
     projectsDescription: string;
     labTitle: string;
     labDescription: string;
@@ -27,6 +29,9 @@ export const seoCopy: Record<
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
     homeDescription:
       'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
+    aboutTitle: 'About Halil Oğuzcan Toptaş',
+    aboutDescription:
+      'Meet Halil Oğuzcan Toptaş, an Istanbul-based software developer and homelab hobbyist building web interfaces, automation systems, and browser experiments.',
     projectsDescription:
       'Browse frontend projects, API interfaces, utilities, forms, and browser experiments by Halil Oğuzcan Toptaş.',
     labTitle: 'Retro Game Center: DOOM in WebAssembly',
@@ -42,6 +47,9 @@ export const seoCopy: Record<
     homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
     homeDescription:
       'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
+    aboutTitle: 'Halil Oğuzcan Toptaş hakkında',
+    aboutDescription:
+      'Halil Oğuzcan Toptaş, İstanbul’da web arayüzleri, otomasyon sistemleri ve browser deneyleri geliştiren bir yazılım geliştirici ve homelab meraklısıdır.',
     projectsDescription:
       'Halil Oğuzcan Toptaş’ın frontend projelerini, API arayüzlerini, yardımcı araçlarını, formlarını ve browser deneylerini inceleyin.',
     labTitle: 'Retro Game Center: WebAssembly ile DOOM',

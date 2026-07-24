@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import manifest from '@/app/manifest';
 import { serializeJsonLd } from '@/components/seo/json-ld';
 import { projects } from '@/content/projects';
+import { siteCopy } from '@/content/site';
 import {
   createRootMetadata,
   createRouteMetadata,
@@ -12,6 +13,7 @@ import {
 import { siteUrl } from '@/lib/site-url';
 import {
   buildHomeStructuredData,
+  buildAboutStructuredData,
   buildPrivacyStructuredData,
   buildProjectStructuredData,
   buildProjectsStructuredData,
@@ -62,7 +64,30 @@ describe('search metadata', () => {
 
 describe('structured data', () => {
   it('represents the visible person, collection, and project owners', () => {
-    expect(JSON.stringify(buildHomeStructuredData('en'))).toContain(identity.fullName);
+    const home = buildHomeStructuredData('en');
+    const about = buildAboutStructuredData('tr');
+
+    expect(JSON.stringify(home)).toContain('"@type":"WebPage"');
+    expect(JSON.stringify(home)).not.toContain('"@type":"ProfilePage"');
+    expect(JSON.stringify(home)).toContain('"@id":"https://www.oguzcantoptas.com/#person"');
+    expect(about).toMatchObject({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'ProfilePage',
+          inLanguage: 'tr',
+          mainEntity: {
+            '@type': 'Person',
+            name: identity.fullName,
+            alternateName: [identity.knownAs, identity.brand],
+            jobTitle: seoCopy.tr.role,
+            homeLocation: { '@type': 'City', name: 'Istanbul, Türkiye' },
+          },
+        },
+      ],
+    });
+    expect(JSON.stringify(about)).toContain('baş harflerinden geliyor');
+    expect(JSON.stringify(about)).toContain(siteCopy.tr.about.identityBody);
     expect(JSON.stringify(buildProjectsStructuredData('tr'))).toContain(
       `"numberOfItems":${projects.length}`,
     );

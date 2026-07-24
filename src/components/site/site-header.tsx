@@ -26,6 +26,12 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
             {copy.nav.home}
           </NavigationLink>
           <NavigationLink
+            href="/about"
+            className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+          >
+            {copy.nav.about}
+          </NavigationLink>
+          <NavigationLink
             href="/projects"
             className={buttonVariants({ size: 'sm', variant: 'ghost' })}
           >
@@ -52,6 +58,7 @@ export function SiteHeader({ locale }: Readonly<{ locale: Locale }>) {
             openLabel={copy.nav.openMenu}
             closeLabel={copy.nav.closeMenu}
             homeLabel={copy.nav.home}
+            aboutLabel={copy.nav.about}
             projectsLabel={copy.nav.projects}
             labLabel={copy.nav.lab}
             processLabel={copy.nav.process}

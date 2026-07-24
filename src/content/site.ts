@@ -19,6 +19,7 @@ export const siteCopy: LocalizedCopy<{
   nav: {
     label: string;
     home: string;
+    about: string;
     projects: string;
     lab: string;
     process: string;
@@ -49,6 +50,27 @@ export const siteCopy: LocalizedCopy<{
     motionIntro: string;
     contactTitle: string;
     contactIntro: string;
+  };
+  about: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    identityTitle: string;
+    identityBody: string;
+    pathsTitle: string;
+    pathsIntro: string;
+    paths: Array<{
+      title: string;
+      body: string;
+      action: string;
+      target: 'email' | 'linkedin' | 'projects';
+    }>;
+    linksTitle: string;
+    projectsAction: string;
+    labAction: string;
+    githubAction: string;
+    linkedinAction: string;
+    emailAction: string;
   };
   projects: {
     title: string;
@@ -132,6 +154,7 @@ export const siteCopy: LocalizedCopy<{
     nav: {
       label: 'Primary navigation',
       home: 'Home',
+      about: 'About',
       projects: 'Projects',
       lab: 'Lab',
       process: 'Process',
@@ -196,6 +219,43 @@ export const siteCopy: LocalizedCopy<{
       contactTitle: 'Have a website or interface to build?',
       contactIntro:
         'Send the product, portfolio, or landing-page problem. I can help turn it into a buildable scope.',
+    },
+    about: {
+      eyebrow: 'About H.O.T. / Istanbul',
+      title: 'Halil Oğuzcan Toptaş',
+      intro:
+        'I am a software developer and homelab hobbyist in Istanbul. H.O.T. comes from my initials: Halil, Oğuzcan, Toptaş. I build web interfaces, small applications, homelab systems, and browser experiments.',
+      identityTitle: 'The work behind H.O.T.',
+      identityBody:
+        'This portfolio brings together shipped web work, homelab and automation experiments, and browser runtime studies. Each entry keeps its scope, implementation choices, and public evidence close to the result.',
+      pathsTitle: 'Choose a starting point',
+      pathsIntro: 'Start with the route that matches what you need to verify.',
+      paths: [
+        {
+          title: 'Clients',
+          body: 'Send a website, portfolio, or interface problem by email to begin with a concrete scope.',
+          action: 'Email H.O.T.',
+          target: 'email',
+        },
+        {
+          title: 'Recruiters',
+          body: 'Review selected work and connect through LinkedIn for the professional context behind this portfolio.',
+          action: 'Open LinkedIn',
+          target: 'linkedin',
+        },
+        {
+          title: 'Technical visitors',
+          body: 'Inspect the project archive, isolated lab, and public source links for implementation details.',
+          action: 'Browse projects',
+          target: 'projects',
+        },
+      ],
+      linksTitle: 'Public routes and contacts',
+      projectsAction: 'Projects',
+      labAction: 'Open the lab',
+      githubAction: 'GitHub',
+      linkedinAction: 'LinkedIn',
+      emailAction: 'Email',
     },
     projects: {
       title: 'Project archive',
@@ -309,6 +369,7 @@ export const siteCopy: LocalizedCopy<{
     nav: {
       label: 'Ana gezinme',
       home: 'Ana sayfa',
+      about: 'Hakkında',
       projects: 'Projeler',
       lab: 'Lab',
       process: 'Süreç',
@@ -372,6 +433,43 @@ export const siteCopy: LocalizedCopy<{
       contactTitle: 'Geliştirilecek bir web sitesi veya arayüz mü var?',
       contactIntro:
         'Ürün, portföy veya landing page problemini gönderin. Bunu uygulanabilir bir kapsama çevirmeye yardımcı olabilirim.',
+    },
+    about: {
+      eyebrow: 'H.O.T. hakkında / İstanbul',
+      title: 'Halil Oğuzcan Toptaş',
+      intro:
+        'İstanbul’da çalışan bir yazılım geliştirici ve homelab meraklısıyım. H.O.T., adımın baş harflerinden geliyor: Halil, Oğuzcan, Toptaş. Web arayüzleri, küçük uygulamalar, homelab sistemleri ve browser deneyleri geliştiriyorum.',
+      identityTitle: 'H.O.T.’ın arkasındaki işler',
+      identityBody:
+        'Bu portföy yayınlanmış web işlerini, homelab ve otomasyon deneylerini ve browser runtime çalışmalarını bir araya getiriyor. Her kayıt kapsamını, uygulama tercihlerini ve herkese açık kanıtlarını sonuçla birlikte gösteriyor.',
+      pathsTitle: 'Bir başlangıç noktası seçin',
+      pathsIntro: 'Doğrulamak istediğiniz şeye uyan rotadan başlayın.',
+      paths: [
+        {
+          title: 'Müşteriler',
+          body: 'Web sitesi, portföy veya arayüz problemini somut bir kapsamla başlamak için e-posta ile gönderin.',
+          action: 'H.O.T. ile e-posta',
+          target: 'email',
+        },
+        {
+          title: 'İşe alım ekipleri',
+          body: 'Seçili işleri inceleyin ve bu portföyün profesyonel bağlamı için LinkedIn üzerinden bağlantı kurun.',
+          action: 'LinkedIn aç',
+          target: 'linkedin',
+        },
+        {
+          title: 'Teknik ziyaretçiler',
+          body: 'Uygulama ayrıntıları için proje arşivini, izole labı ve herkese açık kaynak bağlantılarını inceleyin.',
+          action: 'Projeleri incele',
+          target: 'projects',
+        },
+      ],
+      linksTitle: 'Herkese açık rotalar ve iletişim',
+      projectsAction: 'Projeler',
+      labAction: 'Labı aç',
+      githubAction: 'GitHub',
+      linkedinAction: 'LinkedIn',
+      emailAction: 'E-posta',
     },
     projects: {
       title: 'Proje arşivi',

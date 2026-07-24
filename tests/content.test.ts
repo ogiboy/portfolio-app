@@ -67,6 +67,8 @@ describe('portfolio content', () => {
     expect(contact.email).toBe('ogi@oguzcantoptas.com');
     expect(siteCopy.en.home.primaryCta).toBeTruthy();
     expect(siteCopy.tr.home.primaryCta).toBeTruthy();
+    expect(siteCopy.en.nav.about).toBe('About');
+    expect(siteCopy.tr.nav.about).toBe('Hakkında');
     expect(siteCopy.en.projects.caseLabel).toBeTruthy();
     expect(siteCopy.tr.projects.caseLabel).toBeTruthy();
     expect(siteCopy.en.projects.archiveLabel).toBe('Archive');
@@ -80,6 +82,12 @@ describe('portfolio content', () => {
     }
     expect(siteCopy.en.privacy.disableAction).toBeTruthy();
     expect(siteCopy.tr.privacy.disableAction).toBeTruthy();
+    expect(siteCopy.en.about.title).toBe('Halil Oğuzcan Toptaş');
+    expect(siteCopy.tr.about.title).toBe('Halil Oğuzcan Toptaş');
+    expect(siteCopy.en.about.intro).toContain('H.O.T.');
+    expect(siteCopy.tr.about.intro).toContain('H.O.T.');
+    expect(siteCopy.en.about.paths).toHaveLength(3);
+    expect(siteCopy.tr.about.paths).toHaveLength(3);
   });
 
   it('avoids banned dash characters in visible copy', () => {

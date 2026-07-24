@@ -17,6 +17,17 @@ function markdownList(items: readonly string[]) {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
+function aboutPathHref(target: 'email' | 'linkedin' | 'projects') {
+  switch (target) {
+    case 'email':
+      return `mailto:${contact.email}`;
+    case 'linkedin':
+      return contact.linkedin;
+    case 'projects':
+      return '/projects';
+  }
+}
+
 function homeMarkdown(locale: Locale): MarkdownDocument {
   const copy = siteCopy[locale];
 
@@ -32,7 +43,23 @@ function homeMarkdown(locale: Locale): MarkdownDocument {
       )
       .join(
         '\n',
-      )}\n\n## ${copy.home.contactTitle}\n\n${copy.home.contactIntro}\n\n- Email: ${contact.email}\n- GitHub: ${contact.github}\n- LinkedIn: ${contact.linkedin}\n\n## Public navigation\n\n- [${copy.nav.projects}](/${locale}/projects)\n- [${copy.nav.lab}](/${locale}/labs/retro-game-center)\n- [Public portfolio API](/api/portfolio)\n`,
+      )}\n\n## ${copy.home.contactTitle}\n\n${copy.home.contactIntro}\n\n- Email: ${contact.email}\n- GitHub: ${contact.github}\n- LinkedIn: ${contact.linkedin}\n\n## Public navigation\n\n- [${copy.nav.about}](/${locale}/about)\n- [${copy.nav.projects}](/${locale}/projects)\n- [${copy.nav.lab}](/${locale}/labs/retro-game-center)\n- [Public portfolio API](/api/portfolio)\n`,
+  };
+}
+
+function aboutMarkdown(locale: Locale): MarkdownDocument {
+  const copy = siteCopy[locale].about;
+
+  return {
+    locale,
+    body: `# ${copy.title}\n\n${copy.intro}\n\n## ${copy.identityTitle}\n\n${copy.identityBody}\n\n## ${copy.pathsTitle}\n\n${copy.pathsIntro}\n\n${copy.paths
+      .map(
+        (path) =>
+          `### ${path.title}\n\n${path.body}\n\n[${path.action}](${aboutPathHref(path.target)})`,
+      )
+      .join(
+        '\n\n',
+      )}\n\n## ${copy.linksTitle}\n\n- [${copy.projectsAction}](/${locale}/projects)\n- [${copy.labAction}](/${locale}/labs/retro-game-center)\n- [${copy.githubAction}](${contact.github})\n- [${copy.linkedinAction}](${contact.linkedin})\n- [${copy.emailAction}](mailto:${contact.email})\n`,
   };
 }
 
@@ -88,6 +115,10 @@ export function getAgentMarkdown(pathname: string): MarkdownDocument | undefined
 
   if (segments.length === 1) {
     return homeMarkdown(locale);
+  }
+
+  if (segments[1] === 'about' && segments.length === 2) {
+    return aboutMarkdown(locale);
   }
 
   if (segments[1] === 'projects' && segments.length === 2) {

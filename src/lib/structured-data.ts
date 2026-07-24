@@ -15,7 +15,7 @@ const person = {
   '@id': personId,
   name: identity.fullName,
   alternateName: [identity.knownAs, identity.brand],
-  url: siteUrl('/en'),
+  url: siteUrl('/en/about'),
   sameAs: [contact.github, contact.linkedin],
   knowsAbout: [
     'Web development',
@@ -28,12 +28,9 @@ const person = {
   ],
 } satisfies JsonLdValue;
 
-function profileUrl(locale: Locale) {
-  return siteUrl(`/${locale}`);
-}
-
 export function buildHomeStructuredData(locale: Locale): JsonLdValue {
   const copy = seoCopy[locale];
+  const url = siteUrl(`/${locale}`);
 
   return {
     '@context': 'https://schema.org',
@@ -48,17 +45,43 @@ export function buildHomeStructuredData(locale: Locale): JsonLdValue {
         author: { '@id': personId },
       },
       {
-        '@type': 'ProfilePage',
-        '@id': `${profileUrl(locale)}#profile`,
-        url: profileUrl(locale),
+        '@type': 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
         name: copy.homeTitle,
         description: copy.homeDescription,
         inLanguage: locale,
         isPartOf: { '@id': websiteId },
+        author: { '@id': personId },
+      },
+    ],
+  };
+}
+
+export function buildAboutStructuredData(locale: Locale): JsonLdValue {
+  const copy = siteCopy[locale].about;
+  const url = siteUrl(`/${locale}/about`);
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ProfilePage',
+        '@id': `${url}#profile`,
+        url,
+        name: seoCopy[locale].aboutTitle,
+        description: seoCopy[locale].aboutDescription,
+        inLanguage: locale,
+        isPartOf: { '@id': websiteId },
         mainEntity: {
           ...person,
-          jobTitle: copy.role,
-          description: siteCopy[locale].home.subtitle,
+          jobTitle: seoCopy[locale].role,
+          description: copy.identityBody,
+          disambiguatingDescription: copy.intro,
+          homeLocation: {
+            '@type': 'City',
+            name: 'Istanbul, Türkiye',
+          },
         },
       },
     ],

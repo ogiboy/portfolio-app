@@ -51,6 +51,11 @@ describe('markdown negotiation', () => {
 
   it('renders only the supported localized portfolio paths', async () => {
     expect(getAgentMarkdown('/en')?.locale).toBe('en');
+    expect(getAgentMarkdown('/en/about')?.body).toContain('H.O.T. comes from my initials');
+    expect(getAgentMarkdown('/tr/about')?.body).toContain(
+      'H.O.T., adımın baş harflerinden geliyor',
+    );
+    expect(getAgentMarkdown('/en/about')?.body).toContain('(/en/labs/retro-game-center)');
     expect(getAgentMarkdown('/tr/projects')).toMatchObject({ locale: 'tr' });
     expect(getAgentMarkdown('/en/projects/graduation-project')?.body).toContain(
       'Graduation Project',

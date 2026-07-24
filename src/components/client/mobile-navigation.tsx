@@ -19,6 +19,7 @@ type MobileNavigationProps = {
   openLabel: string;
   closeLabel: string;
   homeLabel: string;
+  aboutLabel?: string;
   projectsLabel: string;
   labLabel: string;
   processLabel: string;
@@ -32,6 +33,7 @@ export function MobileNavigation({
   openLabel,
   closeLabel,
   homeLabel,
+  aboutLabel,
   projectsLabel,
   labLabel,
   processLabel,
@@ -61,6 +63,15 @@ export function MobileNavigation({
           >
             {homeLabel}
           </NavigationLink>
+          {aboutLabel ? (
+            <NavigationLink
+              href="/about"
+              className={buttonVariants({ variant: 'secondary' })}
+              onClick={() => setOpen(false)}
+            >
+              {aboutLabel}
+            </NavigationLink>
+          ) : null}
           <NavigationLink
             href="/projects"
             className={buttonVariants({ variant: 'secondary' })}
