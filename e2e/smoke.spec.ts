@@ -283,7 +283,7 @@ test('keeps the hero Signal arrival finite and removes it for reduced motion', a
 });
 
 test('turns a WASM runtime asset 404 into an explicit retry state', async ({ page }) => {
-  await page.route('**/wasm/engine/main.ttf', (route) =>
+  await page.route('**/wasm/engine/main.ttf*', (route) =>
     route.fulfill({ body: 'missing', contentType: 'text/plain', status: 404 }),
   );
   await page.goto('/en/labs/retro-game-center');
@@ -363,12 +363,13 @@ test('serves sandbox-compatible WASM asset headers', async ({ request }) => {
   expect(manifest.status()).toBe(200);
   expect(manifest.headers()['access-control-allow-origin']).toBe('*');
   expect(manifest.headers()['cross-origin-resource-policy']).toBe('cross-origin');
-  expect(manifest.headers()['cache-control']).toContain('max-age=60');
+  expect(manifest.headers()['cache-control']).toContain('max-age=0');
 
   const runtime = await request.get('/wasm/engine/main.wasm');
   expect(runtime.status()).toBe(200);
   expect(runtime.headers()['content-type']).toContain('application/wasm');
-  expect(runtime.headers()['cache-control']).toContain('immutable');
+  expect(runtime.headers()['cache-control']).toContain('max-age=3600');
+  expect(runtime.headers()['cache-control']).not.toContain('immutable');
 
   const frame = await request.get('/wasm/engine/index.html');
   expect(frame.headers()['content-security-policy']).toContain('wasm-unsafe-eval');

@@ -114,7 +114,7 @@ class InputController {
     });
 
     this.manager.on('move', (evt, data) => {
-      window['myApp'].rivetsData.hadNipple = true;
+      window['myApp'].state.hadNipple = true;
       this.nippleForce = data.force;
 
       //used for directional buttons
@@ -351,8 +351,8 @@ class InputController {
   }
 
   menuTouch(event) {
-    $('#mobileButtons').show();
-    $('#menuDiv').hide();
+    setElementVisible('mobileButtons', true);
+    setElementVisible('menuDiv', false);
   }
 
   mobilePressA(event) {
@@ -1004,5 +1004,6 @@ window['myApp'].setupInputController();
 
 var script = document.createElement('script');
 script.type = 'text/javascript';
-script.src = 'main.js';
+script.src =
+  'main.js?v=' + encodeURIComponent(window.PORTAL_RUNTIME_REVISION || 'doswasmx-v0.3');
 document.head.appendChild(script);

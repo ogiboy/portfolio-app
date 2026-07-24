@@ -1,0 +1,30 @@
+{
+  "scanRoots": ["src", "tests", "scripts", ".ai", ".github", "public/wasm/engine"],
+  "limits": {
+    ".css": 520,
+    ".js": 260,
+    ".json": 260,
+    ".md": 520,
+    ".mjs": 360,
+    ".ts": 340,
+    ".tsx": 260,
+    ".yaml": 260,
+    ".yml": 260
+  },
+  "debtCeilings": {
+    "public/wasm/engine/input_controller.js": 1010,
+    "public/wasm/engine/script.js": 2873,
+    "src/content/projects.ts": 359,
+    "src/content/site.ts": 583
+  },
+  "generatedArtifacts": {
+    "public/wasm/engine/main.js": {
+      "sha256": "d6dd83fa43d37b3510ae5ee09307a46fbf4c4ae1afba6d64ca0e7cac64d3f0c2",
+      "source": "DosWasmX v0.3 generated Emscripten glue"
+    },
+    "public/wasm/engine/main.wasm": {
+      "sha256": "8c10572678e46fd1fd97d0b23eca8589c8b55aa82e4e9df9fb58160c2bd4631a",
+      "source": "DosWasmX v0.3 generated WebAssembly binary"
+    }
+  }
+}

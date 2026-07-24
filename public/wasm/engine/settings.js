@@ -51,8 +51,8 @@
     const start = Date.now();
     return new Promise((resolve, reject) => {
       const tick = () => {
-        if (window.myApp && window.myApp.rivetsData) {
-          if (!window.myApp.rivetsData.moduleInitializing) {
+        if (window.myApp && window.myApp.state) {
+          if (!window.myApp.state.moduleInitializing) {
             resolve(window.myApp);
             return;
           }
@@ -72,6 +72,11 @@
 
   const basename = (path) => path.split('/').pop() || path;
 
+  const runtimeRevision = (manifest) => {
+    const revision = manifest?.runtime?.revision;
+    return typeof revision === 'string' && revision.length > 0 ? revision : 'doswasmx-v0.3';
+  };
+
   const bootGame = async (game) => {
     const app = window.myApp;
     if (!app || !game) return;
@@ -85,7 +90,7 @@
         : `${normalized}\n`;
     }
     if (game.cpu) {
-      app.rivetsData.cpu = game.cpu;
+      app.state.cpu = game.cpu;
     }
     if (game.ram) {
       app.ram = Number(game.ram);
@@ -98,22 +103,23 @@
     const total = files.length;
     let loaded = 0;
 
-    app.multiFiles = [];
-
-    for (const filePath of files) {
-      const target = `/wasm/${normalizePath(filePath)}`;
-      const response = await fetch(target);
-      if (!response.ok) {
-        throw new Error(`Failed to load ${target}`);
-      }
-      const buffer = await response.arrayBuffer();
-      app.multiFiles.push({
-        name: basename(filePath),
-        data: new Uint8Array(buffer),
-      });
-      loaded += 1;
-      updateProgress(loaded, total);
-    }
+    app.multiFiles = await Promise.all(
+      files.map(async (filePath) => {
+        const target = `/wasm/${normalizePath(filePath)}`;
+        const response = await fetch(target);
+        if (!response.ok) {
+          throw new Error(`Failed to load ${target}`);
+        }
+        const buffer = await response.arrayBuffer();
+        const file = {
+          name: basename(filePath),
+          data: new Uint8Array(buffer),
+        };
+        loaded += 1;
+        updateProgress(loaded, total);
+        return file;
+      }),
+    );
 
     updateProgress(total, total);
     await app.parseMultipleFiles();
@@ -134,8 +140,9 @@
         window.ROMLIST = window.ROMLIST || [];
       }
       window.PORTAL_MANIFEST = manifest || null;
+      window.PORTAL_RUNTIME_REVISION = runtimeRevision(manifest);
 
-      await loadScript(`script.js?v=${Date.now()}`);
+      await loadScript(`script.js?v=${encodeURIComponent(window.PORTAL_RUNTIME_REVISION)}`);
       await waitForAppReady();
 
       const gameId = params.get('game') || manifest?.defaultGame || null;

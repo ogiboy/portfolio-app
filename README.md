@@ -16,6 +16,8 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 
 - `pnpm format:check`: Prettier plus Tailwind class sorting.
 - `pnpm lint`: ESLint with Next.js and Prettier compatibility.
+- `pnpm qa:modularity`: Reject new oversized modules, ratchet known debt downward, and verify the
+  pinned generated WASM artefacts by digest.
 - `pnpm qa:typescript`: Verify the pinned TypeScript 7/native and TypeScript 6 compatibility toolchains.
 - `pnpm typecheck`: TypeScript 7/native verification.
 - `pnpm typecheck:compat`: TypeScript 6 compatibility verification.
@@ -42,7 +44,7 @@ Start governance work from the [operating guide](AGENTS.md), [owner map](.ai/arc
 
 ## WASM Game Center
 
-The live WASM game center is available at `/en/labs/retro-game-center` and `/tr/labs/retro-game-center`. It has no separate or stateful backend: it uses static assets, lazy iframe boot, and a thin, read-only `/wasm/*` Next.js Route Handler for MIME and cache headers. Django, Docker, and Kubernetes remain deferred unless durable scores, authenticated saves, ROM administration, or a broader operations showcase becomes a real product requirement.
+The live WASM game center is available at `/en/labs/retro-game-center` and `/tr/labs/retro-game-center`. It has no separate or stateful backend: it uses versioned static assets, lazy iframe boot, and a scoped `next.config.mjs` header policy for MIME, cache, and sandbox support. The pinned DosWasmX engine and third-party notices live beside the runtime. Django, Docker, and Kubernetes remain deferred unless durable scores, authenticated saves, ROM administration, or a broader operations showcase becomes a real product requirement.
 
 ## Agent Discovery
 
@@ -76,12 +78,14 @@ Before a push or release, run:
 pnpm format:check
 pnpm lint
 pnpm qa:typescript
+pnpm qa:modularity
 pnpm typecheck
 pnpm typecheck:compat
 pnpm release:check
 pnpm test
 pnpm test:e2e
 pnpm build
+pnpm qa:bundle-budget
 pnpm audit --prod --audit-level high
 ```
 

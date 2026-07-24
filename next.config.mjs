@@ -7,11 +7,11 @@ const withNextIntl = createNextIntlPlugin({
 });
 
 const projectRoot = dirname(fileURLToPath(import.meta.url));
-const immutableWasmCache = 'public, max-age=31536000, immutable';
-const mutableWasmCache = 'public, max-age=60, stale-while-revalidate=86400';
+const wasmAssetCache = 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800';
+const wasmControlCache = 'public, max-age=0, must-revalidate';
 const wasmFramePolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
+  "script-src 'self' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "connect-src 'self' http://127.0.0.1:* http://localhost:* https://oguzcantoptas.com https://www.oguzcantoptas.com https://*.vercel.app",
   "font-src 'self'",
@@ -37,15 +37,19 @@ const nextConfig = {
         source: '/wasm/:path*',
         headers: [
           { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Cache-Control', value: immutableWasmCache },
+          { key: 'Cache-Control', value: wasmAssetCache },
           { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
       ...mutableWasmFiles.map((source) => ({
         source,
-        headers: [{ key: 'Cache-Control', value: mutableWasmCache }],
+        headers: [{ key: 'Cache-Control', value: wasmControlCache }],
       })),
+      {
+        source: '/wasm/engine/main.wasm',
+        headers: [{ key: 'Content-Type', value: 'application/wasm' }],
+      },
       {
         source: '/wasm/engine/index.html',
         headers: [{ key: 'Content-Security-Policy', value: wasmFramePolicy }],

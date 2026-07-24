@@ -26,3 +26,11 @@ Add the WASM game center to the portfolio roadmap as an isolated live-demo lab. 
 - The current engine HTML still references CDN-hosted `jquery` and `rivets` scripts inside the sandboxed frame; self-hosting those vendor scripts is the next hardening step when package registry access is available.
 - Django, Docker, and Kubernetes remain optional future architecture, not blockers for the first live demo.
 - Browser QA hardened the iframe sandbox after implementation: `allow-same-origin` was removed, fullscreen is delegated through the iframe `allow` attribute, and Playwright smoke now asserts the sandbox does not include same-origin escape.
+
+## Amendment
+
+The delivery-detail bullet requiring a Route Handler was superseded on 2026-07-24 by
+[`2026-07-24-wasm-runtime-modernization.md`](2026-07-24-wasm-runtime-modernization.md). The product
+boundary remains unchanged; static Next.js/Vercel delivery now owns `/wasm/*`, with one effective
+header policy in `next.config.mjs`. That modernization also retired the inherited jQuery and Rivets
+wrapper dependencies after their live DOM ownership was proven unnecessary.

@@ -70,6 +70,10 @@ jobs:
         id: typescript_toolchain
         run: pnpm qa:typescript
 
+      - name: Modularity gate
+        id: modularity
+        run: pnpm qa:modularity
+
       - name: Typecheck
         id: typecheck
         run: pnpm typecheck
@@ -126,6 +130,7 @@ jobs:
             echo "| --- | --- |"
             echo "| Format | ${{ steps.format.outcome }} |"
             echo "| Lint | ${{ steps.lint.outcome }} |"
+            echo "| Modularity | ${{ steps.modularity.outcome }} |"
             echo "| Typecheck | ${{ steps.typecheck.outcome }} |"
             echo "| Bundle budget | ${{ steps.bundle_budget.outcome }} |"
             echo "| Release policy | ${{ steps.release.outcome }} |"

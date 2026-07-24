@@ -25,6 +25,8 @@
     "start": "next start",
     "lint": "eslint .",
     "qa:bundle-budget": "node scripts/qa/bundle-budget.mjs",
+    "qa:modularity": "node scripts/qa/modularity-gate.mjs --fail-on-findings",
+    "qa:modularity:report": "node scripts/qa/modularity-gate.mjs",
     "qa:typescript": "node scripts/qa/typescript-toolchain.mjs",
     "typecheck": "tsc --noEmit",
     "typecheck:compat": "tsc6 --noEmit",
@@ -37,7 +39,7 @@
     "release:check": "node scripts/release/release-state.ts --check",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "ci": "pnpm format:check && pnpm lint && pnpm qa:typescript && pnpm typecheck && pnpm typecheck:compat && pnpm release:check && pnpm test && pnpm test:e2e && pnpm build && pnpm qa:bundle-budget && pnpm audit"
+    "ci": "pnpm format:check && pnpm lint && pnpm qa:typescript && pnpm qa:modularity && pnpm typecheck && pnpm typecheck:compat && pnpm release:check && pnpm test && pnpm test:e2e && pnpm build && pnpm qa:bundle-budget && pnpm audit"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
