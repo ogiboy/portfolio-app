@@ -1,11 +1,11 @@
 # Checkpoint: Portfolio Overhaul and Agent Readiness
 
 Status: active; PR #29 and stacked alive-experience PR #30 are merged. PR #31 remains open on its
-older remote head while the locally accepted review, governance, quality, SonarQube, and WASM
-runtime-security closure is prepared for push. Hosted checks, preview/browser QA, owner approval,
-merge, and production evidence for that successor remain pending.
+older remote head while the locally accepted review, governance, quality, SonarQube, modularity, and
+WASM runtime-security closure is prepared for push. Hosted checks, preview/browser QA, owner
+approval, merge, and production evidence for that successor remain pending.
 
-Updated: 2026-07-24T06:47:46+03:00
+Updated: 2026-07-24T07:41:03+03:00
 
 Objective (immutable until closure): deliver the approved public EN/TR developer and homelab
 portfolio overhaul, H.O.T. identity, isolated WASM lab, rigorous project governance, truthful search
@@ -25,15 +25,17 @@ separately proven; Search Console/Sentry and unsupported protocol surfaces are n
 unless their prerequisites and external evidence exist.
 
 Worktree / branch / commit: repository worktree identifier `dce4` / `feat/alive-interactions` /
-clean exact source `5697ccac7748b0521d0ca30e1c47e8d45893bebd`.
+clean exact implementation source `d6b19ab3332c4e0ee1b116fdbca044379afa4c06` before this
+evidence-only successor.
 
-Last completed slice / commit: `5697cca docs: clarify sonar scanner invocation`; preceding commits
-`7517f1b`, `5346bd5`, `66903a0`, `9d8ca17`, `5489d4a`, and `dc830e1` close runtime security,
-review, governance, quality, scanner, and reporter work.
+Last completed slice / commit: `d6b19ab refactor: simplify docstring analysis`; the closure from
+`623a94b` through `d6b19ab` verifies review findings, preserves requested documentation, narrows
+Sonar ownership, extracts authored WASM adapters, splits oversized modules, and closes every local
+Sonar issue without weakening the 80% documentation or coverage gates.
 
-Current task: commit this source-bound evidence successor, run the complete package gate on that
-docs-only tip, push it to PR #31's remote head `chore/dependency-cooldown`, refresh the PR body, and
-reconcile hosted checks without merging.
+Current task: commit this source-bound evidence successor, run the complete package gate and local
+Sonar analysis on that docs-only tip, push it to PR #31's remote head
+`chore/dependency-cooldown`, refresh the PR body, and reconcile hosted checks without merging.
 
 Completed: PR #29 merged to `main`; PR #30 merged its alive P0 stack into
 `chore/dependency-cooldown`; persistent dark mode, person-first EN/TR content, SEO/discovery fixes,
@@ -43,14 +45,18 @@ against current code and the valid findings were fixed. The WASM shell now valid
 cloud-save routes, target origins, and cryptographic randomness through a tested helper boundary.
 The repository enforces 80% Vitest coverage across all four metrics, 80% JSDoc coverage with a
 100-export minimum, complete CodeRabbit schema coverage, local Docker SonarQube, and CI-based
-SonarQube Cloud analysis.
+SonarQube Cloud analysis. Sonar excludes only the pinned legacy `script.js` and
+`input_controller.js` compatibility wrappers; generated Emscripten artifacts retain their prior
+boundary, while authored runtime security, settings, cloud-save adapters, and future extracted
+modules remain analyzed. Excluded wrappers retain syntax, security-pattern, browser,
+static-delivery, and no-growth modularity gates.
 
-Pending: evidence successor and exact-tip gate; PR #31 push, hosted checks, preview/browser review,
-owner approval, merge, and production verification; later search authority, backlink, field telemetry,
-and explicitly accepted observability work.
+Pending: evidence successor and exact-tip package/Sonar gates; PR #31 push, hosted checks,
+preview/browser review, owner approval, merge, and production verification; later search authority,
+backlink, field telemetry, and explicitly accepted observability work.
 
-Owned dirty files: this checkpoint, the 2026-07-24 daily log, SonarQube decision, Aegis quality
-evidence, owner-map, index, and README while the evidence successor is prepared.
+Owned dirty files: this checkpoint, the 2026-07-24 daily log, Aegis index, and WASM analysis
+closure evidence while this evidence-only successor is prepared.
 
 Unrelated changes: none known. User-owned project capability, component, dependency, and encrypted
 dotenv-vault changes were explicitly authorized for inclusion and remain preserved in branch history.
@@ -66,22 +72,24 @@ Required gates / delivery expectations: before push run `pnpm format:check`, `pn
 `pnpm qa:bundle-budget`, and `pnpm audit --prod --audit-level high`; then collect pushed,
 hosted-check, preview, browser, review, merge, and production evidence independently.
 
-Evidence: clean exact source `5697ccac7748b0521d0ca30e1c47e8d45893bebd` completed
-`pnpm run ci` from `2026-07-24T06:46:18+03:00` through `2026-07-24T06:47:04+03:00` on macOS with
-Node 24.16.0 and pnpm 11.17.0: formatting, ESLint, dual TypeScript toolchains, 86.92% JSDoc coverage,
-modularity/release checks, 29 Vitest files / 138 tests, 88.70% statements / 80.93% branches /
-86.97% functions / 90.00% lines, 22 Playwright journeys, 64 generated pages, bundle budgets, and no
-known production vulnerabilities. The same commit completed local SonarQube analysis at
-`2026-07-24T06:45:58+03:00` with project key `portfolio-app`, SCM revision `5697cca`, 131 indexed
-files, and Quality Gate `PASSED`. The token-redacted raw log remains ignored under
-`.ai/qa/artifacts/sonar/sonar-npm.log`. Detailed evidence lives in
-`docs/aegis/work/2026-07-24-quality-and-sonar/90-evidence.md`.
+Evidence: clean source `7706378814c386bd9247d160d1ac03fae6a50500` completed `pnpm run ci` by
+`2026-07-24T07:29:28+03:00` on macOS with Node 24.16.0 and pnpm 11.17.0: formatting, ESLint, dual
+TypeScript toolchains, 91.59% JSDoc coverage, zero modularity findings, 32 Vitest files / 148 tests,
+88.98% statements / 81.35% branches / 86.97% functions / 90.31% lines, 22 Playwright journeys, 64
+generated pages, bundle budgets, and no known production vulnerabilities. Later focused fixes closed
+the scanner findings without deleting documentation or weakening gates. Exact implementation source
+`d6b19ab3332c4e0ee1b116fdbca044379afa4c06` completed local SonarQube analysis at
+`2026-07-24T07:38:38+03:00`: project `portfolio-app`, 137 indexed files, new coverage 86.5%, new
+violations 0, total open issues 0, new duplicated-lines density 0.0%, and Quality Gate `PASSED`.
+The token-redacted raw log remains ignored under `.ai/qa/artifacts/sonar/sonar-npm.log`. Detailed
+successor evidence lives in
+`docs/aegis/work/2026-07-24-quality-and-sonar/91-wasm-analysis-closure.md`.
 
-Hosted state: `gh pr view 31 --json ...` at `2026-07-24T06:47:46+03:00` reports PR #31 open and
-mergeable on remote head `dc830e1e9dcd6141b8040160ad1615fccfafb196`; its historical SonarCloud
-check failed and does not describe local head `5697cca`. SonarQube Cloud Automatic Analysis is
-disabled and the replacement CI-based analysis has not run remotely yet. No hosted green state is
-inferred.
+Hosted state: `gh pr view 31 --json ...` at `2026-07-24T07:41:03+03:00` reports PR #31 open on
+remote head `4623479d40758cee7a0107981b538d7c86d32f16`; its Verify, CircleCI, and SonarCloud checks
+failed and do not describe local implementation head `d6b19ab`. CodeQL and Vercel succeeded only
+for that older remote source. SonarQube Cloud Automatic Analysis is disabled and the replacement
+CI-based analysis has not run remotely for the local successor. No hosted green state is inferred.
 
 Blockers: PR #31 must remain unmerged until its exact pushed head receives required hosted checks,
 preview/browser evidence, and owner approval. Production and field-performance targets cannot be
@@ -98,8 +106,9 @@ Keep the retired dashboard URL as compatibility-only redirect behavior. Do not i
 `auth.md`, an MCP server card, A2A/MCP DNS-AID, Django, Kubernetes, custom analytics events, Sentry,
 or a Cloudflare Worker without accepted prerequisites. Local Docker is development tooling only.
 
-Next action: commit this evidence successor, run the complete package gate on its exact tip, push to
-PR #31, update the PR metadata, and reconcile every resulting hosted/preview check before handoff.
+Next action: commit this evidence successor, run the complete package and local Sonar gates on its
+exact tip, push to PR #31, update the PR metadata, and reconcile every resulting hosted/preview
+check before handoff.
 
 Closure / archive condition: archive only after PR #31 is owner-approved and merged with hosted
 evidence, the intended production deployment is identified, and all required production journeys and

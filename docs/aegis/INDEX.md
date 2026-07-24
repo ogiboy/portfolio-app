@@ -51,5 +51,6 @@
 - `work/2026-07-24-quality-and-sonar/10-intent.md`: Coverage, documentation, review automation, and dual SonarQube ownership intent.
 - `work/2026-07-24-quality-and-sonar/20-checkpoint.md`: Dated pre-push source and provider boundary.
 - `work/2026-07-24-quality-and-sonar/90-evidence.md`: Exact-source local gates, scanner evidence, and pending hosted delivery classes.
+- `work/2026-07-24-quality-and-sonar/91-wasm-analysis-closure.md`: Successor evidence for the narrow legacy-WASM Sonar boundary, modular extraction, and zero-issue local gate.
 
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.
