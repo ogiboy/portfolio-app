@@ -46,4 +46,10 @@
 - `work/2026-07-24-alive-experience/20-checkpoint.md`: Dated P0 baseline and stacked-delivery boundary.
 - `work/2026-07-24-alive-experience/90-evidence.md`: Exact-source P0 gates, browser, performance, and pending delivery evidence.
 
+## Quality and SonarQube Closure
+
+- `work/2026-07-24-quality-and-sonar/10-intent.md`: Coverage, documentation, review automation, and dual SonarQube ownership intent.
+- `work/2026-07-24-quality-and-sonar/20-checkpoint.md`: Dated pre-push source and provider boundary.
+- `work/2026-07-24-quality-and-sonar/90-evidence.md`: Exact-source local gates, scanner evidence, and pending hosted delivery classes.
+
 Mutable workstream status exists only in `.ai/checkpoints/portfolio-overhaul.md`.

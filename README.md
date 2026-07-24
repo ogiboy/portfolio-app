@@ -16,12 +16,15 @@ Open [http://localhost:3000/en](http://localhost:3000/en).
 
 - `pnpm format:check`: Prettier plus Tailwind class sorting.
 - `pnpm lint`: ESLint with Next.js and Prettier compatibility.
+- `pnpm qa:docstrings`: Enforce at least 80% JSDoc coverage across the configured public export
+  surface.
 - `pnpm qa:modularity`: Reject new oversized modules, ratchet known debt downward, and verify the
   pinned generated WASM artefacts by digest.
 - `pnpm qa:typescript`: Verify the pinned TypeScript 7/native and TypeScript 6 compatibility toolchains.
 - `pnpm typecheck`: TypeScript 7/native verification.
 - `pnpm typecheck:compat`: TypeScript 6 compatibility verification.
 - `pnpm test`: Vitest content and unit checks.
+- `pnpm test:coverage`: Vitest with 80% statement, branch, function, and line thresholds.
 - `pnpm test:e2e`: Playwright public-route smoke checks.
 - `pnpm build`: Next.js production build through Webpack.
 - `pnpm build:turbopack`: Explicit follow-up check for the Turbopack production build path.
@@ -110,11 +113,12 @@ Before a push or release, run:
 pnpm format:check
 pnpm lint
 pnpm qa:typescript
+pnpm qa:docstrings
 pnpm qa:modularity
 pnpm typecheck
 pnpm typecheck:compat
 pnpm release:check
-pnpm test
+pnpm test:coverage
 pnpm test:e2e
 pnpm build
 pnpm qa:bundle-budget

@@ -13,7 +13,10 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - `src/lib`: Agent-discovery payload builders and shared server-safe helpers.
 - `public/wasm`, `next.config.mjs`, and the isolated lab route: pinned WASM assets, static delivery
   headers, and the explicit-intent browser boundary.
-- `.github/workflows/ci.yml` and `package.json`: CI and local delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
+- `.github/workflows/ci.yml`, `.github/workflows/sonar.yml`, and `package.json`: CI and local
+  delivery-gate owners. Hosted check truth belongs to the provider, not to these files.
+- `sonar-project.properties`, `.sonarcloud.properties`, and `scripts/sonarqube`: Separate local
+  SonarQube and hosted SonarQube Cloud identities with a shared authored-source and LCOV boundary.
 - `DESIGN.md` plus `.ai/design-system.instructions.md`: Canonical design contract and its
   implementation routing. The root contract wins on visual or interaction drift.
 - `.ai/development-preferences.instructions.md` and `.ai/versioning.instructions.md`: Local
@@ -49,3 +52,5 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
   and sessions cannot own product state, source truth, or release evidence.
 - Application commands follow `.nvmrc`, `.node-version`, and `package.json`. A separately installed
   development tool may use another Node runtime without changing the application engine contract.
+- The project-local `sonar-scanner-npm` binary owns source analysis. A host command named `sonar`
+  belongs to the separate SonarQube CLI/MCP surface and must not be substituted for the scanner.
