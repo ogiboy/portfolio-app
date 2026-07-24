@@ -46,6 +46,13 @@ function lineCount(path) {
   return readFileSync(path, 'utf8').split(/\r?\n/).length;
 }
 
+function moduleLimit(relativePath, extension) {
+  const matchingPath = Object.keys(baseline.pathLimits ?? {})
+    .filter((path) => relativePath === path || relativePath.startsWith(path))
+    .sort((left, right) => right.length - left.length)[0];
+  return matchingPath ? baseline.pathLimits[matchingPath] : baseline.limits[extension];
+}
+
 function sha256(path) {
   return createHash('sha256').update(readFileSync(path)).digest('hex');
 }
@@ -65,11 +72,16 @@ for (const scanRoot of baseline.scanRoots) {
 
     scannedFiles += 1;
     const lines = lineCount(path);
-    const limit = baseline.limits[extname(path)];
+    const limit = moduleLimit(relativePath, extname(path));
     const debtCeiling = baseline.debtCeilings[relativePath];
 
     if (lines <= limit) {
-      if (debtCeiling !== undefined) resolvedRatchets.push({ path: relativePath, lines, limit });
+      if (debtCeiling !== undefined) {
+        resolvedRatchets.push({ path: relativePath, lines, limit });
+        findings.push(
+          `${relativePath}: debt is resolved at ${lines} lines; remove its stale baseline ceiling`,
+        );
+      }
       continue;
     }
 
@@ -79,11 +91,36 @@ for (const scanRoot of baseline.scanRoots) {
     }
 
     ratchets.push({ path: relativePath, lines, limit, ceiling: debtCeiling });
+    if (lines < debtCeiling) {
+      findings.push(
+        `${relativePath}: debt fell to ${lines} lines; lower its ${debtCeiling}-line baseline ceiling in the same change`,
+      );
+      continue;
+    }
     if (lines > debtCeiling) {
       findings.push(
         `${relativePath}: ${lines} lines exceeds its ${debtCeiling}-line debt ceiling; split ownership instead of raising the ceiling`,
       );
     }
+  }
+}
+
+for (const [relativePath, expectedNames] of Object.entries(baseline.generatedAbi ?? {})) {
+  const path = resolve(root, relativePath);
+  if (!existsSync(path)) continue;
+
+  const actualNames = [
+    ...new Set(
+      [...readFileSync(path, 'utf8').matchAll(/myApp\.([A-Za-z_$][\w$]*)/g)].map(
+        (match) => match[1],
+      ),
+    ),
+  ].sort((left, right) => left.localeCompare(right));
+  const expected = [...expectedNames].sort((left, right) => left.localeCompare(right));
+  if (JSON.stringify(actualNames) !== JSON.stringify(expected)) {
+    findings.push(
+      `${relativePath}: generated myApp ABI changed; review the compatibility adapter before updating the baseline`,
+    );
   }
 }
 
@@ -111,6 +148,7 @@ const report = {
   resolvedRatchets,
   artifacts,
   limits: baseline.limits,
+  pathLimits: baseline.pathLimits,
 };
 
 console.log(JSON.stringify(report, null, 2));

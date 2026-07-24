@@ -54,6 +54,10 @@ jobs:
           command: pnpm qa:typescript
 
       - run:
+          name: Modularity gate
+          command: pnpm qa:modularity
+
+      - run:
           name: Typecheck
           command: pnpm typecheck
 

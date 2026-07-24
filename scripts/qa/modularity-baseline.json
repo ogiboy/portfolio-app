@@ -11,9 +11,15 @@
     ".yaml": 260,
     ".yml": 260
   },
+  "pathLimits": {
+    "src/components/client/wasm-game-frame.tsx": 180,
+    "src/components/client/wasm-runtime/": 240,
+    "src/lib/wasm/": 240
+  },
   "debtCeilings": {
     "public/wasm/engine/input_controller.js": 1010,
     "public/wasm/engine/script.js": 2873,
+    "src/components/client/wasm-game-frame.tsx": 256,
     "src/content/projects.ts": 359,
     "src/content/site.ts": 583
   },
@@ -26,5 +32,24 @@
       "sha256": "8c10572678e46fd1fd97d0b23eca8589c8b55aa82e4e9df9fb58160c2bd4631a",
       "source": "DosWasmX v0.3 generated WebAssembly binary"
     }
+  },
+  "generatedAbi": {
+    "public/wasm/engine/main.js": [
+      "HandleMessage",
+      "SaveStateEvent",
+      "exitToDos",
+      "fullscreen",
+      "mouseDecreaseSpeed",
+      "mouseIncreaseSpeed",
+      "newRom",
+      "rivetsData",
+      "saveHardDriveDiffs",
+      "slowDown",
+      "speedUp",
+      "toggleFPS",
+      "toggleOnscreenKeyboard",
+      "togglePause",
+      "updateCPU"
+    ]
   }
 }

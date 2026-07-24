@@ -63,6 +63,9 @@ describe('WASM static delivery', () => {
     expect(digest('public/wasm/engine/main.wasm')).toBe(
       '8c10572678e46fd1fd97d0b23eca8589c8b55aa82e4e9df9fb58160c2bd4631a',
     );
+    expect(digest('public/wasm/engine/main.js')).toBe(
+      'd6dd83fa43d37b3510ae5ee09307a46fbf4c4ae1afba6d64ca0e7cac64d3f0c2',
+    );
     expect(html).not.toContain('vendor/jquery');
     expect(html).not.toContain('vendor/rivets');
     expect(html).not.toContain('https://code.jquery.com');
@@ -79,6 +82,9 @@ describe('WASM static delivery', () => {
     expect(runtime).not.toMatch(/\b(?:jQuery|rivets|toastr)\b/);
     expect(runtime.match(/rivetsData/g)).toHaveLength(1);
     expect(runtime).toContain('this.rivetsData = this.state;');
+    expect(read('public/wasm/engine/main.js')).toContain(
+      'myApp.rivetsData.inputController.updateDosControls()',
+    );
     expect(runtime).toContain("window['indexedDB'] == undefined");
   });
 });

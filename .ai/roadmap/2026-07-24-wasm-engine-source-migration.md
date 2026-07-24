@@ -67,15 +67,16 @@ not become a second emulator loader with a different asset contract.
 These budgets apply to authored source only. Generated `main.js`, `main.wasm`, fonts, and game
 payloads are excluded from source-line budgets but remain covered by artifact and browser tests.
 
-- A runtime leaf or protocol module: at most 240 non-blank, non-comment content lines.
-- The runtime composition/orchestration leaf: at most 180 content lines.
-- No authored WASM migration module: more than 460 content lines, even temporarily at a phase
+- A runtime leaf or protocol module: at most 240 physical source lines.
+- The runtime composition/orchestration leaf: at most 180 physical source lines.
+- No authored WASM migration module: more than 460 physical source lines, even temporarily at a phase
   boundary.
 - One responsibility per module: lifecycle, protocol, asset selection, DOM adapter, and notice/
   recovery logic must be separable and independently testable.
 - No module may own both public asset generation and browser state.
-- No untyped `window` protocol payloads, global mutable singleton, `eval`, jQuery, Rivets, toastr,
-  or hidden retry.
+- No untyped `window` protocol payloads, `eval`, jQuery, Rivets, toastr, or hidden retry. The only
+  allowed global singleton is the typed compatibility facade required by the pinned generated
+  `myApp` ABI; no product state may escape through a second global owner.
 
 Gates:
 

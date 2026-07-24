@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted and implemented.
+Accepted.
+
+Amends: `2026-06-16-wasm-game-center-demo.md`
 
 ## Context
 
