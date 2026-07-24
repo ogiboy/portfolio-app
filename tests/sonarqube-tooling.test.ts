@@ -183,6 +183,7 @@ describe('local SonarQube tooling', () => {
     expect(sonar['sonar.coverage.exclusions']).toContain('src/app/**');
     expect(sonar['sonar.coverage.exclusions']).toContain('src/components/site/site-header.tsx');
     expect(sonar['sonar.coverage.exclusions']).toContain('scripts/sonarqube/**');
+    expect(sonar['sonar.coverage.exclusions']).toContain('scripts/qa/bundle-budget-artifacts.mjs');
     expect(sonar['sonar.coverage.exclusions']).not.toContain('scripts/**');
     expect(Object.values(sonar).join('\n')).not.toMatch(/uykuluk|agentic.trader/i);
 
