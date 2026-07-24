@@ -47,6 +47,9 @@ The portfolio is client-facing and server-first. Next.js App Router Server Compo
 - Treat `main.js` and `main.wasm` as a digest-pinned generated pair, not hand-maintained modules.
   First-party runtime wrappers remain under a no-growth modularity ratchet until their behavior is
   moved behind typed Next-owned source boundaries.
+- Sonar excludes the pinned legacy `script.js` and `input_controller.js` wrappers only. Authored
+  WASM adapters and every extracted module remain analyzed; syntax, security-pattern, browser,
+  static-delivery, and modularity gates continue to cover the excluded compatibility surface.
 - OMX, Ruflo, Claude-flow, AgentDB, RuVector, and other orchestration systems are development tools,
   not application services. Their databases, daemon state, hooks with machine paths, logs, metrics,
   and sessions cannot own product state, source truth, or release evidence.

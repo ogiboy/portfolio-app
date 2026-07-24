@@ -21,6 +21,13 @@ misdirected tokens, duplicate cloud analyses, or evidence attached to the wrong 
   organization `ogiboy`, and project name `portfolio-app`.
 - Keep authored source, test, LCOV, exclusion, duplication, and quality-gate settings equal across
   both property files while preserving the separate identities.
+- Exclude only the pinned legacy runtime wrappers `public/wasm/engine/script.js` and
+  `public/wasm/engine/input_controller.js` from static analysis. Continue analyzing authored
+  adapters such as `settings.js`, `runtime-security.js`, and every newly extracted wrapper
+  module. Generated `main.js` and binary/font/ROM artifacts remain excluded separately.
+- Keep the excluded wrappers behind syntax, security-pattern, static-delivery, browser, and
+  no-growth modularity gates. Exclusion does not authorize new behavior in those files; new or
+  security-sensitive behavior belongs in analyzed adapters.
 - Run local SonarQube Community Build through the shared Docker Compose owner under
   `scripts/sonarqube`, bind it only to `127.0.0.1:9000`, retain named data volumes on stop, and reject
   non-local host URLs before lifecycle or scan work.
@@ -44,6 +51,8 @@ misdirected tokens, duplicate cloud analyses, or evidence attached to the wrong 
 - Cloud analysis consumes the same LCOV boundary enforced by Vitest but keeps provider credentials
   outside repository content.
 - External PRs without repository secrets are intentionally blocked rather than silently accepted.
+- Legacy-wrapper findings no longer dominate the new-code Quality Gate, while first-party adapters
+  and extracted modules remain visible to both local SonarQube and SonarQube Cloud.
 
 ## Compatibility and Rollback
 
