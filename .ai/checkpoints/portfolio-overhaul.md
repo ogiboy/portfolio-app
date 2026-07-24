@@ -1,11 +1,11 @@
 # Checkpoint: Portfolio Overhaul and Agent Readiness
 
 Status: active; PR #29 and stacked alive-experience PR #30 are merged. PR #31 remains open on its
-older remote head while the locally accepted review, governance, quality, and SonarQube closure is
-prepared for push. Hosted checks, preview/browser QA, owner approval, merge, and production evidence
-for that successor remain pending.
+older remote head while the locally accepted review, governance, quality, SonarQube, and WASM
+runtime-security closure is prepared for push. Hosted checks, preview/browser QA, owner approval,
+merge, and production evidence for that successor remain pending.
 
-Updated: 2026-07-24T06:06:53+03:00
+Updated: 2026-07-24T06:47:46+03:00
 
 Objective (immutable until closure): deliver the approved public EN/TR developer and homelab
 portfolio overhaul, H.O.T. identity, isolated WASM lab, rigorous project governance, truthful search
@@ -25,22 +25,25 @@ separately proven; Search Console/Sentry and unsupported protocol surfaces are n
 unless their prerequisites and external evidence exist.
 
 Worktree / branch / commit: repository worktree identifier `dce4` / `feat/alive-interactions` /
-clean exact source `9d8ca179234adbf8766d6b944471d16cc05f0456`.
+clean exact source `5697ccac7748b0521d0ca30e1c47e8d45893bebd`.
 
-Last completed slice / commit: `9d8ca17 test: enforce coverage and sonar quality gates`; preceding
-commits `5346bd5` and `66903a0` close the still-valid hosted and PR #31 review findings.
+Last completed slice / commit: `5697cca docs: clarify sonar scanner invocation`; preceding commits
+`7517f1b`, `5346bd5`, `66903a0`, `9d8ca17`, `5489d4a`, and `dc830e1` close runtime security,
+review, governance, quality, scanner, and reporter work.
 
 Current task: commit this source-bound evidence successor, run the complete package gate on that
-docs-only tip, push it to PR #31's remote head `chore/dependency-cooldown`, refresh the PR title/body,
-and reconcile hosted checks without merging.
+docs-only tip, push it to PR #31's remote head `chore/dependency-cooldown`, refresh the PR body, and
+reconcile hosted checks without merging.
 
 Completed: PR #29 merged to `main`; PR #30 merged its alive P0 stack into
 `chore/dependency-cooldown`; persistent dark mode, person-first EN/TR content, SEO/discovery fixes,
 Motion-based alive interactions, localized route continuity, mobile/reduced-motion behavior, and the
-typed WASM boot boundary remain present. PR #31 review findings were verified against current code
-and the valid findings were fixed. The repository now enforces 80% Vitest coverage across all four
-metrics, 80% JSDoc coverage with a 100-export minimum, complete CodeRabbit schema coverage, local
-Docker SonarQube, and CI-based SonarQube Cloud analysis.
+typed WASM boot boundary remain present. PR #31 review and SonarQube Cloud findings were verified
+against current code and the valid findings were fixed. The WASM shell now validates runtime assets,
+cloud-save routes, target origins, and cryptographic randomness through a tested helper boundary.
+The repository enforces 80% Vitest coverage across all four metrics, 80% JSDoc coverage with a
+100-export minimum, complete CodeRabbit schema coverage, local Docker SonarQube, and CI-based
+SonarQube Cloud analysis.
 
 Pending: evidence successor and exact-tip gate; PR #31 push, hosted checks, preview/browser review,
 owner approval, merge, and production verification; later search authority, backlink, field telemetry,
@@ -63,20 +66,20 @@ Required gates / delivery expectations: before push run `pnpm format:check`, `pn
 `pnpm qa:bundle-budget`, and `pnpm audit --prod --audit-level high`; then collect pushed,
 hosted-check, preview, browser, review, merge, and production evidence independently.
 
-Evidence: clean exact source `9d8ca179234adbf8766d6b944471d16cc05f0456` completed
-`pnpm run ci` from `2026-07-24T06:05:50+03:00` through `2026-07-24T06:06:53+03:00` on macOS with
+Evidence: clean exact source `5697ccac7748b0521d0ca30e1c47e8d45893bebd` completed
+`pnpm run ci` from `2026-07-24T06:46:18+03:00` through `2026-07-24T06:47:04+03:00` on macOS with
 Node 24.16.0 and pnpm 11.17.0: formatting, ESLint, dual TypeScript toolchains, 86.92% JSDoc coverage,
-modularity/release checks, 27 Vitest files / 120 tests, 88.70% statements / 80.93% branches /
+modularity/release checks, 29 Vitest files / 138 tests, 88.70% statements / 80.93% branches /
 86.97% functions / 90.00% lines, 22 Playwright journeys, 64 generated pages, bundle budgets, and no
 known production vulnerabilities. The same commit completed local SonarQube analysis at
-`2026-07-24T06:03:16+03:00` with project key `portfolio-app`, SCM revision `9d8ca17`, and Quality
-Gate `PASSED`. The token-redacted raw log remains ignored under
+`2026-07-24T06:45:58+03:00` with project key `portfolio-app`, SCM revision `5697cca`, 131 indexed
+files, and Quality Gate `PASSED`. The token-redacted raw log remains ignored under
 `.ai/qa/artifacts/sonar/sonar-npm.log`. Detailed evidence lives in
 `docs/aegis/work/2026-07-24-quality-and-sonar/90-evidence.md`.
 
-Hosted state: `gh pr view 31 --json ...` at `2026-07-24T06:03:34+03:00` reports PR #31 open and
-mergeable on remote head `ecd6779015ce585bbc7d1cea6e01bbd03d5d46d0`; its historical SonarCloud
-check failed and does not describe local head `9d8ca17`. SonarQube Cloud Automatic Analysis is
+Hosted state: `gh pr view 31 --json ...` at `2026-07-24T06:47:46+03:00` reports PR #31 open and
+mergeable on remote head `dc830e1e9dcd6141b8040160ad1615fccfafb196`; its historical SonarCloud
+check failed and does not describe local head `5697cca`. SonarQube Cloud Automatic Analysis is
 disabled and the replacement CI-based analysis has not run remotely yet. No hosted green state is
 inferred.
 
