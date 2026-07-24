@@ -621,6 +621,12 @@ test('alive interactions: keeps the project archive within a 390px viewport', as
       })),
     )
     .toEqual({ clientWidth: 390, scrollWidth: 390 });
+
+  const finalLayout = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  expect(finalLayout).toEqual({ clientWidth: 390, scrollWidth: 390 });
 });
 
 test('alive interactions: keeps project-card focus feedback static with reduced motion', async ({
