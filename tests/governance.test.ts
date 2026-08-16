@@ -216,9 +216,9 @@ describe('project governance contracts', () => {
 
     expect(packageManifest.packageManager).toMatch(/^pnpm@11\.17\.0\+/);
     expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
-    expect(packageManifest.devDependencies.postcss).toBe('^8.5.22');
-    expect(packageManifest.dependencies['lucide-react']).toBe('^1.26.0');
-    expect(packageManifest.dependencies['radix-ui']).toBe('^1.6.5');
+    expect(packageManifest.devDependencies.postcss).toBe('^8.5.26');
+    expect(packageManifest.dependencies['lucide-react']).toBe('^1.31.0');
+    expect(packageManifest.dependencies['radix-ui']).toBe('^1.6.7');
     expect(packageManifest.dependencies).not.toHaveProperty('@radix-ui/react-dialog');
     expect(packageManifest.dependencies).not.toHaveProperty('@phosphor-icons/react');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
