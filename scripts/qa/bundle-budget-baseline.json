@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextVersion": "16.2.11",
+  "nextVersion": "16.3.1",
   "measurement": "sum of gzip-compressed initial JavaScript assets referenced by each prerendered route HTML document",
   "homeRoutes": ["/en", "/tr"],
   "homeInitialGzipBytes": 242770,
