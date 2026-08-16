@@ -17,6 +17,7 @@ export default defineConfig({
     exclude: ['e2e/**', 'node_modules/**', '.next/**'],
     globals: true,
     setupFiles: ['./tests/setup.ts'],
+    execArgv: ['--no-experimental-webstorage'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'lcov', 'html'],
