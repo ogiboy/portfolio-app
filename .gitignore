@@ -12,6 +12,7 @@
 
 # next.js
 /.next/
+/.next-e2e/
 /out/
 
 # production
@@ -76,3 +77,16 @@ ruvector.db
 .codex/skills/.system/**
 !.codex/prompts/
 !.codex/prompts/**
+
+
+
+.nx/cache
+.nx/workspace-data
+.nx/migrate-runs
+vitest.config.*.timestamp*
+
+# Next.js
+.next
+out
+
+.nx/polygraph

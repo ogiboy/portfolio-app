@@ -214,11 +214,11 @@ describe('project governance contracts', () => {
     }>('components.json');
     const npmUpdates = dependabot.updates.find((update) => update['package-ecosystem'] === 'npm');
 
-    expect(packageManifest.packageManager).toMatch(/^pnpm@11\.17\.0\+/);
-    expect(packageManifest.engines.pnpm).toBe('>=11.16.0 <12');
-    expect(packageManifest.devDependencies.postcss).toBe('^8.5.26');
-    expect(packageManifest.dependencies['lucide-react']).toBe('^1.31.0');
-    expect(packageManifest.dependencies['radix-ui']).toBe('^1.6.7');
+    expect(packageManifest.packageManager).toMatch(/^pnpm@12\.4\.2\+/);
+    expect(packageManifest.engines.pnpm).toBe('>=12.4.2 <13');
+    expect(packageManifest.devDependencies.postcss).toBe('^8.5.28');
+    expect(packageManifest.dependencies['lucide-react']).toBe('^1.71.0');
+    expect(packageManifest.dependencies['radix-ui']).toBe('^1.8.1');
     expect(packageManifest.dependencies).not.toHaveProperty('@radix-ui/react-dialog');
     expect(packageManifest.dependencies).not.toHaveProperty('@phosphor-icons/react');
     expect(packageManifest.devDependencies['@typescript/native']).toBe('npm:typescript@^7.0.2');
@@ -228,7 +228,7 @@ describe('project governance contracts', () => {
     );
     expect(packageManifest.scripts['qa:bundle-budget']).toBe('node scripts/qa/bundle-budget.mjs');
     expect(packageManifest.scripts.ci).toContain(
-      'pnpm build && pnpm qa:bundle-budget && pnpm audit',
+      'pnpm build && pnpm qa:bundle-budget && pnpm run audit',
     );
     expect(packageManifest.scripts.typecheck).toBe('tsc --noEmit');
     expect(packageManifest.scripts['typecheck:compat']).toBe('tsc6 --noEmit');
@@ -245,7 +245,8 @@ describe('project governance contracts', () => {
     );
     expect(readdirSync(join(root, 'src/components/ui'))).not.toContain('dialog.tsx');
     expect(workspace.overrides.postcss).toBe('^8.5.22');
-    expect(workspace.overrides.sharp).toBe('0.35.3');
+    expect(workspace.overrides.sharp).toBe('0.35.5');
+    expect(workspace.overrides['next-intl@>=4.13.3 <5.0.0-0']).toBe('4.14.5');
     expect(workspace.minimumReleaseAge).toBe(1440);
     expect(workspace.minimumReleaseAgeExclude).toEqual([
       '@radix-ui/react-dialog@1.1.17 || 1.1.21',
@@ -264,11 +265,12 @@ describe('project governance contracts', () => {
       '@radix-ui/react-use-controllable-state@1.2.5',
       '@radix-ui/react-use-effect-event@0.0.4',
       '@radix-ui/react-use-layout-effect@1.1.3',
-      'icu-minify@4.13.4',
+      'sharp@0.35.5',
+      'icu-minify@4.14.5',
       'lucide-react@1.26.0',
-      'next-intl-swc-plugin-extractor@4.13.4',
-      'next-intl@4.13.4',
-      'use-intl@4.13.4',
+      'next-intl-swc-plugin-extractor@4.14.5',
+      'next-intl@4.14.5',
+      'use-intl@4.14.5',
     ]);
     expect(npmUpdates?.cooldown).toEqual({
       'default-days': 2,
@@ -278,50 +280,20 @@ describe('project governance contracts', () => {
     });
   });
 
-  it('runs both TypeScript toolchains and the post-build bundle budget gate in CircleCI', () => {
-    const circle = parseYamlFile<{
-      jobs: {
-        verify: {
-          steps: Array<
-            | string
-            | { run?: { command?: string; name?: string } }
-            | { restore_cache?: { keys: string[] } }
-            | { save_cache?: { key: string; paths: string[] } }
-          >;
-        };
-      };
-    }>('.circleci/config.yml');
-    const runSteps = circle.jobs.verify.steps.flatMap((entry) =>
-      typeof entry === 'string' || !('run' in entry) || !entry.run ? [] : [entry.run],
-    );
-    const command = (name: string) => runSteps.find((step) => step.name === name)?.command;
+  it('runs both TypeScript toolchains and bundle checks in GitHub Actions', () => {
+    const workflow = parseYamlFile<{
+      jobs: { verify: { steps: Array<{ name?: string; run?: string }> } };
+    }>('.github/workflows/ci.yml');
+    const steps = workflow.jobs.verify.steps;
+    const command = (name: string) => steps.find((step) => step.name === name)?.run;
 
     expect(command('Verify TypeScript toolchain')).toBe('pnpm qa:typescript');
     expect(command('Typecheck')).toBe('pnpm typecheck');
     expect(command('Typecheck compatibility')).toBe('pnpm typecheck:compat');
     expect(command('Bundle budget')).toBe('pnpm qa:bundle-budget');
-
-    const buildIndex = circle.jobs.verify.steps.findIndex(
-      (entry) => typeof entry !== 'string' && 'run' in entry && entry.run?.name === 'Build',
+    expect(steps.findIndex((step) => step.name === 'Bundle budget')).toBeGreaterThan(
+      steps.findIndex((step) => step.name === 'Build'),
     );
-    const saveIndex = circle.jobs.verify.steps.findIndex(
-      (entry) => typeof entry !== 'string' && 'save_cache' in entry,
-    );
-    const bundleBudgetIndex = circle.jobs.verify.steps.findIndex(
-      (entry) => typeof entry !== 'string' && 'run' in entry && entry.run?.name === 'Bundle budget',
-    );
-    const cacheStep = circle.jobs.verify.steps[saveIndex];
-
-    expect(saveIndex).toBeGreaterThan(buildIndex);
-    expect(bundleBudgetIndex).toBeGreaterThan(buildIndex);
-    expect(
-      typeof cacheStep === 'string' || !('save_cache' in cacheStep)
-        ? undefined
-        : cacheStep.save_cache,
-    ).toEqual({
-      key: 'pnpm-v3-{{ arch }}-{{ checksum "pnpm-lock.yaml" }}-{{ checksum "pnpm-workspace.yaml" }}',
-      paths: ['~/.local/share/pnpm/store', '~/.cache/ms-playwright', '.next/cache'],
-    });
   });
 
   it('ignores commented properties and rejects duplicate effective configuration keys', () => {

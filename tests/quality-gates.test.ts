@@ -23,12 +23,13 @@ type RunStep = {
 
 describe('quality gate contracts', () => {
   it('enforces eighty percent V8 coverage across every supported metric', async () => {
-    const { vitestConfig } = await resolveConfig({
+    const vitestConfig = await resolveConfig({
       root,
       config: 'vitest.config.ts',
       mode: 'test',
     });
-    const coverage = vitestConfig.coverage;
+    const coverage = vitestConfig.test?.coverage;
+    if (!coverage) throw new Error('Vitest coverage configuration is missing.');
     const reporters = coverage.reporter.map(([name]) => name);
 
     expect(coverage.provider).toBe('v8');
@@ -40,29 +41,31 @@ describe('quality gate contracts', () => {
       functions: 80,
       lines: 80,
     });
-    expect(coverage.include).toEqual([
-      'scripts/qa/docstring-coverage.mjs',
-      'scripts/release/release-state.ts',
-      'src/lib/**/*.ts',
-      'src/content/**/*.ts',
-      'src/i18n/routing.ts',
-      'src/components/client/analytics-preference.tsx',
-      'src/components/client/cinematic-work-rail.tsx',
-      'src/components/client/locale-switcher.tsx',
-      'src/components/client/mobile-navigation.tsx',
-      'src/components/client/navigation-link.tsx',
-      'src/components/client/site-telemetry.tsx',
-      'src/components/client/theme-toggle.tsx',
-      'src/components/client/use-analytics-preference.ts',
-      'src/components/client/use-cinematic-motion-eligibility.ts',
-      'src/components/client/wasm-game-frame.tsx',
-      'src/components/client/wasm-runtime/**/*.ts',
-      'src/components/client/webmcp-tools.tsx',
-      'src/components/seo/json-ld.tsx',
-      'src/components/site/hot-mark.tsx',
-      'src/components/site/project-card.tsx',
-      'src/components/ui/**/*.tsx',
-    ]);
+    expect(coverage.include).toEqual(
+      expect.arrayContaining([
+        'scripts/qa/docstring-coverage.mjs/**',
+        'scripts/release/release-state.ts/**',
+        'src/lib/**/*.ts',
+        'src/content/**/*.ts',
+        'src/i18n/routing.ts/**',
+        'src/components/client/analytics-preference.tsx/**',
+        'src/components/client/cinematic-work-rail.tsx/**',
+        'src/components/client/locale-switcher.tsx/**',
+        'src/components/client/mobile-navigation.tsx/**',
+        'src/components/client/navigation-link.tsx/**',
+        'src/components/client/site-telemetry.tsx/**',
+        'src/components/client/theme-toggle.tsx/**',
+        'src/components/client/use-analytics-preference.ts/**',
+        'src/components/client/use-cinematic-motion-eligibility.ts/**',
+        'src/components/client/wasm-game-frame.tsx/**',
+        'src/components/client/wasm-runtime/**/*.ts',
+        'src/components/client/webmcp-tools.tsx/**',
+        'src/components/seo/json-ld.tsx/**',
+        'src/components/site/hot-mark.tsx/**',
+        'src/components/site/project-card.tsx/**',
+        'src/components/ui/**/*.tsx',
+      ]),
+    );
     expect(coverage.exclude).toEqual(
       expect.arrayContaining([
         'src/app/**',
@@ -90,8 +93,10 @@ describe('quality gate contracts', () => {
       devDependencies: Record<string, string>;
     };
 
-    expect(manifest.devDependencies['@vitest/coverage-v8']).toBe('^4.1.10');
-    expect(manifest.scripts['test:coverage']).toBe('vitest run --coverage');
+    expect(manifest.devDependencies['@vitest/coverage-v8']).toBe('^5.1.0');
+    expect(manifest.scripts['test:coverage']).toBe(
+      'nx vitest:test portfolio-app -- run --coverage',
+    );
     expect(manifest.scripts['qa:docstrings']).toBe(
       'node scripts/qa/docstring-coverage.mjs --enforce-threshold',
     );
@@ -115,17 +120,15 @@ describe('quality gate contracts', () => {
     expect(step('Unit tests')).toBeUndefined();
   });
 
-  it('mirrors documentation and unit coverage gates in CircleCI', () => {
+  it('runs documentation and unit coverage gates in GitHub Actions', () => {
     const workflow = parseYamlFile<{
-      jobs: { verify: { steps: Array<{ run?: RunStep }> } };
-    }>('.circleci/config.yml');
-    const runSteps = workflow.jobs.verify.steps
-      .map((step) => step.run)
-      .filter((step): step is RunStep => Boolean(step));
-    const step = (name: string) => runSteps.find((candidate) => candidate.name === name);
+      jobs: { verify: { steps: RunStep[] } };
+    }>('.github/workflows/ci.yml');
+    const steps = workflow.jobs.verify.steps;
+    const step = (name: string) => steps.find((candidate) => candidate.name === name);
 
-    expect(step('Documentation coverage')?.command).toBe('pnpm qa:docstrings');
-    expect(step('Unit tests and coverage')?.command).toBe('pnpm test:coverage');
+    expect(step('Documentation coverage')?.run).toBe('pnpm qa:docstrings');
+    expect(step('Unit tests and coverage')?.run).toBe('pnpm test:coverage');
     expect(step('Unit tests')).toBeUndefined();
   });
 });

@@ -7,7 +7,14 @@ import { extname, join, relative, resolve, sep } from 'node:path';
 const root = process.cwd();
 const baselinePath = resolve(root, 'scripts/qa/modularity-baseline.json');
 const failOnFindings = process.argv.includes('--fail-on-findings');
-const ignoredSegments = new Set(['.next', 'build', 'coverage', 'dist', 'node_modules']);
+const ignoredSegments = new Set([
+  '.next',
+  '.next-e2e',
+  'build',
+  'coverage',
+  'dist',
+  'node_modules',
+]);
 
 /**
  * Loads and parses the modularity baseline configuration.

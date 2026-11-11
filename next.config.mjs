@@ -30,6 +30,7 @@ const mutableWasmFiles = [
 const nextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
+  distDir: process.env.PORTFOLIO_NEXT_DIST_DIR ?? '.next',
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   async headers() {
     return [

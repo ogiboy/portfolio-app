@@ -105,7 +105,9 @@ test('registers the public read-only WebMCP tools on the English home page', asy
     )
     .toHaveLength(2);
   await expect(
-    page.evaluate(() => window.__webMcpRegistrations.map(({ name }) => name)),
+    page.evaluate(() =>
+      window.__webMcpRegistrations.filter(({ signal }) => !signal.aborted).map(({ name }) => name),
+    ),
   ).resolves.toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
 });
 
@@ -130,6 +132,8 @@ test('registers the same WebMCP tools through the AgentReady navigator API', asy
     )
     .toHaveLength(2);
   await expect(
-    page.evaluate(() => window.__webMcpRegistrations.map(({ name }) => name)),
+    page.evaluate(() =>
+      window.__webMcpRegistrations.filter(({ signal }) => !signal.aborted).map(({ name }) => name),
+    ),
   ).resolves.toEqual(['portfolio_overview', 'search_public_portfolio_projects']);
 });

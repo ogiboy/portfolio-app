@@ -181,7 +181,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await turkishProject.getByRole('link', { name: 'Detay: İşletmecii - Idler Game' }).click();
   await expect(page).toHaveURL(/\/tr\/projects\/isletmecii-idler-game$/);
   await expect(page.getByText(/Oyuncuların para kazanıp çalışan işe alarak/i)).toBeVisible();
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+  await expect(page.locator('meta[name="description"]').last()).toHaveAttribute(
     'content',
     /Oyuncuların para kazanıp çalışan işe alarak/i,
   );

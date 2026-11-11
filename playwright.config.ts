@@ -24,7 +24,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `corepack pnpm exec next dev --turbopack --hostname 127.0.0.1 -p ${port}`,
+    command: `PORTFOLIO_NEXT_DIST_DIR=.next-e2e corepack pnpm exec next dev --turbopack --hostname 127.0.0.1 -p ${port}`,
     url: `${baseURL}/en`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
