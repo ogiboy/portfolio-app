@@ -76,7 +76,7 @@
     "@nx/next": "23.2.1",
     "@nx/playwright": "23.2.1",
     "@nx/vitest": "23.2.1",
-    "@playwright/test": "^1.65.0",
+    "@playwright/test": "^1.65.1",
     "@sonar/scan": "^5.1.0",
     "@tailwindcss/postcss": "^4.3.5",
     "@testing-library/jest-dom": "^7.0.1",
