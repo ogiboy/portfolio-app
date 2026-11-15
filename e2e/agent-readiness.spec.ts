@@ -24,7 +24,7 @@ test('negotiates markdown only for an explicit positive markdown Accept header',
   expect(rootTurkishMarkdown.headers()['content-language']).toBe('tr');
   expect(rootTurkishMarkdown.headers()['cache-control']).toContain('no-store');
   expect(rootTurkishMarkdown.headers()['set-cookie']).toBeUndefined();
-  await expect(rootTurkishMarkdown.text()).resolves.toContain('Arşivden öne çıkan projeler');
+  await expect(rootTurkishMarkdown.text()).resolves.toContain('Seçili projeler');
 
   const html = await request.get('/en/projects', { headers: { Accept: 'text/markdown;q=0' } });
   expect(html.status()).toBe(200);
@@ -70,7 +70,7 @@ test('serves localized detail, lab, unknown, and HEAD markdown variants', async 
     headers: { Accept: 'text/markdown' },
   });
   expect(lab.status()).toBe(200);
-  await expect(lab.text()).resolves.toContain('# Retro Game Center');
+  await expect(lab.text()).resolves.toContain('# Play DOOM in your browser');
 
   const missing = await request.get('/tr/not-a-public-page', {
     headers: { Accept: 'text/markdown' },

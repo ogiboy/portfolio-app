@@ -77,15 +77,15 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expectLocalizedHomeMetadata({
     page,
     locale: 'en',
-    title: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
+    title: 'H.O.T. | Halil Oğuzcan Toptaş — Developer',
     description:
-      'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
+      'Websites, apps, home lab projects, and browser experiments by Istanbul-based developer Halil Oğuzcan Toptaş.',
   });
   await expect(
     page.getByRole('banner').getByRole('link', { name: /H\.O\.T.*Halil Oğuzcan Toptaş.*home/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: /Halil Oğuzcan Toptaş.*web interfaces, homelab systems/i }),
+    page.getByRole('heading', { name: /Halil Oğuzcan Toptaş.*websites, small web apps/i }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /see the archive/i })).toBeVisible();
   await expectUniqueHeadingText(page);
@@ -93,9 +93,9 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expectLocalizedHomeMetadata({
     page,
     locale: 'tr',
-    title: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
+    title: 'H.O.T. | Halil Oğuzcan Toptaş — Yazılım Geliştirici',
     description:
-      'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
+      'İstanbul’da yaşayan yazılım geliştirici Halil Oğuzcan Toptaş’ın web projeleri, ev sunucusu çalışmaları ve tarayıcı demoları.',
   });
   await expect(
     page
@@ -104,7 +104,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByRole('heading', {
-      name: /Halil Oğuzcan Toptaş.*web arayüzleri, homelab sistemleri/i,
+      name: /Halil Oğuzcan Toptaş.*web siteleri, küçük uygulamalar/i,
     }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: /arşivi gör/i })).toBeVisible();
@@ -114,14 +114,14 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expect(page).toHaveTitle('About Halil Oğuzcan Toptaş | H.O.T.');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    'Meet Halil Oğuzcan Toptaş, an Istanbul-based software developer and homelab hobbyist building web interfaces, automation systems, and browser experiments.',
+    'Learn about Istanbul-based software developer Halil Oğuzcan Toptaş and explore his web projects and home lab experiments.',
   );
   await expect(page.getByRole('heading', { name: 'Halil Oğuzcan Toptaş' })).toBeVisible();
   await expect(page.getByRole('banner').getByRole('link', { name: 'About' })).toHaveAttribute(
     'aria-current',
     'page',
   );
-  await expect(page.getByRole('link', { name: 'Open LinkedIn' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Visit LinkedIn' })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/hoguzcantoptas/',
   );
@@ -136,7 +136,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
   await expect(page).toHaveTitle('Halil Oğuzcan Toptaş hakkında | H.O.T.');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    'Halil Oğuzcan Toptaş, İstanbul’da web arayüzleri, otomasyon sistemleri ve browser deneyleri geliştiren bir yazılım geliştirici ve homelab meraklısıdır.',
+    'İstanbul’da yaşayan yazılım geliştirici Halil Oğuzcan Toptaş’ı tanıyın; web projelerine ve ev sunucusu çalışmalarına göz atın.',
   );
   await expect(page.getByRole('heading', { name: 'Halil Oğuzcan Toptaş' })).toBeVisible();
   await expect(page.getByRole('banner').getByRole('link', { name: 'Hakkında' })).toHaveAttribute(
@@ -148,7 +148,7 @@ test('renders localized public portfolio routes', async ({ page }) => {
     '/tr/labs/retro-game-center',
   );
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
-    '"jobTitle":"Yazılım geliştirici ve homelab meraklısı"',
+    '"jobTitle":"Yazılım geliştirici"',
   );
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Navigasyonu aç' }).click();
@@ -174,19 +174,17 @@ test('renders localized public portfolio routes', async ({ page }) => {
 
   await page.goto('/tr/projects');
   const turkishProject = page.locator('[data-project-card="isletmecii-idler-game"]');
-  await expect(turkishProject.getByText('Oyun Arayüzü', { exact: true })).toBeVisible();
-  await expect(
-    turkishProject.getByText(/Oyuncuların para kazanıp çalışan işe alarak/i),
-  ).toBeVisible();
+  await expect(turkishProject.getByText('Oyun', { exact: true })).toBeVisible();
+  await expect(turkishProject.getByText(/Para kazanıp çalışan alarak/i)).toBeVisible();
   await turkishProject.getByRole('link', { name: 'Detay: İşletmecii - Idler Game' }).click();
   await expect(page).toHaveURL(/\/tr\/projects\/isletmecii-idler-game$/);
-  await expect(page.getByText(/Oyuncuların para kazanıp çalışan işe alarak/i)).toBeVisible();
+  await expect(page.getByText(/Para kazanıp çalışan alarak/i)).toBeVisible();
   await expect(page.locator('meta[name="description"]').last()).toHaveAttribute(
     'content',
-    /Oyuncuların para kazanıp çalışan işe alarak/i,
+    /Para kazanıp çalışan alarak/i,
   );
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
-    'Oyuncuların para kazanıp çalışan işe alarak',
+    'Para kazanıp çalışan alarak',
   );
   await expect(page.getByRole('banner').getByRole('link', { name: 'Projeler' })).toHaveAttribute(
     'aria-current',
@@ -201,18 +199,16 @@ test('renders localized public portfolio routes', async ({ page }) => {
 
   await page.goto('/en/labs/retro-game-center');
   await expect(page).toHaveTitle('Retro Game Center: DOOM in WebAssembly | H.O.T.');
-  await expect(
-    page.getByRole('heading', { name: /retro game center.*doom shareware.*webassembly/i }),
-  ).toBeVisible();
-  await expect(page.getByRole('button', { name: /boot demo/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Play DOOM in your browser' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /start game/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
   expect(wasmRequests).toEqual([]);
 
-  await page.getByRole('button', { name: /boot demo/i }).click();
+  await page.getByRole('button', { name: /start game/i }).click();
   const gameFrame = page.locator('iframe').first();
   await expect(gameFrame).toHaveAttribute('sandbox', /allow-scripts/);
   await expect(gameFrame).not.toHaveAttribute('sandbox', /allow-same-origin/);
-  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+  await expect(page.getByText('Game ready', { exact: true })).toBeVisible({
     timeout: 20_000,
   });
   expect(wasmRequests).toContain('/wasm/engine/main.wasm');
@@ -288,12 +284,12 @@ test('turns a WASM runtime asset 404 into an explicit retry state', async ({ pag
   );
   await page.goto('/en/labs/retro-game-center');
 
-  await page.getByRole('button', { name: /boot demo/i }).click();
+  await page.getByRole('button', { name: /start game/i }).click();
 
-  await expect(page.getByRole('heading', { name: /the dos machine did not boot/i })).toBeVisible({
+  await expect(page.getByRole('heading', { name: /the game could not start/i })).toBeVisible({
     timeout: 20_000,
   });
-  await expect(page.getByRole('button', { name: /retry boot/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /try again/i })).toBeVisible();
   await expect(page.locator('iframe')).toHaveCount(0);
 });
 
@@ -324,9 +320,9 @@ test('finishes WASM initialization when IndexedDB cannot be read', async ({ page
   });
   await page.goto('/en/labs/retro-game-center');
 
-  await page.getByRole('button', { name: /boot demo/i }).click();
+  await page.getByRole('button', { name: /start game/i }).click();
 
-  await expect(page.getByText('DOS machine ready', { exact: true })).toBeVisible({
+  await expect(page.getByText('Game ready', { exact: true })).toBeVisible({
     timeout: 20_000,
   });
 });
@@ -386,7 +382,7 @@ test('provides localized mobile navigation with focus recovery', async ({ page }
 
   const englishDialog = page.getByRole('dialog', { name: 'Primary navigation' });
   await expect(englishDialog).toBeVisible();
-  for (const name of ['Home', 'Projects', 'Lab', 'Process', 'Contact']) {
+  for (const name of ['Home', 'Projects', 'Lab', 'How I work', 'Contact']) {
     await expect(englishDialog.getByRole('link', { name })).toBeVisible();
   }
 
@@ -404,7 +400,7 @@ test('provides localized mobile navigation with focus recovery', async ({ page }
   await turkishTrigger.click();
   const turkishDialog = page.getByRole('dialog', { name: 'Ana gezinme' });
   await expect(turkishDialog).toBeVisible();
-  for (const name of ['Ana sayfa', 'Projeler', 'Lab', 'Süreç', 'İletişim']) {
+  for (const name of ['Ana sayfa', 'Projeler', 'Lab', 'Nasıl çalışıyorum?', 'İletişim']) {
     await expect(turkishDialog.getByRole('link', { name })).toBeVisible();
   }
 });
@@ -412,7 +408,7 @@ test('provides localized mobile navigation with focus recovery', async ({ page }
 test('offers localized recovery from missing routes', async ({ page }) => {
   await page.goto('/en/route-that-does-not-exist');
   await expect(page.getByRole('heading', { name: 'This page does not exist.' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/en');
+  await expect(page.getByRole('link', { name: 'Go home' })).toHaveAttribute('href', '/en');
   await expect(page.getByRole('link', { name: 'Browse projects' })).toHaveAttribute(
     'href',
     '/en/projects',
@@ -420,8 +416,8 @@ test('offers localized recovery from missing routes', async ({ page }) => {
 
   await page.goto('/tr/olmayan-bir-rota');
   await expect(page.getByRole('heading', { name: 'Bu sayfa mevcut değil.' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/tr');
-  await expect(page.getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Ana sayfaya git' })).toHaveAttribute('href', '/tr');
+  await expect(page.getByRole('link', { name: 'Projeleri gör' })).toHaveAttribute(
     'href',
     '/tr/projects',
   );
@@ -429,22 +425,22 @@ test('offers localized recovery from missing routes', async ({ page }) => {
 
 test('keeps aggregate telemetry transparent and locally optional', async ({ page }) => {
   await page.goto('/en/privacy');
-  await expect(page.getByRole('heading', { name: /what this site measures/i })).toBeVisible();
-  await expect(page.getByText(/Sentry and Session Replay are not active/i)).toBeVisible();
-  await expect(page.getByText(/aggregate analytics are enabled/i)).toBeVisible();
+  await expect(page.getByRole('heading', { name: /analytics on this site/i })).toBeVisible();
+  await expect(page.getByText(/Session replay is not enabled/i)).toBeVisible();
+  await expect(page.getByText(/Analytics are on in this browser/i)).toBeVisible();
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
     '"@type":"WebPage"',
   );
 
-  await page.getByRole('button', { name: /disable analytics/i }).click();
-  await expect(page.getByText(/aggregate analytics are disabled/i)).toBeVisible();
+  await page.getByRole('button', { name: /turn analytics off/i }).click();
+  await expect(page.getByText(/Analytics are off in this browser/i)).toBeVisible();
   await expect(page.locator('script[src*="/_vercel/"]')).toHaveCount(0);
   await expect
     .poll(() => page.evaluate(() => window.localStorage.getItem('hot:analytics-disabled')))
     .toBe('1');
 
   await page.reload();
-  await expect(page.getByText(/aggregate analytics are disabled/i)).toBeVisible();
+  await expect(page.getByText(/Analytics are off in this browser/i)).toBeVisible();
 });
 
 test('keeps cinematic motion alive without trapping reduced-motion or mobile layouts', async ({
@@ -670,7 +666,7 @@ test('alive interactions: serves usable home, archive, and detail semantics with
   await page.goto('/en');
   await expect(
     page.getByRole('heading', {
-      name: /Halil Oğuzcan Toptaş.*web interfaces, homelab systems, and browser experiments/i,
+      name: /Halil Oğuzcan Toptaş.*websites, small web apps, and tools for my home lab/i,
     }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'See the archive' })).toHaveAttribute(

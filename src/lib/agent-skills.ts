@@ -13,7 +13,7 @@ description: ${portfolioNavigationDescription}
 
 # Portfolio navigation
 
-Use this read-only skill to discover ${identity.brand} - ${identity.fullName}'s public developer and homelab portfolio.
+Use this read-only skill to explore ${identity.brand}, the portfolio of ${identity.fullName}.
 
 ## Public routes
 

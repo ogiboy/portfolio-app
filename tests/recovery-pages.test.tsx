@@ -33,9 +33,9 @@ describe('localized recovery pages', () => {
       <ErrorPage error={new Error('test fault')} unstable_retry={retry} />,
     );
 
-    fireEvent.click(getByRole('button', { name: 'Retry view' }));
+    fireEvent.click(getByRole('button', { name: 'Try again' }));
     expect(retry).toHaveBeenCalledOnce();
-    expect(getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/');
+    expect(getByRole('link', { name: 'Go home' })).toHaveAttribute('href', '/');
     expect(getByRole('link', { name: 'Browse projects' })).toHaveAttribute('href', '/projects');
   });
 
@@ -45,9 +45,9 @@ describe('localized recovery pages', () => {
       <ErrorPage error={new Error('test fault')} unstable_retry={vi.fn()} />,
     );
 
-    expect(getByRole('button', { name: 'Görünümü yeniden dene' })).toBeInTheDocument();
-    expect(getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/');
-    expect(getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute('href', '/projects');
+    expect(getByRole('button', { name: 'Tekrar dene' })).toBeInTheDocument();
+    expect(getByRole('link', { name: 'Ana sayfaya git' })).toHaveAttribute('href', '/');
+    expect(getByRole('link', { name: 'Projeleri gör' })).toHaveAttribute('href', '/projects');
   });
 
   it('renders localized 404 recovery without turning the route into a client owner', async () => {
@@ -55,7 +55,7 @@ describe('localized recovery pages', () => {
     const { getByRole } = render(await NotFound());
 
     expect(getByRole('heading', { name: 'Bu sayfa mevcut değil.' })).toBeInTheDocument();
-    expect(getByRole('link', { name: 'Ana sayfaya dön' })).toHaveAttribute('href', '/');
-    expect(getByRole('link', { name: 'Projeleri incele' })).toHaveAttribute('href', '/projects');
+    expect(getByRole('link', { name: 'Ana sayfaya git' })).toHaveAttribute('href', '/');
+    expect(getByRole('link', { name: 'Projeleri gör' })).toHaveAttribute('href', '/projects');
   });
 });

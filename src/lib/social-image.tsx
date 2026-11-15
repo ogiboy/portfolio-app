@@ -123,7 +123,7 @@ export function createSocialImage(locale: Locale) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 20 }}>
           <div style={{ display: 'flex', width: 18, height: 18, background: '#b9ef35' }} />
-          <div style={{ display: 'flex' }}>oguzcantoptas.com / developer + homelab portfolio</div>
+          <div style={{ display: 'flex' }}>oguzcantoptas.com / personal portfolio</div>
         </div>
       </div>
     </div>,

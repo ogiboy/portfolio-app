@@ -19,7 +19,7 @@
   "debtCeilings": {
     "public/wasm/engine/input_controller.js": 1010,
     "public/wasm/engine/script.js": 2557,
-    "src/content/site.ts": 583
+    "src/content/site.ts": 571
   },
   "generatedArtifacts": {
     "public/wasm/engine/main.js": {

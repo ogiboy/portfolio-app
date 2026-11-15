@@ -55,14 +55,12 @@ describe('markdown negotiation', () => {
 
     expect(getAgentMarkdown('/en')?.locale).toBe('en');
     expect(getAgentMarkdown('/en/about')?.body).toContain('H.O.T. comes from my initials');
-    expect(getAgentMarkdown('/tr/about')?.body).toContain(
-      'H.O.T., adımın baş harflerinden geliyor',
-    );
+    expect(getAgentMarkdown('/tr/about')?.body).toContain('H.O.T. adımın baş harflerinden geliyor');
     expect(getAgentMarkdown('/en/about')?.body).toContain('(/en/labs/retro-game-center)');
-    expect(getAgentMarkdown('/en/about')?.body).toContain('[Browse projects](/en/projects)');
-    expect(getAgentMarkdown('/tr/about')?.body).toContain('[Projeleri incele](/tr/projects)');
+    expect(getAgentMarkdown('/en/about')?.body).toContain('[View projects](/en/projects)');
+    expect(getAgentMarkdown('/tr/about')?.body).toContain('[Projeleri gör](/tr/projects)');
     expect(getAgentMarkdown('/en/about')?.body).toContain(
-      `[Email H.O.T.](mailto:${contact.email})`,
+      `[Send an email](mailto:${contact.email})`,
     );
     expect(turkishLinkedInPath).toBeDefined();
     expect(getAgentMarkdown('/tr/about')?.body).toContain(
@@ -73,7 +71,7 @@ describe('markdown negotiation', () => {
       'Graduation Project',
     );
     expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
-      'BilgeAdam front-end development bootcamp mezunlarını',
+      'BilgeAdam front-end bootcamp mezunlarını',
     );
     expect(getAgentMarkdown('/tr/projects/graduation-project')?.body).toContain(
       '- Kategori: Platform',

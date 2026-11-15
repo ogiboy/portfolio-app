@@ -7,7 +7,7 @@ export const identity = {
   brand: 'H.O.T.',
   fullName: 'Halil Oğuzcan Toptaş',
   knownAs: 'Oğuzcan Toptaş',
-  siteName: 'H.O.T. Developer Lab',
+  siteName: 'H.O.T. Portfolio',
 } as const;
 
 /** Locale-specific copy used to build search and social metadata. */
@@ -28,38 +28,36 @@ export const seoCopy: Record<
   }
 > = {
   en: {
-    homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Developer & Homelab',
+    homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş — Developer',
     homeDescription:
-      'H.O.T. is Halil Oğuzcan Toptaş’s developer and homelab portfolio: frontend projects, automation, self-hosting experiments, a project archive, and an isolated WebAssembly lab.',
+      'Websites, apps, home lab projects, and browser experiments by Istanbul-based developer Halil Oğuzcan Toptaş.',
     aboutTitle: 'About Halil Oğuzcan Toptaş',
     aboutDescription:
-      'Meet Halil Oğuzcan Toptaş, an Istanbul-based software developer and homelab hobbyist building web interfaces, automation systems, and browser experiments.',
-    projectsDescription:
-      'Browse frontend projects, API interfaces, utilities, forms, and browser experiments by Halil Oğuzcan Toptaş.',
+      'Learn about Istanbul-based software developer Halil Oğuzcan Toptaş and explore his web projects and home lab experiments.',
+    projectsDescription: 'Browse websites, apps, and browser experiments by Halil Oğuzcan Toptaş.',
     labTitle: 'Retro Game Center: DOOM in WebAssembly',
     labDescription:
-      'A live WebAssembly lab running DOOM Shareware through an isolated, lazy-loaded DOSBox-X browser runtime.',
+      'Play the shareware version of DOOM in your browser with DOSBox-X and WebAssembly.',
     privacyDescription:
-      'How the H.O.T. portfolio uses aggregate analytics and performance measurements without building advertising profiles, with a durable local opt-out.',
-    role: 'Software developer and homelab hobbyist',
+      'What analytics this portfolio uses, what information may be collected, and how to turn analytics off.',
+    role: 'Software developer',
     ogLocale: 'en_US',
     alternateOgLocale: 'tr_TR',
   },
   tr: {
-    homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş - Geliştirici & Homelab',
+    homeTitle: 'H.O.T. | Halil Oğuzcan Toptaş — Yazılım Geliştirici',
     homeDescription:
-      'H.O.T., Halil Oğuzcan Toptaş’ın geliştirici ve homelab portföyüdür: frontend projeleri, otomasyon, self-hosting denemeleri, proje arşivi ve izole WebAssembly labı.',
+      'İstanbul’da yaşayan yazılım geliştirici Halil Oğuzcan Toptaş’ın web projeleri, ev sunucusu çalışmaları ve tarayıcı demoları.',
     aboutTitle: 'Halil Oğuzcan Toptaş hakkında',
     aboutDescription:
-      'Halil Oğuzcan Toptaş, İstanbul’da web arayüzleri, otomasyon sistemleri ve browser deneyleri geliştiren bir yazılım geliştirici ve homelab meraklısıdır.',
+      'İstanbul’da yaşayan yazılım geliştirici Halil Oğuzcan Toptaş’ı tanıyın; web projelerine ve ev sunucusu çalışmalarına göz atın.',
     projectsDescription:
-      'Halil Oğuzcan Toptaş’ın frontend projelerini, API arayüzlerini, yardımcı araçlarını, formlarını ve browser deneylerini inceleyin.',
+      'Halil Oğuzcan Toptaş’ın web sitelerini, uygulamalarını ve tarayıcı deneylerini inceleyin.',
     labTitle: 'Retro Game Center: WebAssembly ile DOOM',
-    labDescription:
-      'DOOM Shareware çalıştıran, izole ve yalnızca etkileşimden sonra yüklenen DOSBox-X tabanlı canlı WebAssembly laboratuvarı.',
+    labDescription: 'DOOM Shareware’ı DOSBox-X ve WebAssembly ile tarayıcınızda oynayın.',
     privacyDescription:
-      'H.O.T. portföyünün reklam profili oluşturmadan toplu analitik ve performans ölçümünü, kalıcı yerel vazgeçme tercihiyle nasıl kullandığı.',
-    role: 'Yazılım geliştirici ve homelab meraklısı',
+      'Bu portföyün kullandığı analitik araçları, toplanabilecek bilgiler ve analitiği kapatma yöntemi.',
+    role: 'Yazılım geliştirici',
     ogLocale: 'tr_TR',
     alternateOgLocale: 'en_US',
   },
@@ -102,7 +100,7 @@ function sharedMetadata(
 ): Metadata {
   const copy = seoCopy[locale];
   const canonical = siteUrl(routePath(locale, path));
-  const imageAlt = `${identity.brand} developer and homelab portfolio by ${identity.fullName}`;
+  const imageAlt = `${identity.brand} portfolio by ${identity.fullName}`;
 
   return {
     description,

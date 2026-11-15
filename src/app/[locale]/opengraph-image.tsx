@@ -3,7 +3,7 @@ import { createSocialImage } from '@/lib/social-image';
 
 export { socialImageContentType as contentType, socialImageSize as size } from '@/lib/social-image';
 
-export const alt = 'H.O.T. developer and homelab portfolio by Halil Oğuzcan Toptaş';
+export const alt = 'H.O.T. portfolio by Halil Oğuzcan Toptaş';
 
 export default async function OpenGraphImage({
   params,
