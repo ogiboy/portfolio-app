@@ -25,17 +25,17 @@ export const projects: Project[] = [
     slug: 'isletmecii-idler-game',
     name: 'İşletmecii - Idler Game',
     year: '2026',
-    category: 'Game UI',
-    categoryTr: 'Oyun Arayüzü',
+    category: 'Game',
+    categoryTr: 'Oyun',
     url: 'https://idler-game.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/idler-game',
     image: isletmecii,
     featured: true,
     stack: ['Next.js', 'Tailwind CSS', 'Redux Toolkit'],
     description:
-      'An idle-management game where players grow a virtual business by earning money, hiring employees, and upgrading facilities.',
+      'An idle game about growing a business by earning money, hiring staff, and upgrading facilities.',
     descriptionTr:
-      'Oyuncuların para kazanıp çalışan işe alarak ve tesisleri geliştirerek sanal bir işletmeyi büyüttüğü idle yönetim oyunu.',
+      'Para kazanıp çalışan alarak ve tesisleri geliştirerek işletmenizi büyüttüğünüz bir idle oyunu.',
   },
   {
     id: 1,
@@ -50,26 +50,25 @@ export const projects: Project[] = [
     featured: true,
     stack: ['Next.js', 'React', 'Material UI', 'TypeScript'],
     description:
-      'A graduate showcase for the BilgeAdam front-end development bootcamp, with profile and gallery views.',
+      'A showcase for BilgeAdam front-end bootcamp graduates, with profile and gallery pages.',
     descriptionTr:
-      'BilgeAdam front-end development bootcamp mezunlarını profil ve galeri görünümleriyle sergileyen platform.',
+      'BilgeAdam front-end bootcamp mezunlarını profil ve galeri sayfalarında tanıtan bir site.',
   },
   {
     id: 12,
     slug: 'github-user-search',
     name: 'GitHub User Search',
     year: '2024',
-    category: 'API UI',
-    categoryTr: 'API Arayüzü',
+    category: 'Search',
+    categoryTr: 'Arama',
     url: 'https://github-user-search-lilac-kappa.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/githubUserSearch',
     image: userSearchImg,
     featured: true,
     stack: ['React', 'GitHub API', 'CSS'],
-    description:
-      'A GitHub API interface for searching users and viewing their profiles, repositories, and account statistics.',
+    description: 'Search GitHub users and view their profiles, repositories, and account details.',
     descriptionTr:
-      'Kullanıcı aramak ve profil, repository ve hesap istatistiklerini görüntülemek için GitHub API arayüzü.',
+      'GitHub kullanıcılarını arayın; profillerini, depolarını ve hesap bilgilerini görüntüleyin.',
   },
   {
     id: 0,
@@ -82,23 +81,22 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/weatherSimplified',
     image: weatherImage,
     stack: ['HTML', 'CSS', 'JavaScript', 'Weather API'],
-    description:
-      'A JavaScript weather interface that retrieves and displays current weather information.',
-    descriptionTr: 'Güncel hava durumu bilgisini alıp gösteren JavaScript arayüzü.',
+    description: 'A weather app that shows current conditions.',
+    descriptionTr: 'Güncel hava durumunu gösteren basit bir uygulama.',
   },
   {
     id: 2,
     slug: 'ataturk-quote-generator',
     name: 'Ataturk Quote Generator',
     year: '2023',
-    category: 'Content App',
-    categoryTr: 'İçerik Uygulaması',
+    category: 'Quote Generator',
+    categoryTr: 'Söz Üretici',
     url: 'https://quote-generator-with-ataturk.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/quoteGeneratorWithAtaturk',
     image: quoteImg,
     stack: ['React', 'CSS'],
-    description: 'A React interface that displays quotations attributed to Mustafa Kemal Atatürk.',
-    descriptionTr: 'Mustafa Kemal Atatürk’e atfedilen sözleri gösteren React arayüzü.',
+    description: 'A page that displays quotations attributed to Mustafa Kemal Atatürk.',
+    descriptionTr: 'Mustafa Kemal Atatürk’e atfedilen sözleri gösteren bir sayfa.',
   },
   {
     id: 3,
@@ -111,10 +109,9 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/carouseldemoapp',
     image: carouselImg,
     stack: ['Next.js', 'CSS'],
-    description:
-      'A responsive image carousel demonstrating transition behavior and reusable controls.',
+    description: 'A responsive image carousel with reusable controls.',
     descriptionTr:
-      'Geçiş davranışını ve tekrar kullanılabilir kontrolleri gösteren responsive görsel carousel’i.',
+      'Tekrar kullanılabilir kontroller içeren, farklı ekranlara uyumlu bir görsel kaydırıcı.',
   },
   {
     id: 4,
@@ -127,8 +124,8 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/netflix-survey-form',
     image: surveyFormImg,
     stack: ['HTML', 'CSS'],
-    description: 'A Netflix-inspired survey form with responsive fields and dark-theme styling.',
-    descriptionTr: 'Responsive alanlara ve koyu tema stiline sahip Netflix esintili anket formu.',
+    description: 'A survey form with a Netflix-inspired design.',
+    descriptionTr: 'Netflix tasarımından esinlenen bir anket formu.',
   },
   {
     id: 5,
@@ -142,9 +139,9 @@ export const projects: Project[] = [
     image: contextImg,
     stack: ['React', 'Context API', 'SCSS'],
     description:
-      'A React todo list using Context API for task state and create, update, and delete interactions.',
+      'A task list for adding, editing, and removing tasks, with state managed by Context API.',
     descriptionTr:
-      'Görev durumunu ve oluşturma, güncelleme, silme işlemlerini Context API ile yöneten React todo listesi.',
+      'Görev ekleyip düzenleyip silebildiğiniz; verileri Context API ile yöneten bir liste.',
   },
   {
     id: 6,
@@ -157,24 +154,23 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/catAdoption',
     image: catAdoptImg,
     stack: ['React', 'SCSS'],
-    description: 'A multi-step cat adoption form with validation and responsive presentation.',
-    descriptionTr: 'Validasyon ve responsive sunuma sahip çok adımlı kedi sahiplenme formu.',
+    description: 'A multi-step form for people interested in adopting a cat.',
+    descriptionTr: 'Kedi sahiplenmek isteyenler için adım adım ilerleyen bir form.',
   },
   {
     id: 7,
     slug: 'redux-toolkit-playlist',
     name: 'Redux Toolkit Playlist',
     year: '2023',
-    category: 'State UI',
-    categoryTr: 'Durum Arayüzü',
+    category: 'Playlist',
+    categoryTr: 'Çalma Listesi',
     url: 'https://redux-tk-playlist.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/reduxTkPlaylist',
     image: reduxPlaylistImg,
     stack: ['React', 'Redux Toolkit'],
-    description:
-      'A React playlist interface for creating and editing music playlists with Redux Toolkit state management.',
+    description: 'Create and edit music playlists in this app built with Redux Toolkit.',
     descriptionTr:
-      'Redux Toolkit durum yönetimiyle müzik listeleri oluşturup düzenleyen React arayüzü.',
+      'Redux Toolkit ile geliştirilen bu uygulamada müzik listeleri oluşturup düzenleyin.',
   },
   {
     id: 8,
@@ -187,25 +183,23 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/Interview5ModalNotesApp',
     image: notesAppImg,
     stack: ['React', 'Modal UI', 'CSS'],
-    description: 'A notes interface with modal flows for creating, editing, and removing notes.',
-    descriptionTr:
-      'Not oluşturma, düzenleme ve silme işlemleri için modal akışlar kullanan not uygulaması.',
+    description: 'A notes app for creating, editing, and deleting notes.',
+    descriptionTr: 'Not oluşturup düzenleyip silebileceğiniz basit bir uygulama.',
   },
   {
     id: 9,
     slug: 'activity-generator',
     name: 'Activity Generator',
     year: '2023',
-    category: 'API UI',
-    categoryTr: 'API Arayüzü',
+    category: 'Activity Finder',
+    categoryTr: 'Etkinlik Önerisi',
     url: 'https://interview3-activity-generator.vercel.app/',
     gitUrl: 'https://github.com/ogiboy/interview3ActivityGenerator',
     image: activityGenImg,
     stack: ['React', 'External API', 'CSS'],
     description:
-      'A React interface that requests activity suggestions from an external API using type, participant, and price data.',
-    descriptionTr:
-      'Tür, katılımcı ve fiyat verilerini kullanarak harici API’den etkinlik önerileri alan React arayüzü.',
+      'Get activity suggestions by choosing a type, number of participants, and price range.',
+    descriptionTr: 'Etkinlik türü, kişi sayısı ve fiyat aralığı seçerek öneri alın.',
   },
   {
     id: 10,
@@ -218,8 +212,8 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/Interview2GenerateRobots',
     image: robotsImg,
     stack: ['React', 'RoboHash API', 'CSS'],
-    description: 'A React avatar generator that requests robot images from the RoboHash API.',
-    descriptionTr: 'RoboHash API’den robot görselleri isteyen React avatar oluşturucu.',
+    description: 'Create robot avatars using images from the RoboHash API.',
+    descriptionTr: 'RoboHash API görsellerini kullanarak robot avatarları oluşturun.',
   },
   {
     id: 11,
@@ -233,9 +227,9 @@ export const projects: Project[] = [
     image: shoppingImg,
     stack: ['React', 'Local Storage'],
     description:
-      'A React shopping list with local-storage persistence for adding, removing, and marking items.',
+      'A shopping list that lets you add, remove, and check off items. Your list stays in the browser.',
     descriptionTr:
-      'Ürün ekleme, silme ve işaretleme işlemlerini local storage ile koruyan React alışveriş listesi.',
+      'Ürün ekleyip silebileceğiniz ve aldıklarınızı işaretleyebileceğiniz bir liste. Liste tarayıcıda saklanır.',
   },
   {
     id: 13,
@@ -248,9 +242,8 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/photosApp',
     image: photosAppImg,
     stack: ['React', 'Photo API', 'CSS'],
-    description:
-      'A React photo gallery that retrieves images from an external API and displays them in a grid.',
-    descriptionTr: 'Harici API’den görseller alıp grid içinde gösteren React fotoğraf galerisi.',
+    description: 'A photo gallery that loads images from an external service.',
+    descriptionTr: 'Harici bir servisten görsel yükleyen fotoğraf galerisi.',
   },
   {
     id: 14,
@@ -263,9 +256,8 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/searchPokemons',
     image: pokeFilterImg,
     stack: ['React', 'PokeAPI', 'CSS'],
-    description:
-      'A Pokémon search and filter interface backed by PokeAPI with a responsive card grid.',
-    descriptionTr: 'PokeAPI kullanan Pokémon arama ve filtreleme arayüzü.',
+    description: 'Search and filter Pokémon using data from PokeAPI.',
+    descriptionTr: 'PokeAPI verilerini kullanarak Pokémon arayın ve filtreleyin.',
   },
   {
     id: 15,
@@ -278,25 +270,21 @@ export const projects: Project[] = [
     gitUrl: 'https://github.com/ogiboy/reactBmiCalculator',
     image: bmiCalcImg,
     stack: ['React', 'CSS'],
-    description:
-      'A React BMI calculator with input validation and calculated health-status categories.',
-    descriptionTr:
-      'Girdi doğrulaması ve hesaplanan sağlık durumu kategorileri bulunan React BMI hesaplayıcı.',
+    description: 'Calculate BMI from height and weight.',
+    descriptionTr: 'Boy ve kilo bilgilerine göre vücut kitle indeksini hesaplayın.',
   },
   {
     id: 16,
     slug: 'google-landing-page',
     name: 'Google Landing Page',
     year: '2022',
-    category: 'Clone',
-    categoryTr: 'Yeniden Üretim',
+    category: 'Recreation',
+    categoryTr: 'Arayüz Çalışması',
     url: 'https://ogiboy.github.io/google-landing-page/',
     gitUrl: 'https://github.com/ogiboy/google-landing-page',
     image: googleLandingImg,
     stack: ['HTML', 'CSS'],
-    description:
-      'A responsive recreation of the Google homepage focused on layout and CSS implementation.',
-    descriptionTr:
-      'Google ana sayfasının yerleşim ve CSS uygulamasına odaklanan responsive yeniden üretimi.',
+    description: 'A recreation of the Google homepage built with HTML and CSS.',
+    descriptionTr: 'HTML ve CSS ile yeniden oluşturulmuş Google ana sayfası.',
   },
 ];
