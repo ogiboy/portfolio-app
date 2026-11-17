@@ -73,7 +73,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
     "@nx/eslint": "23.2.1",
-    "@nx/next": "23.2.1",
+    "@nx/next": "24.0.3",
     "@nx/playwright": "23.2.1",
     "@nx/vitest": "23.2.1",
     "@playwright/test": "^1.65.0",
